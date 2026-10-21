@@ -16,6 +16,12 @@ argument-hint: "[name] [photo paths...]"
 allowed-tools: Bash
 ---
 
+> ⛔ **Gasto en ONIA (sobreescribe el «Submit» directo y el Step 0 de esta skill oficial; `CLAUDE.md` §Higgsfield):**
+> entrenar un Soul pide aprobación específica: antes de `soul-id create` se cotiza, se registran fotos y créditos y se
+> espera el OK. Subir la cara o la voz de Sergio Urcullo a un servicio externo pide además el OK de Leslie Mercado
+> Moreno. Nunca se corre `higgsfield auth token`. Si la CLI no está instalada, no se instala sin el OK. Método medido
+> con Lucía: `references/photo-guide.md`, sección ONIA.
+
 # Higgsfield Soul Character
 
 Train a face-faithful identity model. Reusable across all Soul-powered generations.

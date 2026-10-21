@@ -24,6 +24,13 @@ argument-hint: "[prompt-or-analysis-request] [--model <name>] [--image|--video <
 allowed-tools: Bash
 ---
 
+> ⛔ **Gasto en ONIA (sobreescribe la UX Rule 5 y el Step 0 de esta skill oficial; `CLAUDE.md` §Higgsfield):**
+> antes de cada `higgsfield generate create` se corre `higgsfield generate cost` y se registran modelo, parámetros y
+> costo; la regla «don't pre-estimate cost» no aplica acá. Lotes chicos de imagen de prueba (menos de ~5 créditos,
+> sin fraccionar uno mayor) van sin preguntar y se muestran después. Video, Soul, lotes grandes y la cara o la voz de
+> Sergio Urcullo piden su aprobación antes. Nunca se corre `higgsfield auth token`. Si la CLI no está instalada, no
+> se instala sin explicar origen y propósito y recibir el OK.
+>
 > ⛔ **Regla de ONIA (sobreescribe a esta skill oficial), Sergio Urcullo 1-oct-2026:** todo video que sale a
 > redes se edita con la skill **`editor-videos`** (método Santiago: montaje en una pasada, apoyos sincronizados
 > a la palabra, karaoke con gate de ortografía, SFX de la librería de HyperFrames, master −14 LUFS, tabla de
