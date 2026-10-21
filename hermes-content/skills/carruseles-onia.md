@@ -26,11 +26,10 @@ El pipeline vive en `scripts/` del repo `onia-hermes`:
    PNG ya renderizados al VPS y postea via `ig-publish`. Sin Python.
 
 Cuenta IG ONIA: `17841423363059652` con token Meta default. Las cuentas
-personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ahi.
+personales no se publican con `ig-publish`; la via verificada es Buffer (`hermes-content/deploy/vps-ops/publicar/README.md`).
 
 ## Packs visuales disponibles (`carousel_render.js`)
-- `community-editorial` — **default para ONIA, educación y producto**. Portada
-  humana/editorial, interiores claros, tarjetas de conocimiento, diagramas y UI real.
+- `community-editorial` — pack de la marca personal (cuenta `sergio`). **No es el estilo de la pauta de Onia Platform** (rechazado el 29-sep y el 2-oct): la pauta lleva la marca de la web (`web-factory/docs/ONIA_BRAND_IDENTITY_2026.md`) y se arma tras estudiar la Meta Ads Library (`ONIA_ADQUISICION_Y_PAUTA.md` §2.5).
 - `dark-product` — estilo Solaris. Usar sólo cuando el concepto publicitario pida
   deliberadamente una pieza oscura de performance; no usarlo como default para un
   carrusel completo.
@@ -60,8 +59,7 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
   operativa → producto real → mecanismo → control humano/prueba → oferta y CTA.
 - Para software, incluir capturas reales del tenant demo. Nunca inventar UI con un
   generador de imágenes. Revisar que no haya datos personales antes de renderizar.
-- Usar como piso de calidad el pack editorial de la sesión de marca personal
-  (`community-editorial`, commit `e9b80e22`), adaptado a ONIA; no copiar su copy.
+- El formato de la pauta sale de lo que sostienen los competidores en la Meta Ads Library, no del pack de la marca personal.
 - La pieza se rechaza si: el rubro puede reemplazarse sin cambiar el texto, el dolor
   no termina en dinero, no aparece el producto, o el CTA compite con otro CTA.
 
@@ -117,11 +115,10 @@ con una frase fija).
 - [ ] PNGs renderizados y verificados (1080x1350, `image/png`).
 
 ## Reglas de aprobacion
-- Nunca publicar sin aprobacion explicita: `Apruebo publicar <carrusel>`.
+- Nunca publicar sin que Sergio Urcullo haya visto la captura de cada lamina y escrito `Apruebo publicar <carrusel>`.
 - `ok`, `dale` o `hazlo` NO cuentan como aprobacion de publicacion.
 - Publicar exactamente la pieza aprobada, sin cambios posteriores silenciosos.
-- Tras publicar, avisar SIEMPRE a Arthur Y Sergio por Telegram con el
-  `published_id`.
+- Tras publicar, avisar a Sergio Urcullo por Telegram con el `published_id` y el enlace.
 
 ## Errores comunes
 - Graph API falla -> mostrar el error exacto, no resumirlo.
@@ -135,7 +132,7 @@ con una frase fija).
 - Antes/despues de automatizar.
 - Checklist para saber si un negocio esta listo para IA.
 - Flujo real: Instagram/WhatsApp -> Chatwoot -> n8n -> seguimiento.
-- Caso clinica dental: citas, recordatorios, seguimiento y pacientes.
+- Un caso por rubro (dental, comercio, importadora, estetica, servicios) con su vocabulario; no solo clinica dental.
 
 ## Resultado esperado
 Responder con: titulo, slides numeradas, caption, hashtags, prompts visuales,

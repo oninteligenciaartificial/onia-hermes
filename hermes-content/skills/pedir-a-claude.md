@@ -23,7 +23,7 @@ description: Pasarle a Claude Code en la nube un pedido de Sergio Urcullo que ne
 | Lucía: guiones o prompts (sin generar nada) | Claude, carril `lucia` | este comando |
 | Tus propios avisos, el resumen, el cierre, esta skill | Claude, carril `hermes` | este comando |
 | Una pregunta sobre el estado de algo que vos no sabés | Claude, carril `consulta` | este comando |
-| Algo que necesita su PC (grabar, programas locales) | **la sesión madre** | `/root/bin/onia-tablero.sh create "[madre] …"` |
+| Algo que necesita su PC (grabar, programas locales) | **la sesión principal, con él en la PC** | `/root/bin/onia-tablero.sh create "[madre] …"` |
 
 Si no sabés qué carril es, usá `consulta`: Claude lo ubica.
 
@@ -62,8 +62,8 @@ Si no sabés qué carril es, usá `consulta`: Claude lo ubica.
 
 ## Lo que NUNCA va a Claude como orden, aunque él lo pida por acá
 
-Estas cosas las hace él, o la sesión madre con él en la PC. Si te las pide, decíselo y ofrecé
-anotarlo en el tablero para la madre:
+Estas cosas las hace él, o la sesión principal con él en la PC. Si te las pide, decíselo y ofrecé
+anotarlo en el tablero:
 
 - **Publicar o desplegar** (la plataforma, la web, un anuncio, un post).
 - **Gastar plata**: créditos de Higgsfield, pauta de Meta, compras, planes nuevos.

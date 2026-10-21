@@ -11,9 +11,7 @@ cron jobs, reminders, or daily automation.
 
 ## Current Jobs
 
-- `hermes-daily-operational-status`
-- `hermes-daily-content-video-plan`
-- `hermes-daily-video-lab-followup`
+Do not hardcode job names. The three `hermes-daily-*` jobs once listed here did not exist when counted (2026-08-31, docs/DAILY_CRONS.md). Run `hermes cron list` and read `docs/DAILY_CRONS.md` (VPS crontab, UTC; La Paz = UTC-4).
 
 ## Commands
 
@@ -27,7 +25,7 @@ hermes cron tick
 ## Behavior
 
 - Daily crons may suggest work and summarize status.
-- Daily crons must not publish automatically.
+- Daily crons must not publish; anything the public sees waits for Sergio Urcullo's OK with a screenshot.
 - If Sergio asks for a new recurring automation, propose schedule, delivery,
   skill and safety rule before creating it.
 - For video-related crons, use `video-lab-higgsfield`.

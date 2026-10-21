@@ -3,10 +3,8 @@
 ## Objetivo
 Publicar contenido en Instagram desde Hermes usando el script `ig-publish` instalado en el VPS.
 
-## Estado validado
-- `ig-publish healthcheck` devolvio `ok: true`.
-- Carrusel de prueba publicado con `published_id=18126144559620893`.
-- Asset server temporal: `http://187.77.16.63:8099`.
+## Estado
+Historia (sin fecha): `ig-publish healthcheck` dio `ok: true` y hubo un carrusel de prueba. Hoy la via verificada de Instagram es Buffer (`hermes-content/deploy/vps-ops/publicar/ig-reel.mjs`, `ig-carrusel.mjs`), que corre Claude. Antes de cualquier comando de abajo: skill aprobaciones-onia (captura + "Apruebo publicar <pieza>").
 
 ## Comandos
 
@@ -59,7 +57,7 @@ ig-publish carousel_publish --image-urls "<url1,url2,url3>" --caption "<caption>
 Validar antes:
 - Deben existir entre 2 y 10 URLs publicas.
 - Las URLs deben ser directas y devolver `image/png` o `image/jpeg`.
-- Preferir URLs del asset server: `http://187.77.16.63:8099/<archivo>`.
+- Usar URLs publicas HTTPS directas.
 - No publicar assets copiados de Pinterest o terceros.
 
 ## Respuesta esperada

@@ -3,16 +3,9 @@
 ## Objetivo
 Gestionar prospeccion, CRM y seguimientos comerciales de ONIA con informacion publica, notas claras y registros en Notion.
 
-Notion es la fuente oficial. Antes de aprobar seguimiento, demo, propuesta o
-comision, validar que el registro tenga los campos obligatorios del esquema:
-
-- `NOTION_VENDOR_CRM_SCHEMA_2026.md`
-
-Regla:
-
-```text
-SIN DATOS COMPLETOS, NO HAY COMISION APROBADA.
-```
+Notion es la fuente oficial. Antes de aprobar seguimiento, demo o propuesta,
+validar los campos obligatorios (referencia historica de campos:
+`hermes-content/docs/historial/NOTION_VENDOR_CRM_SCHEMA_2026.md`; sin campos de comision).
 
 ## Comandos
 
@@ -51,14 +44,10 @@ Crear mensaje breve y personalizado para contactar a un prospecto.
 - Oferta ONIA recomendada.
 - Prioridad: alta, media o baja.
 - Estado pipeline.
-- Vendedor origen.
 - Responsable actual.
 - Ultimo contacto.
 - Proximo seguimiento.
 - Resultado ultimo contacto.
-- Monto cobrado.
-- Comision calculada.
-- Estado de comision.
 - Datos completos.
 - No contactar.
 
@@ -78,20 +67,16 @@ Crear mensaje breve y personalizado para contactar a un prospecto.
 - Perdido
 - No apto
 
-## Comisiones y propiedad
-- `vendedor_origen` es quien consiguio el lead y cobra si esa venta se paga.
-- `responsable_actual` es quien debe ejecutar el siguiente seguimiento.
-- La comision mensual de SaaS se paga solo sobre el primer pago cobrado.
-- Los meses futuros quedan para ONIA por soporte, entrega, mantenimiento y operacion.
-- Un vendedor puede ganar de nuevo si vende una nueva compra al mismo cliente: upsell, cross-sell, anualidad, web, video, conector o sistema adicional.
-- No duplicar contacto: si un lead ya tiene responsable, no sugerir que otro vendedor lo contacte sin reasignacion.
+## Propiedad
+- `responsable_actual` ejecuta el siguiente seguimiento (hoy, Sergio Urcullo).
+- No duplicar contacto: un lead con responsable no se contacta por otro canal sin reasignacion.
 
 ## WhatsApp ONIA chatbot
 - El WhatsApp principal de ONIA funciona como recepcion y calificacion.
 - El chatbot debe pedir rubro, necesidad, ciudad y urgencia.
 - Despues debe crear o actualizar el lead en CRM y avisar a Sergio/Hermes.
-- El vendedor hace seguimiento humano desde un canal autorizado.
-- No sugerir automatizacion de WhatsApp client-facing hasta verificacion Meta y aprobacion de ONIA.
+- Sergio Urcullo hace el seguimiento humano.
+- No contactar por WhatsApp sin `Apruebo contactar: <empresa>`.
 
 ## Mensaje sugerido
 Debe ser:
@@ -103,6 +88,5 @@ Debe ser:
 
 ## Criterios de calidad
 - Pocos prospectos buenos valen mas que muchos sin contexto.
-- Priorizar empresas bolivianas donde ONIA pueda aportar web, IA, automatizacion, CRM o atencion al cliente.
+- Priorizar empresas bolivianas donde encaje el sistema por rubro (dental primero, luego importadora; ONIA_CLIENTE_IDEAL.md).
 - Nunca tratar el CSV como fuente principal si Notion esta disponible.
-- No aprobar comision si faltan campos obligatorios, monto cobrado o servicio vendido.

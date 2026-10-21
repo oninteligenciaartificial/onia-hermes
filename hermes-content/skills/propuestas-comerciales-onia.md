@@ -10,7 +10,7 @@ propuesta comercial a un cliente (web, tienda, sistema, automatización).
 - `hermes-content/propuestas/PLAYBOOK_CONSTRUCCION_INTERNO.md`
 - `hermes-content/propuestas/ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`
 - `hermes-content/propuestas/BCP_PASARELA_CREDENCIALES_INTERNO.md`
-- `hermes-content/docs/ONIA_PRICING_2026.md`
+- `hermes-content/docs/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` (precios: se leen de `onia-platform/lib/subscription-plans.ts` y `pricing.ts`; `ONIA_PRICING_2026.md` esta degradado y no define precios)
 
 ## Regla base
 
@@ -57,8 +57,7 @@ Cliente nuevo = agregar un objeto a `clientes.json` y correr el generador.
    cobra como add-on es el **chatbot IA** (responde, califica, deriva solo).
 
 8. **Pricing:** cobrar la automatización y el resultado, no los píxeles. El margen
-   vive en lo recurrente (Cuidado Web / GestiOS / videos). Línea estándar:
-   Landing 2,000 / Web Pro 4,500.
+   vive en lo recurrente (Cuidado Web, plan del sistema, add-ons). Los montos no se escriben aquí: se leen de las fuentes de precios (webs: `web-factory/apps/onia-platform/src/content/webs.ts`).
 
 9. **Plantillas internas = confidencial.** Nunca decir al cliente que usamos
    plantillas. Maximizar producción.
@@ -113,7 +112,7 @@ social +34%, CTA claro convierte lectura en respuesta):
 - `imagenes[]` — ambientación editorial o fotos REALES en `propuestas/assets/`.
   NUNCA screenshots falsos de producto. **REGLA (2026-07-05): generar imágenes
   en plataformas externas (Higgsfield, fal.ai, etc.) requiere permiso previo de
-  Sergio en cada caso; validar la idea antes de ejecutar; con permiso, usar el
+  Sergio, salvo lotes chicos de imagen (menos de ~5 créditos, regla del 8-oct); validar la idea antes de ejecutar; con permiso, usar el
   modelo más barato (nano_banana 1k, no text2image_soul_v2 2k).**
 - `casos[]` — prueba social SOLO con casos reales; vacío hasta tener el caso
   fundador (Bolivian Electric).
@@ -135,7 +134,7 @@ Roadmap completo: `hermes-content/docs/ONIA_PROPUESTAS_V3_PLAN_20260705.md`
 Crea propuesta ONIA: <cliente> | <necesidad>
 Perfecciona propuesta: <slug>
 Cotiza add-on: <cliente> | <add-on>
-Envia propuesta: <slug>  (PDF + mensaje de envío)
+Envia propuesta: <slug>  (prepara PDF + mensaje de envío, de usted; enviarlo requiere `Apruebo contactar: <empresa>`)
 ```
 
 ## Clientes actuales (clientes.json)
@@ -145,7 +144,7 @@ bench · garabato · hsb-engineers · lia-albertengo · aw-climatizacion
 onia-empresarial
 
 > `dentalgest` y `onia-empresarial` son propuestas de producto (SaaS/enterprise),
-> con precios del catálogo v2 (`onia-core/ONIA_CATALOGO_COMERCIAL_2026.md`).
+> con precios que se leen de `subscription-plans.ts`/`pricing.ts`.
 > Antes de ENVIARLAS, Sergio valida los precios v2 (ítem S1 del plan 2026-07-05);
 > el pendiente exacto está en el campo `_todo` de cada cliente en `clientes.json`.
 > Propuestas en USD o moneda mixta: usar el campo opcional `moneda` del generador.

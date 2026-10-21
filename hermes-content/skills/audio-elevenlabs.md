@@ -51,7 +51,7 @@ Next action:
 ## Safety
 
 - Never clone a voice without consent.
-- Never publish Sergio AI voice without approval.
+- Never publish Sergio AI voice without approval. Uploading Sergio Urcullo's voice or face to an external service also needs the OK of Leslie Mercado Moreno.
 - Never invent testimonials or results.
 - Never make medical, financial or legal claims without review.
 - Store audio outputs in `/var/www/html/hermes-assets/audio`.

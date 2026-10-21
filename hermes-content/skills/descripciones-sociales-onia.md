@@ -96,7 +96,7 @@ Sergio:
 - sin tono de guru;
 - CTA: "escribeme tu rubro", "demo", "te muestro el sistema".
 
-ONIA:
+ONIA (usted, como la web y los anuncios):
 
 - claro;
 - educativo;
@@ -115,8 +115,8 @@ Cliente:
 - No inventar resultados.
 - No exponer datos de clientes.
 - No usar urgencia falsa.
-- No mencionar WhatsApp automation hasta que exista verificacion de negocio.
-- No publicar nada sin aprobacion explicita.
+- No prometer WhatsApp automatico a clientes sin que lo confirme el catalogo de venta (ONIA_CATALOGO_DE_VENTA.md).
+- No publicar nada sin que Sergio Urcullo vea la pieza con captura y la apruebe (via verificada: Buffer, ig-reel.mjs).
 
 ## Referencias
 

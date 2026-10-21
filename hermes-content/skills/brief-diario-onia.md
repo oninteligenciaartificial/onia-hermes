@@ -15,9 +15,7 @@ bloqueo tecnico en esa seccion y seguir con las demas (nunca abortar todo).
 
 ### 1. Agenda del dia
 Fuente requerida: lectura actual de Google Calendar, con calendario/cuenta, fecha y
-zona `America/La_Paz` identificados. La skill [agenda-calendario](agenda-calendario.md)
-distingue la capacidad actual del flujo pendiente: el router no tiene lector;
-n8n conserva OAuth operativo pero no se confirmo la identidad del calendario.
+zona `America/La_Paz` identificados. Fuente: `/root/bin/onia-agenda.sh` (skill [agenda-calendario](agenda-calendario.md)).
 - Sin lectura actual, o si falla: `Agenda no verificada`; prioridades sin horas.
   No interpretar ausencia de datos como agenda vacia ni prometer un dia libre.
 - Con lectura correcta: listar eventos `[HH:MM] [Titulo]`; sin eventos, decir
@@ -29,8 +27,8 @@ n8n conserva OAuth operativo pero no se confirmo la identidad del calendario.
   disponibilidad leida ni reservas. No usarlos para asignar reuniones.
 
 ### 2. Tareas del dia (prioridades)
-Fuente: `hermes-week-plan` / briefing de ONIA Center (`/api/onia-center/
-briefings/daily`) + seguimientos de CRM y WorkItems pendientes.
+Fuente: `hermes-week-plan` + seguimientos de CRM y WorkItems pendientes.
+ONIA Center está abandonado: no depender de este endpoint (`/api/onia-center/briefings/daily`).
 - Maximo 5 tareas, ordenadas por prioridad. Asignar bloque solo con agenda verificada.
 - Formato: `- Titulo (por que importa)`; agregar hora solo dentro de un bloque ONIA comprobado.
 - Incluir seguimientos vencidos: prospecto sin respuesta, propuesta sin cierre,
@@ -46,12 +44,7 @@ fuentes actuales primero, extraer principios, rankear utilidad.
 - Si depende de una key no configurada (Tavily), marcarlo y usar SearXNG.
 
 ### 4. Cierre accionable
-```text
-Prioridad 1 de hoy:
-Decision que necesito de Sergio:
-Siguiente comando exacto:
-Aprobacion pendiente:
-```
+Cerrar en prosa corta: lo que importa primero y, si hay algo pendiente, "Aprobacion necesaria: <texto literal>".
 
 ## Variantes
 
@@ -60,6 +53,8 @@ Aprobacion pendiente:
 - `Brief Hoy: <rubro>` -> sesga tendencias y prospeccion a ese rubro.
 
 ## Automatizacion prevista (n8n), no evidencia de activacion
+
+> Los dos workflows listados estan con `"active": false`. ONIA Center está abandonado: no depender de este endpoint. El resumen real de las 06:30 y el cierre de las 21:30 son de Hermes-jarvis (skill onia-hermes-jarvis); no duplicarlos.
 
 - `ONIA Center - Briefing diario operativo` (`onia-center-daily-briefing.json`):
   cron 06:45 L-S -> tareas por rol -> Telegram. Cubre secciones 1-2.

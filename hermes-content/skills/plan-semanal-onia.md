@@ -22,7 +22,7 @@ Plan enfocado. Ejemplos:
 2. **Investigar** tendencias actuales con la skill `tendencias-ia-redes`.
 3. **Filtrar**: solo hallazgos con fuentes fiables; descartar rumores.
 4. **Alinear con negocio**: cruzar con prioridades comerciales de la semana
-   (prospeccion activa, propuestas abiertas, DentalGest/GestiOS/Web ONIA).
+   (prospeccion activa, propuestas abiertas, el sistema por rubro: dental primero, importadora despues).
    El contenido debe empujar lo que ONIA esta vendiendo esa semana.
 5. **Convertir** hallazgos en ideas originales para ONIA (nunca copiar).
 6. **Calendario**: proponer 5 piezas distribuidas en la semana.
@@ -30,7 +30,7 @@ Plan enfocado. Ejemplos:
 8. **Aprobar**: pedir aprobacion antes de producir en serie o publicar.
 
 ## Mix de formatos recomendado (5 piezas)
-- 1-2 carruseles (skill `carruseles-onia`, pack `dark-product` por defecto).
+- 1-2 carruseles (skill `carruseles-onia`, el pack lo fija esa skill; `dark-product` no es default).
 - 1-2 Reels/videos (skills `videos-virales-higgsfield` / `video-lab-higgsfield`).
 - 1 historia o pieza ligera (skill `historias-onia`).
 - Variar el objetivo: no hacer 5 piezas de venta dura; mezclar autoridad,
@@ -39,7 +39,7 @@ Plan enfocado. Ejemplos:
 ## Uso de n8n
 n8n orquesta el ciclo recurrente:
 - Disparador semanal -> solicitud a Hermes de investigacion.
-- Generacion del plan -> resumen por Telegram a Arthur Y Sergio.
+- Generacion del plan -> resumen por Telegram a Sergio Urcullo.
 - Espera de aprobacion manual -> publicacion solo si se confirma.
 
 ## Reglas de aprobacion (no negociables)

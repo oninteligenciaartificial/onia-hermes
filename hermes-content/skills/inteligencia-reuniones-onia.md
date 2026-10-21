@@ -16,7 +16,7 @@ Comandos que activan este skill:
 
 - `Procesa reunion: <archivo o contexto>`
 - `Procesa audio WhatsApp: <archivo>`
-- `Analiza llamada: <transcript>`
+- (`Analiza llamada: <transcript>` lo atiende la skill analiza-llamada)
 - `Prepara propuesta desde esta reunion`
 - `Haz acta de esta reunion`
 
@@ -33,12 +33,11 @@ client-facing.
 1. Verificar que el audio fue obtenido con permiso o que Sergio confirma que
    puede procesarse.
 2. Transcribir:
-   - Preferido para uso diario: modulo `Audio IA` en `/onia-center`.
    - Preferido en VPS: Speakr (`meeting-lite` o `meeting-gpu`).
    - Para archivo local: `node scripts/procesa-audio-cliente.js --audio "<ruta>"`.
    - Para acta formal: `python scripts/acta_generator.py --audio "<ruta>"`.
 3. Guardar transcript en ruta canonica si se genera archivo:
-   - `hermes-content/audio-intelligence/transcripts/`
+   - `hermes-content/audio-intelligence/transcripts/` (crear la carpeta; no existe hoy)
 4. Si el objetivo es propuesta:
    - ejecutar `scripts/analiza-transcripcion.js`;
    - generar propuesta con `scripts/genera-propuesta.js`;
@@ -56,7 +55,7 @@ client-facing.
 Fase actual recomendada:
 
 1. Descargar el audio de WhatsApp o reenviarlo al canal operativo de Hermes.
-2. Procesar en ONIA Center `Audio IA`, como archivo local o por Telegram.
+2. Procesar con `scripts/procesa-audio-cliente.js`, como archivo local o por Telegram.
 3. Revisar antes de convertir en propuesta.
 
 No automatizar WhatsApp personal por scraping. Para automatizacion real usar
@@ -109,15 +108,6 @@ Para Speakr:
 
 ```bash
 TEXT_MODEL_API_KEY=...
-```
-
-Para ONIA Center Audio IA:
-
-```bash
-ONIA_AUDIO_STT_BASE_URL=http://127.0.0.1:3108/v1
-ONIA_AUDIO_STT_MODEL=Systran/faster-distil-whisper-large-v3
-OPENAI_ONIA_CENTER_API_KEY=...
-ONIA_AUDIO_ANALYSIS_MODEL=gpt-4.1-mini
 ```
 
 Para WhisperX diarizacion:

@@ -42,7 +42,7 @@ Del transcript, extraer y estructurar:
 
 1. Ejecutar `scripts/analiza-transcripcion.js` con el transcript
 2. El script llama a Claude Haiku para extracción estructurada
-3. Genera propuesta HTML personalizada con los datos extraídos
+3. Genera un borrador de propuesta con los datos extraídos (la que sale al cliente se arma con propuestas-comerciales-onia; no se envía sin "Apruebo contactar: <empresa>")
 4. Imprime resumen ejecutivo + próximos pasos
 5. Hermes reporta el resultado por Telegram
 
@@ -86,10 +86,7 @@ Para el pipeline completamente automático — audio → transcript → propuest
 [n8n] Telegram → enviar archivo HTML como documento
 ```
 
-Costo aproximado por llamada de 20 min con Whisper:
-- Whisper: ~$0.05 USD
-- Claude Haiku extracción: ~$0.001 USD
-- Total: menos de $0.06 USD por llamada
+Costo: sin cifra fija; medirlo en la primera corrida. Preferir la transcripción local (Speaches, ver inteligencia-reuniones-onia).
 
 ## Interpretación de transcriptos imperfectos
 
@@ -154,7 +151,7 @@ Cuando el script detecta objeciones, Hermes debe:
 → hermes-content/propuestas/propuesta-epic-motion-group-xxx.html
 
 📌 Próximos pasos:
-1. Enviar propuesta HOY
+1. Preparar la propuesta HOY (se envía solo con "Apruebo contactar: <empresa>")
 2. Respuesta en < 24h: "Aquí está tu propuesta personalizada"
 3. Registrar en CRM: Propuesta enviada
 ```

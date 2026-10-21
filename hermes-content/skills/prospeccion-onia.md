@@ -9,8 +9,7 @@ preparar datos para seguimiento comercial. Solo fuentes publicas verificables.
 ### Busca prospectos ONIA: <industria> | <ubicacion>
 Ejemplos:
 - `Busca prospectos ONIA: clinicas dentales | Santa Cruz Bolivia`
-- `Busca prospectos ONIA: restaurantes | La Paz Bolivia`
-- `Busca prospectos ONIA: inmobiliarias | Cochabamba Bolivia`
+- `Busca prospectos ONIA: importadoras | Santa Cruz Bolivia`
 
 ### Guarda prospecto: <datos>
 Guardar registro con nombre, contacto, empresa, fuente y notas. Todo prospecto
@@ -21,12 +20,9 @@ Priorizar negocios bolivianos con:
 - Volumen alto de consultas repetitivas (citas, precios, disponibilidad).
 - Atencion manual por WhatsApp/Instagram sin sistema.
 - Web inexistente, desactualizada o sin captacion de leads.
-- Capacidad de pago: clinicas, inmobiliarias, restaurantes establecidos,
-  estudios profesionales, comercios con varias sucursales.
+- Capacidad de pago: clinicas dentales primero, luego importadoras; otros rubros solo con senal clara.
 
-Encajan directo con la oferta: web, IA, automatizacion, Chatwoot, n8n,
-atencion al cliente y ventas (DentalGest para clinicas dentales, GestiOS,
-Web ONIA).
+Se vende el sistema por rubro (Onia Platform); el chatbot es add-on. Cliente ideal y orden de empuje: `hermes-content/docs/ONIA_CLIENTE_IDEAL.md` (clinica dental de Santa Cruz con 2-6 profesionales y recepcion; despues importadora).
 
 ## Busqueda
 Usar SearXNG como gateway cuando este disponible:
@@ -83,13 +79,13 @@ Asignar prioridad segun senales de necesidad observables:
 - Web o perfil publico.
 - Contacto publico encontrado (o `no encontrado`).
 - Senales de oportunidad observadas.
-- Producto ONIA que encaja (web, DentalGest, GestiOS, automatizacion, chatbot).
+- Producto ONIA que encaja (modulo del rubro de Onia Platform; chatbot como add-on).
 - Propuesta de acercamiento en 1-2 lineas.
 - Prioridad: alta / media / baja (segun scoring).
 - Fuente (URL).
 
 ### Mensaje sugerido
-Borrador breve, consultivo y no invasivo, personalizado con algo real y
+Borrador breve, de usted, consultivo y no invasivo, personalizado con algo real y
 verificable del negocio (nunca generico). Recordar: enviarlo requiere
 `Apruebo contactar: <empresa>`.
 
@@ -99,7 +95,6 @@ Guardar, investigar mas o preparar propuesta (skill
 
 ## Integraciones
 - Workflow n8n `ONIA - Prospeccion Diaria` corre automatico; sus reportes van
-  SIEMPRE a Arthur Y Sergio por Telegram.
+  a Sergio Urcullo por Telegram.
 - Prospecto aprobado y contactado -> pasa a `seguimiento-prospectos-onia`.
-- Prospecto con reunion agendada -> lead `reunion_agendada_pendiente` en ONIA
-  Center (ver `agenda-calendario`).
+- Prospecto con reunion agendada -> estado `reunion_agendada_pendiente` en el CRM (ver `agenda-calendario`).

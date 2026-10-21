@@ -115,8 +115,6 @@ client-facing sin aprobacion explicita.
 
 Para el canal Futbol Lab IA, revisar primero:
 
-- `FUTBOL_LAB_IA_CHANNEL_SYSTEM_2026.md`
-- `FUTBOL_LAB_IA_BRAND_IDENTITY_2026.md`
 - `hermes-content/references/futbol-lab-ia-language-system-20260605.json`
 - `hermes-content/references/futbol-lab-ia-higgsfield-prompts-20260605.json`
 
@@ -187,10 +185,9 @@ Elegir segun tarea:
 | Video UGC rapido con producto | Higgsfield Marketing Studio o Veo fallback |
 | Voz natural | ElevenLabs |
 | Avatar/lipsync | HeyGen o herramienta equivalente |
-| Edicion, subtitulos, overlays | ffmpeg, CapCut, Premiere, Canva |
+| Edicion, subtitulos, overlays | HyperFrames del repo y ffmpeg (skill `editor-videos`); CapCut/Canva solo si Sergio lo pide |
 
-Antes de gastar creditos en video, estimar costo cuando la herramienta lo
-permita. Si un modelo falla con HTTP 5xx, registrar el bloqueo y probar un
+Antes de cualquier generacion paga, correr `higgsfield generate cost` y guardar la cotizacion. Imagenes de prueba de menos de ~5 creditos por lote: sin preguntar. Video, entrenamiento Soul, lotes grandes y subir cara o voz de Sergio Urcullo: aprobacion explicita antes (cara/voz tambien el OK de Leslie Mercado Moreno). Si un modelo falla con HTTP 5xx, registrar el bloqueo y probar un
 fallback razonable.
 
 Regla practica:
@@ -287,7 +284,7 @@ Para cada tarea creativa:
 7. Elegir herramientas.
 8. Crear prompts especificos listos para pegar o ejecutar.
 9. Definir guion, voz, texto en pantalla y edicion.
-10. Ejecutar generacion si Sergio pidio producir, no solo plan.
+10. Ejecutar generacion si Sergio pidio producir, no solo plan, con la regla de gasto de "Seleccion de herramientas" (cotizar siempre; video y lotes grandes esperan aprobacion).
 11. Validar con inspeccion visual, dimensiones, conteo, frames o metadata.
 12. Registrar assets importantes en README/manifiesto si son canonicos.
 13. Cerrar con cambios, validacion, riesgos y siguiente accion.

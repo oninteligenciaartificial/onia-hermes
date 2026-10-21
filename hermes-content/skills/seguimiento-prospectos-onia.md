@@ -18,8 +18,7 @@ nuevo -> contactado -> en_conversacion -> reunion_agendada_pendiente
       -> dormido (sin respuesta, reintentar mas adelante)
 ```
 - Todo prospecto guardado por `prospeccion-onia` entra como `nuevo`.
-- `reunion_agendada_pendiente` es el mismo estado del lead en ONIA Center
-  (ver `agenda-calendario`): una reunion sin lead registrado no cuenta.
+- `reunion_agendada_pendiente`: una reunion sin prospecto registrado no cuenta (ver `agenda-calendario`).
 - `cerrado_perdido` y `dormido` siempre con motivo anotado.
 
 ## Cadencia de seguimiento
@@ -29,7 +28,7 @@ nuevo -> contactado -> en_conversacion -> reunion_agendada_pendiente
 - `propuesta_enviada`: seguimiento a las 48h, luego a los 5 dias.
 - `negociacion`: proxima accion SIEMPRE con fecha; sin fecha no hay negociacion.
 - Cada toque aporta valor (dato util, caso, respuesta a su dolor), nunca solo
-  "para hacer seguimiento".
+  "para hacer seguimiento". Los mensajes al prospecto van de usted.
 
 ## Reglas
 - Todo mensaje nuevo a un prospecto sigue requiriendo aprobacion de Sergio
@@ -70,7 +69,7 @@ Siguiente comando sugerido: [comando exacto]
 - Aprobacion necesaria (texto literal) o `ninguna`.
 
 ## Integraciones
-- Reportes de pipeline y alertas de atrasados van SIEMPRE a Arthur Y Sergio
+- Reportes de pipeline y alertas de atrasados van a Sergio Urcullo
   por Telegram.
 - `reunion_agendada_pendiente` se gestiona con `agenda-calendario`.
 - Al pasar a `propuesta_enviada`, la propuesta se genera solo con el sistema de

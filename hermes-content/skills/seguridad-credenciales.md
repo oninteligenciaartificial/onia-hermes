@@ -174,7 +174,7 @@ conector de navegación de Claude o de Codex.
 
 ### Prueba de acceso solicitada por Sergio — 2026-09-28
 
-**Estado final: pendiente y pruebas pausadas.** En el último intento autorizado,
+**Estado al 2026-09-28 (medicion fechada; volver a comprobar antes de actuar): pendiente y pruebas pausadas.** En el último intento autorizado,
 Codex pulsó Continue with Google, eligió Usar otra cuenta y envió Alt+Shift+U
 una vez al campo de correo. La UI completa y la captura de la página mostraron
 el campo vacío, sin control visible de KeePassXC. No se completó el ingreso.
@@ -434,10 +434,10 @@ ig-publish healthcheck
 5. Desplegarlo desde Windows:
 
 ```powershell
-cd C:\dev\Expermimentos\Hermes
+cd C:\dev\proyectos\onia-hermes
 $env:VPS_HOST="187.77.16.63"
 $env:VPS_USER="root"
-$env:VPS_PASSWORD="<VPS_PASSWORD>"
+$env:VPS_KEY_PATH="$HOME\.ssh\onia_hermes_vps_ed25519"
 $env:IG_BUSINESS_ACCOUNT_ID="17841423363059652"
 $env:META_LONG_LIVED_TOKEN="<PAGE_ACCESS_TOKEN>"
 npm run deploy:instagram

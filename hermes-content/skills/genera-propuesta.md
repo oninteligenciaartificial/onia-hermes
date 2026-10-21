@@ -1,7 +1,9 @@
 # Skill: Genera Propuesta de Venta
 
+> LEGADO (20-oct-2026). La propuesta que sale al cliente se genera con `hermes-content/propuestas/generador/` (`node generar-propuestas.js <slug> --pdf`) y la skill propuestas-comerciales-onia; nunca se edita el HTML a mano. Los precios de `scripts/genera-propuesta.js` NO son fuente (planes: subscription-plans.ts; add-ons: pricing.ts; webs: caso por caso). Uso aqui: solo borrador interno para Sergio Urcullo.
+
 ## Cuándo usar
-Cuando Sergio o un vendedor ONIA necesita crear una presentación personalizada para un cliente prospecto o activo. La propuesta se genera como HTML listo para mostrar en pantalla, compartir por link o imprimir en PDF.
+Cuando Sergio Urcullo necesita crear una presentación personalizada para un cliente prospecto o activo. La propuesta se genera como HTML listo para mostrar en pantalla, compartir por link o imprimir en PDF.
 
 Comandos que activan este skill:
 - `Genera propuesta: <empresa> | <industria> | <necesidad>`
@@ -49,12 +51,11 @@ node scripts/genera-propuesta.js datos-cliente.json
 
 | ID | Producto | Para quién |
 |---|---|---|
-| `dentalgest` | DentalGest | Clínicas dentales |
-| `gestios` | GestiOS | PYMEs, comercio, retail |
+| `dentalgest` | Onia Platform, rubro dental | Clínicas dentales |
+| `gestios` | Onia Platform, rubro comercio | PYMEs, comercio, retail |
 | `web_landing` | Landing de Captación | Cualquiera sin web |
 | `web_negocio` | Web Profesional | Negocios medianos |
 | `web_pro` | Web Pro ONIA | Productoras, arquitectos, premium |
-| `consultoria` | Consultoría ONIA | Empresas con procesos complejos |
 
 ## Mapeo automático industria → productos
 
@@ -79,7 +80,7 @@ node scripts/genera-propuesta.js --empresa="X" --productos="web_pro,consultoria"
 2. Ejecutar genera-propuesta.js con los datos
 3. Abrir HTML → revisar que todo se vea bien
 4. Compartir el archivo o pantalla completa durante reunión
-5. Ajustar según feedback → re-generar o editar manualmente el HTML
+5. Ajustar según feedback → re-generar
 6. Registrar en CRM: propuesta enviada, fecha, estado
 ```
 
@@ -88,8 +89,6 @@ node scripts/genera-propuesta.js --empresa="X" --productos="web_pro,consultoria"
 Para mejorar la propuesta con datos del cliente:
 
 - Si el cliente dice "me interesa más X" → agregar al campo `notas` y re-generar con `--productos` forzados
-- Si el cliente da su presupuesto → seleccionar el plan correspondiente manualmente en el HTML
-- Si el cliente tiene logo/colores → editar variables CSS en el HTML generado
 
 ## Ejemplo de JSON de entrada
 

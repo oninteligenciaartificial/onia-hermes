@@ -6,11 +6,12 @@ coordinar n8n, consultar estado, preparar ventas, manejar Video Lab interno o
 usar Telegram como bandeja principal de operacion.
 
 ## Leer antes de actuar
-- `HERMES_TELEGRAM_COMMAND_CENTER.md`
-- `HERMES_EXECUTION_PROTOCOL.md`
+- `TELEGRAM_COMMAND_CENTER.md`
+- `EXECUTION_PROTOCOL.md`
 - `PROJECTS_ORCHESTRATION.md`
-- `HERMES_VIDEO_LAB.md`
-- `N8N_AUTOMATION_PLAN.md`
+- `VIDEO_LAB.md`
+- `N8N_AUTOMATIONS.md`
+(todos en `hermes-content/docs/`)
 - `hermes-content/references/telegram-command-center.json`
 - `hermes-content/references/onia-projects-registry.json`
 
@@ -50,17 +51,15 @@ elegida y el comando exacto alternativo, no adivinar en silencio.
 - Contactar prospecto requiere literal: `Apruebo contactar: <empresa>`.
 - Publicar video requiere literal: `Publicar video <job_id>`.
 - Cara o voz IA de Sergio requiere aprobacion por pieza, sin excepciones.
-- WhatsApp automatico bloqueado hasta verificacion Meta.
-- No mezclar datos de DentalGest con Hermes salvo lectura autorizada para
+- WhatsApp saliente a prospectos solo con `Apruebo contactar: <empresa>`.
+- No mezclar datos de Onia Platform con Hermes salvo lectura autorizada para
   diagnostico o estado tecnico.
 - Secretos nunca viajan por Telegram; si un comando los necesita, apuntar al
   archivo/vault correspondiente.
 
 ## Avisos y reportes
 Todo reporte o aviso automatico (radar, prospeccion, monitores, publicaciones)
-se envia SIEMPRE a Arthur Y a Sergio por Telegram, mismo bot. Sergio =
-chat ID `6830070978`. Si el chat ID de Arthur aun no esta cableado en un
-workflow, marcarlo como pendiente en la respuesta en vez de omitir el aviso.
+se envia a Sergio Urcullo por Telegram (chat ID `6830070978`).
 
 ## Comandos cubiertos
 ```text
@@ -101,17 +100,12 @@ Watcher Higgsfield detalle
 pendientes Video Lab, prioridad operativa y siguiente comando exacto.
 
 ## Formato de respuesta obligatorio
-Corto, accionable, con el siguiente comando exacto cuando aplique:
+Prosa corta, lo importante primero, con el siguiente comando exacto cuando aplique.
+Si queda algo pendiente, cerrar con `Aprobacion necesaria: <texto literal>` (o `ninguna`):
 ```text
-Estado:
-Decision:
-Siguiente comando:
-Aprobacion necesaria:
+Aprobacion necesaria: Apruebo contactar: Clinica Norte
 ```
-- `Aprobacion necesaria:` lleva el texto literal que Sergio debe escribir
-  (ej. `Apruebo contactar: Clinica Norte`) o `ninguna`.
-- Si un comando fallo, `Estado:` incluye el error exacto y `Siguiente comando:`
-  la accion de recuperacion, no un resumen vago.
+- Si un comando fallo, decir el error exacto y la accion de recuperacion, no un resumen vago.
 
 ## Manejo de errores
 - Comando desconocido -> responder con los 3 comandos validos mas cercanos.

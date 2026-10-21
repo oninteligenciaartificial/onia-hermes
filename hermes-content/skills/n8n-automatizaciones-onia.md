@@ -28,7 +28,8 @@ Generar el plan semanal de contenido y prepararlo para aprobacion por Telegram.
 - Notion es el registro recomendado para CRM, finanzas, reportes y tareas.
 - No crear flujos de publicacion automatica sin aprobacion.
 - Leer `/root/.hermes/docs/N8N_CANONICAL.md` antes de tocar instancias n8n.
-- Usar `n8n_n8n` como instancia recomendada salvo que Sergio confirme otra.
+- La unica instancia viva es `n8n-sergio_n8n` (`n8n_n8n` esta apagada); no cambiar sin plan de migracion.
+- Nunca poner un secreto (API key, token, service_role) en un nodo: usar credencial de n8n o `$env`.
 
 ## Formato de respuesta para workflows
 Responder con:

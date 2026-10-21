@@ -17,13 +17,13 @@ si hay key). Extraer principios, no copiar identidad de creadores. Si una fuente
 no responde, decirlo y usar el pilar de contenido evergreen.
 
 ### 2. Elegir pilares del dia
-ONIA vende IA practica para negocios de Bolivia. Rotar entre estos pilares para
+ONIA vende un sistema de gestion por rubro para negocios de Bolivia (el chatbot es add-on). Rotar entre estos pilares para
 no repetir angulo:
 - **Dolor real**: un proceso manual que pierde plata/tiempo (leads sin
   responder, agenda a mano, cobros olvidados) y como la IA lo resuelve.
 - **Antes/Despues**: negocio sin sistema vs con ONIA (sin inventar metricas).
-- **Caso de uso concreto**: chatbot que califica, web que capta, automatizacion
-  que agenda.
+- **Caso de uso concreto**: sistema que ordena agenda, cobros y seguimiento de un
+  rubro (dental primero, luego importadora).
 - **Educativo/mito**: que si y que no puede hacer la IA hoy para una pyme.
 - **Detras de escena**: como ONIA construye (autoridad, confianza).
 - **Autoridad Sergio**: fundador joven construyendo el sistema (usa
