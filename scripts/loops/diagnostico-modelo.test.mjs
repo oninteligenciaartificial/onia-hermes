@@ -15,7 +15,7 @@ assert.ok(fin > inicio, "falta la sección siguiente");
 const seccion = diag.slice(inicio, fin);
 const nube = "sesión de la nube de Hermes-Jarvis: modelo no medible desde el VPS (lo lee la madre en la consola de la sesión)";
 
-function diagnosticoModelo({ jobs, raw, cron = [], scripts = {}, codigoCron = 0, texto = seccion } = {}) {
+function diagnosticoModelo({ jobs, raw, cron = [], scripts = {}, codigoCron = 0, texto = seccion, config } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "diag-modelo-"));
   try {
     const hermes = join(dir, "hermes");
@@ -26,6 +26,7 @@ function diagnosticoModelo({ jobs, raw, cron = [], scripts = {}, codigoCron = 0,
     if (jobs !== undefined || raw !== undefined) {
       writeFileSync(join(hermes, "cron", "jobs.json"), raw ?? JSON.stringify(jobs));
     }
+    if (config !== undefined) writeFileSync(join(hermes, "config.yaml"), config);
     for (const [nombre, texto] of Object.entries(scripts)) {
       const ruta = join(bin, nombre);
       writeFileSync(ruta, texto.startsWith("#!") ? texto : `#!/usr/bin/env bash\n${texto}`);
@@ -250,4 +251,13 @@ test("cron: alias, override entre comillas y expresiones no se expanden", () => 
 test("sección 16: no contiene herramientas, bibliotecas ni destinos de red", () => {
   assert.doesNotMatch(seccion, /curl|wget|urllib|requests|http:\/\/|https:\/\/|api\.openai|LITELLM|hermes cron/);
   assert.match(seccion, /\}\s*\| redactar\s*$/);
+});
+
+test("sección 16: dice cuál es «el del gateway» (model.default y provider), sin las llaves de config.yaml", () => {
+  // 21-oct: Sergio Urcullo pasa todo Hermes a gpt-6.1-sol; los trabajos sin modelo propio usan este.
+  const config = "toolsets: [web]\nmodel:\n  default: gpt-6.1-sol\n  provider: openai-codex\n  api_key: SECRETO-DE-PRUEBA\n" +
+    "fallback:\n  default: SECRETO-DE-PRUEBA\n";
+  const salida = diagnosticoModelo({ jobs: trabajos, config });
+  assert.match(salida, /^el del gateway: default: gpt-6\.1-sol provider: openai-codex $/m);
+  assert.match(diagnosticoModelo({ jobs: trabajos }), /^el del gateway: \(no encontré model\.default en config\.yaml\)$/m);
 });

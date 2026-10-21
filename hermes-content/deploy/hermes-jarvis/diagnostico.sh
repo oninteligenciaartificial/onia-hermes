@@ -521,6 +521,12 @@ sec "16. Modelo y cadencia por trabajo — lo que está escrito, sin llamar a ni
 # Un modelo ausente no prueba que el trabajo no use uno; el gateway puede elegirlo por defecto.
 {
 echo "--- A. Trabajos del gateway de Hermes"
+# «(el del gateway)» = model.default y model.provider de config.yaml (21-oct: Sergio Urcullo pasa todo Hermes a
+# gpt-6.1-sol con `/model … --global`). Solo esas dos claves: el resto del archivo trae llaves.
+GW_MODELO=$(awk '/^model:[[:space:]]*[^[:space:]#]/ {print; exit} /^model:/ {on = 1; next}
+  on && /^[^[:space:]#]/ {exit} on && /^[[:space:]]+(default|provider):/ {sub(/^[[:space:]]+/, ""); print}' \
+  /root/.hermes/config.yaml 2>/dev/null | tr '\n' ' ')
+echo "el del gateway: ${GW_MODELO:-(no encontré model.default en config.yaml)}"
 python3 - <<'PY'
 import json
 p = '/root/.hermes/cron/jobs.json'

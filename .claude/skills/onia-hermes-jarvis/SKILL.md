@@ -67,6 +67,12 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
   (gateway); no se volvió a medir. Después de `aplicar` quedan pausados 08:00, 08:10 y 16:00, y el resumen y
   el cierre de Jarvis usan `gpt-5-mini` (`ONIA_JARVIS_MODELO`): en `nano` queda solo el tablero. Se mira en
   solo lectura con `diagnostico` (imprime «modelo:» por trabajo) y `grep -n model /root/.hermes/config.yaml`.
+  **20-oct: Sergio Urcullo pasa TODO Hermes a `gpt-6.1-sol`** (proveedor `openai-codex`). Medido ese día, antes del
+  cambio: `config.yaml` con `default: gpt-5-mini`, `provider: openai-api`; la revisión de la orquesta lo usaba
+  porque no tiene modelo propio. `/model gpt-6.1-sol` en la CLI de Hermes es solo de esa sesión: persiste con
+  `--global`, y lo corre él. `aplicar` y `revertir` NO tocan `config.yaml` (solo lo copia el respaldo diario),
+  así que no lo pisan. Desde el #267 la sección 16 del diagnóstico imprime «el del gateway: default: … provider: …»
+  (solo esas dos claves). Los trabajos viejos con `gpt-5-mini`/`gpt-5-nano` propio están pausados.
 - **Arma su lista de skills al ARRANCAR** (`.skills_prompt_snapshot.json`). El 1-oct la lista era del
   08-sep y no nombraba `agenda-calendario`, que existía desde el 28-sep: una skill copiada en caliente
   existe en el disco y él no la conoce. **Toda skill o SOUL nuevo exige reiniciar el gateway**:

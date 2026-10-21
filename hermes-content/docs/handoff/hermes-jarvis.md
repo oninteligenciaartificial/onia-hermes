@@ -1,5 +1,13 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> **ESTADO 21-oct, 01:45 UTC.** Paso 5e ENCENDIDO (Hermes planifica la orquesta): aplicar 39496727472 y 39503283126,
+> fallas 0; revisión `26deb0b4121c` cada 3 h. Su primera corrida (20:01 La Paz) cargó la skill y respondió `[SILENT]`:
+> con la cola vacía no tenía de dónde sacar tareas. El arreglo (la skill carga una de `principal.md` o de un carril) y la
+> sección 16/18 del diagnóstico van en el #267; llegan al VPS con otro `aplicar` (sí de Sergio Urcullo). **Modelo:**
+> Sergio Urcullo pasa todo Hermes a `gpt-6.1-sol` con `/model gpt-6.1-sol --global` (lo corre él); `aplicar` no toca
+> `config.yaml`. Verificar con la sección 16 («el del gateway») y la 18 (la respuesta de la revisión). Abierto:
+> `skills/agenda-calendario.md` suelto no se carga (tarjeta propuesta), 11 vigías viejos MUDO sin latido.
+
 > **ESTADO 11-oct, 07:30 UTC — qué está en vuelo y quién lo mueve** (sesión `session_01SQ7cvuDX5w5jDHk5VdhAEo`, rama `claude/adoring-ramanujan-7sjzwv`, PR #194).
 > - **Producción, 11-oct 12:58 UTC (E22):** build nuevo `Lv2W45uYHdFOlYQCVcD01` con #152, #151 y M1 (#156); `/login`, `/book` y `/register` bien y de usted; **Q9b cerrado** (el paso 2 de `/register` dice «Nombre de su clínica»); `web-vs-producto` con 0 diferencias. #157 no entró. Sin medir desde la nube: `/agents`, el Inicio y la caja con M1 (detrás del login).
 > - **Producción antes, 11-oct 09:58 UTC (E11):** build nuevo tras la publicación de las 09:50, `buildId` `FTdbJ5YopG9Ll4v0Yivrq`; `/login`, `/book` y `/register` bien (capturas `despues-0950-*` en `docs/research/qa-publicacion/2026-10-11/`). **El paso 2 de `/register` sigue con «Nombre de tu clínica»** (#148 no está en `master`; Q9b abierto). Lo de #147 que está detrás del login (caja «1.500», borrado con caras) sigue sin medir desde la nube.
