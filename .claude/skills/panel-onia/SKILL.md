@@ -17,7 +17,7 @@ description: Invocar antes de cambiar, depurar o explicar el Panel ONIA, el mod 
 |---|---|
 | Código del mod (lo que se edita) | `C:/Users/PC/.claude/onia-mods/panel-onia` |
 | Marketplace de carpeta `onia-mods` | `C:/Users/PC/.claude/onia-mods/.claude-plugin/marketplace.json` |
-| Versión | `version` de `panel-onia/.claude-plugin/plugin.json` (0.1.1 el 20-oct) |
+| Versión | `version` de `panel-onia/.claude-plugin/plugin.json` (0.4.0 el 21-oct) |
 | **Lo que la app corre** | la COPIA de `~/.claude/plugins/cache/onia-mods/panel-onia/<versión>` |
 | Recolector (node, solo lee, imprime un JSON) | `bin/recolectar.mjs` (`--hermes` suma el VPS) |
 | Panel, línea de estado, aviso al 80 % | `hooks/register.tsx` |
@@ -51,6 +51,9 @@ Todo lo junta `bin/recolectar.mjs`. Cada fuente tiene su tope de tiempo; la que 
 | Nube | `gh run list --workflow orquesta.yml --limit 5`. |
 | PC | `~/.onia-orquesta/registro.jsonl` (última tarea) y `~/.onia-orquesta/candado` (pasada corriendo si el PID está vivo; candado sin proceso = rojo). |
 | **Hermes** | SSH con `~/.ssh/onia_hermes_vps_ed25519` y `python3 -` por stdin: `systemctl --user show hermes-gateway`, `/root/.hermes/cron/jobs.json`, dos claves de `config.yaml` (proveedor y modelo) y el tablero SQLite con `?mode=ro`. **Solo corre después de que Sergio Urcullo aprieta «Conectar Hermes»**; su OK queda en `$.store` (`hermesOk`) y cada sesión lo lee al arrancar. |
+| Hermes · planificador (0.4.0, 21-oct) | Del mismo SSH: modelo con que planifica (el `model` del job o, si falta, el `default` del gateway), última revisión, resultado y próxima, y **lo que contestó**: el último archivo de `~/.hermes/cron/output/<id>/`, solo lo que sigue a `## Response` (arriba trae el prompt), con tokens tapados. `[SILENT]` = «no cargó nada». |
+| Quién hace cada trabajo (0.4.0) | `carriles.json` de main (ya se leía para la cola): carril, PC o GitHub, modelo normal, y el revisor. |
+| Dónde se gastan tus tokens (0.4.0) | Las 5 sesiones con más contexto: cada turno relee todo el contexto, así que son las que más gastan por turno. No es el gasto acumulado del día. |
 | Uso | Cupo de Max del último reporte de sesión, minutos de Actions del mes estimados por duración de cada corrida (cache 30 min en `~/.onia-panel/actions-mes.json`), US$ equivalentes de la orquesta en la PC (`usd` del registro) y el enlace a `claude.ai/settings/usage`. |
 
 Cada sesión, además, pone en su línea de estado «🟢 Contexto N %» y, la primera vez que pasa el 80 %, un
@@ -74,4 +77,5 @@ consulta nada.
 | **`Text` rechaza `size` y `weight`** | En la versión 2.1.299, en terminal y en escritorio. | El texto grande sale de los títulos de `Markdown` (`# Panel ONIA`, `## Sección`); `Text` solo con `bold`, `color` y `dimColor`. |
 | **La facturación de Actions pide el scope `user`** | El token de `gh` de la PC tiene `gist`, `read:org`, `repo` y `workflow`, sin `user`. | Los minutos se estiman sumando la duración de cada corrida del mes (`gh api --paginate .../actions/runs`) y se rotulan «estimado». |
 | **Claude no puede capturar su propia ventana** | Ni controlarla ni sacarle captura. | La captura del panel la toma Sergio Urcullo. Verificar = abrir el panel en OTRA sesión y mirar su captura; un JSON del recolector no prueba que se vea bien. |
+| `gpt-5-mini` salía «Codex Mini» | `nombreModelo` tomaba todo `gpt-N-x` como Codex. | Solo `gpt-…-luna/sol/astra` son Codex; el resto se muestra tal cual (21-oct). |
 | Transcripts de decenas de MB | Leerlos enteros cada 60 s pesa. | Solo los últimos 64 KB (`cola()` en el recolector). |
