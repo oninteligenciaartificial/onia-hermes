@@ -17,7 +17,7 @@ description: Invocar antes de cambiar, depurar o explicar el Panel ONIA, el mod 
 |---|---|
 | Código del mod (lo que se edita) | `C:/Users/PC/.claude/onia-mods/panel-onia` |
 | Marketplace de carpeta `onia-mods` | `C:/Users/PC/.claude/onia-mods/.claude-plugin/marketplace.json` |
-| Versión | `version` de `panel-onia/.claude-plugin/plugin.json` (0.1.1 el 20-oct) |
+| Versión | `version` de `panel-onia/.claude-plugin/plugin.json` (0.4.0 el 21-oct) |
 | **Lo que la app corre** | la COPIA de `~/.claude/plugins/cache/onia-mods/panel-onia/<versión>` |
 | Recolector (node, solo lee, imprime un JSON) | `bin/recolectar.mjs` (`--hermes` suma el VPS) |
 | Panel, línea de estado, aviso al 80 % | `hooks/register.tsx` |
@@ -34,7 +34,7 @@ del cache, y en el cache conviven las versiones (`0.1.0/` y `0.1.1/` el 20-oct).
 3. `claude plugin update panel-onia@onia-mods`
 4. `/reload-plugins` en cada sesión abierta. Las sesiones nuevas lo cargan solas.
 
-Antes de publicar: `claude plugin test C:/Users/PC/.claude/onia-mods/panel-onia` (5 pruebas, en
+Antes de publicar: `claude plugin test C:/Users/PC/.claude/onia-mods/panel-onia` (12 pruebas, en
 `tests/panel.test.ts`) y `node bin/recolectar.check.mjs`.
 
 ## De dónde lee cada sección
@@ -51,6 +51,9 @@ Todo lo junta `bin/recolectar.mjs`. Cada fuente tiene su tope de tiempo; la que 
 | Nube | `gh run list --workflow orquesta.yml --limit 5`. |
 | PC | `~/.onia-orquesta/registro.jsonl` (última tarea) y `~/.onia-orquesta/candado` (pasada corriendo si el PID está vivo; candado sin proceso = rojo). |
 | **Hermes** | SSH con `~/.ssh/onia_hermes_vps_ed25519` y `python3 -` por stdin: `systemctl --user show hermes-gateway`, `/root/.hermes/cron/jobs.json`, dos claves de `config.yaml` (proveedor y modelo) y el tablero SQLite con `?mode=ro`. **Solo corre después de que Sergio Urcullo aprieta «Conectar Hermes»**; su OK queda en `$.store` (`hermesOk`) y cada sesión lo lee al arrancar. |
+| Hermes · planificador (0.4.0, 21-oct) | Del mismo SSH: modelo con que planifica (el `model` del job o, si falta, el `default` del gateway), última revisión, resultado y próxima, y **lo que contestó**: el último archivo de `~/.hermes/cron/output/<id>/`, solo lo que sigue a `## Response` (arriba trae el prompt), con tokens tapados. `[SILENT]` = «no cargó nada». |
+| Quién hace cada trabajo (0.4.0) | `carriles.json` de main (ya se leía para la cola): carril, PC o GitHub, modelo normal, y el revisor. |
+| Dónde se gastan tus tokens (0.4.0) | Las 5 sesiones con más contexto: cada turno relee todo el contexto, así que son las que más gastan por turno. No es el gasto acumulado del día. |
 | Uso | Cupo de Max del último reporte de sesión, minutos de Actions del mes estimados por duración de cada corrida (cache 30 min en `~/.onia-panel/actions-mes.json`), US$ equivalentes de la orquesta en la PC (`usd` del registro) y el enlace a `claude.ai/settings/usage`. |
 
 Cada sesión, además, pone en su línea de estado «🟢 Contexto N %» y, la primera vez que pasa el 80 %, un
@@ -74,4 +77,8 @@ consulta nada.
 | **`Text` rechaza `size` y `weight`** | En la versión 2.1.299, en terminal y en escritorio. | El texto grande sale de los títulos de `Markdown` (`# Panel ONIA`, `## Sección`); `Text` solo con `bold`, `color` y `dimColor`. |
 | **La facturación de Actions pide el scope `user`** | El token de `gh` de la PC tiene `gist`, `read:org`, `repo` y `workflow`, sin `user`. | Los minutos se estiman sumando la duración de cada corrida del mes (`gh api --paginate .../actions/runs`) y se rotulan «estimado». |
 | **Claude no puede capturar su propia ventana** | Ni controlarla ni sacarle captura. | La captura del panel la toma Sergio Urcullo. Verificar = abrir el panel en OTRA sesión y mirar su captura; un JSON del recolector no prueba que se vea bien. |
+| `gpt-5-mini` salía «Codex Mini» | `nombreModelo` tomaba todo `gpt-N-x` como Codex. | Solo `gpt-…-luna/sol/astra` son Codex; el resto se muestra tal cual (21-oct). |
 | Transcripts de decenas de MB | Leerlos enteros cada 60 s pesa. | Solo los últimos 64 KB (`cola()` en el recolector). |
+| **Cómo se dibuja el panel (0.5.0, 21-oct)** | Fila de 5 métricas arriba (`metricas()`: Max 7 d / 5 h, sesiones trabajando/esperándote, cola, Hermes; borde y nota con `COLOR` por umbral, número en un `# ` de Markdown), barras `█░` de 10 celdas (`barra()`) en Max, Codex y contexto, y el borde de cada sección en rojo/amarillo según su peor renglón (`colorBorde`). | Logos Claude y Hermes en los títulos de Sesiones y Hermes solo si la tabla tiene `Svg` (escritorio); en terminal, emoji. Escritorio: dos columnas con `flexWrap` (izq. Sesiones y Gasto; der. Hermes, Trabajadores, Cola, Pasadas, Uso), una sola en terminal. Sin captura de Sergio Urcullo no está verificado a ojo. |
+| **Sesión cortada con Stop salía «trabajando»** | El transcript termina en un mensaje de usuario «[Request interrupted by user]» (o «… for tool use») sin `turn_duration`. | `leerCola` devuelve `interrumpida` (el último registro user/assistant es ese texto) y `estadoDeSesion` da `parada`; `espera` por `interruptedAwaitingPerson` sigue primero. |
+| **Sesiones anidadas salían «Sin sección»** | La app solo asigna sección a la sesión padre. El archivo de sesión NO trae `parentSessionId`: el padre está en `spawnedFrom.sessionId` o `forkedFromSessionId`, y `lineageDetached: true` la suelta. | `seccionDe()` sube por la cadena de padres (tope 10, sin ciclos; incluye padres archivados) y hereda la sección con `orden: -1` (al final de ella). |

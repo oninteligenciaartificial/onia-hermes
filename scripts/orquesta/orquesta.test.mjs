@@ -7,7 +7,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
-  baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
+  baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito, armarRevision,
   leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
 } from './orquesta.mjs';
 
@@ -123,9 +123,15 @@ test('cada carril tiene su cuartito y el prompt lo nombra', () => {
   for (const [nombre, c] of Object.entries(CONF.carriles)) assert.ok(c.leer?.length >= 3, nombre);
   const p = armarPrompt({ carril: 'video', issue: issue(1, 'video'), pedido: { pedido: 'X' }, salida: 's.md', rama: 'r' });
   assert.match(p, /TU CUARTITO.*edicion-referentes/s);
-  assert.match(p, /agregalo con la fecha a \.claude\/skills\/editor-videos\/SKILL\.md/);
-  assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /agregalo/);
+  assert.match(p, /Leé \.claude\/skills\/edicion-referentes\/SKILL\.md y \.claude\/skills\/editor-videos\/SKILL\.md antes/);
+  assert.match(p, /«## Leí».*«## Aprendido».*lo pasa a \.claude\/skills\/editor-videos\/SKILL\.md/s);
+  assert.match(armarCuartito(CONF.carriles.comunidad), /Leé hermes-content\/docs\/handoff\/comunidad\.md y/);
+  assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /lo pasa a/);
   assert.equal(armarCuartito({}), '');
+  const rev = (carril) => armarRevision({ issue: issue(1, carril), pedido: { pedido: 'X' }, salida: 's.md', cambios: 's.md' });
+  assert.match(rev('video'), /5\. Cierra con «## Leí»/);
+  assert.doesNotMatch(armarRevision({ issue: issue(1, 'video'), pedido: { pedido: 'X' }, salida: 's.md', cambios: '' },
+    { carriles: { video: {} } }), /## Leí/);
 });
 
 const hilo = (...bodies) => bodies.map((body) => ({ body, author: { login: 'oninteligenciaartificial' } }));

@@ -97,8 +97,8 @@
       },
       "aprende_en": ".claude/skills/diseno-contenido-onia/SKILL.md",
       "leer": [
-        ".claude/skills/diseno-contenido-onia/SKILL.md",
         "hermes-content/docs/handoff/marca-personal.md",
+        ".claude/skills/diseno-contenido-onia/SKILL.md",
         "hermes-content/skills/guiones-diarios-onia.md",
         "hermes-content/skills/marca-personal-sergio.md",
         "hermes-content/skills/carruseles-onia.md",
@@ -119,6 +119,7 @@
         "profundo": "claude-opus-5-5"
       },
       "leer": [
+        "hermes-content/docs/handoff/comunidad.md",
         "hermes-content/docs/comunidad/ESTADO_COMUNIDAD.md",
         "hermes-content/docs/ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md",
         "hermes-content/docs/ONIA_COMUNIDAD_CONTENIDO.md",
