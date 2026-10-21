@@ -521,6 +521,12 @@ sec "16. Modelo y cadencia por trabajo — lo que está escrito, sin llamar a ni
 # Un modelo ausente no prueba que el trabajo no use uno; el gateway puede elegirlo por defecto.
 {
 echo "--- A. Trabajos del gateway de Hermes"
+# «(el del gateway)» = model.default y model.provider de config.yaml (21-oct: Sergio Urcullo pasa todo Hermes a
+# gpt-6.1-sol con `/model … --global`). Solo esas dos claves: el resto del archivo trae llaves.
+GW_MODELO=$(awk '/^model:[[:space:]]*[^[:space:]#]/ {print; exit} /^model:/ {on = 1; next}
+  on && /^[^[:space:]#]/ {exit} on && /^[[:space:]]+(default|provider):/ {sub(/^[[:space:]]+/, ""); print}' \
+  /root/.hermes/config.yaml 2>/dev/null | tr '\n' ' ')
+echo "el del gateway: ${GW_MODELO:-(no encontré model.default en config.yaml)}"
 python3 - <<'PY'
 import json
 p = '/root/.hermes/cron/jobs.json'
@@ -717,7 +723,15 @@ ORQ_SAL=""
 [ -z "$ORQ_JID" ] || ORQ_SAL=$(ls -t /root/.hermes/cron/output/"$ORQ_JID"/* 2>/dev/null | head -1)
 if [ -n "$ORQ_SAL" ] && [ -f "$ORQ_SAL" ]; then
   echo "--- su última salida: $(basename "$ORQ_SAL") ($(stat -c %s "$ORQ_SAL") bytes, $(stat -c %y "$ORQ_SAL" | cut -c1-19) UTC)"
-  head -n 40 "$ORQ_SAL" | redactar | cut -c 1-200
+  # El archivo trae el prompt entero (con la skill) y la respuesta al final: se muestra si cargó la skill y
+  # desde «## Response» (medido el 21-oct: 8.205 bytes, y las 40 primeras líneas eran solo la skill).
+  grep -q 'invoked the "planificar-orquesta" skill' "$ORQ_SAL" && echo "skill planificar-orquesta: cargada" \
+    || echo "skill planificar-orquesta: NO figura en el prompt"
+  if grep -q '^## Response' "$ORQ_SAL"; then
+    sed -n '/^## Response/,$p' "$ORQ_SAL" | head -n 40 | redactar | cut -c 1-200
+  else
+    tail -n 20 "$ORQ_SAL" | redactar | cut -c 1-200
+  fi
 else
   echo "--- su última salida: (no hay en /root/.hermes/cron/output/${ORQ_JID:-?}/)"
 fi

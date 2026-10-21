@@ -39,11 +39,25 @@ test("muestra la salida MÁS NUEVA de la revisión", () => {
     mkdirSync(d, { recursive: true });
     writeFileSync(join(d, "vieja.md"), "la de antes\n");
     utimesSync(join(d, "vieja.md"), new Date(Date.now() - 3600e3), new Date(Date.now() - 3600e3));
-    writeFileSync(join(d, "nueva.md"), "[SILENT]\n");
+    // Como la guarda el cron de Hermes: el prompt entero (con la skill) y la respuesta al final.
+    writeFileSync(join(d, "nueva.md"), "# Cron Job: onia-planificar-orquesta\n\n## Prompt\n\n" +
+      '[IMPORTANT: The user has invoked the "planificar-orquesta" skill, indicating they want you to follow its instructions.]\n' +
+      "relleno\n".repeat(60) + "\n## Response\n\n[SILENT]\n");
   });
-  assert.match(out, /--- su última salida: nueva\.md \(9 bytes, /);
-  assert.match(out, /^\[SILENT\]$/m);
-  assert.doesNotMatch(out, /la de antes/);
+  assert.match(out, /--- su última salida: nueva\.md \(\d+ bytes, /);
+  assert.match(out, /^skill planificar-orquesta: cargada$/m);
+  assert.match(out, /^## Response\n\n\[SILENT\]$/m, "la respuesta, aunque esté después de 40 líneas");
+  assert.doesNotMatch(out, /relleno|la de antes/);
+});
+
+test("si el prompt no trae la skill, lo dice", () => {
+  const out = correr((dir) => {
+    conTrabajo(dir);
+    const d = join(dir, ".hermes", "cron", "output", "26deb0b4121c");
+    mkdirSync(d, { recursive: true });
+    writeFileSync(join(d, "a.md"), "## Prompt\n\nsin skill\n\n## Response\n\nhola\n");
+  });
+  assert.match(out, /^skill planificar-orquesta: NO figura en el prompt$/m);
 });
 
 test("sin salida todavía, lo dice en vez de callar", () => {

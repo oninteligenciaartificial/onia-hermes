@@ -92,7 +92,19 @@ repetida u otra carga en curso · 1 «NO se cargó» (se puede reintentar) o «P
 
    Solo cierra lo tuyo (`origen:hermes`) que no empezó; lo que está `en curso`, `bloqueada` o
    esperando su ok no se toca.
-4. Terminá con una línea de qué hiciste. Si no hiciste nada, respondé solo `[SILENT]`.
+4. **Si no tenés ninguna tarea `en cola` ni `en curso`, cargá UNA nueva.** Con la cola vacía, callar no
+   es planificar (20-oct: la primera revisión respondió `[SILENT]` y la orquesta quedó parada). Leé, en
+   este orden, del clon del VPS (siempre `origin/main`, nunca el árbol):
+
+       git -C /root/loops/onia-hermes show origin/main:hermes-content/docs/handoff/principal.md
+       git -C /root/loops/onia-hermes ls-tree --name-only origin/main hermes-content/docs/handoff/
+       git -C /root/loops/onia-hermes show origin/main:hermes-content/docs/handoff/<el del carril>.md
+
+   Primero las prioridades de Sergio Urcullo (`principal.md`), después el «Próximos pasos» de cada
+   carril. Elegí la que cumpla las tres de «Cuándo cargar una tarea» y, entre esas, preferí una
+   `donde: nube` + `check: urls` (investigar, comparar, escribir un documento): es la única que arranca
+   sola. Una por revisión. Si ninguna cumple, decí en una línea por qué.
+5. Terminá con una línea de qué hiciste. `[SILENT]` solo si ya tenías tareas andando y no cambió nada.
 
 A Sergio Urcullo no le escribas por esto: cada tarea cargada, cerrada o bloqueada ya le llega en su
 resumen de las 06:30 o el cierre de las 21:30. Si te pregunta «¿cómo va la orquesta?», `--revisar` y
