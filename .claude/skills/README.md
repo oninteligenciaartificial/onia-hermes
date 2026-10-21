@@ -1,7 +1,7 @@
 # Skills del repo (Claude Code)
 
 Skills **auto-descubribles** en este repo. Arrancá siempre por `onia-router` (índice +
-enrutador por carril). Actualizado 2026-10-02: se restauró todo lo que borró la limpieza del
+enrutador por carril). Actualizado 2026-10-20 (66 skills en la carpeta; las de terceros no van en la tabla). El 2026-10-02 se restauró todo lo que borró la limpieza del
 29-sep (historia en `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`).
 
 | Skill | Cuándo se invoca |
@@ -16,6 +16,11 @@ enrutador por carril). Actualizado 2026-10-02: se restauró todo lo que borró l
 | `onia-propuestas` | crear/cotizar/perfeccionar/enviar propuesta a cliente |
 | `onia-web-factory` | construir/rediseñar webs (landings, panel, sitios cliente) |
 | `diseno-contenido-onia` | antes de cualquier pieza visual de ONIA o de Sergio Urcullo |
+| `edicion-referentes` | todo video nuevo de Sergio Urcullo (molde de edición medido) |
+| `onia-ventas-pauta` | prospectos, leads, demo, objeciones, Meta Ads, anuncio y VSL |
+| `equipo-de-agentes` · `aprender-de-todo` | al despachar trabajo · ante cualquier referencia recibida |
+| `orca` · `panel-onia` | antes de tocar Orca (tablero local) o el Panel ONIA (mod de la app de Claude) |
+| `onia-sesion-madre` | HISTORIA desde el 19-oct: solo los canales medidos entre sesiones |
 | `editor-videos` | editar/cortar/subtitular video (pipeline "sin editores humanos") |
 | `ver-videos` | ver, transcribir o analizar un video |
 | `sacar-prompt` | sacar el prompt de una imagen o video de referencia |

@@ -45,7 +45,7 @@ git worktree list
 ls hermes-content/docs/handoff/
 git log -1 --format='%cd' --date=short -- hermes-content/docs/handoff/<mi-carril>.md
 
-# 3. ¿Cuál es la cola de mi carril, y tiene fantasmas?
+# 3. ¿Qué tengo pendiente? Issues del carril (`gh issue list --label orquesta`) y, si queda cola vieja, ¿tiene fantasmas?
 cat hermes-content/docs/cola/README.md          # el índice: qué cola es de quién
 node scripts/verificar_cola.js <mi-cola.md>      # exit 1 si un ítem no existe
 
@@ -138,7 +138,7 @@ Tres cosas se escriben **en el momento**, porque son las que se pierden:
 | Qué | Dónde | Por qué se pierde |
 |---|---|---|
 | **Un doc que resultó falso** | en el doc mismo, con la marca ⚠️ | si esperás al cierre, ya no te acordás de la evidencia |
-| **Una decisión de Sergio** | en la cola del carril, con sus palabras textuales | parafraseada pierde el matiz que la hacía útil |
+| **Una decisión de Sergio Urcullo** | en el issue o el handoff del carril, con sus palabras textuales | parafraseada pierde el matiz que la hacía útil |
 | **Un intento que falló** | handoff, campo *intentos fallidos* | es lo único que no se puede reconstruir del código |
 
 Un hallazgo que aparece **verificando otra cosa** vale doble: nadie lo estaba buscando, así que
@@ -167,8 +167,8 @@ baja una cuenta servía de algo.
 ## 5. Trampas de coordinación medidas en la nube (1-oct-2026)
 
 - **Una sesión en la nube no puede mandarle mensajes a otra:** `SendMessage` falla con «auth: this cloud session cannot
-  message other sessions». Lo que la madre local pide se contesta EN EL TRANSCRIPT, porque ella lo lee desde ahí. Si
-  hace falta que la madre haga algo, el texto se le da a Sergio Urcullo para que lo pegue.
+  message other sessions». Lo que haga falta de la PC se pide con un issue `orquesta` o se le da a Sergio Urcullo como texto para
+  que lo pegue (desde el 19-oct no hay madre que lo lea).
 - **`git grep` sobre todo el repo tarda más de 2 minutos** y corta el comando por timeout. El 1-oct dejó un merge a
   medias, con `git add` sin correr. Para buscar marcadores de conflicto, usá `grep -c '^<<<<<<<'` sobre el archivo en
   conflicto.

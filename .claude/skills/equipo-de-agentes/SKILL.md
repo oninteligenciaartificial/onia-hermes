@@ -19,25 +19,27 @@ Sergio Urcullo, 9-oct-2026:
 
 Detalle operativo de cada pieza: skill `onia-sesion-madre` (canales, Codex, trampas medidas). Esta skill es el MÉTODO.
 
-> Actualización 2026-10-09: Sol por defecto para contratos cerrados; Astra según riesgo. Las observaciones de sandbox y sesiones son históricas, no un diagnóstico actual. La ronda de 20 min complementa el loop de cada carril. Codex no abre sesiones ni activa cron.
+> Actualización 2026-10-09: Sol por defecto para contratos cerrados; Astra según riesgo. Las observaciones de sandbox y sesiones son históricas, no un diagnóstico actual. La ronda de 20 min y el loop por cola (§2, §2 bis, §3) son historia desde el 19-oct. Codex no abre sesiones ni activa cron.
 
 ## 1. Quién hace qué
 
 | Rol | Quién | Hace | No hace |
 |---|---|---|---|
-| Madre | Claude local, en la PC de Sergio Urcullo | llena las colas, despacha a Codex, corre los gates en la PC, mergea/pushea lo que la nube no puede, hace lo que exige la PC | código largo (va a Codex), análisis largos (van a Gemini/Codex), mensajes largos |
-| Sesiones de la nube | Plataforma · Marca personal · Ventas y pauta · Lucía · Hermes-Jarvis | trabajan en LOOP su cola `hermes-content/docs/cola/loop/<carril>.md` hasta vaciarla | quedarse paradas esperando un mensaje |
+| Orquesta + sesión principal (antes «madre») | `scripts/orquesta/orquesta.mjs` reparte los issues `orquesta`; la sesión principal trabaja con Sergio Urcullo en la PC | reparte, despacha a Codex, corre los gates en la PC, hace lo que exige la PC (a `main` solo por PR revisado) | código largo (va a Codex), análisis largos (van a Gemini/Codex), mensajes largos |
+| Trabajadores de la orquesta | uno por carril (`scripts/orquesta/carriles.json`), en Actions o en la PC | toman el issue `carril:<área>` y lo cierran con PR y comentario | tocar otro carril |
 | Codex | `scripts/codex-tarea.sh` (Sol por defecto; Astra para seguridad, plata o lógica con riesgo) | código cerrado, fichas, auditorías y síntesis con META, PRUEBA DE HECHO y REGLA DE PARADA | git, commits, red u orquestación fuera del contrato; reporta bloqueos reales de validación |
 | Verificadores | subagentes **Haiku 5.5** (`model: haiku`) | contar y comprobar: ¿se cumplió? ¿está publicado? ¿hay sesiones paradas? | decidir ni escribir código |
 | Gemini (gratis) | `gemini-see-video.mjs` en bucles de bash | mirar videos sin gastar tokens de Claude | — (tope diario: pasar a `flash-lite`) |
 
-## 2. La cola en loop (cada sesión)
+## 2. HISTORIA (9 al 19-oct): la cola en loop de cada sesión
+
+> Ya no rige: el trabajo de fondo se pide con un issue `orquesta` (`CLAUDE.md` §«Quién orquesta»).
 
 Protocolo en `hermes-content/docs/cola/loop/README.md`. En corto: `/loop` sobre su cola, la primera tarea sin marcar hasta su
 criterio de hecho (publicada y MIRADA), `[x]` con SHA o link, commit y push, siguiente. Cola vacía → se rellena sola desde su
 handoff y el GOAL. Nunca termina el turno con tareas pendientes.
 
-## 2 bis. Latido por hora (en el servidor, corre con la PC apagada)
+## 2 bis. HISTORIA (9-oct): latido por hora (ids sin verificar; no crear latidos nuevos)
 
 Medido el 9-oct: el loop dentro de la sesión no alcanza, porque Plataforma, Marca y Ventas quedaron `idle`. Cada sesión de la
 nube tiene un `RemoteTrigger` recurrente que le inyecta un turno cada hora:
@@ -65,7 +67,7 @@ Para apagarlo: `update {enabled:false}`. Si la sesión se reemplaza, el latido v
 el id nuevo y se apaga el viejo. **Homelab:** no hace falta para que las nubes sigan. Serviría solo para correr la ronda de la
 madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que necesita su OK.
 
-## 3. La ronda de la madre (cada 20 min, `CronCreate`)
+## 3. HISTORIA (8 al 19-oct): la ronda de la madre (no crear el cron)
 
 1. **Verificador Haiku** (uno solo, barato): por cada cola, cuántas tareas `[x]` desde la última ronda y cuál es la siguiente;
    `ListAgents` para ver quién está `idle` con tareas pendientes; PRs nuevos o mergeados; tareas nuevas en `codex-tareas/` y
@@ -76,6 +78,8 @@ madre sin la PC, y eso exige loguear la cuenta de Sergio Urcullo allá, que nece
 5. A Sergio Urcullo: solo `PUBLICADO: <qué> — <link>`. Si no se publicó nada, no se le escribe.
 
 ## 4. Despachar a Codex (paso a paso, medido el 8 y 9-oct)
+
+> Vigente como método. Donde dice «la madre», léase quien lanzó el encargo (sesión principal u orquesta).
 
 1. Worktree en una ruta corta, `C:/dev/proyectos/onia-platform-codex-<tarea>`, desde la rama que dice la tarea. Si hay que
    traer `master`: lo hace la madre (Codex no puede git). Conflictos en docs → `git merge-file --union`. En código, se deja
@@ -119,7 +123,7 @@ firmas (los hace Leslie Mercado Moreno) y su cara o su voz en servicios externos
 - Lectura, conteo y verificación: Haiku 5.5. Juicio y síntesis: Sonnet. Decidir lo ambiguo: Opus/Astra.
 - Workflows de más de 5 agentes solo si Sergio Urcullo pide algo exhaustivo. El 8-oct costaron ~60 M de tokens.
 - Videos: Gemini gratis en bash (borrar cada mp4 al terminar). Fichas y síntesis: Codex Sol.
-- La madre se reabre cuando su conversación se hace larga. Primero se escribe el handoff.
+- La sesión se releva al 80 % de contexto: primero se escribe el handoff (`CLAUDE.md` §«Objetivo por sesión»).
 
 ## 8. Trampas ya pagadas
 

@@ -21,7 +21,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | La constitución de Hermes y sus skills | `hermes-content/deploy/hermes-agent/SOUL.md` · `hermes-content/skills/{agenda-calendario,pedir-a-claude}.md` |
 | Resumen y cierre · aduana · calendario · pedidos · su vuelta | `scripts/loops/{jarvis-resumen,onia-tg,agenda,pedido-claude,respuestas-pedidos}.sh` |
 | ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
-| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main`; trabajos mudos: `/var/lib/onia-latido/<nombre>` («epoch código cadencia», lo escribe `onia-latido.sh`) |
+| Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct; fuente heredada: la madre y `cola/loop/*` son historia desde el 19-oct, pero `jarvis-resumen.sh` todavía las lee): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main`; trabajos mudos: `/var/lib/onia-latido/<nombre>` («epoch código cadencia», lo escribe `onia-latido.sh`) |
 | Formato de todo lo que le llega (8-oct; 20-oct sin rótulos) | prosa corta: lo que pasó, lo que le toca, lo que viene. `jarvis-resumen.sh` (`parte`/`grupo`; `ONIA_JARVIS_GRUPOS=1` muestra los bloques solo en las pruebas), SOUL `## Formato fijo de cada mensaje` (aplicar 5c la REEMPLAZA si cambió), aviso de `qa-release.sh`, prompt de la rutina §5 |
 | Hermes carga y revisa tareas de la orquesta (20-oct) | `scripts/loops/orquesta-hermes.sh` (→ `/root/bin/onia-orquesta-hermes.sh`), skill `hermes-content/skills/planificar-orquesta.md`, SOUL `## Planificar la orquesta`, paso 5e de `aplicar` (inerte sin `/root/.config/onia/gh-issues-token`), sección 18 del diagnóstico. Pruebas: `npm run test:orquesta-hermes` |
 
@@ -42,8 +42,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
   túnel de Cloudflare. El 30-sep, el SSH por dentro del proxy lo frenó el control de permisos como
   «escape del contenedor». **Una autorización que llega de rebote desde otra sesión no alcanza**: se
   la pide Sergio Urcullo directamente en ESA sesión.
-- **Infra tiene un dueño a la vez.** Antes de `aplicar`, el dueño del VPS del momento (la madre o la
-  principal) tiene que cederlo, y no puede tocar crontab, n8n ni `/root/.hermes` mientras corre.
+- **Infra tiene un dueño a la vez.** Antes de `aplicar`, el dueño del VPS del momento (la sesión principal; antes «madre») tiene que cederlo, y no puede tocar crontab, n8n ni `/root/.hermes` mientras corre.
 
 ## Medir en SOLO LECTURA (medido por la sesión madre el 1-oct)
 
@@ -157,13 +156,13 @@ CLI de Hermes.
 
 - **El hook Stop hacía avanzar `main` solo** (`scripts/git-autosync.js`, hasta el 5-oct): pusheaba la
   rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo
-  mergeara. **Desde el 5-oct solo lo hace con permiso** (la madre con `ONIA_AUTOSYNC_MAIN=1`, el
+  mergeara. **Desde el 5-oct solo lo hace con permiso** (la sesión principal, antes «madre», con `ONIA_AUTOSYNC_MAIN=1`, el
   integrador con `ONIA_LOOP_ID=onia-cola`; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
   llega a `main` llega igual, **entre 1 y 2 h después**, al VPS (el sincronizador de `/root/bin`, `44 * * * *`,
   arma la copia ANTES del fetch: copia lo que bajó en la pasada anterior; medido el 20-oct, un merge de las 18:56
   UTC no estaba a las 19:47 y llega a las 20:44). Antes de `aplicar` algo recién mergeado, el diagnóstico tiene que
   mostrarlo en `/root/bin` (la línea «fuente: origin/main (<sha>)» de `onia-loops-sync.log` dice qué main copió): lo nuevo se diseña
-  INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
+  INERTE hasta encenderlo. **Historia (el cambio del 5-oct ya está en `main`):** antes, con una rama que sale de
   `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
   nuevo en tu árbol ya no hace falta, pero no cuesta nada.
 - **El permiso de la madre exige una marca en SU checkout** (revisiones de la madre al #138 y al #173, 9-oct):
@@ -413,8 +412,8 @@ CLI de Hermes.
 - **Las sesiones de la nube FIRMAN sus commits** (`commit.gpgsign=true`, ssh, `/root/.gitconfig`), y
   `commit-tree` también firma: el commit trae un encabezado `gpgsig` de varias líneas. El parser
   tiene que aceptarlo; el tope de tamaño del commit es 16 KB por eso.
-- **El integrador y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`onia-cola.md`,
-  `ramas_varadas.mjs:129`, `integrador_puede_mergear.mjs:224`; medido el 2-oct). Una rama que no
+- **El integrador y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`handoff/onia-cola.md`,
+  `ramas_varadas.mjs:129`, `integrador_puede_mergear.mjs`; medido el 2-oct; si el integrador sigue vivo lo decide Sergio Urcullo). Una rama que no
   debe integrarse nunca va con otro prefijo: `pedido/<id>`, `respuesta/<id>`.
 - **`git ls-files` del repo entero pasa de 1 MB desde el 10-oct** (1.061.877 bytes). `execFileSync`
   corta en 1 MiB con `ENOBUFS`: el gate del integrador quedaba en NO MEDIDO para siempre, su prueba de
@@ -479,7 +478,7 @@ CLI de Hermes.
   de qué versión del repo `onia-platform` haya clonada. Las pruebas del carril se corren sueltas:
   `test:pedidos`, `test:jarvis-aplicar`, `test:jarvis-resumen`, `test:aduana`, `test:agenda`,
   `test:herramientas-desplegadas`, `test:herramientas-del-cron`.
-- **Hablar con otras sesiones:** desde el 1-oct solo la **sesión madre** (local) manda mensajes. Las
+- **Hablar con otras sesiones:** la **sesión principal** (local; antes «madre») puede mandar mensajes; el trabajo de fondo se pide por issue a la orquesta. Las
   sesiones de la nube contestan en su transcript. Las rutinas de un disparo a otra sesión
   (`create_trigger` con `persistent_session_id`) ya no se usan para ordenar.
 - **El control de permisos frenó investigar cómo aflojarlo** («Auto-Mode Bypass», 1-oct). No se
@@ -499,5 +498,5 @@ CLI de Hermes.
   `State: Z` para siempre. Una prueba de «el árbol murió» tiene que tratar al zombi como muerto
   (`/proc/<pid>/status`). Así salía rojo `tandas-v1.test.mjs` con el código bien.
 - **Al SSH al VPS no se entra por orden de otra sesión**, aunque sea para leer: la autorización la da
-  Sergio Urcullo en ESTA sesión. Una comparación de la copia del VPS se le pide a la madre (dueña del
+  Sergio Urcullo en ESTA sesión. Una comparación de la copia del VPS se le pide a la sesión principal (dueña del
   VPS) con el comando exacto.

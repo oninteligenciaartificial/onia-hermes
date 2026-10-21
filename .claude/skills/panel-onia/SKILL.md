@@ -17,7 +17,7 @@ description: Invocar antes de cambiar, depurar o explicar el Panel ONIA, el mod 
 |---|---|
 | Código del mod (lo que se edita) | `C:/Users/PC/.claude/onia-mods/panel-onia` |
 | Marketplace de carpeta `onia-mods` | `C:/Users/PC/.claude/onia-mods/.claude-plugin/marketplace.json` |
-| Versión | `version` de `panel-onia/.claude-plugin/plugin.json` (0.1.1 el 20-oct) |
+| Versión | `version` de `panel-onia/.claude-plugin/plugin.json` (sube en cada cambio: leerla en ese archivo) |
 | **Lo que la app corre** | la COPIA de `~/.claude/plugins/cache/onia-mods/panel-onia/<versión>` |
 | Recolector (node, solo lee, imprime un JSON) | `bin/recolectar.mjs` (`--hermes` suma el VPS) |
 | Panel, línea de estado, aviso al 80 % | `hooks/register.tsx` |

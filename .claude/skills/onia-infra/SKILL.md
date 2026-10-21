@@ -49,7 +49,7 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
 - **Qué más NO sale desde la nube (medido 1-oct):** YouTube bloquea la IP del contenedor (`yt-dlp` pide «no eres
   un robot», Chromium cae en `/sorry`); los videos se ven desde la PC. Los centros de ayuda Zendesk privados dan 403.
   `SendMessage` a otra sesión falla («this cloud session cannot message other sessions yet»): se contesta en el
-  transcript propio y la madre lo lee. La web pública de terceros, en cambio, abre bien con `curl` y Playwright.
+  transcript propio y lo lee la sesión principal (la «madre» es historia desde el 19-oct). La web pública de terceros, en cambio, abre bien con `curl` y Playwright.
 
 - **Playwright/Chromium desde la nube da `ERR_CERT_AUTHORITY_INVALID`** (medido 1-oct): el proxy re-firma TLS y
   Chromium no toma su CA. No se apaga la verificación. Se le pasa a Chromium la huella de la CA del proxy:
@@ -61,6 +61,10 @@ description: Cargar ANTES de tocar el VPS, Docker, n8n o cualquier cosa por SSH.
   `/home/user/onia-platform/node_modules`: el script se corre desde ese repo.
 
 ### Publicar desde la nube (los dos comandos, medidos 1-oct)
+
+- **Antes de correrlos:** lo que cambia lo que ve un cliente (pantallas nuevas, rediseños, web) espera el OK de Sergio
+  Urcullo con captura (`CLAUDE.md` §«Qué se publica sin preguntar», 19-oct). Arreglos invisibles, docs, bot,
+  migraciones e infra revisados se publican solos y se MIRAN después.
 
 - **Plataforma:** `ssh onia-vps 'nohup bash /opt/onia-platform/_deploy/publicar.sh > /tmp/pub.log 2>&1 &'`. Arma la
   imagen de `origin/master`, hace canary, swap y verificación; termina con «PUBLICADO Y VERIFICADO» y deja un

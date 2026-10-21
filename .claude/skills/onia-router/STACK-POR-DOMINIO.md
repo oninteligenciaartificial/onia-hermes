@@ -15,8 +15,7 @@
 y cargá las 2-3 skills de la fila. No las 10 — las que aplican.
 
 > ⚠️ **Existe un segundo ruteo y NO es el mismo:**
-> `hermes-content/references/video-intake/SKILLS_DEL_CARRIL.md` (rama
-> `claude/analizar-reels-videos-67f762`, todavía sin mergear).
+> `hermes-content/references/video-intake/SKILLS_DEL_CARRIL.md` (ya en `main`).
 >
 > | | Responde a |
 > |---|---|
@@ -52,7 +51,7 @@ que uno realmente va a hacer.
 
 > **En la nube (10-oct-2026):** las skills de este mapa que están en `.claude/skills/` del repo, la nube las ve. Estas
 > siguen **solo en la PC** (`~/.claude/skills/`) y una sesión de la nube no las carga; si una tarea las necesita, se
-> la pide a la madre (`CLAUDE.md` «Sesión MADRE»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
+> pide a la sesión principal en la PC (`CLAUDE.md` «Quién orquesta»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
 > `analytics` · `architecture-decision-records` · `article-writing` · `autonomous-loops` · `banner-design` · `brand` ·
 > `brandkit` · `browse` · `caveman-review` · `click-path-audit` · `codebase-onboarding` · `community-marketing` ·
 > `competitors` · `context-budget` · `context-restore` · `context-save` · `continuous-agent-loop` · `copy-editing` ·
@@ -94,11 +93,11 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 | Cuándo | Skills |
 |---|---|
 | Video en general / edición | skills propias `editor-videos` · `ver-videos` |
-| Motor HTML→MP4 | `hyperframes*` (copia global `~/.claude/skills`; flujo que falte: `npx hyperframes skills update <nombre>`) |
+| Motor HTML→MP4 | `hyperframes*` (gana la copia del repo `.claude/skills/`, restaurada el 2-oct; `npx hyperframes skills update` la pisa: solo con OK de Sergio Urcullo) |
 | **Juzgar el movimiento y la continuidad entre planos** | `motion-doctrine` · `cut-the-curve` · `seam-craft` (propias) |
 | Reconstruir un componente desde fotogramas | `image-to-code` |
 
-**Generativo (Higgsfield):** no es skill, es MCP. Tarifario medido y las 3 vías
+**Generativo (Higgsfield):** Claude Code y Codex usan la CLI oficial con `higgsfield-generate` y `higgsfield-soul-id` (siempre `higgsfield generate cost` antes); el MCP es para agentes de chat. Tarifario medido y las 3 vías
 (`start_image` · `image_references` · `video_extension`) en
 `references/modelos/lucia/prueba-lipsync-20260815/LEEME.md`.
 
@@ -164,7 +163,7 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 | Verificar antes de decir "listo" | `verification-loop` |
 | Onboarding a un repo desconocido | `codebase-onboarding` · `investigate` |
 
-⚠️ `verification-loop` es la que corresponde al loop que Sergio pide a mano.
+⚠️ `verification-loop` es la que corresponde al loop que Sergio Urcullo pide a mano.
 **Cargarla en vez de improvisar el loop.**
 
 ---
@@ -199,8 +198,8 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 
 | Origen | Dónde | Ejemplos |
 |---|---|---|
-| Globales del filesystem | `~/.claude/skills/` (**110**) | `impeccable` · `copywriting` · `security-review` |
-| Del proyecto | `.claude/skills/` (**42**) | `onia-router` · `ver-videos` · `editor-videos` |
+| Globales del filesystem | `~/.claude/skills/` (**113**, 20-oct) | `impeccable` · `copywriting` · `security-review` |
+| Del proyecto | `.claude/skills/` (**66**, 20-oct) | `onia-router` · `ver-videos` · `editor-videos` |
 | Plugins | `~/.claude/plugins/cache/` (**9**) | `gsap-skills` · `caveman` · `ponytail` |
 | De claude.ai | no están en disco — se listan con `ListSkills` | `docx` · `xlsx` · `pptx` · `pdf` · `skill-creator` · `abogado-del-diablo` |
 | HyperFrames | **el repo** (`.claude/skills/` y `.agents/skills/`, restaurado 2026-10-02; gana sobre la copia global) | `hyperframes` · `talking-head-recut` · `embedded-captions` |
@@ -209,7 +208,7 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 
 | Capacidad | Dónde vive |
 |---|---|
-| Higgsfield (imagen/video generativo) | MCP |
+| Higgsfield (imagen/video generativo) | CLI oficial + skills `higgsfield-*` (el MCP, solo en agentes de chat) |
 | Meta Ads · Biblioteca de Anuncios | MCP |
 | Supabase · Vercel · n8n · Cloudflare · Notion · Figma · Drive · Gmail · Calendar | MCP |
 | ElevenLabs | API REST desde el VPS (no hay MCP) |

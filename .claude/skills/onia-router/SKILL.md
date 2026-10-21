@@ -10,7 +10,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
 
 > 📇 **Mapa problema → skill: [`STACK-POR-DOMINIO.md`](STACK-POR-DOMINIO.md).**
-> Hay **116 carpetas en `~/.claude/skills/`** (contado el 20-oct; plugins: `claude plugin list`; el 2026-09-29 se sacaron las que no
+> Hay **113 skills en `~/.claude/skills/`** (116 carpetas; 3 no son skills; contado el 20-oct; plugins: `claude plugin list`; el 2026-09-29 se sacaron las que no
 > usaban ni Claude ni Codex; ver el historial de la limpieza). Esta tabla enruta por carril; ese
 > archivo enruta por dominio (contenido/marketing · diseño/UI/UX · frontend · backend ·
 > seguridad · research · proceso), que es como aparecen las tareas en la práctica.
@@ -83,15 +83,15 @@ trabajador de la nube no lo tiene.
 |---|---|---|---|
 | **Referencia recibida** (link, reel, post, web, app, captura, audio o documento) | **`aprender-de-todo` primero**; link sin instrucción = aprender, no producir; después las skills por dimensión | Codex para ficha/síntesis con evidencia; revisión del carril | `aprender-de-todo` |
 | **A** onia-center (panel Next.js) | `impeccable` `ui-ux-pro-max` `taste-design` `frontend-design:frontend-design` `frontend-patterns` `react-components` `shadcn-ui` `ui-styling` `nextjs-turbopack` `design-review` `emil-design-eng` | — | `onia-web-factory` |
-| **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `98669c11ca63:web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` `design-dna` (teardown de referencia → JSON de tokens/estilo/efectos; tipografía SIEMPRE verificada contra el CSS real, no a ojo) `gsap-*` (plugin oficial GreenSock, scrollytelling) | — | `onia-web-factory` |
+| **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` `design-dna` (teardown de referencia → JSON de tokens/estilo/efectos; tipografía SIEMPRE verificada contra el CSS real, no a ojo) `gsap-*` (plugin oficial GreenSock, scrollytelling) | — | `onia-web-factory` |
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | — | `onia-propuestas` |
-| **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | — | `onia-core` |
+| **D** DentalGest · **E** GestiOS *(nombres viejos de packs; repos legado)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | — | `onia-core` |
 | **F** Bolivian Electric *(prospecto REAL desde 2026-08-24 — 10 puestos relevados, ver handoff)* | mismo stack backend | — | `onia-core` |
 | **chatbot** (motor, guion, conocimiento, voz) | **cargar `onia-chatbot`** — ese archivo nombra el stack completo del carril | — | `onia-chatbot` |
 | **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
 | **panel-onia** (mod de la app de Claude: sesiones, cola de la orquesta, nube, PC, Hermes y uso en vivo) | **cargar `panel-onia`** — el mod vive fuera del repo (`~/.claude/onia-mods/panel-onia`); la app corre la copia del cache: cambio = subir versión + 3 comandos (20-oct) | — | `panel-onia` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
-| **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras por sus mecanismos medidos (sin copiar identidad ni guion), desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
+| **H** contenido · **J** video (HyperFrames; Remotion jubilado) | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras por sus mecanismos medidos (sin copiar identidad ni guion), desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield (CLI oficial y skills `higgsfield-*`; el MCP es para agentes de chat) | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | — | — |
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | — | `onia-core` |
@@ -132,7 +132,7 @@ trabajador de la nube no lo tiene.
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;
   validar con research (fuente citada) antes de codear temas de Bolivia.
 
-## Skills del repo (42 en `.claude/skills/` + 30 en `.agents/skills/`)
+## Skills del repo (66 en `.claude/skills/` + 30 en `.agents/skills/`, contadas el 20-oct)
 - **Aprendizaje transversal (2026-10-09):** `aprender-de-todo` — ficha por dimensión,
   destino canónico y prueba de aplicación.
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de

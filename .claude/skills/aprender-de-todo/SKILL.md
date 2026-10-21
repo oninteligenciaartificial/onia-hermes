@@ -33,8 +33,8 @@ Si hay un encargo explícito, aprender y ejecutar solamente ese alcance.
    carril con fecha y enlace a la ficha. Si contradice una decisión de Sergio Urcullo,
    corregir la regla vieja en origen o dejar la propuesta pendiente, sin adoptarla.
 6. Preparar la prueba de aplicación en la próxima tarea pertinente de la cola.
-   No producir una pieza solo para marcar una casilla. La madre coordina la adopción
-   entre sesiones; Codex devuelve su ficha y cambios dentro del encargo cerrado.
+   No producir una pieza solo para marcar una casilla. La sesión principal (o la orquesta, por issue) coordina la
+   adopción entre sesiones; Codex devuelve su ficha y cambios dentro del encargo cerrado.
 
 ## Dimensiones: método y destino
 
@@ -118,7 +118,7 @@ aplicada y una revisión concreta. Para montaje: frames/timestamps del render; p
 UI: capturas del flujo; para código: diff y prueba del comportamiento; para negocio:
 borrador coherente con evidencia, sin inventar ventas. Puede aplicarse sin publicarse.
 
-La madre pasa a cada carril solo las reglas que le corresponden y pide acuse con
+La sesión principal (o la orquesta, por issue) pasa a cada carril solo las reglas que le corresponden y pide acuse con
 prueba de uso en la siguiente tarea pertinente. Si no hay canal o sesión accesible,
 registrar entrega pendiente; editar archivos locales **no prueba** que todas las
 sesiones los cargaron. No abrir ni reactivar sesiones para simular adopción.

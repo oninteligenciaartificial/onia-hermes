@@ -3,7 +3,7 @@ name: orca
 description: Invocar antes de usar, configurar o recomendar Orca (stablyai/orca), el tablero local de agentes en paralelo de la PC de Sergio Urcullo. Qué ve y qué no, cómo se usa como tablero, ajustes a corregir y trampas medidas.
 ---
 
-# Orca — tablero LOCAL de agentes (no es la madre)
+# Orca — tablero LOCAL de agentes (no es el orquestador)
 
 Medido el 16-oct-2026 (docs oficiales onorca.dev + instalación de la PC, solo lectura).
 
@@ -40,8 +40,8 @@ Medido el 16-oct-2026 (docs oficiales onorca.dev + instalación de la PC, solo l
 
 ## No hacer
 - No activar Settings > Experimental > Orchestration, Cloud VM ni `orca serve`: sería un segundo
-  orquestador o infraestructura remota nueva. La madre es una sola.
+  orquestador o infraestructura remota nueva. Orquestan Hermes y `scripts/orquesta/` (`CLAUDE.md`, 19-oct); no hay otro.
 - No borrar `ponyfish` (lo maneja Orca) con `git worktree remove`: se borra desde Orca.
 - Las capturas de computer-use salen negras con la ventana de Orca: se aprende por la doc y por la CLI.
 
-Relacionado: skill `onia-sesion-madre` (la madre), proyecto «ONIA · Hermes» en claude.ai/code (madre en la nube).
+Relacionado: `scripts/orquesta/README.md` (quién orquesta desde el 19-oct) y `onia-sesion-madre` (historia: canales entre sesiones).

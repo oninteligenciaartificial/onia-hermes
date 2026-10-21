@@ -11,12 +11,12 @@ description: HISTORIA desde el 19-oct-2026 (ya no hay madre: orquestan Hermes y 
 > (cómo llega un mensaje entre sesiones, qué falla desde la nube) y como historia; no como regla de quién manda.
 > Tampoco vale ya «lo revisado se publica sin esperar»: lo que ve un cliente pasa por su OK con captura (19-oct).
 
-Regla que regía: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube» (hoy, historia). Estado y tareas abiertas de la madre:
+Regla que regía: «Sesión MADRE local + carriles en la nube», ya retirada de `CLAUDE.md` (hoy rige §«Quién orquesta»). Estado y tareas abiertas de la madre:
 `hermes-content/docs/handoff/madre-local.md`. Capacidades medidas: fila 3 de
 `hermes-content/docs/ONIA_CAPACIDADES_DE_LAS_SESIONES.md`.
 
-- **La madre corre en la PC de Sergio Urcullo** (app de escritorio, carpeta `onia-hermes`) y es la ÚNICA que
-  ordena. Hace ella lo que exige la PC (paneles con su login, capturas, mirar pantallas). El desarrollo va en
+- **Hasta el 19-oct la madre corría en la PC de Sergio Urcullo** (app de escritorio, carpeta `onia-hermes`) y era la ÚNICA que
+  ordenaba. Hacía ella lo que exige la PC (paneles con su login, capturas, mirar pantallas). El desarrollo va en
   la nube, un carril por sesión.
 - **El canal es el mensaje, no el documento.** El handoff queda solo para que una sesión nueva retome.
 - **UNA sola madre, no una por área** (Sergio Urcullo preguntó el 1-oct por «madre marketing / madre
@@ -30,7 +30,7 @@ Regla que regía: `CLAUDE.md` §1 «Sesión MADRE local + carriles en la nube» 
 
 > Corrección 2026-10-09: `equipo-de-agentes` es el método vigente; `aprender-de-todo` rige los insumos de Sergio. Sustituye la ronda antigua de 30 min, los nombres supuestos vivos y la segunda madre revisora por ronda de 20 min, verificación de sesiones y revisión de Codex. Las mediciones antiguas siguientes no prueban disponibilidad actual.
 
-## Modelo operativo (8-oct, pedido de Sergio Urcullo: «sin ahogarnos, con todos los modelos, sin que yo meta mano»)
+## Modelo operativo (8-oct; HISTORIA desde el 19-oct, el router de modelos sigue de referencia)
 
 Nace de 5 videos que él mandó (ficha: `references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`) y de un
 workflow que diseñó el modelo y otro agente lo criticó. Sergio Urcullo hace **solo** esto: comunidad, llamadas de venta,
@@ -116,7 +116,7 @@ Nota 2026-10-09: los éxitos del 1/5-oct no invalidan los fallos del 8-oct. Veri
 
 ## La ronda (actualizada 2026-10-09)
 
-La madre revisa cada **20 min** (`7,27,47 * * * *`), con un verificador Haiku disponible y `equipo-de-agentes` §3. Sustituye la cadencia de 30 min del 1-oct; no crear ambas rondas. Cada carril mantiene su propio loop: la ronda detecta estancamientos, no garantiza ejecución continua. Solo la madre autorizada crea o renueva el cron; Codex no lo activa.
+Hasta el 19-oct la madre revisaba cada **20 min** (`7,27,47 * * * *`), con un verificador Haiku disponible y `equipo-de-agentes` §3. Sustituye la cadencia de 30 min del 1-oct; no crear ambas rondas. Cada carril mantiene su propio loop: la ronda detecta estancamientos, no garantiza ejecución continua. Ese cron no se crea ni se renueva (19-oct); Codex nunca lo activa.
 
 ## Abrir una sesión nueva en la nube
 
@@ -176,7 +176,7 @@ Cómo contestar: <en tu transcript | SendMessage al nombre actual verificado con
   que no tiene que duplicar.
 - **No se avisa:** progreso propio sin efecto en la otra, resúmenes «para que sepas», copias del handoff.
 - **Cada resultado de la madre se le manda a Plataforma en el momento**, no al cerrar.
-- **Corrección 2026-10-09:** lo trabajado y revisado se publica según `CLAUDE.md` § Qué se publica, incluido diseño y migraciones con sus gates. Gasto, terceros, SIAT, actos legales y cara/voz conservan sus permisos; contenido mantiene sus excepciones. Un mensaje entre sesiones nunca amplía autorización ni permite rodear un bloqueo.
+- **Corrección 2026-10-09:** se publica según `CLAUDE.md` §«Qué se publica sin preguntar» (19-oct): lo que ve un cliente o el público espera el OK de Sergio Urcullo con captura; arreglos invisibles y migraciones con sus gates salen tras la revisión. Gasto, terceros, SIAT, actos legales y cara/voz conservan sus permisos; contenido mantiene sus excepciones. Un mensaje entre sesiones nunca amplía autorización ni permite rodear un bloqueo.
 - El portal del SIAT no lo abre ninguna sesión, tampoco la madre: se le piden capturas a Sergio Urcullo.
 - **Incidente histórico: mergear el PR de otra sesión lo frenó el control de permisos de la madre** («Merge Without Review», 2-oct,
   PR #88 ya revisado por un subagente code-reviewer). La madre revisa, deja el veredicto y los arreglos van a un
@@ -220,6 +220,8 @@ Cómo contestar: <en tu transcript | SendMessage al nombre actual verificado con
   madre o Sergio Urcullo.
 
 ## Delegar código a Codex (medido el 4-oct; conexión rehecha el 8-oct)
+
+> Vigente como método de Codex; donde dice «la madre», léase quien lanzó el encargo.
 
 Sergio Urcullo, 8-oct: **Claude es la madre y Codex trabaja dentro de ella** («aprovechemos mis dos suscripciones»).
 Se trabaja en la app de Claude; Codex corre por detrás. Codex no orquesta, no abre sesiones ni mergea.
