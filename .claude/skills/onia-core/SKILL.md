@@ -5,13 +5,13 @@ description: Invocar al tocar onia-core (contract.json, adapters, schema/base-sc
 
 # ONIA Core — núcleo operativo común
 
-Fuente de verdad: `onia-core/contract.json` (beta, congelado para adopción) +
+Fuente de verdad: `onia-core/contract.json` (v1.0.0, `status: stable`; cambios solo aditivos) +
 `onia-core/CHANGELOG.md` + docs `onia-core/*.md`. Guardián: subagente `onia-core-guardian`
 (toda modificación al core pasa por ahí). Receta de adopción: `onia-core/ONIA_CORE_INSTALL_GUIDE_2026.md`.
 
 ## Qué es
 Núcleo común de los SaaS ONIA. Vive SOLO en `onia-hermes` hasta aprobar adopción.
-Core + módulos (commerce/knowledge/accounting/invoicing/payroll/dental/automation).
+Core + 9 módulos activables (commerce, accounting + tax_bolivia, invoicing, payroll, imports, knowledge, automation, dental, agents; `onia-core/CHANGELOG.md` §1.0.0).
 
 ## Reglas duras
 - **`policy.installInProductRepos = false`:** NO crear migraciones/rutas/UI dependientes del core
@@ -22,14 +22,14 @@ Core + módulos (commerce/knowledge/accounting/invoicing/payroll/dental/automati
 - **Clientes nuevos → track vertical, NUNCA fork del core.** Ver `ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md`.
 - **Integraciones externas (WhatsApp, SIAT, TR4) → `external_gate`:** fuera del core, entran como intake normalizado.
 - **Line endings:** onia-core fuerza LF vía `.gitattributes`; los tests de portable-artifacts hashean bytes
-  crudos (CRLF en Windows rompe 2 tests). Suite objetivo 352/352, 4 validadores verdes.
+  crudos (CRLF en Windows rompe 2 tests). Suite del core en verde (`npm run test:onia-core-logica`; 503 tests en el CHANGELOG 1.0.0) y 4 validadores verdes.
 
 ## Orden de adopción
 ⚠️ **Corregido 2026-08-24.** Acá se nombraban como productos separados. `CLAUDE.md` §3
 dice literal que **DentalGest, GestiOS, Ganadero OS y ProveeGest NO son productos ni
 marcas**: son nombres viejos de PACKS de un solo producto, Onia Platform. Al cliente se le
 nombra el rubro ("módulo dental"), nunca el pack.
-Orden de encendido de rubros: **dental (vivo) → comercio → importadora → el resto.**
+Los 5 rubros que se ofrecen ya están encendidos. Orden de empuje (`CLAUDE.md` §ONIA Core, 19-oct): **dental → importadora → el resto**; comercio y servicios esperan a que la factura del SIN esté dentro del sistema.
 
 ## Al agregar/editar algo del core
 1. Delegá en `onia-core-guardian` o seguí su checklist.

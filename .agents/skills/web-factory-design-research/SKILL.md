@@ -27,8 +27,8 @@ Use these first when available:
 ```bash
 pnpm references:harvest:daily
 pnpm references:intelligence
-pnpm design:auto -- <slug> --template <landing|store> --force
-pnpm factory:build -- <slug> --template <landing|store> --force
+pnpm design:auto -- <slug> --template <template> --force   # 7 plantillas: WEB_FACTORY_TEMPLATES en web-factory/data/schema.ts
+pnpm factory:build -- <slug> --template <template> --force
 pnpm factory:smoke
 ```
 

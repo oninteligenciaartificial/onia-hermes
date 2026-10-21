@@ -147,8 +147,9 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
    descripción) pasa por `humanizer` o `stop-slop` antes de quedar. `web-factory/generate/slop.test.ts`
    vigila una lista en español. El motor escribe `data/clients/<slug>.DESIGN.md` (tokens con rol,
    contraste medido, componentes, voz): es lo que lee cualquier agente para repetir el estilo.
-6. **Revisión:** `design-review` + preview en navegador (verificar en vivo, no pedirle a
-   Sergio que revise a mano).
+6. **Revisión:** `design-review` + preview en navegador (verificar en vivo antes de mostrar). Lo que ve un
+   cliente o el público llega a Sergio Urcullo con capturas a 390 y 1440 y **espera su OK** antes de publicarse
+   (`CLAUDE.md` §«Qué se publica sin preguntar», 19-oct). La web y los anuncios van de **usted**.
 
 ## Piso de calidad / benchmark
 
@@ -280,7 +281,7 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
     `git -C onia-platform grep -nE "entiende (las )?fotos" origin/master -- ':!docs/**'`.
   - **Marca personal:** `scripts/marca-personal/generar-carrusel-atender.py:104` y
     `generar-carrusel-chatbot.py:94` dibujan «Entiende fotos y audios».
-- ⏸ **Decisión pendiente de Sergio Urcullo, NO verificado:** /chatbot vende como disponible el
+- ⏸ **Decisión pendiente de Sergio Urcullo, NO verificado (estado del 3-oct; releer el catálogo §5 antes de actuar):** /chatbot vende como disponible el
   agente conversacional, que el catálogo §5 tiene en ⏸ («después de la prueba real»: nunca se
   conectó el WhatsApp de un cliente). JSON-LD con «contesta 24/7» y `availability: InStock`
   (`chatbot/page.tsx:47-57`), hero «Tu WhatsApp responde las 24 horas» y botón «Pedir el agente
@@ -364,5 +365,6 @@ Decisión, dirección fotográfica, shot list y gate completos →
   borrar porque algo los referencia, **queda escrito en el doc del tema por qué no sirven**.
 - **Una imagen se juzga MONTADA al tamaño real** en que se va a ver, no abierta a pantalla
   completa. Un recorte nítido a 1434 px puede ser ilegible en una tarjeta de 290 px.
-- **Gasto:** imagen en lote chico = trivial y ya validado (~0,12 cr por imagen 2k). **Video =
-  permiso explícito de Sergio con `get_cost` por delante.** Registrar cada lote.
+- **Gasto (`CLAUDE.md` §Higgsfield):** `higgsfield generate cost` antes de cada `generate create`. Imagen de
+  prueba en lote chico (menos de ~5 cr) sin preguntar; lotes grandes, Soul, **video** y cara o voz de Sergio
+  Urcullo piden aprobación. Registrar cada lote.

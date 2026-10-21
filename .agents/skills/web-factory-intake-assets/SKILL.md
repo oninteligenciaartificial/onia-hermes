@@ -25,7 +25,7 @@ description: Use when collecting client data, images, videos, brand assets, refe
    - intake JSON
    - client resource request message
    - missing-field checklist
-   - next command: `pnpm design:auto -- <slug> --template <landing|store> --force`
+   - next command: `pnpm design:auto -- <slug> --template <template> --force` (plantilla según rubro, p. ej. `landing-clinic` para dental; lista en `WEB_FACTORY_TEMPLATES`, `web-factory/data/schema.ts`)
 
 ## Gates
 

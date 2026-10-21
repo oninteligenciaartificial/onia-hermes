@@ -10,7 +10,7 @@ Para delegar el armado en paralelo: subagente `onia-propuestas`.
 
 ## Leer primero
 - `hermes-content/propuestas/generador/README.md`
-- `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` (§0 = fuente de verdad de precios)
+- `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` (§0 son precios de lanzamiento del 3-jul, vencidos para webs: ver «Pricing»)
 - `hermes-content/propuestas/PLAYBOOK_CONSTRUCCION_INTERNO.md`
 - `hermes-content/propuestas/ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`
 
@@ -35,9 +35,8 @@ Cliente nuevo = agregar objeto a `clientes.json` y correr el generador.
 8. **No fabricar.** Falta dato del cliente → pedirlo o marcarlo. Personalizar con datos reales.
 9. **Benchmark visual:** Bench, Garabato, HSB Engineers (jerarquía/limpieza/seriedad), sin copiar literal.
 
-## Pricing (fuente de verdad: PRICING_RATIONALE_INTERNO.md §0)
-- **Lanzamiento vigente (fase sin portafolio):** Landing **790** / Web Pro **1.500**.
-- **Premium (objetivo con 3-5 casos):** Landing **2.000** / Web Pro **4.500**.
+## Pricing (las cifras no se escriben acá)
+- **Webs (pago único):** se leen de `web-factory/apps/onia-platform/src/content/webs.ts` (ratificados por Sergio Urcullo el 23-ago-2026; la oferta de arranque 790/1.500 venció el 31-jul-2026). `PRICING_RATIONALE_INTERNO.md` §0 quedó viejo en esas cifras.
 - **SaaS Onia (planes y add-ons): NO se escriben acá.** Se LEEN del código del producto:
   planes en `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`; nombres visibles en
   `lib/pricing.ts`, p.ej. `clinic` = «Completo») y add-ons en `onia-platform/lib/pricing.ts`

@@ -7,14 +7,14 @@ description: Invocar para CUALQUIER trabajo sobre el chatbot de Onia — motor c
 
 El carril del chatbot toca cuatro mundos a la vez (motor Node, base Postgres, canal Meta,
 panel Next.js) y por eso es el que más fácil se hace a ojo. Este archivo dice **qué skill
-cargar para qué**, con las 196 skills que ya están instaladas. No reemplaza a `onia-router`:
+cargar para qué**, con las skills ya instaladas. No reemplaza a `onia-router`:
 lo extiende para este carril.
 
 ## Dónde vive cada cosa (verificado 2026-08-16)
 
 | Pieza | Ruta |
 |---|---|
-| **Motor conversacional** (el único que existe) | `hermes-content/deploy/vps-ops/bot/` — 18.440 líneas, 503 tests |
+| **Motor conversacional** (el único que existe) | `hermes-content/deploy/vps-ops/bot/` (el número de tests sale de la corrida, ver Gates) |
 | Hechos editables sin desplegar | `/opt/onia/bot/knowledge.json` en el VPS, **fuera de git** |
 | Config y secretos del bot | `/opt/onia/bot/webhook.env`, chmod 600, **nunca en git ni en el chat** |
 | Persistencia | Supabase self-hosted, schema `onia_center` (`bot_conversations`, `bot_messages`) |
@@ -26,7 +26,7 @@ lo extiende para este carril.
 | **Visión** (el bot VE fotos) | motor: `vision.mjs` (descarga SSRF-safe + LiteLLM detail low) → `R_ATTACH_VISTO`; guardrails filtran la descripción |
 | **Candado bot-humano** (takeover + desarme) | motor: `takeoverTurn` (arma al contestar un humano) + `conversation_status_changed=resolved` → `clearHumanTakeover` (resolver = devolver al bot) |
 
-**Fuentes de verdad — leer ANTES de construir, no después:**
+**Estado vivo: `hermes-content/docs/handoff/chatbot.md`, contrastado con el código. Los docs de abajo llevan fecha en el nombre: dan contexto, no son la verdad vigente; qué se promete lo fija `ONIA_CATALOGO_DE_VENTA.md`. Leer ANTES de construir:**
 `ONIA_ESTADO_CHATBOT_Y_VOZ_20260816.md` (qué está encendido hoy) ·
 `ONIA_BOT_MANUAL_OPERACION_20260807.md` (operación) ·
 `ONIA_BOT_CAPA_CONOCIMIENTO_20260806.md` (frontera lógica/hecho) ·
@@ -37,7 +37,7 @@ lo extiende para este carril.
 ## Qué cargar según la tarea
 
 ### Tocar el motor conversacional (`bot-engine`, `intents`, `reply-builder`)
-`superpowers:test-driven-development` — el motor tiene 503 tests y son el contrato; test primero, siempre.
+`superpowers:test-driven-development` — la suite del motor es el contrato; test primero, siempre.
 `superpowers:systematic-debugging` o `investigate` — para un bug: causa raíz antes de tocar. Nunca adivinar.
 `superpowers:verification-before-completion` — antes de decir "listo".
 
@@ -157,8 +157,8 @@ final. Y los horarios que ofrecía no salían de un calendario: los escribe un c
 (`slots-rodantes.mjs`) desde las ventanas de atención.
 
 - **`ONIA_BOT_AGENDA`** (`agendaDelEntorno`, `calcom-booking.mjs`). VACÍO = **persona** (default):
-  el bot NO ofrece horarios ni confirma; saluda con `M0_PERSONA` («el horario lo coordinás directo con
-  Sergio: te escribe por acá», o el link de la agenda real si el conocimiento trae `orgSlug`) y a Sergio
+  el bot NO ofrece horarios ni confirma; saluda con `M0_PERSONA` («el horario lo coordina directo con
+  Sergio: le escribe por acá», o el link de la agenda real si el conocimiento trae `orgSlug`) y a Sergio
   Urcullo le llega el aviso `coordinar_demo`. Una elección sobre una oferta VIEJA (conversación que nació
   con horarios) se deriva con `M_HORARIO_SIN_AGENDA`, nunca se confirma. `calcom` SOLO enciende con
   `CALCOM_BASE_URL` + `CALCOM_BOT_EVENT_TYPE_ID`: tener Cal.com declarado no alcanza (era justo el estado
@@ -181,7 +181,7 @@ final. Y los horarios que ofrecía no salían de un calendario: los escribe un c
   de producción antes de dar por hecho un cambio de guion.
 - **`ONIA_AUDIO_ENABLED`**: solo `true` la enciende (antes, vacío = encendida contra `speaches:8000`, que no
   existe). Apagada, el motor contesta al instante `M_AUDIO_FAIL` («no lo puedo escuchar yo, ¿me lo
-  escribís?») y al segundo audio deriva a la persona. `destinos-vivos.mjs` lee el interruptor con
+  escribe?») y al segundo audio deriva a la persona. `destinos-vivos.mjs` lee el interruptor con
   `getTranscribeConfig` del producto (no una copia de la regla).
 - ⚠️ **El código no cambia el entorno vivo.** El proceso vivo tenía `ONIA_AUDIO_ENABLED=true` (medido el
   19-sep en `/proc`, ver `destinos-vivos.mjs`), y no se sabe si viene ESCRITO en `/opt/onia/bot/webhook.env`

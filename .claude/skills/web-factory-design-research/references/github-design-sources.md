@@ -11,7 +11,7 @@ Current source file: `web-factory/data/references/design-sources/github-design-r
 5. Use NOASSERTION or branded systems only as pattern reading.
 6. Record exact source URLs and date; do not claim a repo is current without checking.
 
-## Current top sources
+## Top sources (medido el 2026-06-26; volver a mirar estrellas y licencia antes de citar)
 
 | Repo | Stars | License | Web Factory use |
 |---|---:|---|---|
@@ -44,7 +44,7 @@ Current source file: `web-factory/data/references/design-sources/github-design-r
 ## Local skills to combine
 
 - Use `impeccable` for frontend craft, critique, anti-slop, motion, accessibility, responsive behavior and polish.
-- Use `design-taste-frontend` for landing/redesign design reads, motion-density dials, hero discipline, image requirements and final pre-flight checks.
+- Use `taste-design` for landing/redesign design reads, motion-density dials, hero discipline, image requirements and final pre-flight checks.
 - Use `web-factory-intake-assets` before design generation so missing brand assets, photos, videos, products and rights are explicit.
 
 ## Output contract

@@ -15,7 +15,7 @@
 Para crear la web necesito:
 
 1. Logo o texto exacto de marca.
-2. 3 a 6 referencias de webs que te gustan, indicando que usar y que evitar.
+2. 3 a 6 referencias de webs que le gustan, indicando qué usar y qué evitar.
 3. Imagen principal o permiso para generar imagen IA/usar stock licenciado.
 4. Fotos reales de productos, local, equipo, trabajos o casos.
 5. Oferta principal, beneficios, servicios y preguntas frecuentes.
@@ -33,5 +33,5 @@ Estado: listo | faltan_datos | bloqueado
 Faltantes criticos: ...
 Mensaje para cliente: ...
 JSON sugerido: ...
-Comando siguiente: pnpm design:auto -- <slug> --template <landing|store> --force
+Comando siguiente: pnpm design:auto -- <slug> --template <template> --force
 ```
