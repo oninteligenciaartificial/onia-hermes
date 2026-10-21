@@ -136,7 +136,11 @@ Tocados: los de §3 marcados «corregida». No tocados: CLAUDE.md, scripts, `dep
 
 ## 7. Próximos pasos
 
-1. Abrir los cinco PR (y el de este handoff) cuando `api.github.com` responda; las ramas ya están pusheadas.
+0. **En pausa desde el 21-oct 01:40 UTC** (pedido de Sergio Urcullo por la Principal: «stop las sesiones»). La revisión
+   independiente de los cinco diffs (agente `code-reviewer`) se paró antes de terminar: **ninguna rama está revisada
+   todavía**. Al retomar: correr esa revisión (`git diff origin/main...claude/revision-skills-<grupo>`), arreglar lo que
+   salga y recién ahí abrir los PR.
+1. Abrir los cinco PR (y el de este handoff), después de la revisión; las ramas ya están pusheadas.
 2. Sesión de Platform: aplicar §3 «onia-platform» en su repo.
 3. Fuera de skills, encontrado de paso (no es de esta sesión): `ONIA_ADQUISICION_Y_PAUTA.md` L38-40 con el orden de
    rubros viejo; la página `/agentes` de la web y dos tests en vos (pasan a usted juntos); comentario de cabecera de
