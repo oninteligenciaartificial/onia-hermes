@@ -176,7 +176,7 @@
     "test:pedidos": "node --test scripts/loops/pedido-claude.test.mjs scripts/loops/pedido-respuesta.test.mjs scripts/loops/pedido-rama.test.mjs",
     "test:orquesta-hermes": "node --test scripts/loops/orquesta-hermes.test.mjs scripts/orquesta/orquesta.test.mjs",
     "test:jarvis-aplicar": "node --test scripts/loops/hermes-jarvis-aplicar.test.mjs",
-    "test:jarvis-diagnostico": "node --test scripts/loops/diagnostico-mudo.test.mjs",
+    "test:jarvis-diagnostico": "node --test scripts/loops/diagnostico-mudo.test.mjs scripts/loops/diagnostico-orquesta.test.mjs",
     "test:qa-diario-guarda": "node --test scripts/loops/qa-diario-guarda.test.mjs",
     "test:jarvis-modelo": "node --test scripts/loops/diagnostico-modelo.test.mjs",
     "test:jarvis-qa-release": "node --test scripts/loops/diagnostico-qa-release.test.mjs",

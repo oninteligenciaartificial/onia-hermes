@@ -700,6 +700,27 @@ j = next((j for j in jobs if isinstance(j, dict) and j.get("name") == "onia-plan
 print("revisión de cada 3 h: " + ("no está programada" if not j else
       f"{j.get('id')} · enabled={j.get('enabled')} · state={j.get('state')} · última={j.get('last_run_at') or j.get('last_run') or '?'}"))
 PY
+# Lo que contestó en su última revisión ([SILENT] o lo que hizo), como lo guarda el cron de Hermes en
+# ~/.hermes/cron/output/<id>/ (su documentación, features/cron.md). 21-oct: «ok» en jobs.json no decía si
+# leyó la cola ni si cargó la skill.
+ORQ_JID=$(python3 - 2>/dev/null <<'PY'
+import json
+d = json.load(open("/root/.hermes/cron/jobs.json"))
+jobs = d.get("jobs", d) if isinstance(d, dict) else d
+if isinstance(jobs, dict):
+    jobs = [dict(v, id=v.get("id", k)) for k, v in jobs.items() if isinstance(v, dict)]
+print(next((j.get("id", "") for j in jobs if isinstance(j, dict) and j.get("name") == "onia-planificar-orquesta"), ""))
+PY
+)
+case "$ORQ_JID" in ''|*[!0-9a-f]*) ORQ_JID="" ;; esac
+ORQ_SAL=""
+[ -z "$ORQ_JID" ] || ORQ_SAL=$(ls -t /root/.hermes/cron/output/"$ORQ_JID"/* 2>/dev/null | head -1)
+if [ -n "$ORQ_SAL" ] && [ -f "$ORQ_SAL" ]; then
+  echo "--- su última salida: $(basename "$ORQ_SAL") ($(stat -c %s "$ORQ_SAL") bytes, $(stat -c %y "$ORQ_SAL" | cut -c1-19) UTC)"
+  head -n 40 "$ORQ_SAL" | redactar | cut -c 1-200
+else
+  echo "--- su última salida: (no hay en /root/.hermes/cron/output/${ORQ_JID:-?}/)"
+fi
 
 sec "fin"
 echo "diagnóstico terminado $(date -u +%FT%TZ) — no se modificó nada"
