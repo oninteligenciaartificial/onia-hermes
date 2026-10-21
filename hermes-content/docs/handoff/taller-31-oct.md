@@ -1,6 +1,9 @@
 # Handoff — taller «No pierdas clientes» (página /taller y carruseles)
 
 > Escrito el 20-oct-2026 por la sesión «taller: estilo y piezas», al pausar todo menos Hermes (pedido de Sergio Urcullo vía la sesión Principal).
+> **Retomado el 20-oct, 21:30, por la sesión del área TALLER** (la lanzó la Principal). Objetivo nuevo: venta abierta (o fecha nueva acordada) con OK a página y carruseles, número en el botón y cobro definido con Leslie Mercado Moreno.
+> Estado al retomar: Sergio Urcullo todavía no había contestado a las capturas. Se le reenviaron (390, 1440 y las 2 hojas) en un solo mensaje con todo lo que falta. El número ya estaba en los 3 botones (hecho). GitHub no respondía desde la PC (fetch y push con timeout): sin traer `origin/main` todavía.
+> Ojo: la Principal y partes viejas de `TALLER_31_OCT.md` dicen `/auditoria`; la página vigente es **`/taller`** (`/auditoria` es la vieja, no se publica). Corregido en `TALLER_31_OCT.md` §1, §3 y §4.
 > Fuente única del taller: `hermes-content/docs/TALLER_31_OCT.md`. Esto es el estado del carril; el método está en las skills.
 
 **Objetivo**
@@ -36,7 +39,8 @@ Nada. La página tiene `noindex`, no se publicó en Vercel y no se subió ningú
 **Qué depende de Sergio**
 1. OK o cambios a la página `/taller` y a los 2 carruseles (capturas de arriba).
 2. Con su OK: autorizar la publicación de la página (sacar el `noindex`, deploy) y la subida de los carruseles, según `TALLER_31_OCT.md` §4. La apertura era el mié 21-oct.
-3. Leslie Mercado Moreno: QR del BCP, titular y cómo se factura, y el texto de devolución (compuerta §3, condiciones 4 y 5).
+3. Leslie Mercado Moreno: QR del BCP, titular y cómo se factura, y el texto de devolución (compuerta §3, condiciones 4 y 5). Lo pide Sergio Urcullo; la sesión no contacta a terceros.
+5. Fecha de apertura: mié 21 si da el OK esta noche y Leslie Mercado Moreno pasa el QR; si no, la fecha nueva que diga él. Cada día corrido sube el ritmo necesario (hoy ~6 pagos/día para los 50 cupos).
 4. Aclarar qué quiso decir con «rae».
 
 **Próximos pasos**
