@@ -1,0 +1,7 @@
+Apertura: 233 palabras -> 73 s de voz
+Textos de guiones ausentes en GUIONES-SEMANA.md: ninguno
+WORKSHOP-MATERIAL contiene '—' 0 veces
+WORKSHOP-MATERIAL contiene '–' 0 veces
+GUIONES-SEMANA contiene '—' 0 veces
+GUIONES-SEMANA contiene '–' 0 veces
+OK

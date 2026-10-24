@@ -1,0 +1,13 @@
+S1: 82 palabras -> voz 26 s; con pausas 28-30 s
+S1A: 111 palabras -> voz 35 s; con pausas 37-39 s
+S1B: 96 palabras -> voz 30 s; con pausas 32-34 s
+S2: 105 palabras -> voz 33 s; con pausas 35-37 s
+S3: 98 palabras -> voz 31 s; con pausas 33-35 s
+S3A: 114 palabras -> voz 36 s; con pausas 38-40 s
+S3B: 108 palabras -> voz 34 s; con pausas 36-38 s
+S4: 92 palabras -> voz 29 s; con pausas 31-33 s
+S5: 77 palabras -> voz 24 s; con pausas 26-28 s
+S5A: 94 palabras -> voz 29 s; con pausas 31-33 s
+S5B: 87 palabras -> voz 27 s; con pausas 29-31 s
+S6: 86 palabras -> voz 27 s; con pausas 29-31 s
+S7: 102 palabras -> voz 32 s; con pausas 34-36 s

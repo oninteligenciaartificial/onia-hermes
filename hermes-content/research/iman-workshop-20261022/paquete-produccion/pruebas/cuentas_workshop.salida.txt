@@ -1,0 +1,13 @@
+n | tarea | veces x min | min/semana | min/mes | h min/mes | riesgo
+1 | Contestar «¿cuánto cuesta?» por WhatsApp | 10 x 5 | 50 | 200 | 3 h 20 min | medio
+2 | Pasar los pedidos del cuaderno a la planilla | 5 x 15 | 75 | 300 | 5 h | medio
+3 | Recordar saldos pendientes a clientes | 2 x 20 | 40 | 160 | 2 h 40 min | alto
+4 | Armar el resumen de ventas del viernes | 1 x 45 | 45 | 180 | 3 h | bajo
+5 | Responder reclamos por entregas | 4 x 25 | 100 | 400 | 6 h 40 min | alto
+6 | Actualizar precios en las publicaciones | 1 x 30 | 30 | 120 | 2 h | medio
+7 | Coordinar horarios de entrega | 6 x 4 | 24 | 96 | 1 h 36 min | medio
+8 | Pedir fotos y datos a proveedores | 3 x 8 | 24 | 96 | 1 h 36 min | bajo
+TOTAL min/semana: 388 | min/mes: 1552 | 25 h 52 min
+PRIORIDAD (regla: mayor tiempo semanal entre las de riesgo no alto): 2 Pasar los pedidos del cuaderno a la planilla 75 min/semana
+Mayor tiempo sin mirar riesgo: (5, 'Responder reclamos por entregas')
+OK: todas las aserciones pasan

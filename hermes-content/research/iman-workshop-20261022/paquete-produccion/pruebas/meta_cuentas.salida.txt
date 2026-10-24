@@ -1,0 +1,17 @@
+Gasto por dia: 7 dias = 42.86 | 8 dias (canon) = 37.5 | 5 dias = 60.0
+Pagos para cubrir el gasto a Bs 50: 6.00 -> 6 pagos
+Pagos para cubrir el gasto a Bs 60: 5.00 -> 5 pagos
+Pagos para cubrir el gasto a Bs 70: 4.29 -> 5 pagos
+
+Costo por conversacion (SUPUESTO ilustrativo) -> conversaciones con Bs 300 -> tasa conversacion->pago necesaria para 5 pagos
+Bs  4/conversacion ->  75.0 conversaciones ->   6.7% deben terminar en pago
+Bs  6/conversacion ->  50.0 conversaciones ->  10.0% deben terminar en pago
+Bs  8/conversacion ->  37.5 conversaciones ->  13.3% deben terminar en pago
+Bs 15/conversacion ->  20.0 conversaciones ->  25.0% deben terminar en pago
+Bs 30/conversacion ->  10.0 conversaciones ->  50.0% deben terminar en pago
+
+Costo maximo por conversacion para llegar a 50 conversaciones con Bs 300: Bs 6.0
+Gastado al dia 3 con ritmo parejo de 7 dias: Bs 129
+Gastado al dia 5 con ritmo parejo de 7 dias: Bs 214
+Gastado al dia 7 con ritmo parejo de 7 dias: Bs 300
+OK
