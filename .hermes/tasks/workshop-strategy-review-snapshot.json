@@ -1,0 +1,74 @@
+{
+  "integrity": {
+    "iman-workshop-final-snapshot.json": {
+      "count": 19,
+      "mismatches": []
+    },
+    "iman-workshop-supplement-corrected-snapshot.json": {
+      "count": 69,
+      "mismatches": []
+    }
+  },
+  "files": [
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/ESTRATEGIA-WORKSHOP.md",
+      "bytes": 29243,
+      "sha256": "0bd9e52bf4679ccabe5f534cf87206480f09c9b44e106feeaef92bd56de8f003"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/STACK-DISENO.md",
+      "bytes": 6655,
+      "sha256": "53192a2fe3382cde4ea139bd62648bf10f46ca50c1bfc2fb102498b99c846c00"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-muestra-8s-tras-play.png",
+      "bytes": 440626,
+      "sha256": "4ba19dc229e537c8527d02c480b94f42c226bdc93c501aad3813bf6b7fe2a6f7"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-muestra-antes-de-play.png",
+      "bytes": 441624,
+      "sha256": "823b019ffd805605d284a5d93af90850977f777052c4fe66b8865bb36b5ca756"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-muestra-seq-19.png",
+      "bytes": 377202,
+      "sha256": "8ba11e3c8ac387d157ad653e1273eb2175ff8cb4677d1d454d3f439eb5d6936c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-muestra-seq-26.png",
+      "bytes": 670752,
+      "sha256": "8bcb6d6a7b8b12e46f87b329e0b3b16674d40f8ae2fa30c1a118bb83179928bf"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-muestra-seq-33.png",
+      "bytes": 670752,
+      "sha256": "8bcb6d6a7b8b12e46f87b329e0b3b16674d40f8ae2fa30c1a118bb83179928bf"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-muestra-seq-44.png",
+      "bytes": 377202,
+      "sha256": "8ba11e3c8ac387d157ad653e1273eb2175ff8cb4677d1d454d3f439eb5d6936c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-trailer-12s-tras-clic.png",
+      "bytes": 198895,
+      "sha256": "d8770cf583588b65e9963248186728ca782fe1e4bfb63396ae1076d0639c9894"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-trailer-4s-tras-clic.png",
+      "bytes": 198895,
+      "sha256": "d8770cf583588b65e9963248186728ca782fe1e4bfb63396ae1076d0639c9894"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/erik-workshops-23oct.png",
+      "bytes": 84765,
+      "sha256": "1e1bdc87c5403bec526752f4561e198bc5e4a2c66cf746debeebf55edce4bc29"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-estrategia/monetise-waitlist-23oct.png",
+      "bytes": 358562,
+      "sha256": "c2c9187194abd38702742c608747d406476f05737bc2dcb7114e3b1a065d4974"
+    }
+  ]
+}

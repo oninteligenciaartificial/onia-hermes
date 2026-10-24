@@ -1,0 +1,11 @@
+[
+  {
+    "antipattern": "aphoristic-cadence",
+    "name": "Aphoristic-cadence copy",
+    "description": "Three or more sections landing on a short rebuttal sentence (\"X. No Y.\" / \"X. Just Y.\") or a manufactured-contrast aphorism (\"Not a feature. A platform.\") reads as AI cadence, not voice. Once is fine; the pattern is the tell.",
+    "severity": "warning",
+    "file": "C:\\Users\\PC\\orca\\workspaces\\onia-hermes\\iman-workshop-20261022\\hermes-content\\research\\iman-workshop-20261022\\diseno-workshop-v2\\index.html",
+    "line": 0,
+    "snippet": "4 aphoristic constructions: \"Una tarea para empezar. No diez.\""
+  }
+]

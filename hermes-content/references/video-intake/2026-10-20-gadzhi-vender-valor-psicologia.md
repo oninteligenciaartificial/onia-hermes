@@ -96,3 +96,21 @@ Regla usada: Negocio y oferta + Guion y gancho, `onia-ventas-pauta` §10
 Artefacto: pendiente (§3 es la propuesta; no se tocó la página por pedido de Sergio Urcullo)
 Verificación: pendiente
 Pendiente: aplicar §3 a la plantilla A, la página y las historias con su OK
+
+## Ampliación 22-oct: perfiles, webs y aplicación
+
+> Todo lo anterior queda como estaba (transcripción, **sin observación visual**). Esta sección agrega lo observado el 22-oct-2026 en navegador, sin sesión iniciada. Paquete completo: `hermes-content/research/iman-workshop-20261022/` (`fuentes.json`, `evidencia/`, `APLICACION-WORKSHOP.md`). Borrador para revisión de Codex; no es versión aprobada.
+
+**Corrección única 22-oct (tras revisión de Codex, dictamen «cambios necesarios»):** solo las capturas de `evidencia/` son inspeccionables; los textos DOM/CSS, fechas completas, capítulos y enlaces de oficialidad son **reportados por Claude, no verificados independientemente** (extractos no conservados, no reconstruidos).
+
+**Observado hoy [OBS]**
+- Perfiles: instagram.com/imangadzhi (**parcial**, modal de registro), youtube.com/@ImanGadzhi (observado) y x.com/gadzhiiman (**parcial**). Que sean los oficiales sale de enlaces desde iman-gadzhi.com **reportados, no visibles en la captura**. TikTok: sin cuenta enlazada, **no abierto**.
+- Recorrido observado: bio de IG (`link.consulting.com/ig-bio-aic`) → landing del reto gratis 7–15 nov. El paso hacia una oferta de pago **no se recorrió**: es **[INF]**. En los cuatro videos de la muestra la descripción lleva hoy el CTA al reto (reportado); que el de un video de agosto se haya reescrito es **[INF]**, no demostrado, y no se generaliza a todo el canal.
+- Webs con captura: portada personal, Consulting.com (+ agenda), Monetise y landing del reto. Tipografías y colores de CTA (p. ej. `rgb(208,254,22)`) son **reportados, sin extracto**.
+- Videos: 6 piezas; del tráiler AIC V6 hay 3 fotogramas (instantes ≈27/76/117 s reportados, no visibles en las capturas). **Hook inicial del tráiler no observado**; del resto, hook, estructura, prueba y CTA dentro del video **no observados** (solo metadatos reportados).
+
+**Declarado por la fuente [DEC]:** cifras de ingresos, testimonios y garantías de Monetise/Consulting.com/reto; no auditados ni aplicables a Bolivia.
+
+**Huecos reales:** secuencia de lanzamiento acotada al cierre vigente (jue 29-oct 20:00; no se desplaza sin decisión de Sergio); móvil no verificado (la emulación no cambió el viewport), sin transcripción nueva (yt-dlp HTTP 429), reels de IG no abiertos, formularios no abiertos.
+
+**Propuesta [PROP]:** pitch, cierre de clase gratis, 3 reels, historias, WhatsApp, arquitectura de landing y reglas de skill, todo en `APLICACION-WORKSHOP.md`. **No se cambió** TALLER_31_OCT, la página ni ninguna skill; la devolución y la fecha siguen como decisión de Sergio Urcullo.

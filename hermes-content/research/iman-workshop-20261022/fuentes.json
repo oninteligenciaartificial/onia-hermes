@@ -1,0 +1,287 @@
+{
+  "version": 2,
+  "fecha_consulta": "2026-10-22",
+  "hora_zona": "La Paz (consulta entre ~14:35 y 14:45 locales del equipo)",
+  "metodo": "Navegador de Orca del worktree iman-workshop-20261022 (sin sesion iniciada en ninguna red, sin cookies exportadas, sin formularios enviados) + curl solo para ver redirecciones. Los textos citados fueron leidos con document.innerText y getComputedStyle, pero esos extractos NO se conservaron: ver procedencia_general.",
+  "nota_total": "El total de fuentes y su desglose por acceso se calculan con codigo (ver el comando de verificacion en APLICACION-WORKSHOP.md, seccion Verificacion), no a mano.",
+  "fuentes": [
+    {
+      "id": "S01",
+      "url": "https://www.iman-gadzhi.com/",
+      "titulo": "Portada personal Iman Gadzhi",
+      "tipo": "web_personal",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "observado",
+      "evidencia_path": "evidencia/01-iman-gadzhi-com-desktop.png",
+      "limites": "Solo se ve el hero (foto de espalda frente al mar, titulo serif 160px 'Reckless Neue Medium'); el resto se leyo por DOM. Vista movil NO verificada: set device respondio 390x844 pero el viewport y la captura siguieron en ancho de escritorio. Enlaces cruzados a IG, YouTube y X confirman oficialidad. Pie legal: IAG SERVICES FZCO, Dubai. [Oficialidad: los enlaces a IG/YouTube/X son reportados desde el DOM; la captura no los muestra.]",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S02",
+      "url": "https://www.instagram.com/imangadzhi/",
+      "titulo": "Instagram @imangadzhi",
+      "tipo": "perfil_social",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "parcial",
+      "evidencia_path": "evidencia/08-www-instagram-com-imangadzhi-.png",
+      "limites": "Perfil publico visible solo con un modal de registro encima; no se cerro ni se sorteo. Texto del DOM: 3,1 M seguidores, 5 seguidos, bio 'Owner: @consulting (Est. 2016)...' y enlace link.consulting.com/ig-bio-aic. No se abrieron publicaciones ni reels. Oficial: enlazado desde S01.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S03",
+      "url": "https://www.youtube.com/@ImanGadzhi",
+      "titulo": "Canal de YouTube Iman Gadzhi",
+      "tipo": "perfil_social",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "observado",
+      "evidencia_path": "evidencia/09-youtube-videos.png (misma cabecera de canal)",
+      "limites": "6,23 M suscriptores, 486 videos, bio con link.consulting.com/yt-bio-aic (texto DOM). Titulos en espanol por la interfaz de Bolivia: algunos videos dicen 'Con doblaje automatico', o sea que titulo/audio en espanol puede ser traduccion de YouTube y no el original. Oficial: enlazado desde S01.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S04",
+      "url": "https://www.youtube.com/@ImanGadzhi/videos",
+      "titulo": "Pestana Videos del canal (mas recientes)",
+      "tipo": "listado_contenido",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "observado",
+      "evidencia_path": "evidencia/09-youtube-videos.png",
+      "limites": "Se leyeron 14 tarjetas del DOM (titulo, duracion, vistas, 'hace N'); la captura muestra solo cabecera y las dos primeras miniaturas. Fechas relativas ('hace 1 dia') salvo en las piezas abiertas.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S05",
+      "url": "https://x.com/gadzhiiman",
+      "titulo": "X @GadzhiIman",
+      "tipo": "perfil_social",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "parcial",
+      "evidencia_path": "evidencia/08-x-com-gadzhiiman.png",
+      "limites": "Perfil visible con modal de inicio de sesion; no se interactuo. 815,7 mil seguidores, 1.320 posts. Texto de 5 posts leido del DOM (12, 15 y 21 oct); no se reprodujo ningun video. Oficial: enlazado desde S01.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S06",
+      "url": "https://consulting.com/",
+      "titulo": "Consulting.com (portada)",
+      "tipo": "web_comercial",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "observado",
+      "evidencia_path": "evidencia/04-consulting-com-hero.png",
+      "limites": "Hero capturado (titular serif, subtitulo 'Established 2016 | 23,000+ Clients Served', boton ambar 'Apply to Work With Us'). El resto de secciones se leyo por DOM, sin captura por seccion. Cifras (750K, 5,7 mil millones, $100M+, 25+ clientes de $1M) son claims del emisor. Vista movil no verificada. educate.io redirige aqui (S10).",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S07",
+      "url": "https://consulting.com/assessment-call",
+      "titulo": "Consulting.com: agendar llamada Quantum",
+      "tipo": "web_comercial",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "observado",
+      "evidencia_path": "evidencia/05-consulting-assessment-call.png",
+      "limites": "Calendario embebido sin disponibilidad (mensaje localizado 'Sin disponibilidad en noviembre'); no se pulso nada ni se envio nada. Los campos del formulario no se vieron (se muestran tras elegir hora).",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S08",
+      "url": "https://www.monetise.com/waitlist",
+      "titulo": "Monetise: lista de espera (VSL + oferta)",
+      "tipo": "web_comercial",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "observado",
+      "evidencia_path": "evidencia/06-monetise-waitlist.png; evidencia/07-monetise-oferta-garantia.png",
+      "limites": "Pagina larga (15.697 caracteres de texto). Se leyo oferta, apilado de valor, garantia y testimonios por DOM; capturas de hero y de un testimonio. Video del hero visto solo como un fotograma con subtitulo en ingles. Testimonios e ingresos: claims del emisor, no auditados. Precio no visible en el texto leido (se vende 'valor' $19.458+).",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S09",
+      "url": "https://link.consulting.com/ig-bio-aic",
+      "titulo": "AI Income Challenge 2026 (landing del link de la bio)",
+      "tipo": "web_comercial",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "observado",
+      "evidencia_path": "evidencia/12-aic-landing-hero.png",
+      "limites": "Redireccion reportada (URL final leida de la pagina, no capturada): event.monetise.com/lp-1-o con parametros UTM de Instagram-bio. Reto gratis en vivo 7-15 nov 2026. Hero capturado; episodios, bloques de 'lo que aprendes' y pruebas leidos por DOM. Formulario 'SAVE MY FREE SPOT' no abierto. Un intento de captura de la seccion de episodios salio en negro y se descarto. La cadena hacia una oferta de pago NO se recorrio.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S10",
+      "url": "https://educate.io",
+      "titulo": "Educate.io (referencia historica)",
+      "tipo": "web_comercial",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": null,
+      "acceso": "parcial",
+      "evidencia_path": "curl -sL: HTTP 200 con URL final https://consulting.com/",
+      "limites": "Solo se comprobo la redireccion con curl; no se abrio en el navegador. Educate.io figura como empresa en S01, pero hoy lleva a Consulting.com: no se afirma que siga vigente como producto.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S11",
+      "url": "https://www.youtube.com/watch?v=YZ6OyZKrRh8",
+      "titulo": "Nuevo trailer de AIC V6 (5:14)",
+      "tipo": "video_pitch",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": "2026-10-12",
+      "acceso": "parcial",
+      "evidencia_path": "evidencia/11-yt-trailer-AIC-V6-tras-anuncio.png; evidencia/11-trailer-frame-1.png (t~76 s); evidencia/11-trailer-frame-2.png (t~117 s); evidencia/10-yt-YZ6OyZKrRh8-solo-anuncio-previo.png",
+      "limites": "Reproducido en el navegador hasta ~117 s de 313 s con subtitulos automaticos (en ingles). Se vieron 3 fotogramas utiles y los subtitulos de esos instantes: no es el video completo. Sin transcripcion completa: yt-dlp devolvio HTTP 429 al pedir subtitulos y no se insistio. Fecha: meta datePublished del DOM. [Correccion: hook inicial NO observado; instantes 27/76/117 s reportados, no visibles en las capturas.]",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S12",
+      "url": "https://www.youtube.com/watch?v=LqCPwQ1IcA4",
+      "titulo": "Regalame 24 minutos y te dare mas de 1,000 horas de conocimiento sobre Claude (24:01)",
+      "tipo": "video_tutorial",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": "2026-10-21",
+      "acceso": "parcial",
+      "evidencia_path": "evidencia/10-yt-LqCPwQ1IcA4.png",
+      "limites": "Un fotograma (planos 'Expensive Burden / Powerful Tool', avatar ilustrado) con subtitulo doblado al espanol. Metadatos y descripcion por DOM (CTA al Reto gratis en link.consulting.com/yt-video-aic). No se vio el resto ni hay transcripcion. Marcado 'Con doblaje automatico'.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S13",
+      "url": "https://www.youtube.com/watch?v=WO-Gl6-6gLE",
+      "titulo": "Como es realmente construir un imperio multimillonario (27:02)",
+      "tipo": "video_contenido",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": "2026-10-15",
+      "acceso": "parcial",
+      "evidencia_path": "evidencia/10-yt-WO-Gl6-6gLE.png",
+      "limites": "Metadatos, descripcion y 11 capitulos por DOM; la captura quedo sin fotograma util de contenido. No se reprodujo. La descripcion vincula la inversion en Higgsfield con el Reto gratis.",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    },
+    {
+      "id": "S14",
+      "url": "https://www.youtube.com/watch?v=w-lkP9XcZfg",
+      "titulo": "Dame 28 minutos y te dare 10,000 horas de conocimiento sobre ChatGPT (27:42)",
+      "tipo": "video_tutorial",
+      "fecha_consulta": "2026-10-22",
+      "publicacion_si_visible": "2026-08-18",
+      "acceso": "parcial",
+      "evidencia_path": "evidencia/10-yt-w-lkP9XcZfg.png",
+      "limites": "Metadatos y capitulos por DOM (11 capitulos de 'Introduction to AI mastery' a 'Deep research'); no se reprodujo. 715 k vistas, marcado con doblaje automatico. La descripcion ya fue actualizada al Reto de nov: el CTA de un video de agosto cambia con la campana. [Correccion: que el CTA de nov-2026 en un video de ago-2026 haya sido reescrito es INFERENCIA, no demostrado; solo se sabe que hoy figura.]",
+      "procedencia": "capturas: inspeccionables; texto/CSS/fechas/capitulos citados en limites: reportado por Claude, no verificado independientemente"
+    }
+  ],
+  "piezas_muestra_seis": [
+    {
+      "pieza": 1,
+      "fuente": "S11",
+      "rol": "pitch/oferta (trailer del reto)",
+      "hook_observado": "Hook inicial NO observado. Fragmentos: plano nocturno de torre con letras verticales y subtitulo \"Almaty Tower or city tower is wild\" (frame-1); otro con subtitulo \"...online using AI. And I'm about to show you three ways to make money with AI in\" y tres cajas numeradas (frame-2). Instantes (~76 s, ~117 s) reportados, no visibles.",
+      "no_observado": [
+        "hook del segundo 0",
+        "prueba",
+        "cierre/CTA dentro del video"
+      ]
+    },
+    {
+      "pieza": 2,
+      "fuente": "S12",
+      "rol": "tutorial largo",
+      "hook_observado": "Titulo con tiempo y promesa; fotograma con dicotomia visual 'Expensive Burden / Powerful Tool'",
+      "no_observado": [
+        "hook inicial",
+        "estructura",
+        "prueba",
+        "CTA dentro del video"
+      ]
+    },
+    {
+      "pieza": 3,
+      "fuente": "S14",
+      "rol": "tutorial largo (agosto)",
+      "hook_observado": "No observado (solo titulo y capitulos reportados)",
+      "no_observado": [
+        "hook",
+        "prueba",
+        "CTA dentro del video",
+        "si el CTA de la descripcion fue editado despues (inferencia)"
+      ]
+    },
+    {
+      "pieza": 4,
+      "fuente": "S13",
+      "rol": "contenido de marca/vlog",
+      "hook_observado": "No observado (solo titulo, capitulos y descripcion reportados)",
+      "no_observado": [
+        "hook",
+        "estructura real",
+        "prueba",
+        "CTA dentro del video"
+      ]
+    },
+    {
+      "pieza": 5,
+      "fuente": "S05",
+      "rol": "formato corto (post fijado en X, 12-oct, video 00:22)",
+      "hook_observado": "Texto: 'I've been keeping this a secret for a while...' sobre inversion en Higgsfield; el video NO se reprodujo (solo texto y metricas: 272/151/5 mil/758 mil)",
+      "localizador": "primer articulo del perfil, marcado 'Fijado', 12 oct",
+      "no_observado": [
+        "video",
+        "hook del video",
+        "estructura",
+        "prueba",
+        "CTA"
+      ]
+    },
+    {
+      "pieza": 6,
+      "fuente": "S08",
+      "rol": "pitch largo (VSL + pagina de oferta)",
+      "hook_observado": "Titular de la pagina visible en la captura; hook del video NO observado (un fotograma con subtitulo en ingles)",
+      "no_observado": [
+        "hook del video",
+        "estructura",
+        "prueba",
+        "CTA del video",
+        "fecha"
+      ]
+    }
+  ],
+  "superficies_sin_abrir_o_bloqueadas": [
+    {
+      "superficie": "TikTok",
+      "estado": "no oficial confirmado / no abierto",
+      "causa": "Ni S01 ni S02/S03/S05 enlazan un TikTok; no se asume cuenta por buscadores o agregadores."
+    },
+    {
+      "superficie": "Instagram: publicaciones y reels",
+      "estado": "bloqueada (modal de registro)",
+      "causa": "No se sortea el login; solo cabecera y texto del perfil."
+    },
+    {
+      "superficie": "Vista movil real de S01/S06/S08/S09",
+      "estado": "no verificada",
+      "causa": "La emulacion de dispositivo no cambio el viewport ni la captura (innerWidth 1095)."
+    },
+    {
+      "superficie": "Transcripcion completa de videos",
+      "estado": "no obtenida",
+      "causa": "yt-dlp -> HTTP 429; Gemini nativo no usado (clave/cuota no autorizadas en este encargo)."
+    },
+    {
+      "superficie": "Cursos pagos (Monetise, Quantum, UpLevel)",
+      "estado": "no accedido por diseno",
+      "causa": "Regla del encargo: no descargar ni sortear paywall."
+    },
+    {
+      "superficie": "Recorrido reto gratis -> oferta de pago",
+      "estado": "no observado",
+      "causa": "No se abrio formulario ni se hizo registro; la cadena es inferencia."
+    }
+  ],
+  "correccion": "22-oct-2026, unica correccion acotada tras dictamen de Codex (cambios necesarios): se agrega procedencia y se rebajan lecturas DOM/CSS a reportadas sin verificacion independiente. No hubo nuevo barrido ni se agrego evidencia.",
+  "procedencia_general": "Evidencia inspeccionable = capturas en evidencia/. Textos de DOM/CSS, fechas completas, capitulos, enlaces de oficialidad y conteos son REPORTADOS POR CLAUDE, NO VERIFICADOS INDEPENDIENTEMENTE: los extractos no se conservaron como archivo y no se reconstruyen. Los instantes en segundos del trailer son reportados y no se ven en las capturas."
+}

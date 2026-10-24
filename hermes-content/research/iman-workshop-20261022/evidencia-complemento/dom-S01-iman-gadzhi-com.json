@@ -1,0 +1,181 @@
+{
+ "fuente": "https://www.iman-gadzhi.com/",
+ "titulo": "Iman Gadzhi",
+ "extraido": "2026-10-23T12:27:35.184Z",
+ "viewport": [
+  1095,
+  706
+ ],
+ "alto_doc": 6272,
+ "body": {
+  "font": "sans-serif",
+  "bg": "rgb(0, 0, 0)",
+  "color": "rgb(0, 0, 0)"
+ },
+ "headings": [
+  {
+   "tag": "H1",
+   "text": "IMAN GADZHI",
+   "top": 307,
+   "font": "\"Reckless Neue Medium\", \"Reckless Neue Medium Placeholder\", sans-serif",
+   "size": "160px",
+   "weight": "500"
+  },
+  {
+   "tag": "H3",
+   "text": "About",
+   "top": 1186,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "Early life",
+   "top": 1562,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H2",
+   "text": "Companies",
+   "top": 2099,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "30px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "IAG Media",
+   "top": 2256,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "GrowYourAgency",
+   "top": 2566,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "Gadzhi",
+   "top": 2888,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "Flozy",
+   "top": 3186,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "Educate",
+   "top": 3496,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "Big Day",
+   "top": 3806,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H2",
+   "text": "You Get What You Give",
+   "top": 4254,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "30px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "Schools in Nepal",
+   "top": 4418,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "Company Marathon",
+   "top": 4807,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H3",
+   "text": "MEALS IN SOUTH AFRICA:",
+   "top": 5195,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "24px",
+   "weight": "600"
+  },
+  {
+   "tag": "H2",
+   "text": "Get in Touch",
+   "top": 5699,
+   "font": "\"Reckless Neue SemiBold\", \"Reckless Neue SemiBold Placeholder\", sans-s",
+   "size": "42px",
+   "weight": "600"
+  }
+ ],
+ "links": [
+  {
+   "text": "ABOUT",
+   "href": "https://www.iman-gadzhi.com/",
+   "top": 89
+  },
+  {
+   "text": "EARLY LIFE",
+   "href": "https://www.iman-gadzhi.com/",
+   "top": 122
+  },
+  {
+   "text": "COMPANIES",
+   "href": "https://www.iman-gadzhi.com/",
+   "top": 155
+  },
+  {
+   "text": "CONTACT",
+   "href": "https://www.iman-gadzhi.com/",
+   "top": 188
+  },
+  {
+   "text": "",
+   "href": "https://www.instagram.com/imangadzhi/",
+   "top": 6172
+  },
+  {
+   "text": "",
+   "href": "https://www.youtube.com/@ImanGadzhi",
+   "top": 6172
+  },
+  {
+   "text": "",
+   "href": "https://x.com/gadzhiiman",
+   "top": 6172
+  }
+ ],
+ "ctas": [],
+ "campos_formulario_visibles_sin_enviar": [],
+ "iframes": [
+  "",
+  "https://framer.com/edit?framerSiteId=da143e8d53d5129778ba38d1f33cb8e4805c3fbc7edf58f587855f4abe036419&source=www.iman-gadzhi.com&features=%7B%22editorBarDisableFrameAncestorsSecurity%22%3Afalse%2C%22o"
+ ],
+ "texto": "IMAN GADZHI\n\nABOUT\n\nEARLY LIFE\n\nCOMPANIES\n\nCONTACT\n\nIMAN GADZHI\n\nCOMPANIES\n\nAbout\n\nIman Gadzhi is a British business owner, entrepreneur, motivational speaker and online educator. Iman is an advocate for universal education and a committed philanthropist. His philanthropic efforts include privately funding the establishment of numerous schools in Nepal and providing thousands of children access to high-quality education.\n\nEarly life\n\nIman was born on January 3, 2000, in a Russian family in Dagestanskiye Ogni, Dagestan, Russia. He moved to London at age 4. Raised in a modest environment, Gadzhi faced challenges related to family issues, financial hardship, and limited access to traditional education. At 15, he started trading Instagram accounts to provide for himself and his mother, later developing an interest in entrepreneurship and digital marketing.\n\nCompanies\nIAG Media\n\nIn 2017, Iman founded IAG Media, a boutique digital marketing agency specializing in high-return-on-investment strategies, including social media marketing, sales funnel optimization, and online advertising.\n\nGrowYourAgency\n\nCapitalizing on the course’s success, Gadzhi established GrowYourAgency, an e-learning platform that trains novice agency owners with initiating, sustaining, and scaling their businesses.\n\nGadzhi\n\nIn 2019, Iman established GADZHI, a United Kingdom-based eyewear brand specializing in blue light-blocker glasses and a range of apparel items.\n\nFlozy\n\nSince 2020, the software solutions company has been committed to simplifying the operations of agency owners by consolidating essential tools and providing a streamlined workflow.\n\nEducate\n\nIn 2023, Gadzhi founded Educate.io, an online education platform dedicated to empowering students with monetizable skills across marketing, sales, and copywriting.\n\nBig Day\n\nDebuting with a range of electrolyte mixes and drinks, BIG DAY is a lifestyle brand built around Iman’s life as a business owner and the drive of entrepreneurial success.\n\nYou Get What You Give\nSchools in Nepal\n\nIman is constructing schools in Nepal to encourage greater involvement from disadvantaged nations in the new era. So far, Gadzhi has privately funded the construction of five schools in Nepal. He considers it his most fulfilling commitment and has no plans to stop.\n\nCompany Marathon\n\nAt the end of 2023, 75 employees of Educate ran a marathon and raised funds to support the work of Pahar Trust Nepal. Iman united his entire team and completed three marathons across three countries in one week to support education in Nepal.\n\nMEALS IN SOUTH AFRICA:\n\nCherishing a personal connection to South Africa, and recognising the importance of nutrition in development, in 2024 Iman partnered with Ladles of Love, funding a program providing nutritious meals for 100 children over the course of a year.\n\nGet in Touch\n\nIMAN GADZHI\n\nIAG SERVICES - FZCO | DSO-IFZA-20424, IFZA Properties, Dubai Silicon Oasis, United Arab Emirates\n\n©2026 IMAN GADZHI. All Rights Reserved."
+}

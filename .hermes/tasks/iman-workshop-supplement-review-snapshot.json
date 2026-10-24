@@ -1,0 +1,354 @@
+{
+  "run": "run_66e1d03c2397",
+  "scope": "Claude supplement plus coordinator S08 addendum; originals preserved",
+  "original_snapshot": ".hermes/tasks/iman-workshop-final-snapshot.json",
+  "original_checked": 19,
+  "original_mismatches": [],
+  "files": [
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/cobertura-complemento.json",
+      "bytes": 12009,
+      "sha256": "c8170f44cd9b38c8e8349432f6caa789b39a023f6116af026734ffb83a47c658"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/COMPLEMENTO.md",
+      "bytes": 31073,
+      "sha256": "cce72fe2fe68ee3931323ffc1fc448c1f908dc1ccbf9ea5b12a9e006b315bbe5"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/dom-S01-iman-gadzhi-com.json",
+      "bytes": 7183,
+      "sha256": "c25fbbcf124efe691682752e87902c450f043d0c5820b5f4e3d37948e7752213"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/dom-S02-instagram.json",
+      "bytes": 9529,
+      "sha256": "6e805a77be0c27de1d24e563a759bcf6974c17da3a4dc5740c9a46428d670b97"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/dom-S05-x-perfil.json",
+      "bytes": 13729,
+      "sha256": "ae22b4fd9eed72c38dd90d12643dc02ef481f126c37a4db87cfcb31252b4067a"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/dom-S06-consulting-com.json",
+      "bytes": 9906,
+      "sha256": "54fce348a27fd0332da949517f70ee4fe4f3ed68ae71abc76aa5b5a074bcf7b3"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/dom-S07-assessment-call.json",
+      "bytes": 1836,
+      "sha256": "aaefc7bfa3bbf97564d86d73870c19c29f8e3670e999612a918d81bd07dec9c0"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/dom-S08-monetise-waitlist.json",
+      "bytes": 20795,
+      "sha256": "82c4e992990de8ec3b90160e47289a0719a61b5de83271b1d6f02b1ccf25b5a3"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/dom-S09-reto-landing.json",
+      "bytes": 16423,
+      "sha256": "da2882cb9b78447d638c67cc72c87b4a2836adc8b56cbe05a33ff3494e79231c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/form-S08-campos.txt",
+      "bytes": 285,
+      "sha256": "a25aa34b4ef9555b80bd0acdc42520652d108c47d984650ed010754f861d99c5"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/form-S08-tras-clic-waitlist.png",
+      "bytes": 358562,
+      "sha256": "c2c9187194abd38702742c608747d406476f05737bc2dcb7114e3b1a065d4974"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/form-S09-campos.txt",
+      "bytes": 504,
+      "sha256": "77e7cb8c990643e3598041eb55f97959d6a538b6b82870e2e45b31e6f1c7d1b0"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/form-S09-estado-tras-clic.txt",
+      "bytes": 141,
+      "sha256": "d93e23b31cbd17e534717d25a9da7b0a7aa7e55b08bf78f723fb5af37995e979"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/form-S09-modal-sin-enviar.png",
+      "bytes": 698494,
+      "sha256": "1667f9c3fb06381deb78491a5d14a24ffa7c7d7df70aa3b45828a58127b88d0b"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/LqCPwQ1IcA4-cortes-escena-gt0.3.txt",
+      "bytes": 911,
+      "sha256": "46967ad51636efff0337dbf90de5faea96623502d731573b23a45378569f0cd3"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-diagnostico-media-queries-S09.txt",
+      "bytes": 534,
+      "sha256": "5cd077ff8af99201e283ae81270c27123712adf0034f84f0ab043c9df4a26a9d"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S01-iman-gadzhi-com-medicion.txt",
+      "bytes": 193,
+      "sha256": "71bf427664484aa16962e88ce7e1e5630402eb57804b53b0d5e7d99944ed3ace"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S01-iman-gadzhi-com.png",
+      "bytes": 318438,
+      "sha256": "17330a3d13f34ed095f42afee5a1a7508c25d894820b3d9aa434b635705b3177"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S06-consulting-com-medicion.txt",
+      "bytes": 169,
+      "sha256": "efe55998ed242d16c38b0751fd1ed4bc60482105947917ca8a23cc950562aacd"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S06-consulting-com-reintento-espera-22s-medicion.txt",
+      "bytes": 169,
+      "sha256": "efe55998ed242d16c38b0751fd1ed4bc60482105947917ca8a23cc950562aacd"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S06-consulting-com-reintento-espera-22s.png",
+      "bytes": 32619,
+      "sha256": "9655e915ae41e50fd7f14c1b703cd5afb1722c001fa2a90c874e8da7dccb414c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S06-consulting-com.png",
+      "bytes": 33195,
+      "sha256": "619108f0a37b13800a484f13755d4d6a1475bcfff099a67532e5436de7baf9e6"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S08-monetise-waitlist-medicion.txt",
+      "bytes": 169,
+      "sha256": "efe55998ed242d16c38b0751fd1ed4bc60482105947917ca8a23cc950562aacd"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S08-monetise-waitlist.png",
+      "bytes": 178915,
+      "sha256": "5f51dcf2e70faeda0441fc222a67bd58db2198e9fd4efbfc838a591a0e6ed2fb"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S09-reto-landing-medicion.txt",
+      "bytes": 246,
+      "sha256": "b71882eb9542429672f6088ea654821b0f8c2fdd488d47c06d09eae6d9bb3beb"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/movil-S09-reto-landing.png",
+      "bytes": 275012,
+      "sha256": "3142c933cf17c344677e4b495647af8511c8915c054ec9a7c6e4fee1f244c2f4"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S04-yt-dlp-flat-playlist-ultimos14.txt",
+      "bytes": 1312,
+      "sha256": "b425d37558def9d1af47b15eab2f0e469ed0e675990b62ae172ff93c76b55b9f"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S05-articulos-extracto.txt",
+      "bytes": 771,
+      "sha256": "9841a40123db2690ff2ee7aee1b3ca6d24457a035b0184258313c8d5c33f0fcb"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S05-cortes-escena-gt0.3.txt",
+      "bytes": 117,
+      "sha256": "57d51779113868ce10938a44174406a2de5a78775553714da891bfa20317ee1f"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S05-hoja-contactos-12-fotogramas.png",
+      "bytes": 2087685,
+      "sha256": "365a3cba4e25faf39476b013aca04cfa5bf7c92d52cde5b6c9ba74493fac6c97"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S05-pinned-status-urls.txt",
+      "bytes": 1146,
+      "sha256": "ff5fd59afc87743eb188d3f2c7ba239eecd430a6beb3735a54d076cb33a7746f"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S05-transcripcion-whisper-local-en.json",
+      "bytes": 778,
+      "sha256": "0007fa69cace4beb281ea95f35da33ac48cbae8a07bae1b2656d75dd1010221e"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_00_00s.jpg",
+      "bytes": 10919,
+      "sha256": "845a1a96aa26c81371ab3f41ae9925694037769f0cde4b76ffb8fbb78e72b586"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_01_01s.jpg",
+      "bytes": 11296,
+      "sha256": "9870ecd84cf3c127e144298566a6aadaa4fc0f7bbfc7c9906c56a20a4368cadc"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_02_02s.jpg",
+      "bytes": 11265,
+      "sha256": "14eec60bb6bfbac723150be030d5de5ecbfdaf2d73ba2681eda5f7a8bf37a550"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_03_03s.jpg",
+      "bytes": 3745,
+      "sha256": "f4f141ff459f3ffa1d22d8d905f25ce41654b4fe0fdc5e6c98d5e296e73fa7f4"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_04_05s.jpg",
+      "bytes": 7539,
+      "sha256": "925da5b15abcc7c9d06cad5d06d63964c741d8e5bed0d854b577f9334ab61c37"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_05_08s.jpg",
+      "bytes": 13257,
+      "sha256": "4d3f6eb653f6643f42bb27e30eefbe0658f1d4fd48a652175f7658956005d875"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_06_12s.jpg",
+      "bytes": 11703,
+      "sha256": "ae12bda98af9da1c1307d4596137c6765a765bf08f66e044f239652c47966049"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_07_16s.jpg",
+      "bytes": 11550,
+      "sha256": "d6e2905fd8fc8970b4d63ec986282d0a1dd8f41014012387fd97b057ffa0a683"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_08_20s.jpg",
+      "bytes": 11454,
+      "sha256": "1c81bbe163199f3913b9aa6ee377c1fba5c99afe1ace2b4df2f0b2f5a0283928"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_09_24s.jpg",
+      "bytes": 9144,
+      "sha256": "6107ae3c49386c9003eeacf6de4898c90472274a2fbc25f8e558730d5e7fc44f"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_10_28s.jpg",
+      "bytes": 15357,
+      "sha256": "0281d78c1f45007c178aae4b8f7dd36ba4d68abcc796bd6e126c730dfb4e0841"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_11_32s.jpg",
+      "bytes": 6554,
+      "sha256": "32627e63b181fa7b1a504dae78b46b532b04ea6e0ed3ee32ed22f1694523c8be"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_12_36s.jpg",
+      "bytes": 7144,
+      "sha256": "ffe485dc037083f49e9686e6c5365cc33e75bf2a0dd3ceb4570f6063cbfdc9fe"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_13_40s.jpg",
+      "bytes": 10738,
+      "sha256": "1f835f7e0d5356ad2d51266542ac41a2d6c9cb06f44fd1b7ab6ad1ba4d4a45b4"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_14_44s.jpg",
+      "bytes": 12697,
+      "sha256": "f9f56525e45aa2d50e3e2ab0a5893af9904afb5060cc45c7ae9b160a3a7fbbcb"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_15_48s.jpg",
+      "bytes": 11056,
+      "sha256": "78adeeb333ebea20fa55267f4046474b1971960beb6de1e52430e30ef3c98759"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_16_52s.jpg",
+      "bytes": 10604,
+      "sha256": "f097552fabf0da484b16016ad466ac22bd97bfcb062d96f6083d85c73e1b4fec"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-local-frame_17_54s.jpg",
+      "bytes": 1066,
+      "sha256": "ae4d3feff48fdd63f4bec382ef2bd2e6b78e0d9c47553d3d4754d4ad2236b72b"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-vsl-estado-no-reproducido.png",
+      "bytes": 358558,
+      "sha256": "32c4a144cb5e6d62b1ae3f3587a276eaeaeda0ae3ead17ec98dd7152398ea497"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S08-vsl-estado-reproductor.txt",
+      "bytes": 143,
+      "sha256": "6a555b689ee14c61d44f4df3f4ca38926b5075ff3d6e5e9b99fcf33ca5105d9f"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S11-cortes-escena-gt0.3.txt",
+      "bytes": 574,
+      "sha256": "f12cec3ba2165b72e516b3c4a67689cd570fd49fbb0b2344265c6b042fb80c12"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S11-hoja-contactos-15-fotogramas.png",
+      "bytes": 1427078,
+      "sha256": "41d6099fd07dd5bc675a79f3ec0fbc03832f19dbf4e278c9e424f19bb1811531"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S11-info-yt-dlp-resumen.json",
+      "bytes": 1209,
+      "sha256": "3808ee43bd01c49edbb98169b1747b79f5c1c84362b14283b52fe1f3446694f7"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S11-trailer-transcripcion-forzada-es-DESCARTADA.json",
+      "bytes": 46482,
+      "sha256": "736042b90367d16f970f5cd586bba2588a43c678c99880e65440160bbfb07219"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S11-transcripcion-whisper-local-en.json",
+      "bytes": 51328,
+      "sha256": "6b881420548c1449744ee172d6f74833fd4467bf8b52d325fdd47f4a7e2e87c3"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S12-hoja-contactos-12-fotogramas.png",
+      "bytes": 859318,
+      "sha256": "2d13a6878ff5206f9bd269dba3e683d0cd116bc618e24296c525173fed3bbf96"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S12-info-yt-dlp-resumen.json",
+      "bytes": 1081,
+      "sha256": "3e8742c8a200fa3a940d0bed5059bde7dfdefae32fa2217d2b8912e5f83085be"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S12-transcripcion-whisper-local-en.json",
+      "bytes": 343575,
+      "sha256": "cdd423383546e1c19046d0d88727355d47f1c5c4052a8dafe86ee3a5f32e753a"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S13-hoja-contactos-12-fotogramas.png",
+      "bytes": 1109484,
+      "sha256": "fe27a00da59d2afee191c860a0a7ae6dd431510bf1bc7442a506fbedce10dc65"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S13-info-yt-dlp-resumen.json",
+      "bytes": 2072,
+      "sha256": "e4ab6e46338322735f82a3c5c91d9f46ba92a0b6234d0733843ecd44ce08bb37"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S13-transcripcion-whisper-local-en.json",
+      "bytes": 296523,
+      "sha256": "533370c1024297271963ea9dd72d69993502eea840b62ea8371860e6799a3643"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S14-hoja-contactos-12-fotogramas.png",
+      "bytes": 933164,
+      "sha256": "0e9923717f21a4e29ada860cc400c1c7ef0b629ca36acd0ab1dcc60c28198c47"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S14-info-yt-dlp-resumen.json",
+      "bytes": 2243,
+      "sha256": "64fc603add55fec8b25ac820c48418f109544ace7c7ba4ebca04eb2ad67778b7"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/S14-transcripcion-whisper-local-en.json",
+      "bytes": 391091,
+      "sha256": "756baff3fd4fb292abe87e19d95ffccefd59512e88337650a7d095f8f732bc5e"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/w-lkP9XcZfg-cortes-escena-gt0.3.txt",
+      "bytes": 1922,
+      "sha256": "60accf8a655310562d39b167689ca9d1eea3741eb52d371a0169e39a988d3c7b"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-complemento/WO-Gl6-6gLE-cortes-escena-gt0.3.txt",
+      "bytes": 1890,
+      "sha256": "d85e6459c99ab10fc70f5fb2795fb68c7f428b1bb5769731b5b10c781ea7bce9"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/S08-VERIFICACION-LOCAL.md",
+      "bytes": 3866,
+      "sha256": "cd7a824f21b13bb9c8cd6462fcaeb332e2e63933251b2948b861f9f96e8c90fa"
+    }
+  ]
+}

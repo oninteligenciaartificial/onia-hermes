@@ -1,0 +1,58 @@
+{
+ "fuente": "https://consulting.com/assessment-call",
+ "titulo": "Consulting.com",
+ "extraido": "2026-10-23T12:28:32.829Z",
+ "viewport": [
+  1095,
+  706
+ ],
+ "alto_doc": 1030,
+ "body": {
+  "font": "sans-serif",
+  "bg": "rgb(0, 0, 0)",
+  "color": "rgb(0, 0, 0)"
+ },
+ "headings": [
+  {
+   "tag": "H3",
+   "text": "Schedule Your Quantum Demo Call",
+   "top": 191,
+   "font": "\"Test Tiempos Headline Regular\", \"Test Tiempos Headline Regular Placeh",
+   "size": "34px",
+   "weight": "400"
+  },
+  {
+   "tag": "H4",
+   "text": "Jean Hollaender",
+   "top": 394,
+   "font": "\"Test Tiempos Headline Medium\", \"Test Tiempos Headline Medium Placehol",
+   "size": "24px",
+   "weight": "500"
+  }
+ ],
+ "links": [
+  {
+   "text": "",
+   "href": "https://www.instagram.com/consulting/",
+   "top": 798
+  },
+  {
+   "text": "Privacy Policy",
+   "href": "https://consulting.com/policy/privacy",
+   "top": 962
+  },
+  {
+   "text": "Terms & Conditions",
+   "href": "https://consulting.com/policy/terms",
+   "top": 962
+  }
+ ],
+ "ctas": [],
+ "campos_formulario_visibles_sin_enviar": [],
+ "iframes": [
+  "",
+  "",
+  "https://framer.com/edit?framerSiteId=66c3e3e6e00a68db9e651903130ae0ad558e3c48a6d5de675ab76519a84e528b&source=consulting.com&features=%7B%22editorBarDisableFrameAncestorsSecurity%22%3Afalse%2C%22onPage"
+ ],
+ "texto": "Schedule Your Quantum Demo Call\nJean Hollaender\n\nFounder of Liberty Webi\n\n\"Before Quantum, our biggest launch capped at $2.8M. After joining, we executed everything we found inside — and just closed a record-breaking $5.8M launch.\"\n\nDisclaimer: This site is not a part of the Facebook website or Facebook Inc. Additionally, This site is NOT endorsed by Facebook in any way. FACEBOOK is a trademark of FACEBOOK, Inc.\n\n© 2026 Consulting.com All rights reserved.\n\nPrivacy Policy\n\n | \n\nTerms & Conditions"
+}

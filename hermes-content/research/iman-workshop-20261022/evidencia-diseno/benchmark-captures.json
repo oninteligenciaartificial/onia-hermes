@@ -1,0 +1,50 @@
+{
+  "browser": "149.0.7827.55",
+  "count": 4,
+  "rows": [
+    {
+      "name": "bench",
+      "source": "hermes-content/propuestas/propuesta-bench.html",
+      "screenshot": "C:\\Users\\PC\\orca\\workspaces\\onia-hermes\\iman-workshop-20261022\\hermes-content\\research\\iman-workshop-20261022\\evidencia-diseno\\bench-1440.png",
+      "title": "Propuesta Onia — BENCH",
+      "errors": [],
+      "metrics": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "garabato",
+      "source": "hermes-content/propuestas/propuesta-garabato.html",
+      "screenshot": "C:\\Users\\PC\\orca\\workspaces\\onia-hermes\\iman-workshop-20261022\\hermes-content\\research\\iman-workshop-20261022\\evidencia-diseno\\garabato-1440.png",
+      "title": "Propuesta Onia — Garabato",
+      "errors": [],
+      "metrics": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "hsb",
+      "source": "hermes-content/propuestas/propuesta-hsb-engineers.html",
+      "screenshot": "C:\\Users\\PC\\orca\\workspaces\\onia-hermes\\iman-workshop-20261022\\hermes-content\\research\\iman-workshop-20261022\\evidencia-diseno\\hsb-1440.png",
+      "title": "Propuesta Onia — HSB Engineers",
+      "errors": [],
+      "metrics": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "auditoria-actual",
+      "source": "hermes-content/sitio-sergiourcullo/auditoria/index.html",
+      "screenshot": "C:\\Users\\PC\\orca\\workspaces\\onia-hermes\\iman-workshop-20261022\\hermes-content\\research\\iman-workshop-20261022\\evidencia-diseno\\auditoria-actual-1440.png",
+      "title": "Auditá tu negocio con IA — taller en vivo",
+      "errors": [],
+      "metrics": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      }
+    }
+  ]
+}

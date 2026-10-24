@@ -1,0 +1,1 @@
+"{\"url\":\"https://www.monetise.com/waitlist?utm_source=www.monetise.com\",\"scrollY\":0,\"dialogs\":0,\"campos\":[],\"iframes\":[\"\",\"https://framer.com/edit?framerSiteId=cb92d55b8ac904193a897b56826e02e05e5774b8fc46af9c488722e645d3a30b&source=www.monetise.com&features=%7B%2\"]}",

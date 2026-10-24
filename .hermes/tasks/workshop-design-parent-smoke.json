@@ -1,0 +1,84 @@
+{
+  "scope": "independent coordinator smoke, not full QA",
+  "rows": [
+    {
+      "width": 390,
+      "d": "a",
+      "metrics": {
+        "ctaBottom": 666.15625,
+        "overflow": false,
+        "h1": 1
+      },
+      "opened": true,
+      "closed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "width": 390,
+      "d": "b",
+      "metrics": {
+        "ctaBottom": 564.71875,
+        "overflow": false,
+        "h1": 1
+      },
+      "opened": true,
+      "closed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "width": 390,
+      "d": "c",
+      "metrics": {
+        "ctaBottom": 653.046875,
+        "overflow": false,
+        "h1": 1
+      },
+      "opened": true,
+      "closed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "width": 1440,
+      "d": "a",
+      "metrics": {
+        "ctaBottom": 580.515625,
+        "overflow": false,
+        "h1": 1
+      },
+      "opened": true,
+      "closed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "width": 1440,
+      "d": "b",
+      "metrics": {
+        "ctaBottom": 492.046875,
+        "overflow": false,
+        "h1": 1
+      },
+      "opened": true,
+      "closed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "width": 1440,
+      "d": "c",
+      "metrics": {
+        "ctaBottom": 464.765625,
+        "overflow": false,
+        "h1": 1
+      },
+      "opened": true,
+      "closed": true,
+      "errors": [],
+      "external": []
+    }
+  ],
+  "pass": true
+}

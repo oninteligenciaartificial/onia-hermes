@@ -1,0 +1,19 @@
+{
+  "pitch": {
+    "path": "hermes-content/research/iman-workshop-20261022/PITCH-PARA-GRABAR.md",
+    "sha256": "a7fca829037e927b64e853fad3840d10f3772018e7c5eede3c949edace9ef38d",
+    "bytes": 6491
+  },
+  "literal_blocks": 4,
+  "word_counts": [
+    54,
+    55,
+    80,
+    7
+  ],
+  "total_words": 196,
+  "seconds_at_150wpm": 78.4,
+  "seconds_at_130wpm": 90.46153846153845,
+  "canon_identical": true,
+  "canon_sha256": "6086a27bf3559f025107939a595e54394b84b25d3b5986dba5afef9165ab7cc4"
+}

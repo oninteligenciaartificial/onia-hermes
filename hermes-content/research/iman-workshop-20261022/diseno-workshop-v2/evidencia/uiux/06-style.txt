@@ -1,0 +1,76 @@
+## UI Pro Max Search Results
+**Domain:** style | **Query:** photography duotone high contrast editorial
+**Source:** styles.csv | **Found:** 4 results
+
+### Result 1
+- **Style Category:** Vibrant & Block-based
+- **Type:** General
+- **Keywords:** Bold, energetic, playful, block layout, geometric shapes, high color contrast, duotone, modern, energetic
+- **Primary Colors:** Neon Green #39FF14, Electric Purple #BF00FF, Vivid Pink #FF1493, Bright Cyan #00FFFF, Sunburst #FFAA00
+- **Effects & Animation:** Large sections (48px+ gaps), animated patterns, bold hover (color shift), scroll-snap, large type (32px+), 200-300ms
+- **Best For:** Startups, creative agencies, gaming, social media, youth-focused, entertainment, consumer
+- **Light Mode ✓:** ✓ Full
+- **Dark Mode ✓:** ✓ Full
+- **Performance:** ⚡ Good
+- **Accessibility:** ◐ Ensure WCAG
+- **Framework Compatibility:** Tailwind 10/10, Chakra 9/10, Styled 9/10
+- **Complexity:** Medium
+- **AI Prompt Keywords:** Design an energetic, vibrant interface with bold block layouts, geometric shapes, high color contrast, large typography (32px+), animated background patterns, duotone effects. Perfect for startups and youth-focused apps. Use 4-6 contrasting colors from complementary/triadic schemes.
+- **CSS/Technical Keywords:** display: flex/grid with large gaps (48px+), font-size: 32px+, background: animated patterns (CSS), color: neon/vibrant colors, animation: continuous pattern movement
+- **Implementation Checklist:** ☐ Block layout with 48px+ gaps, ☐ Large typography 32px+, ☐ 4-6 vibrant colors max, ☐ Animated patterns active, ☐ Scroll-snap enabled, ☐ High contrast verified (7:1+)
+- **Design System Variables:** --block-gap: 48px, --typography-size: 32px+, --color-palette: 4-6 vibrant colors, --animation: continuous pattern, --contrast-ratio: 7:1+
+
+### Result 2
+- **Style Category:** Exaggerated Minimalism
+- **Type:** General
+- **Keywords:** Bold minimalism, oversized typography, high contrast, negative space, loud minimal, statement design
+- **Primary Colors:** #000000 (Black), #FFFFFF (White), single vibrant accent only
+- **Effects & Animation:** font-size: clamp(3rem 10vw 12rem), font-weight: 900, letter-spacing: -0.05em, massive whitespace
+- **Best For:** Fashion, architecture, portfolios, agency landing pages, luxury brands, editorial
+- **Light Mode ✓:** ✓ Full
+- **Dark Mode ✓:** ✓ Full
+- **Performance:** ⚡ Excellent
+- **Accessibility:** ✓ WCAG AA
+- **Framework Compatibility:** Tailwind 10/10, Typography.js 10/10
+- **Complexity:** Low
+- **AI Prompt Keywords:** Design with exaggerated minimalism. Use: oversized typography (clamp 3rem-12rem), extreme negative space, black/white primary, single accent color only, bold statements, minimal elements, dramatic contrast.
+- **CSS/Technical Keywords:** font-size: clamp(3rem, 10vw, 12rem), font-weight: 900, letter-spacing: -0.05em, color: #000 or #FFF, padding: 8rem+, single accent, no decorations
+- **Implementation Checklist:** ☐ Typography oversized, ☐ White space extreme, ☐ Black/white dominant, ☐ Single accent only, ☐ Elements minimal, ☐ Statement clear
+- **Design System Variables:** --type-giant: clamp(3rem, 10vw, 12rem), --type-weight: 900, --spacing-huge: 8rem, --color-primary: #000000, --color-bg: #FFFFFF, --accent: single color only
+
+### Result 3
+- **Style Category:** Minimalist Monochrome
+- **Type:** Mobile
+- **Keywords:** monochrome, black white, editorial, austere, typographic, sharp, zero radius, high contrast, brutalist, pocket editorial, serif, mechanical
+- **Primary Colors:** Pure Black #000000, Pure White #FFFFFF
+- **Effects & Animation:** Instant inversion active state (tap → bg-black text-white, zero transition-none), no shadows (strictly 2D), full-bleed horizontal rules (4px black section dividers), subtle paper noise texture (opacity: 0.03), slide-in page transitions with hard edge
+- **Best For:** Luxury fashion e-commerce mobile, editorial publications, high-end portfolio apps, experimental/avant-garde brands, digital exhibitions
+- **Light Mode ✓:** ✓ Full (Light Mode Enforced)
+- **Dark Mode ✓:** ◐ Dark by section only (inverted sections)
+- **Performance:** ⚡ Excellent
+- **Accessibility:** ✓ WCAG AAA (pure black/white)
+- **Framework Compatibility:** React Native 10/10, Expo 10/10, SwiftUI 9/10, Tailwind 9/10
+- **Complexity:** Medium
+- **AI Prompt Keywords:** Design a minimalist monochrome mobile app. Use ONLY black (#000000) and white (#FFFFFF). Zero border-radius on every element. No shadows — depth is created by 1–4px black borders and color inversion only. Typography is the primary visual: Playfair Display for heroes (text-5xl–text-6xl, tracking-tigh...
+- **CSS/Technical Keywords:** border-radius: 0px (ALL elements including modals), box-shadow: none, active:bg-black active:text-white transition-none, border-b-4 border-black (section dividers), divide-y divide-black (lists), font-family: Playfair Display (headers) + Source Serif 4 (body) + JetBrains Mono (labels), background-im...
+- **Implementation Checklist:** ☐ 0px border-radius on ALL elements, ☐ No shadows anywhere, ☐ Instant inversion on every tap (transition-none), ☐ 4px black line separates hero from content, ☐ Safe area respected (pt-safe pb-safe), ☐ h-14 touch targets, ☐ Sticky section headers with border-b, ☐ Typography hero: word spans full scre...
+- **Design System Variables:** --color-bg: #FFFFFF, --color-fg: #000000, --color-muted: #F5F5F5, --color-muted-fg: #525252, --color-border: #000000, --color-border-light: #E5E5E5, --radius: 0px, --shadow: none, --border-hairline: 1px solid #E5E5E5, --border-thin: 1px solid #000000, --border-thick: 2px solid #000000, --border-heav...
+
+### Result 4
+- **Style Category:** Vintage Analog / Retro Film
+- **Type:** General
+- **Keywords:** Film grain, VHS, cassette tape, polaroid, analog warmth, faded colors, light leaks, vintage photography
+- **Primary Colors:** Faded Cream #F5E6C8, Warm Sepia #D4A574, Muted Teal #4A7B7C, Soft Pink #E8B4B8
+- **Effects & Animation:** Film grain overlay, VHS tracking effect, polaroid shake, fade-in transitions, light leak animations
+- **Best For:** Photography portfolios, music/vinyl brands, vintage fashion, nostalgia marketing, film industry, cafes
+- **Light Mode ✓:** ✓ Full
+- **Dark Mode ✓:** ◐ Partial
+- **Performance:** ⚡ Good
+- **Accessibility:** ✓ WCAG AA
+- **Framework Compatibility:** CSS filters 10/10, Canvas 9/10
+- **Complexity:** Medium
+- **AI Prompt Keywords:** Design with vintage analog film aesthetic. Use: film grain overlay, faded/desaturated colors, warm sepia tones, light leaks, VHS tracking effect, polaroid frame, analog warmth, nostalgic photography feel.
+- **CSS/Technical Keywords:** filter: sepia() contrast() saturate(0.8), background: noise texture overlay, animation: VHS tracking (transform skew), light leak gradient overlay, border for polaroid frame, grain via SVG filter
+- **Implementation Checklist:** ☐ Film grain visible, ☐ Colors faded/warm, ☐ Light leaks present, ☐ Nostalgic feel achieved, ☐ Performance with filters, ☐ Images look vintage
+- **Design System Variables:** --sepia-amount: 20%, --contrast: 1.1, --saturation: 0.8, --grain-opacity: 0.15, --light-leak-color: rgba(255,200,100,0.2), --warm-tint: #F5E6C8
+

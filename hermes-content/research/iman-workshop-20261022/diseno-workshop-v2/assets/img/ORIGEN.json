@@ -1,0 +1,42 @@
+{
+ "pila": {
+  "fuente": "lote-fotobn-s31-61421ccd.jpg",
+  "sha256_12": "782853e0ba14",
+  "size": [
+   2048,
+   1528
+  ]
+ },
+ "bandeja": {
+  "fuente": "lote-fotobn-s32-c5e1d3d0.jpg",
+  "sha256_12": "4786c8654267",
+  "size": [
+   2048,
+   1528
+  ]
+ },
+ "hojas": {
+  "fuente": "lote-fotobn-s33-3af2cf9a.jpg",
+  "sha256_12": "bc0b7549b6f0",
+  "size": [
+   1520,
+   2688
+  ]
+ },
+ "balanza": {
+  "fuente": "lote-fotobn-s35-d60f36df.jpg",
+  "sha256_12": "380faa22785f",
+  "size": [
+   2048,
+   1158
+  ]
+ },
+ "balanza-baja": {
+  "fuente": "lote-fotobn-s36-1a27a52e.jpg",
+  "sha256_12": "9d7a9bf0498f",
+  "size": [
+   2048,
+   1158
+  ]
+ }
+}

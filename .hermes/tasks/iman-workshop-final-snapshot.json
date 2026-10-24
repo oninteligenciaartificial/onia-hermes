@@ -1,0 +1,110 @@
+{
+  "run": "run_66e1d03c2397",
+  "dispatch": "ctx_a8219514a14e",
+  "fuentes": 14,
+  "unique_urls": 14,
+  "acceso": {
+    "observado": 7,
+    "parcial": 7
+  },
+  "piezas": 6,
+  "captures": 16,
+  "files": [
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/APLICACION-WORKSHOP.md",
+      "bytes": 28974,
+      "sha256": "b7d6a6d29e9d07dd23fecf36d6313fe299803ba2700cc88eaa7cd2d34ee6ae70"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/01-iman-gadzhi-com-desktop.png",
+      "bytes": 760126,
+      "sha256": "f644035fe83a845a49ff133fed613b7bc951c33cf7afe6bcb8ec63ba1e6ea1c7"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/04-consulting-com-hero.png",
+      "bytes": 232845,
+      "sha256": "37d8ccebf5c90e7a8f984a7cde168656cd3f14c1c3fc88ee28eacfe9117722d8"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/05-consulting-assessment-call.png",
+      "bytes": 58194,
+      "sha256": "e59e4e49ea1b1375fcafc5c8c5dd621b86376df553982d825c391906c8db77b3"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/06-monetise-waitlist.png",
+      "bytes": 566087,
+      "sha256": "94970397feed5fe031e9619982f9cdcf377fd9b8261757041c73e75ec1edd14a"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/07-monetise-oferta-garantia.png",
+      "bytes": 230053,
+      "sha256": "659e9ed02fd6f301d6cec5e7898325467ccbe7ffbac17e14e9190b137805a2a1"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/08-www-instagram-com-imangadzhi-.png",
+      "bytes": 224267,
+      "sha256": "ac2863d7008e8df35401ba32dad44602afcf07a27c7f5b41629859c666bc011b"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/08-x-com-gadzhiiman.png",
+      "bytes": 139116,
+      "sha256": "a97fb3e3240c25a343d7e6254a4fd2ed74ae5fa24c1ac19979fee7b69325df91"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/09-youtube-videos.png",
+      "bytes": 640432,
+      "sha256": "5e460eaad1781d038c9ebf47ad704f02ca46347cd473fc169ba8fc2d45fed8f7"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/10-yt-LqCPwQ1IcA4.png",
+      "bytes": 315115,
+      "sha256": "890fa12c6cf708d9785a91d2c21022dfdc358ea5704f0724d16edef865e1a348"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/10-yt-w-lkP9XcZfg.png",
+      "bytes": 370553,
+      "sha256": "f69f84f72e8793f6ce4d0b8301788e1f0d69d293568daaf381dab8ff696af74c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/10-yt-WO-Gl6-6gLE.png",
+      "bytes": 114411,
+      "sha256": "7d35160f970567e4c732f8372b79887bc84fe417cf28abfd1b2e9a6e94705b57"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/10-yt-YZ6OyZKrRh8-solo-anuncio-previo.png",
+      "bytes": 271492,
+      "sha256": "037514c340a940dda06ad27e76f26ec91143058593575aa4b37a3787a327c4d9"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/11-trailer-frame-1.png",
+      "bytes": 528889,
+      "sha256": "2e40beb78f15bf2237bf3cea883241201ffd77bf22db9184c048b2ad2cbaa696"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/11-trailer-frame-2.png",
+      "bytes": 628853,
+      "sha256": "f3bfb9eb703fb4ebb24434961836e8e3d8d49b8515153151370e618ae992dc4e"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/11-yt-trailer-AIC-V6-tras-anuncio.png",
+      "bytes": 177423,
+      "sha256": "b2fd54f1e08f82b9b957f33e2646eabe82e4d765bf53a62cb823f00d531b55d2"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia/12-aic-landing-hero.png",
+      "bytes": 698278,
+      "sha256": "62dc37dd802d3537b2603e66316d0697474e015f2f11d208fea823412163bb6e"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/fuentes.json",
+      "bytes": 16652,
+      "sha256": "74ad31ee5f12a58c5399ed4f2afa0148465d193d45340968d251e29533ab633d"
+    },
+    {
+      "path": "hermes-content/references/video-intake/2026-10-20-gadzhi-vender-valor-psicologia.md",
+      "bytes": 16915,
+      "sha256": "b177bd355806d5b2f2dffb973cc8594c2231ff848706d260197aab6047a247d1"
+    }
+  ],
+  "stage": "after_single_correction"
+}

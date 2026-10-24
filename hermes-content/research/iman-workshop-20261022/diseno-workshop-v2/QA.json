@@ -1,0 +1,1324 @@
+{
+ "fecha": "2026-10-24T02:35:35.636Z",
+ "url": "file:///C:/Users/PC/orca/workspaces/onia-hermes/iman-workshop-20261022/hermes-content/research/iman-workshop-20261022/diseno-workshop-v2/index.html",
+ "chromium": "149.0.7827.55",
+ "responsive": [
+  {
+   "scrollW": 360,
+   "innerW": 360,
+   "h1px": "37.6px",
+   "h1lines": 4,
+   "ctaHeroTop": 513,
+   "ctaHeroBottom": 569,
+   "overflowEls": [],
+   "objetivosMenores44": [
+    "INPUT:312x43",
+    "tramo tramo-pausa:37x104"
+   ],
+   "ancho": 360,
+   "sinScrollHorizontal": true
+  },
+  {
+   "scrollW": 390,
+   "innerW": 390,
+   "h1px": "39.4px",
+   "h1lines": 4,
+   "ctaHeroTop": 572,
+   "ctaHeroBottom": 628,
+   "overflowEls": [],
+   "objetivosMenores44": [
+    "INPUT:342x43",
+    "tramo tramo-pausa:39x104"
+   ],
+   "ancho": 390,
+   "sinScrollHorizontal": true
+  },
+  {
+   "scrollW": 768,
+   "innerW": 768,
+   "h1px": "42.88px",
+   "h1lines": 4,
+   "ctaHeroTop": 874,
+   "ctaHeroBottom": 930,
+   "overflowEls": [],
+   "objetivosMenores44": [
+    "INPUT:720x43"
+   ],
+   "ancho": 768,
+   "sinScrollHorizontal": true
+  },
+  {
+   "scrollW": 1024,
+   "innerW": 1024,
+   "h1px": "51.84px",
+   "h1lines": 3,
+   "ctaHeroTop": 687,
+   "ctaHeroBottom": 743,
+   "overflowEls": [],
+   "objetivosMenores44": [
+    "INPUT:360x43"
+   ],
+   "ancho": 1024,
+   "sinScrollHorizontal": true
+  },
+  {
+   "scrollW": 1440,
+   "innerW": 1440,
+   "h1px": "66.4px",
+   "h1lines": 3,
+   "ctaHeroTop": 753,
+   "ctaHeroBottom": 809,
+   "overflowEls": [],
+   "objetivosMenores44": [
+    "INPUT:379x43"
+   ],
+   "ancho": 1440,
+   "sinScrollHorizontal": true
+  }
+ ],
+ "contraste": {
+  "pares": [
+   {
+    "ejemplo": "Saltar al contenido",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 18,
+    "peso": 400,
+    "clase": "saltar",
+    "ratio": 18.9,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Venta pausada. Borrador privado: no ",
+    "fg": [
+     217,
+     222,
+     219
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 13,
+    "peso": 400,
+    "clase": "aviso",
+    "ratio": 13.88,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Auditá tu negocio con IA",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     243,
+     244,
+     243
+    ],
+    "px": 17,
+    "peso": 800,
+    "clase": "marca",
+    "ratio": 17.14,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Sáb 31 oct · 10:00 (La Paz)",
+    "fg": [
+     61,
+     70,
+     66
+    ],
+    "bg": [
+     243,
+     244,
+     243
+    ],
+    "px": 15,
+    "peso": 400,
+    "clase": "barra-fecha",
+    "ratio": 8.85,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Quiero mi cupo",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     12,
+     113,
+     55
+    ],
+    "px": 16,
+    "peso": 700,
+    "clase": "btn",
+    "ratio": 6.12,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Contá lo que repetís en tu negocio a",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 66.4,
+    "peso": 800,
+    "clase": "H1",
+    "ratio": 18.9,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Un taller en vivo de 90 minutos de c",
+    "fg": [
+     227,
+     232,
+     229
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 18,
+    "peso": 400,
+    "clase": "sub",
+    "ratio": 15.25,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Si en tu negocio no se repite nada, ",
+    "fg": [
+     0,
+     198,
+     97
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 18,
+    "peso": 700,
+    "clase": "filtro",
+    "ratio": 8.33,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Quiero mi cupo",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     12,
+     113,
+     55
+    ],
+    "px": 18,
+    "peso": 700,
+    "clase": "btn btn-grande",
+    "ratio": 6.12,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Sábado 31 de octubre, 10:00 (La Paz)",
+    "fg": [
+     196,
+     204,
+     200
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 15,
+    "peso": 400,
+    "clase": "micro",
+    "ratio": 11.54,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Salís con",
+    "fg": [
+     61,
+     70,
+     66
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 24,
+    "peso": 600,
+    "clase": "H2",
+    "ratio": 5.41,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Tu lista de tareas repetidas y lo qu",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 53.76,
+    "peso": 800,
+    "clase": "entrega-t",
+    "ratio": 10.48,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Qué repetís, cuántas veces por seman",
+    "fg": [
+     61,
+     70,
+     66
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 18,
+    "peso": 400,
+    "clase": "P",
+    "ratio": 5.41,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Tu prioridad.",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 40,
+    "peso": 800,
+    "clase": "entrega-t",
+    "ratio": 10.48,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Tu primer paso.",
+    "fg": [
+     12,
+     113,
+     55
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 32,
+    "peso": 800,
+    "clase": "entrega-t",
+    "ratio": 3.39,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "No se promete ahorro, resultados, ce",
+    "fg": [
+     61,
+     70,
+     66
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 15,
+    "peso": 400,
+    "clase": "limites",
+    "ratio": 5.41,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Así se cuenta una tarea",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 40,
+    "peso": 800,
+    "clase": "H2",
+    "ratio": 18.9,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Ejemplo inventado. No es de ningún n",
+    "fg": [
+     227,
+     232,
+     229
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 15,
+    "peso": 400,
+    "clase": "rotulo",
+    "ratio": 15.25,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Tarea",
+    "fg": [
+     227,
+     232,
+     229
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 15,
+    "peso": 600,
+    "clase": "campo",
+    "ratio": 15.25,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "−",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 22.4,
+    "peso": 600,
+    "clase": "BUTTON",
+    "ratio": 18.9,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "50 min",
+    "fg": [
+     0,
+     198,
+     97
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 68,
+    "peso": 800,
+    "clase": "res-num",
+    "ratio": 8.33,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "por semana",
+    "fg": [
+     227,
+     232,
+     229
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 17,
+    "peso": 400,
+    "clase": "res-linea",
+    "ratio": 15.25,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "3 h 20 min",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 18,
+    "peso": 800,
+    "clase": "SPAN",
+    "ratio": 18.9,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Es tiempo, no ahorro ni dinero. Lo q",
+    "fg": [
+     196,
+     204,
+     200
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 14,
+    "peso": 400,
+    "clase": "nota",
+    "ratio": 11.54,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "90 minutos de contenido",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 56,
+    "peso": 800,
+    "clase": "H2",
+    "ratio": 18.9,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "más una pausa de 5.",
+    "fg": [
+     0,
+     198,
+     97
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 56,
+    "peso": 800,
+    "clase": "mas",
+    "ratio": 8.33,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Tiempo transcurrido, en vivo por Goo",
+    "fg": [
+     211,
+     218,
+     214
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 18,
+    "peso": 400,
+    "clase": "prog-intro",
+    "ratio": 13.29,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Contar",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     0,
+     198,
+     97
+    ],
+    "px": 30.4,
+    "peso": 800,
+    "clase": "tramo-n",
+    "ratio": 8.33,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "minutos 0 a 45",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     0,
+     198,
+     97
+    ],
+    "px": 15,
+    "peso": 600,
+    "clase": "tramo-m",
+    "ratio": 8.33,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "5",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 30.4,
+    "peso": 800,
+    "clase": "tramo-n",
+    "ratio": 18.9,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "minutos 50 a 95",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 15,
+    "peso": 600,
+    "clase": "tramo-m",
+    "ratio": 18.9,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Contar",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 34.88,
+    "peso": 800,
+    "clase": "panel-t",
+    "ratio": 18.9,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Qué tareas repetís y cuánto te cuest",
+    "fg": [
+     227,
+     232,
+     229
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 19,
+    "peso": 400,
+    "clase": "P",
+    "ratio": 15.25,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Es para vos si",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     243,
+     244,
+     243
+    ],
+    "px": 17,
+    "peso": 700,
+    "clase": "quien-r",
+    "ratio": 17.14,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Tenés un negocio y cada semana hacés",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     243,
+     244,
+     243
+    ],
+    "px": 49.6,
+    "peso": 800,
+    "clase": "quien-g",
+    "ratio": 17.14,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "No hace falta saber de tecnología.",
+    "fg": [
+     61,
+     70,
+     66
+    ],
+    "bg": [
+     243,
+     244,
+     243
+    ],
+    "px": 19,
+    "peso": 400,
+    "clase": "quien-p",
+    "ratio": 8.85,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "No es para vos si",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     12,
+     113,
+     55
+    ],
+    "px": 17,
+    "peso": 700,
+    "clase": "quien-r",
+    "ratio": 6.12,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Tu negocio no repite tareas.",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     12,
+     113,
+     55
+    ],
+    "px": 38.4,
+    "peso": 800,
+    "clase": "LI",
+    "ratio": 6.12,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Qué necesitás.",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     230,
+     231,
+     230
+    ],
+    "px": 17,
+    "peso": 700,
+    "clase": "STRONG",
+    "ratio": 15.24,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Una computadora o un celular con int",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     230,
+     231,
+     230
+    ],
+    "px": 17,
+    "peso": 400,
+    "clase": "necesitas",
+    "ratio": 15.24,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Sergio Urcullo",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 70.4,
+    "peso": 800,
+    "clase": "H2",
+    "ratio": 10.48,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Dicta el taller y trabaja con vos so",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 30.4,
+    "peso": 700,
+    "clase": "sergio-g",
+    "ratio": 10.48,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "50 cupos, en tres tramos.",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     243,
+     244,
+     243
+    ],
+    "px": 56,
+    "peso": 800,
+    "clase": "H2",
+    "ratio": 17.14,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Primeros 15",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     193,
+     193,
+     191
+    ],
+    "px": 15,
+    "peso": 600,
+    "clase": "of-cupos",
+    "ratio": 10.48,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Siguientes 20",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     12,
+     113,
+     55
+    ],
+    "px": 15,
+    "peso": 600,
+    "clase": "of-cupos",
+    "ratio": 6.12,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Bs 60",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     12,
+     113,
+     55
+    ],
+    "px": 40,
+    "peso": 800,
+    "clase": "of-bs",
+    "ratio": 6.12,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Vale el precio del momento en que se",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     243,
+     244,
+     243
+    ],
+    "px": 19,
+    "peso": 600,
+    "clase": "of-texto",
+    "ratio": 17.14,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Preguntas",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     230,
+     231,
+     230
+    ],
+    "px": 56,
+    "peso": 800,
+    "clase": "H2",
+    "ratio": 15.24,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "¿Es para mí si no sé de tecnología?",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     230,
+     231,
+     230
+    ],
+    "px": 25.6,
+    "peso": 700,
+    "clase": "SUMMARY",
+    "ratio": 15.24,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Sí. El taller es para contar las tar",
+    "fg": [
+     61,
+     70,
+     66
+    ],
+    "bg": [
+     230,
+     231,
+     230
+    ],
+    "px": 18,
+    "peso": 400,
+    "clase": "P",
+    "ratio": 7.87,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Texto final de la condición: pendien",
+    "fg": [
+     13,
+     18,
+     16
+    ],
+    "bg": [
+     230,
+     231,
+     230
+    ],
+    "px": 18,
+    "peso": 600,
+    "clase": "pend",
+    "ratio": 15.24,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Sábado 31 de octubre",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 71.04,
+    "peso": 800,
+    "clase": "H2",
+    "ratio": 18.9,
+    "minimo": 3,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Borrador privado. Venta pausada.",
+    "fg": [
+     255,
+     255,
+     255
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 15,
+    "peso": 700,
+    "clase": "STRONG",
+    "ratio": 18.9,
+    "minimo": 4.5,
+    "pasa": true
+   },
+   {
+    "ejemplo": "Este botón no inscribe, no cobra y n",
+    "fg": [
+     205,
+     213,
+     209
+    ],
+    "bg": [
+     13,
+     18,
+     16
+    ],
+    "px": 15,
+    "peso": 400,
+    "clase": "P",
+    "ratio": 12.63,
+    "minimo": 4.5,
+    "pasa": true
+   }
+  ],
+  "fallan": [],
+  "nota": "Todo el texto de la pagina va sobre fondos solidos (ninguno sobre fotografia). Pares por combinacion unica de color de texto, fondo efectivo, tamano y peso.",
+  "otros": {
+   "blancoSobreVerde": 6.12,
+   "blancoSobreVerdeOscuroHover": 8.37,
+   "tintaSobreVerdeVivo": 8.33,
+   "aroFocoVivoSobreTinta": 8.33,
+   "aroFocoVivoSobrePapel": 2.06,
+   "tintaSobreAroTinta": "aro doble: 3px verde vivo + 2px tinta"
+  }
+ },
+ "foco": {
+  "390": {
+   "enfocables": 17,
+   "sinAroVisible": [],
+   "enfocadosOcultos": [],
+   "primeros": [
+    "A.saltar",
+    "BUTTON.btn",
+    "BUTTON.btn btn-grande",
+    "INPUT.#c-tarea",
+    "BUTTON.",
+    "INPUT.#c-veces"
+   ]
+  },
+  "1440": {
+   "enfocables": 17,
+   "sinAroVisible": [],
+   "enfocadosOcultos": [],
+   "primeros": [
+    "A.saltar",
+    "BUTTON.btn",
+    "BUTTON.btn btn-grande",
+    "INPUT.#c-tarea",
+    "BUTTON.",
+    "INPUT.#c-veces"
+   ]
+  }
+ },
+ "fuentes": {
+  "archivoCargada": true,
+  "estados": [
+   "Archivo 100 900 loaded"
+  ],
+  "familiasUsadas": [
+   "Archivo"
+  ],
+  "imagenesRotas": []
+ },
+ "demo": {
+  "390": {
+   "inicial": [
+    "50 min",
+    "3 h 20 min"
+   ],
+   "sieteporDoce": [
+    "84 min",
+    "5 h 36 min"
+   ],
+   "tras_mas_una_vez": [
+    "96 min",
+    "6 h 24 min"
+   ],
+   "tras_menos_un_min": [
+    "88 min",
+    "5 h 52 min"
+   ],
+   "vacio": [
+    "0 min",
+    "0 min"
+   ],
+   "negativo": [
+    "0 min",
+    "0 min"
+   ],
+   "sobreMaximo": [
+    "1000 min",
+    "66 h 40 min"
+   ],
+   "esperado": {
+    "inicial": [
+     "50 min",
+     "3 h 20 min"
+    ],
+    "sieteporDoce": [
+     "84 min",
+     "5 h 36 min"
+    ],
+    "tras_mas_una_vez": [
+     "96 min",
+     "6 h 24 min"
+    ],
+    "tras_menos_un_min": [
+     "88 min",
+     "5 h 52 min"
+    ]
+   },
+   "ok": true
+  },
+  "1440": {
+   "inicial": [
+    "50 min",
+    "3 h 20 min"
+   ],
+   "sieteporDoce": [
+    "84 min",
+    "5 h 36 min"
+   ],
+   "tras_mas_una_vez": [
+    "96 min",
+    "6 h 24 min"
+   ],
+   "tras_menos_un_min": [
+    "88 min",
+    "5 h 52 min"
+   ],
+   "vacio": [
+    "0 min",
+    "0 min"
+   ],
+   "negativo": [
+    "0 min",
+    "0 min"
+   ],
+   "sobreMaximo": [
+    "1000 min",
+    "66 h 40 min"
+   ],
+   "esperado": {
+    "inicial": [
+     "50 min",
+     "3 h 20 min"
+    ],
+    "sieteporDoce": [
+     "84 min",
+     "5 h 36 min"
+    ],
+    "tras_mas_una_vez": [
+     "96 min",
+     "6 h 24 min"
+    ],
+    "tras_menos_un_min": [
+     "88 min",
+     "5 h 52 min"
+    ]
+   },
+   "ok": true
+  }
+ },
+ "tabs": {
+  "390": {
+   "inicial": "true,false,false | visibles:p-1",
+   "clicElegir": "false,false,true | visibles:p-3",
+   "flechaIzq": "false,true,false | visibles:p-2",
+   "end": "false,false,true | visibles:p-3",
+   "home": "true,false,false | visibles:p-1",
+   "ok": true
+  },
+  "1440": {
+   "inicial": "true,false,false | visibles:p-1",
+   "clicElegir": "false,false,true | visibles:p-3",
+   "flechaIzq": "false,true,false | visibles:p-2",
+   "end": "false,false,true | visibles:p-3",
+   "home": "true,false,false | visibles:p-1",
+   "ok": true
+  }
+ },
+ "faq": {
+  "390": {
+   "preguntas": 5,
+   "abiertas": 2,
+   "teclado": true,
+   "ok": true
+  },
+  "1440": {
+   "preguntas": 5,
+   "abiertas": 2,
+   "teclado": true,
+   "ok": true
+  }
+ },
+ "cta": {
+  "390": {
+   "abre": true,
+   "texto": "Inscripción no habilitada",
+   "focoEnDialogo": true,
+   "cierraConEscape": true,
+   "abreDesdeCierre": true,
+   "formulariosReales": 0,
+   "enlacesExternos": 0,
+   "peticionesNuevas": 0
+  },
+  "1440": {
+   "abre": true,
+   "texto": "Inscripción no habilitada",
+   "focoEnDialogo": true,
+   "cierraConEscape": true,
+   "abreDesdeCierre": true,
+   "formulariosReales": 0,
+   "enlacesExternos": 0,
+   "peticionesNuevas": 0
+  }
+ },
+ "red": {
+  "peticionesHttpIntentadas": 0,
+  "urls": [],
+  "nota": "Se abortó todo http(s); la página solo usa file://."
+ },
+ "errores": [],
+ "limites": [
+  "Viewport emulado, no dispositivo móvil real: no prueba táctil.",
+  "Un solo motor (Chromium headless); no se probó Firefox ni Safari.",
+  "Contraste calculado desde estilos computados sobre fondo sólido efectivo; no cubre estados hover transitorios.",
+  "No es una auditoría con lector de pantalla.",
+  "Sin Lighthouse; el peso se midió por archivo."
+ ]
+}

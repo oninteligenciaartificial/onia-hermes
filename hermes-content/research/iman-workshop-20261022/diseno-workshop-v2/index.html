@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Auditá tu negocio con IA · V2 borrador privado</title>
+<meta name="description" content="Borrador privado V2. Venta pausada. Taller en vivo del sábado 31 de octubre, 10:00 (La Paz).">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<div class="aviso" role="note">Venta pausada. Borrador privado: no inscribe ni envía datos.</div>
+
+<header class="barra">
+  <p class="marca">Auditá tu negocio con IA</p>
+  <p class="barra-fecha">Sáb 31 oct · 10:00 (La Paz)</p>
+  <button class="btn" type="button" data-cta>Quiero mi cupo</button>
+</header>
+
+<main id="contenido">
+
+  <!-- 1. HERO -->
+  <section class="hero" aria-labelledby="h1">
+    <figure class="hero-foto hero-a">
+      <picture>
+        <source media="(max-width: 700px)" srcset="assets/img/hojas-1000.webp">
+        <img src="assets/img/pila-2000.webp" width="2000" height="1492" alt="Una pila de sobres grises sin ordenar junto a dos bandejas de metal; en una bandeja hay un solo sobre verde." fetchpriority="high">
+      </picture>
+    </figure>
+    <figure class="hero-foto hero-b">
+      <picture>
+        <source media="(max-width: 700px)" srcset="assets/img/balanza-baja-1000.webp">
+        <img src="assets/img/balanza-baja-2000.webp" width="2000" height="1131" alt="Una balanza de metal en equilibrio: una esfera verde en un plato y un cubo gris en el otro.">
+      </picture>
+    </figure>
+    <div class="hero-pie">
+      <h1 id="h1">Contá lo que repetís en tu negocio antes de automatizar nada.</h1>
+      <div class="hero-lado">
+        <p class="sub">Un taller en vivo de 90 minutos de contenido, más una pausa de 5, con tu propio negocio. Salís con tu lista de tareas repetidas, lo que cuestan al mes, una prioridad y tu primer paso.</p>
+        <p class="filtro">Si en tu negocio no se repite nada, seguí de largo.</p>
+        <div class="acciones">
+          <button class="btn btn-grande" type="button" data-cta>Quiero mi cupo</button>
+          <p class="micro">Sábado 31 de octubre, 10:00 (La Paz), por Google Meet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. SALÍS CON -->
+  <section class="salis" aria-labelledby="salis-t">
+    <figure class="salis-foto">
+      <img src="assets/img/hojas-1000.webp" width="1000" height="1768" alt="Hojas de papel gris cayendo hacia una caja negra abierta; la hoja de arriba es verde." loading="lazy">
+    </figure>
+    <div class="salis-txt">
+      <h2 id="salis-t">Salís con</h2>
+      <ul class="entregas">
+        <li class="entrega entrega-1 activa">
+          <p class="entrega-t">Tu lista de tareas repetidas y lo que cuestan al mes.</p>
+          <p>Qué repetís, cuántas veces por semana y cuántos minutos. La armamos juntos, con tu negocio.</p>
+        </li>
+        <li class="entrega entrega-2">
+          <p class="entrega-t">Tu prioridad.</p>
+          <p>Una tarea para empezar. No diez.</p>
+        </li>
+        <li class="entrega entrega-3">
+          <p class="entrega-t">Tu primer paso.</p>
+          <p>Concreto, para después del taller.</p>
+        </li>
+      </ul>
+      <p class="limites">No se promete ahorro, resultados, certificado ni grabación. Tampoco que algo quede automatizado.</p>
+    </div>
+  </section>
+
+  <!-- 3. CÓMO SE CUENTA UNA TAREA -->
+  <section class="cuenta" aria-labelledby="cuenta-t">
+    <figure class="cuenta-foto">
+      <img src="assets/img/balanza-2000.webp" width="2000" height="1131" alt="Una balanza antigua de metal: una esfera verde en un plato y un cubo gris en el otro." loading="lazy">
+    </figure>
+    <div class="cuenta-panel">
+      <h2 id="cuenta-t">Así se cuenta una tarea</h2>
+      <form class="calc" id="calc" novalidate>
+        <p class="rotulo">Ejemplo inventado. No es de ningún negocio real. Cambiá los números para probar.</p>
+        <label class="campo">Tarea
+          <input id="c-tarea" type="text" value="Contestar «¿cuánto cuesta?» por WhatsApp" maxlength="80" autocomplete="off">
+        </label>
+        <div class="par">
+          <div class="campo">
+            <label for="c-veces">Veces por semana</label>
+            <div class="paso">
+              <button type="button" data-paso="-1" data-para="c-veces" aria-label="Una vez menos por semana">−</button>
+              <input id="c-veces" type="number" inputmode="numeric" min="0" max="200" value="10">
+              <button type="button" data-paso="1" data-para="c-veces" aria-label="Una vez más por semana">+</button>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="c-min">Minutos cada vez</label>
+            <div class="paso">
+              <button type="button" data-paso="-1" data-para="c-min" aria-label="Un minuto menos cada vez">−</button>
+              <input id="c-min" type="number" inputmode="numeric" min="0" max="480" value="5">
+              <button type="button" data-paso="1" data-para="c-min" aria-label="Un minuto más cada vez">+</button>
+            </div>
+          </div>
+        </div>
+        <output class="resultado" for="c-veces c-min" aria-live="polite">
+          <span class="res-linea"><span class="res-num" id="r-sem">50 min</span> por semana</span>
+          <span class="res-linea res-mes"><span id="r-mes">3 h 20 min</span> al mes, con 4 semanas por mes (supuesto)</span>
+        </output>
+        <p class="nota">Es tiempo, no ahorro ni dinero. Lo que escribas acá no se guarda ni se envía.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- 4. PROGRAMA -->
+  <section class="programa" aria-labelledby="prog-t">
+    <div class="contenedor">
+      <h2 id="prog-t">90 minutos de contenido<br><span class="mas">más una pausa de 5.</span></h2>
+      <p class="prog-intro">Tiempo transcurrido, en vivo por Google Meet. Al volver de la pausa entrás al mismo link.</p>
+      <div class="eje" role="tablist" aria-label="Programa del taller">
+        <button class="tramo" role="tab" id="t-1" aria-selected="true" aria-controls="p-1" tabindex="0" style="--w:45"><span class="tramo-n">Contar</span><span class="tramo-m">minutos 0 a 45</span></button>
+        <button class="tramo tramo-pausa" role="tab" id="t-2" aria-selected="false" aria-controls="p-2" tabindex="-1" aria-label="Pausa de 5 minutos, minutos 45 a 50" style="--w:5"><span class="tramo-n">5</span></button>
+        <button class="tramo" role="tab" id="t-3" aria-selected="false" aria-controls="p-3" tabindex="-1" style="--w:45"><span class="tramo-n">Elegir</span><span class="tramo-m">minutos 50 a 95</span></button>
+      </div>
+      <div class="paneles">
+        <div class="panel" role="tabpanel" id="p-1" aria-labelledby="t-1">
+          <p class="panel-t">Contar</p>
+          <p>Qué tareas repetís y cuánto te cuestan. Es la mitad del taller: sin la cuenta no hay nada que elegir.</p>
+        </div>
+        <div class="panel" role="tabpanel" id="p-2" aria-labelledby="t-2" hidden>
+          <p class="panel-t">Pausa de 5</p>
+          <p>Cinco minutos de pausa. Volvés al mismo link.</p>
+        </div>
+        <div class="panel" role="tabpanel" id="p-3" aria-labelledby="t-3" hidden>
+          <p class="panel-t">Elegir</p>
+          <p>Tu prioridad, una tarea para empezar, y tu primer paso, concreto, para después del taller.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. PARA QUIÉN SÍ / NO -->
+  <section class="quien" aria-labelledby="quien-t">
+    <h2 id="quien-t" class="solo-lectores">Para quién es y para quién no</h2>
+    <div class="quien-si">
+      <p class="quien-r">Es para vos si</p>
+      <p class="quien-g">Tenés un negocio y cada semana hacés las mismas tareas.</p>
+      <p class="quien-p">No hace falta saber de tecnología.</p>
+    </div>
+    <div class="quien-no">
+      <p class="quien-r">No es para vos si</p>
+      <ul>
+        <li>Tu negocio no repite tareas.</li>
+        <li>Buscás un certificado.</li>
+        <li>Querés que otro lo haga por vos.</li>
+      </ul>
+    </div>
+    <p class="necesitas"><strong>Qué necesitás.</strong> Una computadora o un celular con internet y Google Meet. Podés llevar tus pedidos o tu cuaderno si querés.</p>
+  </section>
+
+  <!-- 6. SERGIO -->
+  <section class="sergio" aria-labelledby="sergio-t">
+    <figure class="retrato">
+      <img src="assets/img/sergio-retrato.webp" width="900" height="980" alt="Sergio Urcullo, en blanco y negro." loading="lazy">
+    </figure>
+    <div class="sergio-txt">
+      <h2 id="sergio-t">Sergio Urcullo</h2>
+      <p class="sergio-g">Dicta el taller y trabaja con vos sobre tu propio negocio, en vivo.</p>
+      <p>Sin casos ni cifras de otros: lo que armás en la sesión es tuyo.</p>
+    </div>
+  </section>
+
+  <!-- 7. OFERTA -->
+  <section class="oferta" aria-labelledby="of-t">
+    <div class="contenedor">
+      <h2 id="of-t">50 cupos, en tres tramos.</h2>
+      <div class="tramos-of" role="img" aria-label="Los primeros 15 cupos a Bs 50, los siguientes 20 a Bs 60 y los últimos 15 a Bs 70.">
+        <p style="--w:15"><span class="of-cupos">Primeros 15</span><span class="of-bs">Bs 50</span></p>
+        <p style="--w:20"><span class="of-cupos">Siguientes 20</span><span class="of-bs">Bs 60</span></p>
+        <p style="--w:15"><span class="of-cupos">Últimos 15</span><span class="of-bs">Bs 70</span></p>
+      </div>
+      <p class="of-texto">Vale el precio del momento en que se acredita tu pago.</p>
+      <p class="of-pausa">Así está armada la oferta. No es un precio vigente ni indica cupos disponibles: la venta está pausada.</p>
+    </div>
+  </section>
+
+  <!-- 8. PREGUNTAS -->
+  <section class="preguntas" aria-labelledby="faq-t">
+    <div class="contenedor-angosto">
+      <h2 id="faq-t">Preguntas</h2>
+      <details><summary>¿Es para mí si no sé de tecnología?</summary><div class="resp"><p>Sí. El taller es para contar las tareas de tu negocio, no para programar.</p></div></details>
+      <details><summary>¿Me van a decir cuánto voy a ahorrar?</summary><div class="resp"><p>No. No te prometo ahorro ni resultados: te llevás claridad y un paso concreto.</p></div></details>
+      <details><summary>¿Hay certificado? ¿Queda grabado?</summary><div class="resp"><p>No hay certificado y no se promete grabación.</p></div></details>
+      <details><summary>¿Hay otra fecha?</summary><div class="resp"><p>No hay segunda fecha. Es el sábado 31 de octubre, a las 10:00 (La Paz).</p></div></details>
+      <details><summary>¿Qué pasa si el taller no se dicta?</summary><div class="resp"><p>Se devuelve el pago completo. Una vez confirmado tu cupo, no hay devolución si el taller se dicta. <span class="pend">Texto final de la condición: pendiente de revisión.</span></p></div></details>
+    </div>
+  </section>
+
+  <!-- 9. CIERRE -->
+  <section class="cierre" aria-labelledby="cierre-t">
+    <figure class="cierre-foto">
+      <img src="assets/img/bandeja-2000.webp" width="2000" height="1492" alt="Dos bandejas de metal: en una, una pila de sobres grises; en la otra, un solo sobre verde." loading="lazy">
+    </figure>
+    <div class="cierre-txt">
+      <h2 id="cierre-t">Sábado 31 de octubre<br>10:00 (La Paz)</h2>
+      <button class="btn btn-grande" type="button" data-cta>Quiero mi cupo</button>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <p><strong>Borrador privado. Venta pausada.</strong> Este botón no inscribe, no cobra y no envía datos. Paleta y tipografía son propuestas reversibles, no la marca definitiva.</p>
+  <p>Imágenes ilustrativas generadas con IA (galería propia de Sergio Urcullo). El retrato es el ya publicado en la página actual.</p>
+</footer>
+
+<dialog id="estado" aria-labelledby="estado-t">
+  <form method="dialog">
+    <h2 id="estado-t">Inscripción no habilitada</h2>
+    <p>La venta del taller está pausada. Este botón es una maqueta: no inscribe, no cobra y no envía ningún dato.</p>
+    <button class="btn" value="ok" autofocus>Entendido</button>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

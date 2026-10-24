@@ -1,0 +1,1 @@
+"{\"outer\":[1095,706],\"iframeBox\":[390,700],\"inner\":[390,700],\"dpr\":1.25,\"docScrollWidth\":375,\"maxWidth390\":false,\"maxWidth809\":true,\"h1\":\"IMAN GADZHI\",\"h1font\":\"160px\"}",

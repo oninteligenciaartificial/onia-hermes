@@ -1,0 +1,470 @@
+{
+ "version": 2,
+ "fecha": "2026-10-23",
+ "alcance": "una pasada complementaria; no modifica los 19 archivos congelados",
+ "herramientas": [
+  "navegador Orca (mismo browserPageId)",
+  "yt-dlp via fetch-video.mjs sin cookies",
+  "ffmpeg/ffprobe locales",
+  "faster-whisper small local, language=en",
+  "sin Gemini, sin APIs de pago, sin instalaciones"
+ ],
+ "ids_contabilizados": [
+  "S11",
+  "S05",
+  "S12",
+  "S13",
+  "S14",
+  "S08"
+ ],
+ "piezas": [
+  {
+   "id": "S11",
+   "url_original": "https://www.youtube.com/watch?v=YZ6OyZKrRh8",
+   "tipo": "video_pitch",
+   "publicacion": "2026-10-12",
+   "fuente": "primaria (canal/perfil oficial)",
+   "metodo": "descarga publica + ASR + eventos de escena + 15 fotogramas",
+   "duracion_total_s": 313.1,
+   "cobertura": {
+    "transcripcion": {
+     "dur": 313.1,
+     "seg": 87,
+     "palabras": 862
+    },
+    "fotogramas_muestreados_s": [
+     0,
+     3,
+     6,
+     9,
+     30,
+     60,
+     90,
+     120,
+     150,
+     178,
+     200,
+     236,
+     276,
+     296,
+     308
+    ],
+    "nota": "audio transcrito completo por ASR local (no escuchado; el ASR puede fallar); fotogramas son muestreo, no visionado continuo",
+    "eventos_escena": {
+     "picos": 91,
+     "candidatos_agrupados": 64,
+     "nota": "candidatos, no cortes confirmados; sin validacion visual continua"
+    }
+   },
+   "evidencia": [
+    "evidencia-complemento/S11-transcripcion-whisper-local-en.json",
+    "evidencia-complemento/S11-cortes-escena-gt0.3.txt",
+    "evidencia-complemento/S11-hoja-contactos-15-fotogramas.png"
+   ],
+   "estado": "observado",
+   "hook": "0-9 s: el ASR no detecta habla (estepa, jinetes, banderas en los fotogramas); primer segmento reconocido a 9,0 s",
+   "estructura": "noticia 9-36; credibilidad 36-107; oportunidad 107-178; demostracion de 50 s 178-258; giro a oferta 258-306",
+   "prueba": "valuacion de tercero dicha por el; sin resultados de alumnos dentro del video",
+   "cta": "CTA comercial hablado a ~299 s (link en comentarios) segun ASR; descripcion con link",
+   "inferencias": [
+    "molde de anuncio de evento gratis",
+    "no hay datos de conversion"
+   ],
+   "aplicacion": [
+    "C1",
+    "C2",
+    "C3",
+    "C4"
+   ],
+   "faltantes": [
+    "audio no escuchado",
+    "15 fotogramas de ~9400"
+   ]
+  },
+  {
+   "id": "S05",
+   "url_original": "https://x.com/GadzhiIman/status/2109688620051513856",
+   "tipo": "video_corto",
+   "publicacion": "12-oct (visible en el post)",
+   "fuente": "primaria (canal/perfil oficial)",
+   "metodo": "descarga publica + ASR + eventos de escena + 12 fotogramas",
+   "duracion_total_s": 22.4,
+   "cobertura": {
+    "transcripcion": {
+     "dur": 22.4,
+     "seg": 1,
+     "palabras": 11
+    },
+    "fotogramas_muestreados_s": [
+     0,
+     2,
+     4,
+     6,
+     8,
+     10,
+     12,
+     14,
+     16,
+     18,
+     20,
+     21.5
+    ],
+    "nota": "audio transcrito completo por ASR local (no escuchado; el ASR puede fallar); fotogramas son muestreo, no visionado continuo",
+    "eventos_escena": {
+     "picos": 22,
+     "candidatos_agrupados": 10,
+     "nota": "candidatos, no cortes confirmados; sin validacion visual continua"
+    }
+   },
+   "evidencia": [
+    "evidencia-complemento/S05-transcripcion-whisper-local-en.json",
+    "evidencia-complemento/S05-cortes-escena-gt0.3.txt",
+    "evidencia-complemento/S05-hoja-contactos-12-fotogramas.png"
+   ],
+   "estado": "observado_visual_asr_no_fiable",
+   "hook": "imagenes; el ASR no detecta habla fiable (audio no escuchado); el texto del post hace de gancho",
+   "estructura": "teaser cinematografico -> torre iluminada -> capturas de prensa",
+   "prueba": "dos capturas de prensa de terceros dentro del video (no verificadas)",
+   "cta": "ninguno visible en los 12 fotogramas; CTA hablado no descartable (ASR no fiable, audio no escuchado)",
+   "inferencias": [
+    "el unico segmento ASR no es habla fiable; que suena (musica, voz, silencio) es desconocido"
+   ],
+   "aplicacion": [
+    "C5"
+   ],
+   "faltantes": [
+    "sonido real",
+    "fotos 1/3/4 del post",
+    "metricas actuales"
+   ]
+  },
+  {
+   "id": "S12",
+   "url_original": "https://www.youtube.com/watch?v=LqCPwQ1IcA4",
+   "tipo": "video_tutorial",
+   "publicacion": "2026-10-21",
+   "fuente": "primaria (canal/perfil oficial)",
+   "metodo": "descarga publica + ASR + eventos de escena + 12 fotogramas",
+   "duracion_total_s": 1440.3,
+   "cobertura": {
+    "transcripcion": {
+     "dur": 1440.3,
+     "seg": 747,
+     "palabras": 5558
+    },
+    "fotogramas_muestreados_s": [
+     1,
+     8,
+     20,
+     45,
+     100,
+     400,
+     750,
+     1000,
+     1250,
+     1380,
+     1410,
+     1436
+    ],
+    "nota": "audio transcrito completo por ASR local (no escuchado; el ASR puede fallar); fotogramas son muestreo, no visionado continuo",
+    "eventos_escena": {
+     "picos": 135,
+     "candidatos_agrupados": 124,
+     "nota": "candidatos, no cortes confirmados; sin validacion visual continua"
+    }
+   },
+   "evidencia": [
+    "evidencia-complemento/S12-transcripcion-whisper-local-en.json",
+    "evidencia-complemento/LqCPwQ1IcA4-cortes-escena-gt0.3.txt",
+    "evidencia-complemento/S12-hoja-contactos-12-fotogramas.png"
+   ],
+   "estado": "observado",
+   "hook": "0-40 s herramienta vs carga cara + filtro de salida a 25-28 s",
+   "estructura": "4 niveles (beginner/novice/intermediate/pro) 95-1406 s",
+   "prueba": "demos en pantalla; sin cifras de ingresos",
+   "inferencias": [
+    "dentro del texto reconocido no invita hablando al reto y lleva trafico por descripcion; si pide interaccion (like/comentario/sorteo)"
+   ],
+   "aplicacion": [
+    "C1",
+    "C4"
+   ],
+   "faltantes": [
+    "audio no escuchado"
+   ],
+   "cta_comercial": "el ASR no detecta mencion hablada del reto; el reto aparece en la descripcion; cierre de uso con una accion a 1427-1431 s",
+   "cta_interaccion": "si: like + comentario + sorteo de MacBook, ASR 377,64-414,62 s (S12-transcripcion-whisper-local-en.json)"
+  },
+  {
+   "id": "S13",
+   "url_original": "https://www.youtube.com/watch?v=WO-Gl6-6gLE",
+   "tipo": "video_contenido",
+   "publicacion": "2026-10-15",
+   "fuente": "primaria (canal/perfil oficial)",
+   "metodo": "descarga publica + ASR + eventos de escena + 12 fotogramas",
+   "duracion_total_s": 1621.4,
+   "cobertura": {
+    "transcripcion": {
+     "dur": 1621.4,
+     "seg": 700,
+     "palabras": 4738
+    },
+    "fotogramas_muestreados_s": [
+     1,
+     10,
+     40,
+     150,
+     300,
+     450,
+     700,
+     900,
+     1100,
+     1300,
+     1500,
+     1610
+    ],
+    "nota": "audio transcrito completo por ASR local (no escuchado; el ASR puede fallar); fotogramas son muestreo, no visionado continuo",
+    "eventos_escena": {
+     "picos": 273,
+     "candidatos_agrupados": 173,
+     "nota": "candidatos, no cortes confirmados; sin validacion visual continua"
+    }
+   },
+   "evidencia": [
+    "evidencia-complemento/S13-transcripcion-whisper-local-en.json",
+    "evidencia-complemento/WO-Gl6-6gLE-cortes-escena-gt0.3.txt",
+    "evidencia-complemento/S13-hoja-contactos-12-fotogramas.png"
+   ],
+   "estado": "observado",
+   "hook": "montaje 0-30 s y entrevista de primer dia a 30 s",
+   "estructura": "vlog-documental de 11 capitulos del autor",
+   "prueba": "imagenes de oficina y equipo; cifras de terceros [DEC]",
+   "inferencias": [
+    "contenido de credibilidad del aliado"
+   ],
+   "aplicacion": [
+    "C4"
+   ],
+   "faltantes": [
+    "audio no escuchado"
+   ],
+   "cta_comercial": "el ASR no detecta mencion hablada del reto (no certifica ausencia real); el reto aparece en la descripcion",
+   "cta_interaccion": "no detectado por el ASR"
+  },
+  {
+   "id": "S14",
+   "url_original": "https://www.youtube.com/watch?v=w-lkP9XcZfg",
+   "tipo": "video_tutorial",
+   "publicacion": "2026-08-18",
+   "fuente": "primaria (canal/perfil oficial)",
+   "metodo": "descarga publica + ASR + eventos de escena + 12 fotogramas",
+   "duracion_total_s": 1661.5,
+   "cobertura": {
+    "transcripcion": {
+     "dur": 1661.5,
+     "seg": 570,
+     "palabras": 6550
+    },
+    "fotogramas_muestreados_s": [
+     1,
+     8,
+     45,
+     200,
+     400,
+     600,
+     800,
+     1000,
+     1200,
+     1400,
+     1600,
+     1655
+    ],
+    "nota": "audio transcrito completo por ASR local (no escuchado; el ASR puede fallar); fotogramas son muestreo, no visionado continuo",
+    "eventos_escena": {
+     "picos": 273,
+     "candidatos_agrupados": 270,
+     "nota": "candidatos, no cortes confirmados; sin validacion visual continua"
+    }
+   },
+   "evidencia": [
+    "evidencia-complemento/S14-transcripcion-whisper-local-en.json",
+    "evidencia-complemento/w-lkP9XcZfg-cortes-escena-gt0.3.txt",
+    "evidencia-complemento/S14-hoja-contactos-12-fotogramas.png"
+   ],
+   "estado": "observado",
+   "hook": "0-52 s filtro de salida + promesa 98 % en 20-30 min",
+   "estructura": "12 capitulos; niveles beginner/intermediate/advanced",
+   "prueba": "demos en pantalla",
+   "inferencias": [
+    "el ultimo fotograma muestra una descripcion distinta de la actual (observado); que fue reescritura de campana es inferencia"
+   ],
+   "aplicacion": [
+    "C1"
+   ],
+   "faltantes": [
+    "audio no escuchado",
+    "fecha del cambio de descripcion"
+   ],
+   "cta_comercial": "puente a herramientas especializadas 1601-1651 s (sin nombrar producto); descripcion actual con reto",
+   "cta_interaccion": "si: sorteo de MacBook, ASR 522-548 y 1652 s"
+  },
+  {
+   "id": "S08",
+   "url_original": "https://www.monetise.com/waitlist",
+   "tipo": "aviso_cierre_reapertura_clip_actual (pitch_largo_vsl historica no observada)",
+   "publicacion": null,
+   "fuente": "primaria (web comercial enlazada)",
+   "metodo": "DOM/CSS de la pagina + captura movil + clic en CTA sin datos; reproductor no reproducible",
+   "duracion_total_s": 54.976,
+   "cobertura": {
+    "origen": "adenda S08-VERIFICACION-LOCAL.md; recuperacion y decodificacion reportadas por el coordinador, no repetidas por mi",
+    "medio": "H264 854x480 + AAC, 14/14 fragmentos HLS, decodificacion completa a null exit 0",
+    "sha256_temporal": "df0eda62198197ad999660d16c68393c707e00f2c4ad9e1ebe7d8e0ef3f19ded",
+    "archivo_temporal_fuera_del_repo": true,
+    "fotogramas_muestreados_s": [
+     0,
+     1,
+     2,
+     3,
+     5,
+     8,
+     12,
+     16,
+     20,
+     24,
+     28,
+     32,
+     36,
+     40,
+     44,
+     48,
+     52,
+     54
+    ],
+    "transcripcion": null,
+    "nota": "muestreo visual de 18 fotogramas; audio existe y decodifica pero no fue escuchado ni transcrito; sin cortes ni ritmo medidos; no equivale a visionado completo ni a la VSL larga"
+   },
+   "estado": "clip_actual_recuperado_parcial_vsl_larga_no_observada",
+   "evidencia": [
+    "evidencia-complemento/dom-S08-monetise-waitlist.json",
+    "evidencia-complemento/movil-S08-monetise-waitlist.png",
+    "evidencia-complemento/form-S08-tras-clic-waitlist.png",
+    "evidencia-complemento/S08-vsl-estado-no-reproducido.png",
+    "evidencia-complemento/S08-vsl-estado-reproductor.txt",
+    "S08-VERIFICACION-LOCAL.md (adenda, fuera de evidencia-complemento/)",
+    "evidencia-complemento/S08-local-frame_00_00s.jpg ... S08-local-frame_17_54s.jpg (18 fotogramas, de la adenda)"
+   ],
+   "hook": "clip actual: presentador a camara con subtitulos breves y intertitulos de cierre de plazas (0-8 s, muestreo visual)",
+   "estructura": "clip actual: aviso de cierre, demostracion de pagina/formulario dentro del video (28-36 s), reapertura (40 s), CTA visible a 44 s; VSL larga no observada",
+   "prueba": "mensaje del autor (24 s), no prueba de calidad; sin resultados verificados",
+   "cta": "clip actual: CTA visible a 44 s para pulsar el boton inferior; pagina: JOIN WAITLIST GROUP",
+   "inferencias": [
+    "no se sabe cuando cambio el clip ni se recupero la version historica"
+   ],
+   "aplicacion": [
+    "C7"
+   ],
+   "faltantes": [
+    "VSL larga historica",
+    "audio del clip actual (no escuchado ni transcrito)",
+    "cortes y ritmo",
+    "fecha de reapertura"
+   ],
+   "estado_historico": "bloqueado",
+   "estado_fuente": "adenda del coordinador S08-VERIFICACION-LOCAL.md (no editada; no es aprobacion de Codex)",
+   "causa_bloqueo_historico": "el reproductor de la VSL mostro el panel Continue watching / Start from beginning; no expone <video> ni URL descargable; no hay constancia de que el clic en Start se ejecutara; capturas posteriores muestran el mismo panel; no se reintento",
+   "nota_bloqueo_historico": "se conserva: durante mi pasada el reproductor del navegador no expuso <video> en el DOM ordinario; la adenda indica que habia un VIDEO en el shadow root cerrado de VTurb, asi que la ausencia en querySelectorAll no probaba ausencia de video. Recuperar el archivo no repara el reproductor ni explica su fallo."
+  }
+ ],
+ "movil": {
+  "metodo": "viewport embebido (iframe de la misma URL a 390x700 CSS px); NO es movil autentico: sin touch (pointer:coarse=false, hover:hover=true), UA iPhone solo por emulacion previa",
+  "mediciones": [
+   {
+    "fuente": "S01",
+    "archivo_medicion": "evidencia-complemento/movil-S01-iman-gadzhi-com-medicion.txt",
+    "captura": "evidencia-complemento/movil-S01-iman-gadzhi-com.png"
+   },
+   {
+    "fuente": "S06",
+    "archivo_medicion": "evidencia-complemento/movil-S06-consulting-com-medicion.txt",
+    "captura": "evidencia-complemento/movil-S06-consulting-com.png"
+   },
+   {
+    "fuente": "S08",
+    "archivo_medicion": "evidencia-complemento/movil-S08-monetise-waitlist-medicion.txt",
+    "captura": "evidencia-complemento/movil-S08-monetise-waitlist.png"
+   },
+   {
+    "fuente": "S09",
+    "archivo_medicion": "evidencia-complemento/movil-S09-reto-landing-medicion.txt",
+    "captura": "evidencia-complemento/movil-S09-reto-landing.png"
+   }
+  ],
+  "salvedad": "S06 no mostro titular ni CTA en dos intentos",
+  "diagnostico_media_queries": {
+   "archivo": "evidencia-complemento/movil-diagnostico-media-queries-S09.txt",
+   "resultado": "max-width:390px=false, max-width:391px=true, max-width:809px=true; clientWidth 375; dpr 1.25",
+   "consecuencia": "reglas con corte exacto <=390px pueden no haberse aplicado; breakpoints >=391 si"
+  }
+ },
+ "formularios": {
+  "S09": "clic en CTA: sin modal ni campos",
+  "S08": "clic en CTA: sin modal ni campos",
+  "S07": "sin clic; sin disponibilidad",
+  "datos_enviados": false,
+  "contactos_a_terceros": false
+ },
+ "instagram": {
+  "estado": "solo DOM del perfil publico; 12 enlaces /p/ /reel/ no abiertos",
+  "tiktok": "sin cuenta oficial enlazada"
+ },
+ "extractos_dom": [
+  "evidencia-complemento/dom-S01-iman-gadzhi-com.json",
+  "evidencia-complemento/dom-S02-instagram.json",
+  "evidencia-complemento/dom-S05-x-perfil.json",
+  "evidencia-complemento/dom-S06-consulting-com.json",
+  "evidencia-complemento/dom-S07-assessment-call.json",
+  "evidencia-complemento/dom-S08-monetise-waitlist.json",
+  "evidencia-complemento/dom-S09-reto-landing.json"
+ ],
+ "pendiente_no_cubierto": [
+  "audio real (ningun audio escuchado)",
+  "formularios de captacion",
+  "S06 movil",
+  "VSL larga historica de S08",
+  "audio del clip actual de S08",
+  "reels IG",
+  "datos de conversion",
+  "cortes confirmados / ritmo de edicion"
+ ],
+ "verificacion": {
+  "archivos_json_referenciados": 36,
+  "faltan": [],
+  "archivos_md_citados": 44,
+  "md_no_encontrados": [],
+  "ids": [
+   "S11:observado",
+   "S05:observado_visual_asr_no_fiable",
+   "S12:observado",
+   "S13:observado",
+   "S14:observado",
+   "S08:clip_actual_recuperado_parcial_vsl_larga_no_observada (historico: bloqueado)"
+  ],
+  "total_archivos_evidencia_complemento": 48
+ },
+ "correccion_unica": {
+  "fecha": "2026-10-23",
+  "motivo": "dictamen Codex CAMBIOS NECESARIOS sobre el complemento (3 hallazgos + consistencia S08)",
+  "cambios": [
+   "C4: separa CTA comercial / CTA de interaccion / ausencia de menciones detectadas; colocacion solo al final = decision propuesta, no evidencia del ejemplo",
+   "ausencia de habla, musica sin voz y ausencia de CTA hablado -> el ASR no detecta habla fiable / no detecta mencion (audio no escuchado)",
+   "scene>0.3 y agrupacion = eventos/candidatos, no cortes confirmados ni benchmark de ritmo",
+   "S08: estado actual conciliado con la adenda S08-VERIFICACION-LOCAL.md; bloqueo historico conservado"
+  ],
+  "sin_investigacion_nueva": true
+ },
+ "notas_generales": {
+  "asr": "toda ausencia es ausencia de deteccion del ASR; ningun audio fue escuchado",
+  "eventos_escena": "picos scene>0.3 por ffmpeg (diferencia entre fotogramas) y agrupacion a <1 s por criterio propio: eventos/candidatos, no cortes confirmados; no usar como benchmark de edicion"
+ }
+}

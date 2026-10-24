@@ -1,0 +1,213 @@
+{
+  "scope": "Private visual decision package; Codex reviewed initial bytes, coordinator verified bounded C correction and reran six smoke combinations. Not publication approval.",
+  "capture_hashes_checked": 25,
+  "capture_mismatches": [],
+  "removed_log": "qa-run.log deleted by author; prior snapshot preserved, no log fabricated or restored",
+  "files": [
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/ESTRATEGIA-WORKSHOP.md",
+      "bytes": 32429,
+      "sha256": "f451e8dc469bc54db1149273b75fde99d655329130498c27ef849d986a1d1beb"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/STACK-DISENO.md",
+      "bytes": 6655,
+      "sha256": "53192a2fe3382cde4ea139bd62648bf10f46ca50c1bfc2fb102498b99c846c00"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/app.js",
+      "bytes": 1534,
+      "sha256": "1aa6393850e6077ddcbe247b0aefa797725dd35468d9961d1d26dc4aacbc4cde"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/assets/fonts/BricolageGrotesque-var-latin.woff2",
+      "bytes": 92076,
+      "sha256": "77ead11b21511f4b4f5cd77fd5c36bfa96bdb2b2bda89bc2f85954992e17afbb"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/assets/fonts/DMSans-var-latin.woff2",
+      "bytes": 36664,
+      "sha256": "3a4d56eeaed51cba469428f6c78e59d4865fe169d2e81776f86d6b7ca74fadee"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/assets/fonts/OFL-BricolageGrotesque.txt",
+      "bytes": 4496,
+      "sha256": "9e75de0268df02ccd432ce3e438b0a316c48a8170fd447aeadf0142541b667a6"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/assets/fonts/OFL-DMSans.txt",
+      "bytes": 4482,
+      "sha256": "9af36190332437f5ecd09974de43c1f7c77a310a996cdd8ceb25628b458840e1"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/assets/fonts/OFL-SplineSansMono.txt",
+      "bytes": 4496,
+      "sha256": "f6e93bcc88826f96de74b3ec64c503af6c569c872f2bc95221d4d3afc0389c99"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/assets/fonts/SplineSansMono-var-latin.woff2",
+      "bytes": 25300,
+      "sha256": "a8ec780b2e2d4fea848afda9e8e8ddb2f27e9175df971796698adf0a9d5e6381"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/assets/sergio-retrato.webp",
+      "bytes": 26924,
+      "sha256": "20a41c72ef1614cbdb54bc534dd8346a62fbe772491799f32bb6a9e4a1bfcdee"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-cta-final-1440.png",
+      "bytes": 63649,
+      "sha256": "966f7f629d32788f6970d75ed6ade00ab6c4b2ce79aefef39623d71c95eee14e"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-cta-final-390.png",
+      "bytes": 49525,
+      "sha256": "547ac7efe6fe8d55df945a67dd48242f88922c26b4f4e8732520b381be3ac62a"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-estado-cta-local-1440.png",
+      "bytes": 132078,
+      "sha256": "7010dcb0e47bc58e9be95f6ac7c2c5046f082603f2830884eb597ff9bf4afa69"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-faq-1440.png",
+      "bytes": 83397,
+      "sha256": "2b55e538b7913829dc9bfe3c105f2635e0b2119604e4475fa23039662602e82a"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-faq-390.png",
+      "bytes": 58387,
+      "sha256": "b30e005d3e7b31f551e556af1ae5020b559d18466994956a03dd27d98d935970"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-faq-abierta-1440.png",
+      "bytes": 87049,
+      "sha256": "2e6f2ac0f3f25ea05b2442c82f38fd163a6564d907e2ff7542be05e41e32f95c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-faq-abierta-390.png",
+      "bytes": 59920,
+      "sha256": "926adebf1345c6cbe4f615cff046dbe7c5e3a026e9dd5a778882e64b6cb43f4d"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-foco-cta-1440.png",
+      "bytes": 78611,
+      "sha256": "44adb404d040a9f7b42364f97d42bc8beeee37424b3d44123f593a24d724bed6"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-foco-cta-390.png",
+      "bytes": 58144,
+      "sha256": "e6f3bf9f3a62ecd9a912fb8ea12564e7ee2d490e95ea673d5301b2100de9e3cd"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-hero-1440x900.png",
+      "bytes": 136764,
+      "sha256": "a0b49b998c4b60db1c36f60e3634566f9f28c2eb82a23214f89ef7681836078b"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-hero-390x844.png",
+      "bytes": 76121,
+      "sha256": "0a0509d31564d0527c4c71a6594a8f3c9b08104588fe9abff5b6c1e83538df33"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-pagina-completa-1440.png",
+      "bytes": 453226,
+      "sha256": "bb2dfd2b9a8b82523375aa3f0565f4b8800df7ec33403b027ea25371877f4dfa"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-pagina-completa-390.png",
+      "bytes": 374235,
+      "sha256": "7e30760b13710cd15560319a9b663f57b8200e865af991c715960b182933abb3"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-programa-1440.png",
+      "bytes": 87799,
+      "sha256": "8af83571197ada107d5f844c13c17d64ed846b863435567abe52ebc711b1eb2e"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-programa-390.png",
+      "bytes": 54094,
+      "sha256": "e99ca751707dae0e58f879ae312580c1e0de10629931216aacff8e722f595118"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-reduced-motion-1440.png",
+      "bytes": 136764,
+      "sha256": "a0b49b998c4b60db1c36f60e3634566f9f28c2eb82a23214f89ef7681836078b"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/A-reduced-motion-390.png",
+      "bytes": 76121,
+      "sha256": "0a0509d31564d0527c4c71a6594a8f3c9b08104588fe9abff5b6c1e83538df33"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/B-hero-1440x900.png",
+      "bytes": 123477,
+      "sha256": "160801e33127c4cd2601a389408c70990155f0e25e18484fc7654e83d3745243"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/B-hero-390x844.png",
+      "bytes": 62574,
+      "sha256": "a43067323aca3e1bd23ee982f867cbee989ec715b192b1c653dd7f788a2356ce"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/B-pagina-completa-1440.png",
+      "bytes": 210717,
+      "sha256": "a0e82c1992013edf6519ee709a480c700731aff55915cf5e68de83d779c6231c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/B-pagina-completa-390.png",
+      "bytes": 182421,
+      "sha256": "f8591e68f95d10b5582b9f25e414d93abbae333d787efc6d0a53430746ac7a10"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/C-hero-1440x900.png",
+      "bytes": 119227,
+      "sha256": "7294be755fabe62039fbcdb63e46ef8b67bf5b798913aa2d490eceda0a69a5d8"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/C-hero-390x844.png",
+      "bytes": 72052,
+      "sha256": "3a7b1696a98a7a981c6f3ba790eb5b6190b53813eddaa5d01c37dd10a63e1f55"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/C-pagina-completa-1440.png",
+      "bytes": 241547,
+      "sha256": "2e9e2737c0e5eedf5b3fd498beb46e1175ad88535c110464c138f4458fe492ac"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/capturas/C-pagina-completa-390.png",
+      "bytes": 213409,
+      "sha256": "3f9439fc8c09d26434857becde6c49ea0ac1eb1c0019247fce4d1d52ba4ab9e8"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/index.html",
+      "bytes": 14609,
+      "sha256": "433cbe717a0302f97e3a57b4f64d24df080c07275c946f250aa87683f78efc1c"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/QA.json",
+      "bytes": 24009,
+      "sha256": "4934de8bc76d21601c64757c435d3253c831c3766d7766d5d115e87c0a661ab2"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/README.md",
+      "bytes": 2705,
+      "sha256": "7144c511e487936a016a21118fcc9447b49b0405f2b8b784d99840ac7f5baa4d"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/diseno-workshop/styles.css",
+      "bytes": 13258,
+      "sha256": "779fac42159e83e624c94bf3e3d2252c0fae50025b6f4fcc01aeac6c88baecd4"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-diseno/comparativa-escritorio.png",
+      "bytes": 464858,
+      "sha256": "952091ce1830ee571b4c21ecc1725e8fd51ad62467882d8f02ed7fa72ece56c0"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/evidencia-diseno/comparativa-pantalla-estrecha.png",
+      "bytes": 209281,
+      "sha256": "214fbfaa71e77271705585f2be2ffa67bd282207e2e2e31a9fb41a40ddbd79e8"
+    }
+  ]
+}

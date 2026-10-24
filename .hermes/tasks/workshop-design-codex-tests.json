@@ -1,0 +1,1011 @@
+{
+  "at": "2026-10-23T20:15:31.390Z",
+  "rows": [
+    {
+      "w": 1440,
+      "d": "a",
+      "dom": {
+        "selected": "a",
+        "visible": [
+          "a"
+        ],
+        "pressed": [
+          "a"
+        ],
+        "search": "?d=a",
+        "overflow": {
+          "innerWidth": 1440,
+          "clientWidth": 1440,
+          "scrollWidth": 1440
+        },
+        "h1": 1,
+        "ctaBottom": 580.515625,
+        "ctaSize": [
+          192.078125,
+          52
+        ],
+        "heroText": "TALLER EN VIVO · SÁB 31 OCT 2026 · 10:00 (LA PAZ)\n\nContá lo que repetís en tu negocio antes de automatizar nada.\n\nUn taller en vivo de 90 minutos de contenido (más una pausa de 5), con tu propio negocio. Salís con tu lista de tareas repetidas, lo que cuestan al mes, una prioridad y tu primer paso.\n\nSi en tu negocio no se repite nada, seguí de largo.\n\nQuiero mi cupo\n\nMaqueta: este botón no inscribe.\n\nEJEMPLO INVENTADO — NO ES DE NINGÚN NEGOCIO REAL\nHoja de conteo con una tarea de ejemplo y dos filas vacías\nTAREA\tVECES POR SEMANA\tMINUTOS CADA VEZ\nContestar «¿cuánto cuesta?» por WhatsApp\t10\t5\ntu tarea\t·\t·\ntu tarea\t·\t·\nTiempo de la tarea de ejemplo, por semana\t10 × 5 = 50 min",
+        "pairs": [
+          {
+            "s": "h1",
+            "fg": "rgb(23, 20, 15)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 16.036,
+            "size": "57.6px",
+            "weight": "700"
+          },
+          {
+            "s": ".bajada",
+            "fg": "rgb(23, 20, 15)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 16.036,
+            "size": "19px",
+            "weight": "400"
+          },
+          {
+            "s": ".btn",
+            "fg": "rgb(244, 239, 230)",
+            "bg": [
+              23,
+              20,
+              15
+            ],
+            "ratio": 16.036,
+            "size": "18px",
+            "weight": "700"
+          },
+          {
+            "s": ".nota",
+            "fg": "rgb(81, 73, 62)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 7.729,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".etiqueta",
+            "fg": "rgb(11, 92, 59)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 7.03,
+            "size": "16px",
+            "weight": "500"
+          },
+          {
+            "s": ".rotulo",
+            "fg": "rgb(122, 46, 14)",
+            "bg": [
+              251,
+              248,
+              242
+            ],
+            "ratio": 8.905,
+            "size": "16px",
+            "weight": "600"
+          },
+          {
+            "s": ".micro",
+            "fg": "rgb(81, 73, 62)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 7.729,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".a-cierre h2",
+            "fg": "rgb(244, 239, 230)",
+            "bg": [
+              23,
+              20,
+              15
+            ],
+            "ratio": 16.036,
+            "size": "51.2px",
+            "weight": "700"
+          },
+          {
+            "s": ".a-cierre .micro",
+            "fg": "rgb(217, 210, 197)",
+            "bg": [
+              23,
+              20,
+              15
+            ],
+            "ratio": 12.223,
+            "size": "16px",
+            "weight": "400"
+          }
+        ],
+        "links": [
+          "#contenido"
+        ],
+        "forms": 0,
+        "fonts": [
+          [
+            "Bricolage Grotesque",
+            "loaded"
+          ],
+          [
+            "DM Sans",
+            "loaded"
+          ],
+          [
+            "Spline Sans Mono",
+            "loaded"
+          ]
+        ]
+      },
+      "dialog": {
+        "opens": true,
+        "text": "Inscripción no habilitada\n\nEsto es una maqueta privada y la venta está pausada. Este botón no inscribe, no cobra, no envía datos ni abre WhatsApp.\n\nEntendido",
+        "escapeCloses": true,
+        "focusRestored": true,
+        "buttonCloses": true,
+        "urlUnchanged": true
+      },
+      "faq": {
+        "before": false,
+        "after": true,
+        "closes": true
+      },
+      "focus": {
+        "outline": "rgb(244, 239, 230) none 3px",
+        "offset": "0px",
+        "active": true
+      }
+    },
+    {
+      "w": 1440,
+      "d": "b",
+      "dom": {
+        "selected": "b",
+        "visible": [
+          "b"
+        ],
+        "pressed": [
+          "b"
+        ],
+        "search": "?d=b",
+        "overflow": {
+          "innerWidth": 1440,
+          "clientWidth": 1440,
+          "scrollWidth": 1440
+        },
+        "h1": 1,
+        "ctaBottom": 492.046875,
+        "ctaSize": [
+          192.078125,
+          52
+        ],
+        "heroText": "TALLER EN VIVO · SÁB 31 OCT 2026 · 10:00 (LA PAZ)\n\nContá lo que repetís en tu negocio antes de automatizar nada.\n\n90 minutos de contenido, más una pausa de 5. Con tu propio negocio, salís con tu lista, tu prioridad y tu primer paso.\n\nQuiero mi cupo\n\nMaqueta: este botón no inscribe.\n\n90+5\n\nminutos de contenido\nmás una pausa",
+        "pairs": [
+          {
+            "s": "h1",
+            "fg": "rgb(238, 241, 234)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 16.198,
+            "size": "54.4px",
+            "weight": "700"
+          },
+          {
+            "s": ".bajada",
+            "fg": "rgb(238, 241, 234)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 16.198,
+            "size": "19px",
+            "weight": "400"
+          },
+          {
+            "s": ".btn",
+            "fg": "rgb(8, 21, 14)",
+            "bg": [
+              123,
+              224,
+              168
+            ],
+            "ratio": 11.629,
+            "size": "18px",
+            "weight": "700"
+          },
+          {
+            "s": ".nota",
+            "fg": "rgb(180, 189, 178)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 9.559,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".etiqueta",
+            "fg": "rgb(123, 224, 168)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 11.502,
+            "size": "16px",
+            "weight": "500"
+          },
+          {
+            "s": ".rotulo",
+            "fg": "rgb(242, 179, 143)",
+            "bg": [
+              22,
+              32,
+              26
+            ],
+            "ratio": 9.254,
+            "size": "16px",
+            "weight": "600"
+          },
+          {
+            "s": ".micro",
+            "fg": "rgb(180, 189, 178)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 9.559,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".b-cierre h2",
+            "fg": "rgb(8, 21, 14)",
+            "bg": [
+              123,
+              224,
+              168
+            ],
+            "ratio": 11.629,
+            "size": "44.8px",
+            "weight": "700"
+          },
+          {
+            "s": ".expl",
+            "fg": "rgb(238, 241, 234)",
+            "bg": [
+              22,
+              36,
+              28
+            ],
+            "ratio": 14.123,
+            "size": "16px",
+            "weight": "400"
+          }
+        ],
+        "links": [
+          "#contenido"
+        ],
+        "forms": 0,
+        "fonts": [
+          [
+            "Bricolage Grotesque",
+            "loaded"
+          ],
+          [
+            "DM Sans",
+            "loaded"
+          ],
+          [
+            "Spline Sans Mono",
+            "loaded"
+          ]
+        ]
+      },
+      "dialog": {
+        "opens": true,
+        "text": "Inscripción no habilitada\n\nEsto es una maqueta privada y la venta está pausada. Este botón no inscribe, no cobra, no envía datos ni abre WhatsApp.\n\nEntendido",
+        "escapeCloses": true,
+        "focusRestored": true,
+        "buttonCloses": true,
+        "urlUnchanged": true
+      }
+    },
+    {
+      "w": 1440,
+      "d": "c",
+      "dom": {
+        "selected": "c",
+        "visible": [
+          "c"
+        ],
+        "pressed": [
+          "c"
+        ],
+        "search": "?d=c",
+        "overflow": {
+          "innerWidth": 1440,
+          "clientWidth": 1440,
+          "scrollWidth": 1440
+        },
+        "h1": 1,
+        "ctaBottom": 448.453125,
+        "ctaSize": [
+          192.078125,
+          52
+        ],
+        "heroText": "TALLER EN VIVO · SÁB 31 OCT 2026 · 10:00 (LA PAZ)\n\n¿Cuánto te cuesta lo que repetís cada semana?\n\nContalo. En «Auditá tu negocio con IA», un taller de 90 minutos con tu propio negocio, armás tu lista, tu prioridad y tu primer paso.\n\nQuiero mi cupo\n\nMaqueta: este botón no inscribe.",
+        "pairs": [
+          {
+            "s": "h1",
+            "fg": "rgb(20, 32, 28)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 15.39,
+            "size": "60.8px",
+            "weight": "700"
+          },
+          {
+            "s": ".c-resp",
+            "fg": "rgb(20, 32, 28)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 15.39,
+            "size": "19px",
+            "weight": "400"
+          },
+          {
+            "s": ".btn",
+            "fg": "rgb(255, 255, 255)",
+            "bg": [
+              10,
+              90,
+              74
+            ],
+            "ratio": 8.158,
+            "size": "18px",
+            "weight": "700"
+          },
+          {
+            "s": ".nota",
+            "fg": "rgb(74, 87, 82)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 6.947,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".etiqueta",
+            "fg": "rgb(10, 90, 74)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 7.492,
+            "size": "16px",
+            "weight": "500"
+          },
+          {
+            "s": ".rotulo",
+            "fg": "rgb(122, 46, 14)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 8.669,
+            "size": "16px",
+            "weight": "600"
+          },
+          {
+            "s": ".micro",
+            "fg": "rgb(74, 87, 82)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 6.947,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".expl",
+            "fg": "rgb(20, 32, 28)",
+            "bg": [
+              221,
+              235,
+              229
+            ],
+            "ratio": 13.637,
+            "size": "16px",
+            "weight": "400"
+          }
+        ],
+        "links": [
+          "#contenido"
+        ],
+        "forms": 0,
+        "fonts": [
+          [
+            "Bricolage Grotesque",
+            "loaded"
+          ],
+          [
+            "DM Sans",
+            "loaded"
+          ],
+          [
+            "Spline Sans Mono",
+            "loaded"
+          ]
+        ]
+      },
+      "dialog": {
+        "opens": true,
+        "text": "Inscripción no habilitada\n\nEsto es una maqueta privada y la venta está pausada. Este botón no inscribe, no cobra, no envía datos ni abre WhatsApp.\n\nEntendido",
+        "escapeCloses": true,
+        "focusRestored": true,
+        "buttonCloses": true,
+        "urlUnchanged": true
+      }
+    },
+    {
+      "w": 390,
+      "d": "a",
+      "dom": {
+        "selected": "a",
+        "visible": [
+          "a"
+        ],
+        "pressed": [
+          "a"
+        ],
+        "search": "?d=a",
+        "overflow": {
+          "innerWidth": 390,
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        "h1": 1,
+        "ctaBottom": 666.15625,
+        "ctaSize": [
+          350,
+          52
+        ],
+        "heroText": "TALLER EN VIVO · SÁB 31 OCT 2026 · 10:00 (LA PAZ)\n\nContá lo que repetís en tu negocio antes de automatizar nada.\n\nUn taller en vivo de 90 minutos de contenido (más una pausa de 5), con tu propio negocio. Salís con tu lista de tareas repetidas, lo que cuestan al mes, una prioridad y tu primer paso.\n\nSi en tu negocio no se repite nada, seguí de largo.\n\nQuiero mi cupo\n\nMaqueta: este botón no inscribe.\n\nEJEMPLO INVENTADO — NO ES DE NINGÚN NEGOCIO REAL\nHoja de conteo con una tarea de ejemplo y dos filas vacías\nTAREA\tVECES POR SEMANA\tMINUTOS CADA VEZ\nContestar «¿cuánto cuesta?» por WhatsApp\t10\t5\ntu tarea\t·\t·\ntu tarea\t·\t·\nTiempo de la tarea de ejemplo, por semana\t10 × 5 = 50 min",
+        "pairs": [
+          {
+            "s": "h1",
+            "fg": "rgb(23, 20, 15)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 16.036,
+            "size": "32px",
+            "weight": "700"
+          },
+          {
+            "s": ".bajada",
+            "fg": "rgb(23, 20, 15)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 16.036,
+            "size": "19px",
+            "weight": "400"
+          },
+          {
+            "s": ".btn",
+            "fg": "rgb(244, 239, 230)",
+            "bg": [
+              23,
+              20,
+              15
+            ],
+            "ratio": 16.036,
+            "size": "18px",
+            "weight": "700"
+          },
+          {
+            "s": ".nota",
+            "fg": "rgb(81, 73, 62)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 7.729,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".etiqueta",
+            "fg": "rgb(11, 92, 59)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 7.03,
+            "size": "16px",
+            "weight": "500"
+          },
+          {
+            "s": ".rotulo",
+            "fg": "rgb(122, 46, 14)",
+            "bg": [
+              251,
+              248,
+              242
+            ],
+            "ratio": 8.905,
+            "size": "16px",
+            "weight": "600"
+          },
+          {
+            "s": ".micro",
+            "fg": "rgb(81, 73, 62)",
+            "bg": [
+              244,
+              239,
+              230
+            ],
+            "ratio": 7.729,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".a-cierre h2",
+            "fg": "rgb(244, 239, 230)",
+            "bg": [
+              23,
+              20,
+              15
+            ],
+            "ratio": 16.036,
+            "size": "28.8px",
+            "weight": "700"
+          },
+          {
+            "s": ".a-cierre .micro",
+            "fg": "rgb(217, 210, 197)",
+            "bg": [
+              23,
+              20,
+              15
+            ],
+            "ratio": 12.223,
+            "size": "16px",
+            "weight": "400"
+          }
+        ],
+        "links": [
+          "#contenido"
+        ],
+        "forms": 0,
+        "fonts": [
+          [
+            "Bricolage Grotesque",
+            "loaded"
+          ],
+          [
+            "DM Sans",
+            "loaded"
+          ],
+          [
+            "Spline Sans Mono",
+            "loaded"
+          ]
+        ]
+      },
+      "dialog": {
+        "opens": true,
+        "text": "Inscripción no habilitada\n\nEsto es una maqueta privada y la venta está pausada. Este botón no inscribe, no cobra, no envía datos ni abre WhatsApp.\n\nEntendido",
+        "escapeCloses": true,
+        "focusRestored": true,
+        "buttonCloses": true,
+        "urlUnchanged": true
+      },
+      "faq": {
+        "before": false,
+        "after": true,
+        "closes": true
+      },
+      "focus": {
+        "outline": "rgb(244, 239, 230) none 3px",
+        "offset": "0px",
+        "active": true
+      }
+    },
+    {
+      "w": 390,
+      "d": "b",
+      "dom": {
+        "selected": "b",
+        "visible": [
+          "b"
+        ],
+        "pressed": [
+          "b"
+        ],
+        "search": "?d=b",
+        "overflow": {
+          "innerWidth": 390,
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        "h1": 1,
+        "ctaBottom": 564.71875,
+        "ctaSize": [
+          350,
+          52
+        ],
+        "heroText": "TALLER EN VIVO · SÁB 31 OCT 2026 · 10:00 (LA PAZ)\n\nContá lo que repetís en tu negocio antes de automatizar nada.\n\n90 minutos de contenido, más una pausa de 5. Con tu propio negocio, salís con tu lista, tu prioridad y tu primer paso.\n\nQuiero mi cupo\n\nMaqueta: este botón no inscribe.\n\n90+5\n\nminutos de contenido\nmás una pausa",
+        "pairs": [
+          {
+            "s": "h1",
+            "fg": "rgb(238, 241, 234)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 16.198,
+            "size": "32px",
+            "weight": "700"
+          },
+          {
+            "s": ".bajada",
+            "fg": "rgb(238, 241, 234)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 16.198,
+            "size": "19px",
+            "weight": "400"
+          },
+          {
+            "s": ".btn",
+            "fg": "rgb(8, 21, 14)",
+            "bg": [
+              123,
+              224,
+              168
+            ],
+            "ratio": 11.629,
+            "size": "18px",
+            "weight": "700"
+          },
+          {
+            "s": ".nota",
+            "fg": "rgb(180, 189, 178)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 9.559,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".etiqueta",
+            "fg": "rgb(123, 224, 168)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 11.502,
+            "size": "16px",
+            "weight": "500"
+          },
+          {
+            "s": ".rotulo",
+            "fg": "rgb(242, 179, 143)",
+            "bg": [
+              22,
+              32,
+              26
+            ],
+            "ratio": 9.254,
+            "size": "16px",
+            "weight": "600"
+          },
+          {
+            "s": ".micro",
+            "fg": "rgb(180, 189, 178)",
+            "bg": [
+              15,
+              21,
+              18
+            ],
+            "ratio": 9.559,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".b-cierre h2",
+            "fg": "rgb(8, 21, 14)",
+            "bg": [
+              123,
+              224,
+              168
+            ],
+            "ratio": 11.629,
+            "size": "25.6px",
+            "weight": "700"
+          },
+          {
+            "s": ".expl",
+            "fg": "rgb(238, 241, 234)",
+            "bg": [
+              22,
+              36,
+              28
+            ],
+            "ratio": 14.123,
+            "size": "16px",
+            "weight": "400"
+          }
+        ],
+        "links": [
+          "#contenido"
+        ],
+        "forms": 0,
+        "fonts": [
+          [
+            "Bricolage Grotesque",
+            "loaded"
+          ],
+          [
+            "DM Sans",
+            "loaded"
+          ],
+          [
+            "Spline Sans Mono",
+            "loaded"
+          ]
+        ]
+      },
+      "dialog": {
+        "opens": true,
+        "text": "Inscripción no habilitada\n\nEsto es una maqueta privada y la venta está pausada. Este botón no inscribe, no cobra, no envía datos ni abre WhatsApp.\n\nEntendido",
+        "escapeCloses": true,
+        "focusRestored": true,
+        "buttonCloses": true,
+        "urlUnchanged": true
+      }
+    },
+    {
+      "w": 390,
+      "d": "c",
+      "dom": {
+        "selected": "c",
+        "visible": [
+          "c"
+        ],
+        "pressed": [
+          "c"
+        ],
+        "search": "?d=c",
+        "overflow": {
+          "innerWidth": 390,
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        "h1": 1,
+        "ctaBottom": 594.171875,
+        "ctaSize": [
+          350,
+          52
+        ],
+        "heroText": "TALLER EN VIVO · SÁB 31 OCT 2026 · 10:00 (LA PAZ)\n\n¿Cuánto te cuesta lo que repetís cada semana?\n\nContalo. En «Auditá tu negocio con IA», un taller de 90 minutos con tu propio negocio, armás tu lista, tu prioridad y tu primer paso.\n\nQuiero mi cupo\n\nMaqueta: este botón no inscribe.",
+        "pairs": [
+          {
+            "s": "h1",
+            "fg": "rgb(20, 32, 28)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 15.39,
+            "size": "33.6px",
+            "weight": "700"
+          },
+          {
+            "s": ".c-resp",
+            "fg": "rgb(20, 32, 28)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 15.39,
+            "size": "19px",
+            "weight": "400"
+          },
+          {
+            "s": ".btn",
+            "fg": "rgb(255, 255, 255)",
+            "bg": [
+              10,
+              90,
+              74
+            ],
+            "ratio": 8.158,
+            "size": "18px",
+            "weight": "700"
+          },
+          {
+            "s": ".nota",
+            "fg": "rgb(74, 87, 82)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 6.947,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".etiqueta",
+            "fg": "rgb(10, 90, 74)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 7.492,
+            "size": "16px",
+            "weight": "500"
+          },
+          {
+            "s": ".rotulo",
+            "fg": "rgb(122, 46, 14)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 8.669,
+            "size": "16px",
+            "weight": "600"
+          },
+          {
+            "s": ".micro",
+            "fg": "rgb(74, 87, 82)",
+            "bg": [
+              247,
+              245,
+              241
+            ],
+            "ratio": 6.947,
+            "size": "16px",
+            "weight": "400"
+          },
+          {
+            "s": ".expl",
+            "fg": "rgb(20, 32, 28)",
+            "bg": [
+              221,
+              235,
+              229
+            ],
+            "ratio": 13.637,
+            "size": "16px",
+            "weight": "400"
+          }
+        ],
+        "links": [
+          "#contenido"
+        ],
+        "forms": 0,
+        "fonts": [
+          [
+            "Bricolage Grotesque",
+            "loaded"
+          ],
+          [
+            "DM Sans",
+            "loaded"
+          ],
+          [
+            "Spline Sans Mono",
+            "loaded"
+          ]
+        ]
+      },
+      "dialog": {
+        "opens": true,
+        "text": "Inscripción no habilitada\n\nEsto es una maqueta privada y la venta está pausada. Este botón no inscribe, no cobra, no envía datos ni abre WhatsApp.\n\nEntendido",
+        "escapeCloses": true,
+        "focusRestored": true,
+        "buttonCloses": true,
+        "urlUnchanged": true
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "blocked": [],
+  "browser": "149.0.7827.55",
+  "limit360": {
+    "ctaBottom": 720.390625,
+    "innerWidth": 360,
+    "scrollWidth": 360
+  },
+  "currentFiles": {
+    "index.html": "862c5e57c042f5c53b6a6a73e4bbb2db086a8a2089243ee2b0ab05983d000480",
+    "app.js": "1aa6393850e6077ddcbe247b0aefa797725dd35468d9961d1d26dc4aacbc4cde",
+    "styles.css": "779fac42159e83e624c94bf3e3d2252c0fae50025b6f4fcc01aeac6c88baecd4"
+  },
+  "keyboard": [
+    {
+      "width": 1440,
+      "found": true,
+      "style": {
+        "outline": "rgb(11, 92, 59) solid 3px",
+        "offset": "3px",
+        "focusVisible": true
+      },
+      "keyboardOpens": true,
+      "escapeRestores": true
+    },
+    {
+      "width": 390,
+      "found": true,
+      "style": {
+        "outline": "rgb(11, 92, 59) solid 3px",
+        "offset": "3px",
+        "focusVisible": true
+      },
+      "keyboardOpens": true,
+      "escapeRestores": true
+    }
+  ]
+}

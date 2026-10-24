@@ -1,0 +1,1020 @@
+{
+ "version": 1,
+ "fecha": "2026-10-23",
+ "estado": "BORRADOR PRIVADO — venta pausada. Boceto de diseño; no autoriza publicar ni abrir la venta.",
+ "herramienta": {
+  "navegador": "Chromium 149.0.7827.55",
+  "playwright": "resuelto desde C:/dev/proyectos/onia-hermes/web-factory",
+  "headless": true
+ },
+ "metodo_viewport": "Viewport emulado de Playwright/Chromium headless (anchos 360, 390, 768, 1024, 1440). NO es un dispositivo móvil real: sin pantalla táctil, sin UA móvil, sin pruebas de gestos. Los «targets ≥ 44» se miden por tamaño de caja, no por usabilidad táctil.",
+ "archivos": {
+  "index.html": {
+   "bytes": 14609,
+   "sha256": "433cbe717a0302f97e3a57b4f64d24df080c07275c946f250aa87683f78efc1c"
+  },
+  "styles.css": {
+   "bytes": 13258,
+   "sha256": "779fac42159e83e624c94bf3e3d2252c0fae50025b6f4fcc01aeac6c88baecd4"
+  },
+  "app.js": {
+   "bytes": 1534,
+   "sha256": "1aa6393850e6077ddcbe247b0aefa797725dd35468d9961d1d26dc4aacbc4cde"
+  },
+  "README.md": {
+   "bytes": 2705,
+   "sha256": "7144c511e487936a016a21118fcc9447b49b0405f2b8b784d99840ac7f5baa4d"
+  }
+ },
+ "assets": {
+  "assets/fonts/BricolageGrotesque-var-latin.woff2": {
+   "bytes": 92076,
+   "sha256": "77ead11b21511f4b4f5cd77fd5c36bfa96bdb2b2bda89bc2f85954992e17afbb"
+  },
+  "assets/fonts/DMSans-var-latin.woff2": {
+   "bytes": 36664,
+   "sha256": "3a4d56eeaed51cba469428f6c78e59d4865fe169d2e81776f86d6b7ca74fadee"
+  },
+  "assets/fonts/OFL-BricolageGrotesque.txt": {
+   "bytes": 4496,
+   "sha256": "9e75de0268df02ccd432ce3e438b0a316c48a8170fd447aeadf0142541b667a6"
+  },
+  "assets/fonts/OFL-DMSans.txt": {
+   "bytes": 4482,
+   "sha256": "9af36190332437f5ecd09974de43c1f7c77a310a996cdd8ceb25628b458840e1"
+  },
+  "assets/fonts/OFL-SplineSansMono.txt": {
+   "bytes": 4496,
+   "sha256": "f6e93bcc88826f96de74b3ec64c503af6c569c872f2bc95221d4d3afc0389c99"
+  },
+  "assets/fonts/SplineSansMono-var-latin.woff2": {
+   "bytes": 25300,
+   "sha256": "a8ec780b2e2d4fea848afda9e8e8ddb2f27e9175df971796698adf0a9d5e6381"
+  },
+  "assets/sergio-retrato.webp": {
+   "bytes": 26924,
+   "sha256": "20a41c72ef1614cbdb54bc534dd8346a62fbe772491799f32bb6a9e4a1bfcdee"
+  }
+ },
+ "pesos": {
+  "html_css_js_bytes": 29401,
+  "html_css_js_kib": 28.7,
+  "presupuesto_html_css_js_kib": 200,
+  "dentro_del_presupuesto": true,
+  "assets_bytes": 194438,
+  "assets_kib": 189.9,
+  "paquete_sin_capturas_kib": 221.2,
+  "objetivo_paquete_mib": 2,
+  "dentro_del_objetivo_paquete_sin_capturas": true,
+  "capturas_bytes": 3291308,
+  "capturas_mib": 3.14,
+  "nota": "El objetivo de 2 MiB se evalúa sobre el paquete sin capturas (código + assets). Las capturas PNG son evidencia permanente y se informan aparte. LCP NO se midió."
+ },
+ "aislamiento": {
+  "enlaces_a_href": [
+   "#contenido"
+  ],
+  "wa_me": false,
+  "formularios": false,
+  "analytics": false,
+  "google_fonts": false,
+  "urls_http_en_codigo": []
+ },
+ "resultados_por_prueba": {
+  "overflow_fallos": [],
+  "h1_fallos": [],
+  "cta_fallos": [],
+  "texto_menores_16": {},
+  "contraste_fallos": {},
+  "targets_fallos": {},
+  "errores": []
+ },
+ "cumple": {
+  "sin_overflow_5_anchos_3_direcciones": true,
+  "un_h1_visible": true,
+  "cta_bottom_le_700_en_1440_y_390": true,
+  "texto_cuerpo_ge_16px": true,
+  "targets_ge_44": true,
+  "contraste_ge_minimo": true,
+  "sin_errores_de_pagina": true
+ },
+ "pruebas_por_direccion_y_ancho": {
+  "a": {
+   "360": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 105
+    },
+    "contraste": {
+     "peor": 6.26,
+     "fallos": [],
+     "pares": 105
+    },
+    "targets": {
+     "fallos": [],
+     "total": 10
+    },
+    "h1": 1,
+    "cta_bottom": 720.4,
+    "overflow": {
+     "scrollWidth": 360,
+     "clientWidth": 360,
+     "innerWidth": 360
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "390": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 105
+    },
+    "contraste": {
+     "peor": 6.26,
+     "fallos": [],
+     "pares": 105
+    },
+    "targets": {
+     "fallos": [],
+     "total": 10
+    },
+    "h1": 1,
+    "cta_bottom": 666.2,
+    "overflow": {
+     "scrollWidth": 390,
+     "clientWidth": 390,
+     "innerWidth": 390
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "768": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 106
+    },
+    "contraste": {
+     "peor": 6.26,
+     "fallos": [],
+     "pares": 106
+    },
+    "targets": {
+     "fallos": [],
+     "total": 10
+    },
+    "h1": 1,
+    "cta_bottom": 473.5,
+    "overflow": {
+     "scrollWidth": 768,
+     "clientWidth": 768,
+     "innerWidth": 768
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "1024": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 106
+    },
+    "contraste": {
+     "peor": 6.26,
+     "fallos": [],
+     "pares": 106
+    },
+    "targets": {
+     "fallos": [],
+     "total": 10
+    },
+    "h1": 1,
+    "cta_bottom": 577.5,
+    "overflow": {
+     "scrollWidth": 1024,
+     "clientWidth": 1024,
+     "innerWidth": 1024
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "1440": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 106
+    },
+    "contraste": {
+     "peor": 6.26,
+     "fallos": [],
+     "pares": 106
+    },
+    "targets": {
+     "fallos": [],
+     "total": 10
+    },
+    "h1": 1,
+    "cta_bottom": 580.5,
+    "overflow": {
+     "scrollWidth": 1440,
+     "clientWidth": 1440,
+     "innerWidth": 1440
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "foco_390": {
+    "tag": "SUMMARY",
+    "texto": "¿Es para mí si no sé de tecnol",
+    "outline": "solid 3px rgb(11, 92, 59)",
+    "offset": "3px",
+    "bottom": 449.984375
+   },
+   "foco_1440": {
+    "tag": "SUMMARY",
+    "texto": "¿Es para mí si no sé de tecnol",
+    "outline": "solid 3px rgb(11, 92, 59)",
+    "offset": "3px",
+    "bottom": 478.484375
+   }
+  },
+  "b": {
+   "360": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 35
+    },
+    "contraste": {
+     "peor": 9.25,
+     "fallos": [],
+     "pares": 35
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 589.5,
+    "overflow": {
+     "scrollWidth": 360,
+     "clientWidth": 360,
+     "innerWidth": 360
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "390": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 35
+    },
+    "contraste": {
+     "peor": 9.25,
+     "fallos": [],
+     "pares": 35
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 564.7,
+    "overflow": {
+     "scrollWidth": 390,
+     "clientWidth": 390,
+     "innerWidth": 390
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "768": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 36
+    },
+    "contraste": {
+     "peor": 9.25,
+     "fallos": [],
+     "pares": 36
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 395,
+    "overflow": {
+     "scrollWidth": 768,
+     "clientWidth": 768,
+     "innerWidth": 768
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "1024": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 36
+    },
+    "contraste": {
+     "peor": 9.25,
+     "fallos": [],
+     "pares": 36
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 466.4,
+    "overflow": {
+     "scrollWidth": 1024,
+     "clientWidth": 1024,
+     "innerWidth": 1024
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "1440": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 36
+    },
+    "contraste": {
+     "peor": 9.25,
+     "fallos": [],
+     "pares": 36
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 492,
+    "overflow": {
+     "scrollWidth": 1440,
+     "clientWidth": 1440,
+     "innerWidth": 1440
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   }
+  },
+  "c": {
+   "360": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 42
+    },
+    "contraste": {
+     "peor": 6.95,
+     "fallos": [],
+     "pares": 42
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 648.4,
+    "overflow": {
+     "scrollWidth": 360,
+     "clientWidth": 360,
+     "innerWidth": 360
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "390": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 42
+    },
+    "contraste": {
+     "peor": 6.95,
+     "fallos": [],
+     "pares": 42
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 594.2,
+    "overflow": {
+     "scrollWidth": 390,
+     "clientWidth": 390,
+     "innerWidth": 390
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "768": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 43
+    },
+    "contraste": {
+     "peor": 6.95,
+     "fallos": [],
+     "pares": 43
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 423,
+    "overflow": {
+     "scrollWidth": 768,
+     "clientWidth": 768,
+     "innerWidth": 768
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "1024": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 43
+    },
+    "contraste": {
+     "peor": 6.95,
+     "fallos": [],
+     "pares": 43
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 464.9,
+    "overflow": {
+     "scrollWidth": 1024,
+     "clientWidth": 1024,
+     "innerWidth": 1024
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   },
+   "1440": {
+    "texto": {
+     "min_px": 16,
+     "menores_16": [],
+     "total": 43
+    },
+    "contraste": {
+     "peor": 6.95,
+     "fallos": [],
+     "pares": 43
+    },
+    "targets": {
+     "fallos": [],
+     "total": 5
+    },
+    "h1": 1,
+    "cta_bottom": 448.5,
+    "overflow": {
+     "scrollWidth": 1440,
+     "clientWidth": 1440,
+     "innerWidth": 1440
+    },
+    "errores": [],
+    "fuentes": {
+     "bricolage": true,
+     "dmsans": true,
+     "mono": true,
+     "cargadas": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ]
+    }
+   }
+  }
+ },
+ "funcional": {
+  "reduced_motion_1440": true,
+  "cta": {
+   "dialogo_abre": true,
+   "cierra_con_boton": true,
+   "url_sin_cambio": true,
+   "foco_vuelve_al_boton": "btn js-cta",
+   "cierra_con_escape": true
+  },
+  "faq": {
+   "antes": false,
+   "despues": true
+  },
+  "selector": {
+   "b": {
+    "main_visible": [
+     "b"
+    ],
+    "url": "?d=b"
+   },
+   "c": {
+    "main_visible": [
+     "c"
+    ],
+    "url": "?d=c"
+   },
+   "a": {
+    "main_visible": [
+     "a"
+    ],
+    "url": "?d=a"
+   }
+  },
+  "enlaces": {
+   "a_href": [
+    "#contenido"
+   ],
+   "formularios": 0,
+   "wa_me": false,
+   "http_en_html": []
+  },
+  "reduced_motion_390": true,
+  "solicitudes_de_red": {
+   "total": 119,
+   "no_file": [],
+   "muestra": [
+    "index.html?d=a",
+    "styles.css",
+    "assets/sergio-retrato.webp",
+    "app.js",
+    "assets/fonts/SplineSansMono-var-latin.woff2",
+    "assets/fonts/DMSans-var-latin.woff2",
+    "assets/fonts/BricolageGrotesque-var-latin.woff2",
+    "index.html?d=b",
+    "index.html?d=c"
+   ]
+  }
+ },
+ "capturas": [
+  {
+   "archivo": "capturas/A-hero-390x844.png",
+   "sha256": "0a0509d31564d0527c4c71a6594a8f3c9b08104588fe9abff5b6c1e83538df33",
+   "bytes": 76121
+  },
+  {
+   "archivo": "capturas/A-pagina-completa-390.png",
+   "sha256": "7e30760b13710cd15560319a9b663f57b8200e865af991c715960b182933abb3",
+   "bytes": 374235
+  },
+  {
+   "archivo": "capturas/A-programa-390.png",
+   "sha256": "e99ca751707dae0e58f879ae312580c1e0de10629931216aacff8e722f595118",
+   "bytes": 54094
+  },
+  {
+   "archivo": "capturas/A-faq-390.png",
+   "sha256": "b30e005d3e7b31f551e556af1ae5020b559d18466994956a03dd27d98d935970",
+   "bytes": 58387
+  },
+  {
+   "archivo": "capturas/A-faq-abierta-390.png",
+   "sha256": "926adebf1345c6cbe4f615cff046dbe7c5e3a026e9dd5a778882e64b6cb43f4d",
+   "bytes": 59920
+  },
+  {
+   "archivo": "capturas/A-cta-final-390.png",
+   "sha256": "547ac7efe6fe8d55df945a67dd48242f88922c26b4f4e8732520b381be3ac62a",
+   "bytes": 49525
+  },
+  {
+   "archivo": "capturas/A-foco-cta-390.png",
+   "sha256": "e6f3bf9f3a62ecd9a912fb8ea12564e7ee2d490e95ea673d5301b2100de9e3cd",
+   "bytes": 58144
+  },
+  {
+   "archivo": "capturas/A-hero-1440x900.png",
+   "sha256": "a0b49b998c4b60db1c36f60e3634566f9f28c2eb82a23214f89ef7681836078b",
+   "bytes": 136764
+  },
+  {
+   "archivo": "capturas/A-pagina-completa-1440.png",
+   "sha256": "bb2dfd2b9a8b82523375aa3f0565f4b8800df7ec33403b027ea25371877f4dfa",
+   "bytes": 453226
+  },
+  {
+   "archivo": "capturas/A-programa-1440.png",
+   "sha256": "8af83571197ada107d5f844c13c17d64ed846b863435567abe52ebc711b1eb2e",
+   "bytes": 87799
+  },
+  {
+   "archivo": "capturas/A-faq-1440.png",
+   "sha256": "2b55e538b7913829dc9bfe3c105f2635e0b2119604e4475fa23039662602e82a",
+   "bytes": 83397
+  },
+  {
+   "archivo": "capturas/A-faq-abierta-1440.png",
+   "sha256": "2e6f2ac0f3f25ea05b2442c82f38fd163a6564d907e2ff7542be05e41e32f95c",
+   "bytes": 87049
+  },
+  {
+   "archivo": "capturas/A-cta-final-1440.png",
+   "sha256": "966f7f629d32788f6970d75ed6ade00ab6c4b2ce79aefef39623d71c95eee14e",
+   "bytes": 63649
+  },
+  {
+   "archivo": "capturas/A-foco-cta-1440.png",
+   "sha256": "44adb404d040a9f7b42364f97d42bc8beeee37424b3d44123f593a24d724bed6",
+   "bytes": 78611
+  },
+  {
+   "archivo": "capturas/B-hero-390x844.png",
+   "sha256": "a43067323aca3e1bd23ee982f867cbee989ec715b192b1c653dd7f788a2356ce",
+   "bytes": 62574
+  },
+  {
+   "archivo": "capturas/B-pagina-completa-390.png",
+   "sha256": "f8591e68f95d10b5582b9f25e414d93abbae333d787efc6d0a53430746ac7a10",
+   "bytes": 182421
+  },
+  {
+   "archivo": "capturas/B-hero-1440x900.png",
+   "sha256": "160801e33127c4cd2601a389408c70990155f0e25e18484fc7654e83d3745243",
+   "bytes": 123477
+  },
+  {
+   "archivo": "capturas/B-pagina-completa-1440.png",
+   "sha256": "a0e82c1992013edf6519ee709a480c700731aff55915cf5e68de83d779c6231c",
+   "bytes": 210717
+  },
+  {
+   "archivo": "capturas/C-hero-390x844.png",
+   "sha256": "3a7b1696a98a7a981c6f3ba790eb5b6190b53813eddaa5d01c37dd10a63e1f55",
+   "bytes": 72052
+  },
+  {
+   "archivo": "capturas/C-pagina-completa-390.png",
+   "sha256": "3f9439fc8c09d26434857becde6c49ea0ac1eb1c0019247fce4d1d52ba4ab9e8",
+   "bytes": 213409
+  },
+  {
+   "archivo": "capturas/C-hero-1440x900.png",
+   "sha256": "7294be755fabe62039fbcdb63e46ef8b67bf5b798913aa2d490eceda0a69a5d8",
+   "bytes": 119227
+  },
+  {
+   "archivo": "capturas/C-pagina-completa-1440.png",
+   "sha256": "2e9e2737c0e5eedf5b3fd498beb46e1175ad88535c110464c138f4458fe492ac",
+   "bytes": 241547
+  },
+  {
+   "archivo": "capturas/A-reduced-motion-1440.png",
+   "sha256": "a0b49b998c4b60db1c36f60e3634566f9f28c2eb82a23214f89ef7681836078b",
+   "bytes": 136764
+  },
+  {
+   "archivo": "capturas/A-estado-cta-local-1440.png",
+   "sha256": "7010dcb0e47bc58e9be95f6ac7c2c5046f082603f2830884eb597ff9bf4afa69",
+   "bytes": 132078
+  },
+  {
+   "archivo": "capturas/A-reduced-motion-390.png",
+   "sha256": "0a0509d31564d0527c4c71a6594a8f3c9b08104588fe9abff5b6c1e83538df33",
+   "bytes": 76121
+  }
+ ],
+ "errores_de_la_corrida": [],
+ "integridad": {
+  "originales": {
+   "snapshot": ".hermes/tasks/iman-workshop-final-snapshot.json",
+   "coinciden": 19,
+   "total": 19,
+   "discrepancias": []
+  },
+  "complemento_corregido": {
+   "snapshot": ".hermes/tasks/iman-workshop-supplement-corrected-snapshot.json",
+   "coinciden": 69,
+   "total": 69,
+   "discrepancias": []
+  }
+ },
+ "mtime_no_modificados": {
+  "TALLER_31_OCT.md": "2026-10-22T12:07:41.567Z",
+  "sitio-sergiourcullo/auditoria/index.html": "2026-10-22T12:08:09.383Z"
+ },
+ "limites": [
+  "Viewport emulado, no móvil auténtico ni touch.",
+  "LCP, CLS, INP y Core Web Vitals no se midieron; no se declara ninguno.",
+  "Contraste calculado sobre colores computados de nodos de texto con fondo sólido; los pares con imagen de fondo no existen en este diseño; no sustituye una auditoría axe/WCAG completa ni evalúa lectores de pantalla.",
+  "A 360 px: el CTA del hero termina en 720.4 px (> 700); el criterio de 700 px se exigió solo en 1440 y 390 y se cumple ahí.",
+  "Solo Chromium 149 headless; no se probaron Firefox ni WebKit.",
+  "B y C son exploraciones comparables (hero, resultado, método, programa, CTA); no incluyen requisitos, oferta ni FAQ.",
+  "Fuentes y retrato: locales; el retrato es el ya embebido en la página vigente. Paleta y tipografías son propuestas reversibles.",
+  "Las capturas fueron inspeccionadas visualmente por el autor (ver README/Reporte); la inspección no sustituye revisión de Sergio.",
+  "Corrección de copy de C: se rehicieron solo 4 capturas (hero y página completa, 1440 y 390)."
+ ],
+ "nota_de_versiones": "Resultados de A y B: corrida completa anterior (sin repetir). Resultados de C: corrida acotada posterior a la corrección de copy en correccion_copy_C; las entradas de C en pruebas_por_direccion_y_ancho.c son de la corrida anterior (copy previo).",
+ "correccion_copy_C": {
+  "fecha": "2026-10-23",
+  "motivo": "dictamen workshop-design-codex-review.md: coherencia de oferta en C",
+  "cambios": [
+   {
+    "donde": "hero C (index.html:177)",
+    "antes": "un taller de 90 minutos con tu propio negocio",
+    "despues": "un taller de 90 minutos de contenido, más una pausa de 5, con tu propio negocio"
+   },
+   {
+    "donde": "resultado C (index.html:192)",
+    "antes": "No hay certificado, grabación ni promesa de ahorro.",
+    "despues": "No hay certificado; no se promete grabación, ahorro ni resultados."
+   }
+  ],
+  "index_html_antes": {
+   "bytes": 14559,
+   "sha256": "862c5e57c042f5c53b6a6a73e4bbb2db086a8a2089243ee2b0ab05983d000480"
+  },
+  "index_html_despues": {
+   "bytes": 14609,
+   "sha256": "433cbe717a0302f97e3a57b4f64d24df080c07275c946f250aa87683f78efc1c"
+  },
+  "capturas_antes": [
+   {
+    "archivo": "capturas/C-hero-390x844.png",
+    "sha256": "8cc632d2c749e115f10fe04f3ec59c927b10813dfb0dd146edaeade8c1da3638",
+    "bytes": 73354
+   },
+   {
+    "archivo": "capturas/C-pagina-completa-390.png",
+    "sha256": "29ed851c87b8a78c78717c59bc806dc7c4ef98adf7c46fa950841ac9a20c0d5f",
+    "bytes": 208233
+   },
+   {
+    "archivo": "capturas/C-hero-1440x900.png",
+    "sha256": "6c8d9774f7399c70789ea2260dfdd9f8539d63c7bbafb268f437408d37090668",
+    "bytes": 115015
+   },
+   {
+    "archivo": "capturas/C-pagina-completa-1440.png",
+    "sha256": "19889900870e883ad80da596396189f06817ecfe0faffde5187f3b7af8e1c0ad",
+    "bytes": 236889
+   }
+  ],
+  "capturas_despues": [
+   {
+    "archivo": "capturas/C-hero-1440x900.png",
+    "sha256": "7294be755fabe62039fbcdb63e46ef8b67bf5b798913aa2d490eceda0a69a5d8",
+    "bytes": 119227
+   },
+   {
+    "archivo": "capturas/C-pagina-completa-1440.png",
+    "sha256": "2e9e2737c0e5eedf5b3fd498beb46e1175ad88535c110464c138f4458fe492ac",
+    "bytes": 241547
+   },
+   {
+    "archivo": "capturas/C-hero-390x844.png",
+    "sha256": "3a7b1696a98a7a981c6f3ba790eb5b6190b53813eddaa5d01c37dd10a63e1f55",
+    "bytes": 72052
+   },
+   {
+    "archivo": "capturas/C-pagina-completa-390.png",
+    "sha256": "3f9439fc8c09d26434857becde6c49ea0ac1eb1c0019247fce4d1d52ba4ab9e8",
+    "bytes": 213409
+   }
+  ],
+  "corrida": {
+   "navegador": "Chromium 149.0.7827.55",
+   "reduced_motion": true,
+   "fuentes_y_scroll_lazy_antes_de_capturar": true,
+   "pruebas": {
+    "390": {
+     "texto": {
+      "min_px": 16,
+      "menores_16": []
+     },
+     "contraste": {
+      "peor": 6.95,
+      "fallos": [],
+      "pares": 42
+     },
+     "targets": {
+      "fallos": []
+     },
+     "overflow": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+     },
+     "h1_visibles": 1,
+     "cta_bottom": 653,
+     "textos": {
+      "hero": "Contalo. En «Auditá tu negocio con IA», un taller de 90 minutos de contenido, más una pausa de 5, con tu propio negocio, armás tu lista, tu prioridad y tu primer paso.",
+      "nota_resultado": "No hay certificado; no se promete grabación, ahorro ni resultados."
+     },
+     "errores": [],
+     "fuentes": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ],
+     "reduced_motion": true
+    },
+    "1440": {
+     "texto": {
+      "min_px": 16,
+      "menores_16": []
+     },
+     "contraste": {
+      "peor": 6.95,
+      "fallos": [],
+      "pares": 43
+     },
+     "targets": {
+      "fallos": []
+     },
+     "overflow": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+     },
+     "h1_visibles": 1,
+     "cta_bottom": 464.8,
+     "textos": {
+      "hero": "Contalo. En «Auditá tu negocio con IA», un taller de 90 minutos de contenido, más una pausa de 5, con tu propio negocio, armás tu lista, tu prioridad y tu primer paso.",
+      "nota_resultado": "No hay certificado; no se promete grabación, ahorro ni resultados."
+     },
+     "errores": [],
+     "fuentes": [
+      "Bricolage Grotesque",
+      "DM Sans",
+      "Spline Sans Mono"
+     ],
+     "reduced_motion": true
+    }
+   },
+   "funcional_cta": {
+    "390": {
+     "abre": true,
+     "cierra_y_devuelve_foco": true,
+     "cierra_con_escape": true,
+     "url_sin_cambio": true
+    },
+    "1440": {
+     "abre": true,
+     "cierra_y_devuelve_foco": true,
+     "cierra_con_escape": true,
+     "url_sin_cambio": true
+    }
+   },
+   "red": {
+    "total": 14,
+    "no_file": []
+   }
+  },
+  "criterios": {
+   "cta_bottom_le_700": true,
+   "cta_bottom": {
+    "390": 653,
+    "1440": 464.8
+   },
+   "sin_overflow": true,
+   "un_h1": true,
+   "texto_ge_16": true,
+   "targets_ge_44": true,
+   "contraste_sin_fallos": true,
+   "menor_contraste": 6.95,
+   "errores_de_pagina": 0,
+   "red_no_file": 0
+  },
+  "alcance": "Solo C; no se repitieron A ni B, ni las otras 21 capturas, ni el resto de pruebas. LCP no medido; viewport emulado."
+ }
+}

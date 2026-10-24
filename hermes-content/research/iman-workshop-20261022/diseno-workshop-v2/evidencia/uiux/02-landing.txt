@@ -1,0 +1,36 @@
+## UI Pro Max Search Results
+**Domain:** landing | **Query:** workshop webinar course enrollment hero
+**Source:** landing.csv | **Found:** 4 results
+
+### Result 1
+- **Pattern Name:** Webinar Registration
+- **Keywords:** webinar, registration, event, training, live
+- **Section Order:** 1. Hero (Topic + Timer + Form), 2. What you'll learn, 3. Speaker Bio, 4. Urgency/Bonuses, 5. Form (again)
+- **Primary CTA Placement:** Hero (Right side form) + Bottom anchor
+- **Color Strategy:** Urgency: Red/Orange. Professional: Blue/Navy. Form: High contrast white.
+- **Conversion Optimization:** Limited seats logic. 'Live' indicator. Auto-fill timezone.
+
+### Result 2
+- **Pattern Name:** Hero-Centric Design
+- **Keywords:** hero-centric, hero-centric design, hero-first, hero above fold
+- **Section Order:** 1. Full-bleed Hero (headline + visual), 2. Single value prop strip, 3. Key benefit or proof, 4. Primary CTA
+- **Primary CTA Placement:** Hero dominant (center/bottom) + Sticky nav CTA
+- **Color Strategy:** Hero: High-impact visual. Minimal text. CTA 7:1 contrast.
+- **Conversion Optimization:** One primary CTA. Hero is 60-80% above fold. Mobile: same hierarchy.
+
+### Result 3
+- **Pattern Name:** Hero + Features + CTA
+- **Keywords:** hero, hero-centric, hero-centric design, features, feature-rich, feature-rich showcase, cta, call-to-action
+- **Section Order:** 1. Hero with headline/image, 2. Value prop, 3. Key features (3-5), 4. CTA section, 5. Footer
+- **Primary CTA Placement:** Hero (sticky) + Bottom
+- **Color Strategy:** Hero: Brand primary or vibrant. Features: Card bg #FAFAFA. CTA: Contrasting accent color
+- **Conversion Optimization:** Deep CTA placement. Use contrasting color (at least 7:1 contrast ratio). Sticky navbar CTA.
+
+### Result 4
+- **Pattern Name:** Video-First Hero
+- **Keywords:** video, hero, media, visual, engaging
+- **Section Order:** 1. Hero with video background, 2. Key features overlay, 3. Benefits section, 4. CTA
+- **Primary CTA Placement:** Overlay on video (center/bottom) + Bottom section
+- **Color Strategy:** Dark overlay 60% on video. Brand accent for CTA. White text on dark.
+- **Conversion Optimization:** 86% higher engagement with video. Add captions for accessibility. Compress video for performance.
+
