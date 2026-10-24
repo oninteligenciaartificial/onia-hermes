@@ -1,17 +1,24 @@
-Gasto por dia: 7 dias = 42.86 | 8 dias (canon) = 37.5 | 5 dias = 60.0
-Pagos para cubrir el gasto a Bs 50: 6.00 -> 6 pagos
-Pagos para cubrir el gasto a Bs 60: 5.00 -> 5 pagos
-Pagos para cubrir el gasto a Bs 70: 4.29 -> 5 pagos
+== Casos H1 (regresion) ==
+5 pagos [50, 50, 50, 50, 50] = Bs 250 vs gasto real Bs 300 -> diferencia bruta Bs -50 -> NO cubre el gasto
+4 pagos [50, 50, 50, 50] = Bs 200 vs gasto real Bs 180 -> diferencia bruta Bs +20 -> cubre el gasto (bruto)
+5 pagos [50, 50, 60, 60, 70] = Bs 290 vs gasto real Bs 300 -> diferencia bruta Bs -10 -> NO cubre el gasto
+5 pagos [50, 60, 60, 70, 70] = Bs 310 vs gasto real Bs 300 -> diferencia bruta Bs +10 -> cubre el gasto (bruto)
+5 pagos [70, 70, 70, 70, 70] = Bs 350 vs gasto real Bs 300 -> diferencia bruta Bs +50 -> cubre el gasto (bruto)
+0 pagos [] = Bs 0 vs gasto real Bs 300 -> diferencia bruta Bs -300 -> NO cubre el gasto
+5 pagos [60, 60, 60, 60, 60] = Bs 300 vs gasto real Bs 300 -> diferencia bruta Bs +0 -> cubre el gasto (bruto)
 
-Costo por conversacion (SUPUESTO ilustrativo) -> conversaciones con Bs 300 -> tasa conversacion->pago necesaria para 5 pagos
-Bs  4/conversacion ->  75.0 conversaciones ->   6.7% deben terminar en pago
-Bs  6/conversacion ->  50.0 conversaciones ->  10.0% deben terminar en pago
-Bs  8/conversacion ->  37.5 conversaciones ->  13.3% deben terminar en pago
-Bs 15/conversacion ->  20.0 conversaciones ->  25.0% deben terminar en pago
-Bs 30/conversacion ->  10.0 conversaciones ->  50.0% deben terminar en pago
-
-Costo maximo por conversacion para llegar a 50 conversaciones con Bs 300: Bs 6.0
+== Gasto por dia con Bs 300 (aritmetica) ==
+7 dias = 42.86 | 8 dias (plan del canon) = 37.5 | 5 dias = 60.0
 Gastado al dia 3 con ritmo parejo de 7 dias: Bs 129
 Gastado al dia 5 con ritmo parejo de 7 dias: Bs 214
 Gastado al dia 7 con ritmo parejo de 7 dias: Bs 300
+
+== Costo por conversacion (SUPUESTO ilustrativo) vs conversaciones con el tope ==
+Bs  4/conversacion ->  75.0 conversaciones con Bs 300
+Bs  6/conversacion ->  50.0 conversaciones con Bs 300
+Bs  8/conversacion ->  37.5 conversaciones con Bs 300
+Bs 15/conversacion ->  20.0 conversaciones con Bs 300
+Bs 30/conversacion ->  10.0 conversaciones con Bs 300
+
+Ejemplo de lectura: gasto 280 / N1 40 = Bs 7.00 por conversacion; cobrado atribuible 170 / N1 = Bs 4.25 por conversacion
 OK

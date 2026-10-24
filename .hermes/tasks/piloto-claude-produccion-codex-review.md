@@ -1,0 +1,79 @@
+# Auditoría independiente del paquete de producción de Claude
+
+**Dictamen: CAMBIOS NECESARIOS.** Revisión del 23-oct-2026 (La Paz), dispatch `ctx_5e917470f8aa`, tarea `task_139072decf40`. El paquete existe completo y permite una corrección acotada; todavía no apruebo el conjunto como borrador privado listo para Sergio. No autoriza grabación pública, apertura, publicación ni gasto.
+
+## Alcance y evidencia ejecutada
+
+Base de rutas de esta revisión: `hermes-content/research/iman-workshop-20261022/paquete-produccion/`. Revisé completos `ENTREGA.md`, `GUIONES-SEMANA.md` (los siete), `WORKSHOP-MATERIAL.md`, `META-ADS-ESTUDIO-APLICADO.md`, los cinco scripts Python y sus cuatro salidas guardadas, contra `hermes-content/docs/TALLER_31_OCT.md`. Snapshot: `.hermes/tasks/paquete-produccion-review-snapshot.json`, entrega Claude `task_4ef73b0faaea` / `ctx_33dc3089008b`.
+
+- **Ejecutado por este revisor:** SHA-256 de los 13 archivos: **13/13 coinciden**; conteo independiente por regex Unicode sobre cada párrafo hablado real; cuentas del ejemplo y de pauta en PowerShell; lectura y contraejemplos de prompt/rúbrica; apertura de fuentes públicas. No modifiqué archivos del autor.
+- **No ejecutado aquí:** los cuatro scripts Python. El intento `python -B ...` devolvió `CommandNotFoundException` para `python`. Sus salidas y los checks exitosos del padre son evidencia leída, no ejecuciones propias. Las cuentas y conteos indicados abajo se recalcularon con PowerShell. No instalé ni busqué otro intérprete.
+- **Subagente nativo único:** `/root/factcheck_guiones`, tarea acotada de fuentes Meta y Goldman, completada; abrió las ocho URL Meta y encontró la primaria Goldman. Corroboré personalmente Goldman, tres URL Meta críticas, OpenAI, Google y el índice Anthropic; respondo por el dictamen, no lo delego.
+- Sin ensayo hablado, participantes, ejecución del prompt en otro proveedor, edición/render, inspección de cuenta Meta, chat real ni transacciones. Ningún error de hooks observado en estas pruebas; el incidente previo de hooks sigue separado. El fallo de descubrimiento de Python no es un fallo demostrado de hooks ni impidió las comprobaciones aritméticas.
+
+## Matriz: siete guiones completos
+
+Duraciones de la tabla: **voz calculada a 192 ppm / 150 ppm**, sin pausas ni ensayo. A/B son alternativas, nunca se suman entre sí. Las variantes B siguen siendo el uso por defecto mientras la venta esté pausada (`GUIONES-SEMANA.md:10`).
+
+| Guion / localizador | Palabras reales | Segundos calculados | Hook → desarrollo → cierre; utilidad y estado |
+|---|---:|---:|---|
+| Sáb 24, líneas 98–121 | Base 82; A 111; B 96 | A 34,7 / 44,4; B 30 / 38,4 | Cuenta reproducible 10×5×4=200 min=3 h 20; supuesto cuatro semanas y ficción claros. A ofrece lista propia y Link; B acción y pregunta sobre la misma tarea. Voseo y captions limpios. Corregir tiempo del cierre A (H6). |
+| Dom 25, 127–146 | 105 | 32,8 / 42 | Noticia, límite EE.UU. y opinión separados; acción aplicable a dueño. Primaria del 22-oct corroborada. No incluir a Bolivia como beneficiaria. La opción de agregar otro cierre crea doble CTA y cambia duración (H6); trazabilidad mejorable (H7). |
+| Lun 26, 150–174 | Base 98; A 114; B 108 | A 35,6 / 45,6; B 33,8 / 43,2 | Tres tareas y criterio de riesgo/revisión, no elegir solo por minutos. Una idea; ejemplo inventado; voseo; captions sin notas internas; cierres alternativos distinguibles. |
+| Mar 27, 178–197 | 92 | 28,8 / 36,8 | Tres preguntas antes de adoptar herramienta; cierre operativo, sin fingir noticia ni clase gratis confirmada. Útil y sin promesa comercial nueva. |
+| Mié 28, 201–225 | Base 77; A 94; B 87 | A 29,4 / 37,6; B 27,2 / 34,8 | Prueba pequeña, tiempo inicial, revisión humana, medición posterior; no promete mejora. A/B y captions separados, sin notas internas habladas. |
+| Jue 29, 228–247 | 86 | 26,9 / 34,4 | Buen procedimiento previo a pegar datos y guardar como CTA. La conclusión de riesgo cero invalida el matiz anterior (H3). |
+| Vie 30, 251–270 | 102 | 31,9 / 40,8 | Responsabilidad humana y esquema didáctico, sin atribuir sistema real ni ahorro. Absoluto causal innecesario en apertura (H3). |
+
+No detecté notas internas coladas en los siete captions ni tuteo en los hablados. Las duraciones del documento no son mediciones de voz; las estimaciones globales son aritméticamente razonables bajo su ritmo exigente, pero no acreditan grababilidad real. No exijo un ensayo externo como condición adicional de este borrador.
+
+## Matriz: workshop, Meta y aprendizaje aplicado
+
+| Requisito | Evidencia y resultado |
+|---|---|
+| Artefactos completos | Están los siete guiones, agenda, apertura, hoja, prompt, ejemplo resuelto, rúbrica y estudio Meta con dos conceptos; no se aprueba un subset ni falta una pieza exigida. |
+| Oferta y tiempo | `WORKSHOP-MATERIAL.md:24–38`: 45+5+45=95 min transcurridos, 90 de contenido, regreso al mismo link; sábado 31, 10:00 La Paz. Promete lista/costo temporal/prioridad/primer paso, no gestionar negocio entero. No declara ahorro probado, demanda validada ni automatización implantada. No se promete grabación; eso no significa que esté prohibida. |
+| Cuentas y ejemplo | `WORKSHOP-MATERIAL.md:62–70`: 388 min semanales ×4=1552 min mensuales=25 h 52; máximo elegible 75 min, frente a 100 de riesgo alto; simulación y cuatro semanas explícitos. Segundo ejemplo: tres pedidos por recibir y dos pagados. Son respuestas escritas por el autor, no una salida LLM ni resultados de asistentes reales. |
+| Ejercicio/prompt/rúbrica | Presentes y conectados a los cuatro resultados del canon; participación limitada a tres filas de voluntarios, sin prometer revisión individual de 50. Fallos reproducibles H4–H5. Agenda cabe por suma, no por ensayo demostrado. |
+| Meta: medición | `META-ADS-ESTUDIO-APLICADO.md:47–57`: separa conversación, calificada y pago; pago acreditado manual, atribución T1/T2 limitada, lectura descriptiva. H1–H2 impiden considerar fiable todavía el criterio operativo. |
+| Meta: topes y compuertas | `META-ADS-ESTUDIO-APLICADO.md:118–126`: Bs300 total propuesto, fin al cierre 29-oct 20:00, OK de gasto y venta pendientes; no hay campaña configurada. El +20% no puede habilitar superar el techo ni reabrir aprobación de gasto. No exige datos comerciales para un mockup desactivado. |
+| Referentes y aprendizaje | `GUIONES-SEMANA.md:80–94`: se materializan cuenta visual, tarjetas, fecha/fuente, rótulos de ficción, una prioridad y responsabilidad humana; hay aplicación escrita, no solo lista de skills. Son propuestas de montaje basadas en resúmenes históricos, no montaje observado ahora ni edición ya hecha. No detecté copia de identidad/frases ajenas en el producto. No se demuestra que esos recursos conviertan. |
+
+## Hallazgos priorizados y corrección concreta
+
+**H1 — Bloqueante, decisión económica falsa.** `META-ADS-ESTUDIO-APLICADO.md:66,135–137`: cinco pagos se equiparan a cubrir Bs300. Contraejemplo ejecutado: 5×Bs50=Bs250; hacen falta 6/5/5 pagos a Bs50/60/70 si se gastan Bs300. A la inversa, cuatro pagos de Bs50 pueden cubrir un gasto real de Bs180. Reemplazar ambas ramas por comparación entre **suma acreditada atribuible y gasto real**, con montos efectivamente cobrados; separar cobertura bruta del anuncio, beneficio y causalidad. El precio vigente solo tampoco resume el ingreso de una cohorte con distintos escalones.
+
+**H2 — Bloqueante, destino/medición tratados con más certeza que la evidencia.** `META-ADS-ESTUDIO-APLICADO.md:38–41,50,53–55,67,103–104,119,124,133–134`. El canon define perfil→página→WhatsApp personal; ir directamente del anuncio al chat es una **propuesta alternativa**, no un flujo canónico ya aprobado. No está acreditada la elegibilidad del número para anuncios, su vínculo con una Page ni etiquetas disponibles: escribirle desde otro teléfono solo comprueba mensajería. Conservar como pendiente explícito la compatibilidad/elección de destino antes de gastar, sin migrar ni configurar cuentas en esta corrección. El cuestionario solo pregunta tres de sus cuatro criterios: añadir comprobación de certificado/hecho-por-otro o dejar calificación pendiente. Si se borra T1/T2 y solo responde «Instagram», conservar origen/anuncio desconocido; no adjudicar variante. Cero conversaciones permite pausar e inspeccionar, **no diagnostica destino roto**; ninguna calificada tampoco prueba por sí sola cuál fue la causa. Quitar certeza sobre «cada cambio reinicia», +20% y 50 eventos como umbral estadístico: fuentes no verificadas aquí y una cifra de aprendizaje no acredita significación. Mantener prueba descriptiva, presupuesto absoluto y reglas internas identificadas como tales.
+
+**H3 — Bloqueante, absolutos en contenido listo para usar.** `GUIONES-SEMANA.md:233` y `WORKSHOP-MATERIAL.md:48` afirman que así se prueba «sin arriesgar a nadie». Sustituir identificadores no demuestra anonimización ni ausencia de riesgos. Usar casos íntegramente sintéticos cuando no se pueda asegurar tratamiento y hablar de reducir exposición, manteniendo revisión humana. `GUIONES-SEMANA.md:256` dice que nadie detecta un error hasta la queja del cliente: no es cierto necesariamente; puede existir revisión o monitoreo. Formular como posibilidad de que pase inadvertido, sin inventar ese resultado universal.
+
+**H4 — Bloqueante, contrato del prompt y discrepancias.** `WORKSHOP-MATERIAL.md:99,105,108–121`: «funciona en cualquier asistente» no está probado (el autor reconoce que no lo ejecutó en uno). Presentarlo como prompt propuesto, sin garantía universal. Riesgo y posibilidad de revisión son decisiones contextuales: pedir confirmación del dueño, no tratarlas como hechos inferibles solo de tarea/frecuencia/minutos. Añadir salida explícita cuando ninguna tarea sea elegible o falten esos datos: no forzar prioridad ni inventar revisión. La instrucción «vale la tuya» ante discrepancias puede consagrar una multiplicación manual incorrecta: recalcular ambos resultados y supuestos antes de aceptar uno. Verificación realizada: lectura adversarial con lista toda de riesgo alto y con discrepancia manual; no simulo una ejecución LLM.
+
+**H5 — Bloqueante, rúbrica no cubre respuestas válidas intermedias.** `WORKSHOP-MATERIAL.md:168`: una lista de **cuatro tareas concretas semanales** no es menos de tres, no contiene una tarea vaga y no llega a cinco; no encaja en ninguna puntuación. Lo mismo puede ocurrir con más de ocho tareas concretas. Definir categorías exhaustivas y excluyentes (por ejemplo, 3–4 concretas en progreso; más de ocho requiere seleccionar), manteniendo meta 5–8, y resolver cómo puntuar el caso sin candidato elegible de H4. Los tres ensayos del autor no cubren estos casos; la suma 2+2+2+2 no valida la rúbrica.
+
+**H6 — Ajuste necesario de rodaje/CTA, sin exigir duración medida.** `GUIONES-SEMANA.md:71,106,118`: cierre común ~4 s frente a 29 palabras del sábado A; son **9,06 s incluso a 192 ppm**, 11,6 s a150 ppm, sin pausas. Asignar al cierre su duración realista estimada y adaptar timeline; no acelerar para cumplir cuatro segundos. `:134` permite agregar cierre comercial al domingo que ya termina con «Anotá una hoy»: eliminar esa opción o reemplazar el cierre educativo y recalcular, preservando un CTA. `:8` debe decir segundos estimados, en consistencia con `:76`.
+
+**H7 — Ajuste de trazabilidad, noticia principal corroborada.** `GUIONES-SEMANA.md:85,139,144–146`: NBC es secundaria y no una «prueba oficial»; no pude leer su URL en esta pasada. Incorporar el comunicado primario Goldman ya corroborado abajo, dejar explícito que US$500M corresponde al compromiso del programa general y mantener alcance estadounidense. No es necesario cambiar la idea del guion ni descartarla. Las atribuciones históricas «Erik vigente» en `:84–92` deben entenderse fechadas por el resumen del 8-oct, no como observación actual; conservar que su montaje es una propuesta propia.
+
+## Fuentes: fecha, existencia y alcance realmente corroborados
+
+Las fechas relevantes son anteriores al 23-oct-2026. No uso como evidencia hechos posteriores que aparezcan en un índice vivo. Un enlace abierto con login/429 no acredita su contenido; tampoco contradice por sí solo la lectura declarada por Claude.
+
+| Fuente primaria / enlace exacto | Fecha y comprobación | Estado y alcance |
+|---|---|---|
+| [Goldman Sachs](https://www.goldmansachs.com/pressroom/press-releases/2026/goldman-sachs-commits-500-million-to-launch-small-business-ai-institute) | 22-oct-2026; cuerpo leído por revisor y helper | **VERIFICADO**: instituto, cuatro socios, compromiso general de US$500M, orientación EE.UU.; no elegibilidad Bolivia. |
+| [OpenAI changelog](https://developers.openai.com/api/docs/changelog) | Entrada Oct22/2026, cuerpo leído por revisor | **VERIFICADO**: Decisions API GA, no beta ese día; corrección del radar adecuada. Noticia descartada editorialmente, no hace falta reintroducirla. |
+| [Google Developers](https://developers.googleblog.com/streaming-comes-to-api-gateway-real-time-and-ai-ready-apis-without-changing-your-spec/) | 22-oct-2026, cuerpo leído por revisor | **VERIFICADO**: streaming API Gateway en Public Preview; descartado por poca utilidad directa a dueños. |
+| [Anthropic News](https://www.anthropic.com/news) | Entrada Agent Skills, 22-oct-2026, índice leído por revisor | **PARCIAL**: título/fecha de donación AAIF, no artículo completo; no sustenta ningún hablado. Claude Duet y otras pistas de terceros descartadas siguen sin aprobación factual. |
+| [Click to WhatsApp](https://developers.facebook.com/documentation/ads-commerce/marketing-api/ad-creative/messaging-ads/click-to-whatsapp) | Revisor y helper: HTTP429, sin fecha visible | **NO_VERIFICADO**: requisitos, optimización y elegibilidad concreta. |
+| [CAPI Business Messaging](https://developers.facebook.com/documentation/ads-commerce/conversions-api/business-messaging) | Revisor y helper: HTTP429 | **NO_VERIFICADO**: eventos, integración y aplicabilidad al número. |
+| [Ayuda 942374239243867](https://www.facebook.com/business/help/942374239243867) | Revisor y helper: login/bloqueo temporal | **NO_VERIFICADO**: regla de 50 eventos; no es prueba estadística de este experimento. |
+| [Atributos personales](https://transparency.meta.com/policies/ad-standards/objectionable-content/privacy-violations-personal-attributes/) | Helper: HTTP429 | **NO_VERIFICADO**: cuerpo/fecha declarada por autor. |
+| [Claims engañosos](https://transparency.meta.com/policies/ad-standards/fraud-scams/fraud-scams-deceptive-practices/) | Helper: HTTP429 | **NO_VERIFICADO**: texto actual; revisar prudentemente los claims no equivale a certificación de política. |
+| [WhatsApp Business Agent](https://whatsappbusiness.com/blog/introducing-meta-business-agent-ai/) | Helper: URL inaccesible | **NO_VERIFICADO**: fecha3-jun y condiciones; no se usa como noticia de esta semana. |
+| [Meta Connect](https://www.meta.com/blog/meta-connect-2026-everything-we-announced/) | Helper: cuerpo, 23-sep-2026 | **CORROBORADO POR HELPER**: página no sustenta el supuesto anuncio Business Agent Platform. No extrapolo acceso futuro para Bolivia. |
+| [Ayuda 112167992830700](https://www.facebook.com/business/help/112167992830700) | Helper: login/bloqueo | **NO_VERIFICADO**, limitación ya reconocida por autor. |
+
+## Cierre y única corrección admisible
+
+Entregar una corrección acotada de H1–H6 y la trazabilidad H7, sin cambiar oferta, ejecutar campaña, contratar herramientas ni repetir investigación de referentes. La revalidación posterior comprobará esos puntos y los nuevos hashes; cualquier fuente o elegibilidad inaccesible seguirá explícitamente pendiente, sin presentarse resuelta por editar texto. Aun corregido, será un borrador privado: tiempos ensayados, aceptación por participantes, configuración Meta, demanda y resultados continúan no probados. Venta y publicación siguen pausadas; este dictamen no abre ninguna compuerta.

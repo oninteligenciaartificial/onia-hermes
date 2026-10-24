@@ -1,0 +1,76 @@
+{
+  "task": "task_4ef73b0faaea",
+  "dispatch": "ctx_33dc3089008b",
+  "files_count": 13,
+  "exclusions": [
+    "__pycache__",
+    "*.pyc"
+  ],
+  "files": [
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/ENTREGA.md",
+      "bytes": 12290,
+      "sha256": "6df90be16dcc9ba8a975cb87e42a89b414f72c1e72448b4d28e7353666ef0336"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/GUIONES-SEMANA.md",
+      "bytes": 31671,
+      "sha256": "a82b49af9605ca73cd8093f01c54555a403c37944f302713806c646b8861cd55"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/META-ADS-ESTUDIO-APLICADO.md",
+      "bytes": 17570,
+      "sha256": "0b02d50a633dfd970c6b9fb9031bdb18009b2495edc7986843c407a9d681c0aa"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/contar_palabras.py",
+      "bytes": 668,
+      "sha256": "b3f30e2e6dd61f17e1534cde50b71aff27a30eea16d19fb80a989825e8cec0c7"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/contar_palabras.salida.txt",
+      "bytes": 648,
+      "sha256": "2d07c3020302a483df11aec60fbb38bec207db207a4c92322f2a7710aec933e7"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/cuentas_workshop.py",
+      "bytes": 2568,
+      "sha256": "a7374567817c9eb3cbea9370fd7cdc2c0e4fc60bbfaaeafec54cf0e9320af3c8"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/cuentas_workshop.salida.txt",
+      "bytes": 999,
+      "sha256": "db62843b37248a5517ab42c30b59c81ff453f5567f8c308da7b2da94bed695a1"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/meta_cuentas.py",
+      "bytes": 1776,
+      "sha256": "8f63c8d1f9d045e9abe98f391bd1a83d61d674b4aa55ef5adb65ec04ae0525b0"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/meta_cuentas.salida.txt",
+      "bytes": 990,
+      "sha256": "f6335eb4b50bb98a13734876580ff4e40a3b0b4b16e28b725e8cc6be39207424"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/textos_guiones.py",
+      "bytes": 4562,
+      "sha256": "475fddfceb023652ae4dfd4bba6aa02383c8360fa4b5b1f470454eea691c5399"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/verificar_material.py",
+      "bytes": 1680,
+      "sha256": "7000c751a6a8346a1a39e889c63165c1c2bddf9c5ed1f3254316e4701e8792e6"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/pruebas/verificar_material.salida.txt",
+      "bytes": 263,
+      "sha256": "109b111b7c01a4bdd9cf7924be16872d1b0140ef143f62d7aa18625639c83f41"
+    },
+    {
+      "path": "hermes-content/research/iman-workshop-20261022/paquete-produccion/WORKSHOP-MATERIAL.md",
+      "bytes": 20818,
+      "sha256": "797a7689a1302265738f41880aac761a57f5cb849e4d40748e9a3d23b3392896"
+    }
+  ]
+}

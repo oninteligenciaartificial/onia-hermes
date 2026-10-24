@@ -1,0 +1,45 @@
+{
+  "scope": "local checks; no approval of news, editorial quality, prompt safety or ads strategy",
+  "scripts": [
+    {
+      "script": "cuentas_workshop.py",
+      "exit": 0,
+      "stdout": "n | tarea | veces x min | min/semana | min/mes | h min/mes | riesgo\n1 | Contestar «¿cuánto cuesta?» por WhatsApp | 10 x 5 | 50 | 200 | 3 h 20 min | medio\n2 | Pasar los pedidos del cuaderno a la planilla | 5 x 15 | 75 | 300 | 5 h | medio\n3 | Recordar saldos pendientes a clientes | 2 x 20 | 40 | 160 | 2 h 40 min | alto\n4 | Armar el resumen de ventas del viernes | 1 x 45 | 45 | 180 | 3 h | bajo\n5 | Responder reclamos por entregas | 4 x 25 | 100 | 400 | 6 h 40 min | alto\n6 | Actualizar precios en las publicaciones | 1 x 30 | 30 | 120 | 2 h | medio\n7 | Coordinar horarios de entrega | 6 x 4 | 24 | 96 | 1 h 36 min | medio\n8 | Pedir fotos y datos a proveedores | 3 x 8 | 24 | 96 | 1 h 36 min | bajo\nTOTAL min/semana: 388 | min/mes: 1552 | 25 h 52 min\nPRIORIDAD (regla: mayor tiempo semanal entre las de riesgo no alto): 2 Pasar los pedidos del cuaderno a la planilla 75 min/semana\nMayor tiempo sin mirar riesgo: (5, 'Responder reclamos por entregas')\nOK: todas las aserciones pasan\n",
+      "stderr": ""
+    },
+    {
+      "script": "meta_cuentas.py",
+      "exit": 0,
+      "stdout": "Gasto por dia: 7 dias = 42.86 | 8 dias (canon) = 37.5 | 5 dias = 60.0\nPagos para cubrir el gasto a Bs 50: 6.00 -> 6 pagos\nPagos para cubrir el gasto a Bs 60: 5.00 -> 5 pagos\nPagos para cubrir el gasto a Bs 70: 4.29 -> 5 pagos\n\nCosto por conversacion (SUPUESTO ilustrativo) -> conversaciones con Bs 300 -> tasa conversacion->pago necesaria para 5 pagos\nBs  4/conversacion ->  75.0 conversaciones ->   6.7% deben terminar en pago\nBs  6/conversacion ->  50.0 conversaciones ->  10.0% deben terminar en pago\nBs  8/conversacion ->  37.5 conversaciones ->  13.3% deben terminar en pago\nBs 15/conversacion ->  20.0 conversaciones ->  25.0% deben terminar en pago\nBs 30/conversacion ->  10.0 conversaciones ->  50.0% deben terminar en pago\n\nCosto maximo por conversacion para llegar a 50 conversaciones con Bs 300: Bs 6.0\nGastado al dia 3 con ritmo parejo de 7 dias: Bs 129\nGastado al dia 5 con ritmo parejo de 7 dias: Bs 214\nGastado al dia 7 con ritmo parejo de 7 dias: Bs 300\nOK\n",
+      "stderr": ""
+    },
+    {
+      "script": "contar_palabras.py",
+      "exit": 0,
+      "stdout": "S1: 82 palabras -> voz 26 s; con pausas 28-30 s\nS1A: 111 palabras -> voz 35 s; con pausas 37-39 s\nS1B: 96 palabras -> voz 30 s; con pausas 32-34 s\nS2: 105 palabras -> voz 33 s; con pausas 35-37 s\nS3: 98 palabras -> voz 31 s; con pausas 33-35 s\nS3A: 114 palabras -> voz 36 s; con pausas 38-40 s\nS3B: 108 palabras -> voz 34 s; con pausas 36-38 s\nS4: 92 palabras -> voz 29 s; con pausas 31-33 s\nS5: 77 palabras -> voz 24 s; con pausas 26-28 s\nS5A: 94 palabras -> voz 29 s; con pausas 31-33 s\nS5B: 87 palabras -> voz 27 s; con pausas 29-31 s\nS6: 86 palabras -> voz 27 s; con pausas 29-31 s\nS7: 102 palabras -> voz 32 s; con pausas 34-36 s\n",
+      "stderr": ""
+    },
+    {
+      "script": "verificar_material.py",
+      "exit": 0,
+      "stdout": "Apertura: 233 palabras -> 73 s de voz\nTextos de guiones ausentes en GUIONES-SEMANA.md: ninguno\nWORKSHOP-MATERIAL contiene '—' 0 veces\nWORKSHOP-MATERIAL contiene '–' 0 veces\nGUIONES-SEMANA contiene '—' 0 veces\nGUIONES-SEMANA contiene '–' 0 veces\nOK\n",
+      "stderr": ""
+    }
+  ],
+  "daily_sections": [
+    "## Sáb 24 · «La cuenta de tus horas» · TALLER (condicional)",
+    "## Dom 25 · «Goldman Sachs capacita a pequeñas empresas en IA» · NOTICIA (verificada 22-oct)",
+    "## Lun 26 · «Compará tres tareas» · TALLER (condicional)",
+    "## Mar 27 · «Tres preguntas antes de probar una novedad de IA» · EVERGREEN",
+    "## Mié 28 · «Tu primer paso con IA» · TALLER (condicional)",
+    "## Jue 29 · «Antes de pegar datos de tus clientes en una IA» · EVERGREEN",
+    "## Vie 30 · «La IA propone, vos aprobás» · EVERGREEN"
+  ],
+  "regression_counterexample": {
+    "claim": "5 pagos cubren Bs300 con cualquier escalon",
+    "first_tier_price": 50,
+    "five_payments": 250,
+    "ad_cost": 300,
+    "covers_cost": false
+  }
+}

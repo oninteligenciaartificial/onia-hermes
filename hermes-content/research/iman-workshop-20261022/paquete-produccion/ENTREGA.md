@@ -3,12 +3,29 @@
 Autor: Claude (worktree `iman-workshop-20261022`). Revisor independiente previsto: Codex. Coordina: Hermes. Entregado el **23-oct-2026** (La Paz).
 Todo es **borrador privado**. Nada está grabado, editado, publicado, gastado ni contactado. **No se hizo Git**, no se instaló nada, no se tocó ninguna cuenta ni secreto, no se subió cara ni voz, no se abrió ninguna sesión persistente.
 
+## 0. Corrección H1-H7 (única, tras el dictamen «CAMBIOS NECESARIOS» de Codex, task_139072decf40)
+
+Aplicada el 23-oct-2026 sobre esta carpeta. **No se tocó** el dictamen de Codex (`.hermes/tasks/piloto-claude-produccion-codex-review.md`), el snapshot original (`.hermes/tasks/paquete-produccion-review-snapshot.json`), los insumos congelados, el canon, V1, V2, la web actual, precios, cuentas, configuración ni hooks. No hubo investigación general nueva, ni noticias descartadas reintroducidas, ni Git, instalaciones, gasto, publicación, contacto ni subida de cara o voz. Una sola lectura nueva: el comunicado de Goldman (me dio 403).
+
+| H | Cambio hecho | Ruta | Prueba | Residual (lo que sigue sin resolver) |
+|---|---|---|---|---|
+| **H1** | Se comparan **suma acreditada atribuible vs gasto real** con los montos efectivamente cobrados; desaparece «5 pagos cubren Bs 300» y «menos de 5 no cubren»; tabla de 7 casos (5 × Bs 50 vs Bs 300; 4 × Bs 50 vs Bs 180; mezclas de escalones); es cobertura **bruta**, no beneficio ni causa; el criterio de cierre usa esa comparación | `META-ADS-ESTUDIO-APLICADO.md` §4 y §6; `pruebas/meta_cuentas.py` | `meta_cuentas.py` (7 casos con aserciones: 250 < 300, 200 ≥ 180, 290 < 300, 310 ≥ 300, 350, 300, 0) | No se sabe cuánto cobraría la pauta; IVA, IT y facturación los define Leslie Mercado Moreno |
+| **H2** | El chat directo pasa a **alternativa B, no canon**; el canon (A) queda como camino; la elegibilidad del número personal, el vínculo con una Page y las etiquetas **no están acreditadas**; el teléfono de prueba solo prueba mensajería; **4.ª pregunta** (certificado / que lo haga otro) y estado «calificación pendiente»; si dice «Instagram» el origen es **«anuncio desconocido»**; 0 conversaciones **no diagnostica** destino roto; se quitó la certeza sobre «50 eventos», «cada cambio reinicia» y «+20 %»; **el techo de Bs 300 no se sube**; fuentes de Meta marcadas `NO_VERIFICADO` para el revisor | `META-ADS-ESTUDIO-APLICADO.md` §1, §2, §3, §4, §5, §6, §7 | `verificar_material.py` (frases retiradas ausentes; presentes «Camino del canon», «no es canon», «anuncio desconocido», «El techo de Bs 300 NO se sube») | **Sergio debe elegir A o B** y alguien acreditar la elegibilidad en la cuenta; las páginas de Meta siguen **sin verificar** (no se arreglan declarándolas leídas) |
+| **H3** | Se retiraron «sin arriesgar a nadie» (jue 29 y apertura) y «nadie se entera hasta que el cliente se queja» (vie 30). Ahora: **casos totalmente inventados**; cambiar nombres **no anonimiza**; se habla de **exponer menos**, no de riesgo cero; el error **puede** pasar inadvertido | `GUIONES-SEMANA.md` (jue 29, vie 30), `pruebas/textos_guiones.py` (S6, S7), `WORKSHOP-MATERIAL.md` §3, §4, §5, §7 | `verificar_material.py` (frases ausentes) | Ninguna herramienta se evaluó: qué hace cada una con los datos sigue siendo del usuario |
+| **H4** | Es un **prompt propuesto**, sin garantía universal; el **riesgo y la posibilidad de revisión los confirma la persona** (no se infieren); salidas explícitas **«Sin candidata elegible»** y **«Faltan datos»**; la discrepancia entre cuentas **se recalcula**, no gana la humana; en un empate de minutos decide la persona; §6.5 con dos casos de borde | `WORKSHOP-MATERIAL.md` §4, §5, §6, §6.5, §8; `pruebas/cuentas_workshop.py` | `cuentas_workshop.py`: `prioridad` (10 casos: Perchero → tarea 2; vacía; todas de riesgo alto; ninguna revisable; falta riesgo; falta revisión; falta un número; empate; un solo elegible; la más larga de riesgo alto) y `reconciliar` (5 casos, incluido el de la cuenta humana mal) | **El prompt no se probó en ninguna herramienta** ni con ningún LLM externo; los casos de borde son lógica del script, no comportamiento de un asistente |
+| **H5** | Rúbrica **exhaustiva y excluyente**: lista para 0-2 / 3-4 / 5-8 todas concretas / 9 o más; costo, prioridad (incluye «sin candidata elegible») y primer paso con casos; 5 respuestas puntuadas con funciones (8, 3, 0, 7, 7) | `WORKSHOP-MATERIAL.md` §7; `pruebas/cuentas_workshop.py` | `rubrica_*`: 0, 2, 3, 4, 5, 8, 9 y 12 tareas, 6 tareas con una vaga, 5 con la mayoría vaga; **todas las combinaciones (0 a 14 tareas) dan 0, 1 o 2** | No se probó con participantes; «concreta» requiere juicio humano |
+| **H6** | Los cierres A de taller **ya no caben en 4 s**: sáb 24 son 29 palabras (~9 s), lun 26 16 (~5 s), mié 28 17 (~5 s); se recalcularon las tablas de planos desde las palabras; el **domingo tiene un solo CTA** (se quitó la opción de agregar otro cierre); recuento de todos los textos y variantes; los segundos se llaman **estimados** | `GUIONES-SEMANA.md` (§0, §4, §3, cada tabla); `pruebas/contar_palabras.py` + `.salida.txt` | `verificar_material.py` (palabras de cada cierre; ausencia de «Cierre ~4 s»; S2 termina en su única acción) | **Segundos estimados a 3,2 palabras por segundo, no medidos en voz**; sensibilidad a 150 ppm en `GUIONES-SEMANA.md` §4 |
+| **H7** | Goldman cita el **comunicado primario** (NBC queda como **secundaria**, no «prueba oficial»); los US$500M son el compromiso del **programa general**; orientación **EE. UU.**, sin Bolivia; referentes **históricos del 8-oct, no observados ahora**; el montaje es **propuesta mía** | `GUIONES-SEMANA.md` §2 fila 1, §4b, Dom 25; `pruebas/textos_guiones.py` (S2) | `verificar_material.py` (URL primaria presente; «programa general»; «Estados Unidos» en S2; «históricos fechados el 8-oct») | **El comunicado primario no lo pude leer (403)**: para mí es `NO_VERIFICADO`; me apoyo en el revisor y en Hermes y en NBC (secundaria) |
+
+**Regresiones ejecutadas (los 4 scripts, Python del autor):** `cuentas_workshop.py` (OK), `meta_cuentas.py` (OK), `contar_palabras.py` (salida guardada), `verificar_material.py` (OK, salida guardada). **No se afirma** ensayo real, participantes ni ejecución de un LLM externo.
+**Parada:** esta es la única corrección. Hermes congela los nuevos bytes; Codex verifica **solo** estos siete hallazgos; después se muestra a Sergio.
+
 ## 1. Qué se entrega (rutas relativas a `hermes-content/research/iman-workshop-20261022/paquete-produccion/`)
 
 | Archivo | Qué es |
 |---|---|
 | `GUIONES-SEMANA.md` | **7 guiones completos** sáb 24 a vie 30 oct: radar verificable, 3 prioritarios, hook, texto hablado, cierre (venta lista y versión educativa en los de taller), planos y capturas, caption, fuente y fecha, y la tabla referente → principio → aplicación |
-| `WORKSHOP-MATERIAL.md` | Recomendación de alcance, agenda 90+5 minuto a minuto, **apertura** del facilitador, **ejercicio completo** con datos ficticios rotulados, **prompt seguro**, **ejemplo resuelto**, **rúbrica** (lista, costo en tiempo, prioridad, primer paso) ensayada con tres respuestas, y la continuidad como hipótesis separada |
+| `WORKSHOP-MATERIAL.md` | Recomendación de alcance, agenda 90+5 minuto a minuto, **apertura** del facilitador, **ejercicio completo** con casos totalmente inventados y rotulados, **prompt propuesto**, **ejemplo resuelto**, **rúbrica** (lista, costo en tiempo, prioridad, primer paso) ensayada con tres respuestas, y la continuidad como hipótesis separada |
 | `META-ADS-ESTUDIO-APLICADO.md` | Fuentes oficiales leídas, objetivo y destino, medición (conversaciones, calificadas, pagos), cuentas del presupuesto, **2 conceptos de anuncio**, experimento acotado con **criterios para detener** |
 | `ENTREGA.md` | Este archivo |
 | `pruebas/` | `cuentas_workshop.py`, `meta_cuentas.py`, `textos_guiones.py`, `contar_palabras.py`, `verificar_material.py` y las salidas `*.salida.txt` |
@@ -25,26 +42,27 @@ Todo es **borrador privado**. Nada está grabado, editado, publicado, gastado ni
 | Recuperar el borrador del delegado antes de investigar | `GUIONES-SEMANA.md` §1: estaba en `C:/dev/proyectos/onia-hermes/hermes-content/docs/cola/plan-3-semanas/GRABAR-24-30-OCT.md` (repo principal, no en este worktree) | Recuperado, leído completo, **no modificado**; origen y ajustes documentados |
 | Workshop: recomendación frente a «manejar todo el negocio» | `WORKSHOP-MATERIAL.md` §1 | Hecho: se mantiene auditar y priorizar |
 | Agenda 90 de contenido + 5 de pausa | §2 (suma comprobada: 45 + 5 + 45 = 95 transcurridos) | Hecho |
-| Apertura del facilitador | §3 (233 palabras) | Hecho |
+| Apertura del facilitador | §3 (264 palabras, estimados 82 s de voz) | Hecho |
 | Ejercicio completo con datos ficticios rotulados | §4 («Tienda El Perchero», inventada) | Hecho |
-| Prompt seguro; ejemplo resuelto; rúbrica | §5, §6, §7 | Hecho |
+| Prompt propuesto; ejemplo resuelto; rúbrica | §5, §6, §6.5, §7 | Hecho; prompt **no probado** en ninguna herramienta |
 | Continuidad: una tarea supervisada separada, no oferta | §9 | Hecho como hipótesis; no se agrega a la oferta |
-| Meta Ads: fuentes oficiales actuales; objetivo y destino | `META-ADS-ESTUDIO-APLICADO.md` §1 y §2 | Hecho, con lo no leído marcado |
+| Meta Ads: fuentes oficiales actuales; objetivo y destino | `META-ADS-ESTUDIO-APLICADO.md` §1 y §2 | Hecho como lectura del autor; **las fuentes de Meta siguen `NO_VERIFICADO` para el revisor** |
 | 2 conceptos de anuncio en borrador | §5 | Hecho |
-| Medición conversaciones calificadas y pagos | §3 | Hecho |
-| Experimento acotado y criterios para detener | §6 | Hecho, **no ejecutable sin las aprobaciones de §7** |
+| Medición conversaciones calificadas y pagos | §3 | Hecho (4 criterios; atribución desconocida no se adjudica) |
+| Experimento acotado y criterios para pausar o cerrar | §6 | Hecho, **no ejecutable sin las aprobaciones de §7** ni sin que Sergio elija el destino A o B |
 | No configurar, gastar ni publicar; Bs 300 es referencia | Encabezado y §6 | Respetado |
 | No trasladar segmentación dental ni prometer por la Biblioteca de Anuncios | Encabezado, §5, §6 | Respetado (sin intereses ni rubro; no se usó la Biblioteca) |
 | No tocar fecha, precio, cupos, canon ni prometer grabación, ahorro, resultados | Los tres documentos (revisión con `grep`, solo aparecen como negaciones) | Respetado |
 
 ## 3. Subagentes nativos: lo que se usó de verdad
 
-Se comprobó que la herramienta de subagentes está disponible. **Se usaron dos, de a uno, ambos Haiku, ambos en segundo plano y de solo lectura web.** No se crearon sesiones persistentes ni globales.
+Se comprobó que la herramienta de subagentes está disponible. **Se usaron tres, de a uno, los tres Haiku, en segundo plano y de solo lectura** (los dos primeros con web; el tercero solo leyó los archivos del paquete). No se crearon sesiones persistentes ni globales.
 
 | # | Id | Modelo | Tarea | Artefacto | Resultado y qué hice con él |
 |---|---|---|---|---|---|
 | 1 | `add9de84e33beb146` | haiku | Reunir fuentes oficiales de Meta sobre anuncios a WhatsApp, medición, políticas, presupuesto y cambios recientes | Informe de devolución (texto en el transcript de la tarea; no escribió archivos) | **Parcial.** Volví a leer las fuentes que importaban. **Descarté** tres afirmaciones suyas sin sustento: «Meta Connect anunció la Business Agent Platform» (la página que leí no lo dice), «learning phase de 50 eventos en 7 días» (no se pudo leer la página) y «US$ 350-500 recomendados» (sin fuente) |
 | 2 | `ac11c68524398afaa` | haiku | Fact-check de Goldman/NBC, estado de la Decisions API, búsqueda de noticias útiles para dueños y de «Claude Duet» | Informe de devolución (texto en el transcript; sin archivos) | **Confirmó** Goldman (22-oct). Dijo que la Decisions API seguía en beta: **se equivocó** (y yo lo repetí): el changelog oficial muestra GA el 22-oct. Marcó «Claude Duet» como confirmado con un único sitio de terceros: **lo excluí** (no figura en la lista oficial de Anthropic que leí, sin fuente primaria, solo EE. UU. con lista de espera) |
+| 3 | `ab23c2b092e7b9a91` | haiku | **Revisor de coherencia de la corrección H1-H7** (solo lectura, sin web): restos de afirmaciones retiradas, rúbrica vs. caso sin candidata, tablas de cierres, un solo CTA el domingo, Goldman | Informe de devolución (sin archivos) | Informó **«sin hallazgos»** en los cuatro puntos. **Es evidencia débil**: hizo 4 lecturas y respondió en menos de un minuto; no sustituye el chequeo de `verificar_material.py` ni la verificación de Codex |
 
 La integración, la redacción y la verificación son mías; los subagentes aportaron pistas y una segunda lectura.
 
@@ -62,20 +80,24 @@ La integración, la redacción y la verificación son mías; los subagentes apor
 3. **Una sola noticia útil para dueños** en la ventana (Goldman, 22-oct). No se rellenó con titulares técnicos.
 4. **Meta:** con Bs 300 no hay estadística. El experimento sirve para leer; ver `META-ADS-ESTUDIO-APLICADO.md` §4.
 
-## 6. Pruebas ejecutadas (se reproducen con `cd pruebas && python <archivo>`)
+## 6. Pruebas ejecutadas (se reproducen con `cd pruebas && python <archivo>`; Python del autor, salidas guardadas)
 
 | Archivo | Qué prueba | Resultado |
 |---|---|---|
-| `cuentas_workshop.py` | Cuentas del ejercicio y del canon: 10 × 5 × 4 = 200 min = 3 h 20; total del caso 388 min por semana, 1.552 por mes (25 h 52); la regla de riesgo cambia la elección (sin ella gana la tarea 5; con ella, la 2); escalera 15×50 + 20×60 + 15×70 = Bs 3.000 | Todas las aserciones pasan |
-| `meta_cuentas.py` | Gasto diario de Bs 300 (7, 8 y 5 días); pagos para cubrir el gasto (6, 5 y 5); tasas necesarias por costo de conversación; costo máximo de Bs 6 para llegar a 50 conversaciones | Todas pasan |
-| `contar_palabras.py` + `textos_guiones.py` | Palabras y segundos de cada texto hablado (rango de 28 a 40 s con pausas) | Salida guardada |
-| `verificar_material.py` | Apertura de 233 palabras; los 13 textos hablados de `textos_guiones.py` están **literalmente** en `GUIONES-SEMANA.md`; suma de la agenda; puntajes de la rúbrica | `OK` |
+| `cuentas_workshop.py` | Cuentas del caso y del canon (200 min = 3 h 20; 388 por semana, 1.552 por mes = 25 h 52; la más larga es la tarea 5, de riesgo alto); **`prioridad`** con 10 casos de borde; **`reconciliar`** con 5 casos; **rúbrica** exhaustiva y excluyente para 0, 2, 3, 4, 5, 8, 9 y 12 tareas y para todas las combinaciones de 0 a 14; cinco respuestas puntuadas (8, 3, 0, 7, 7); escalera del canon | `OK` |
+| `meta_cuentas.py` | **`cobertura_bruta`** con 7 casos (suma acreditada vs gasto real, incluidos 5 × Bs 50 vs Bs 300 y 4 × Bs 50 vs Bs 180); gasto por día; costo por conversación supuesto; el techo no se sube | `OK` |
+| `contar_palabras.py` + `textos_guiones.py` | Palabras y segundos **estimados** de cada texto hablado y variante (28 a 40 s con pausas) | Salida guardada |
+| `verificar_material.py` | Los 13 textos hablados están literalmente en `GUIONES-SEMANA.md`; palabras de cada cierre (29, 14, 16, 10, 17, 10); no queda «Cierre ~4 s»; el domingo termina en su única acción; **frases retiradas ausentes** en los tres documentos; presentes las correcciones de Meta, Goldman y referentes; agenda 45 + 5 + 45 = 95; sin notas internas en el hablado | `OK` |
+
+Todas son comprobaciones de texto y de números. **No son un ensayo con personas ni una ejecución de un LLM externo.**
 
 ## 7. Límites: lo que NO se comprobó
 
 - **No se grabó nada**: las duraciones son estimadas a 3,2 palabras por segundo más pausas. La «lectura en voz» fue una relectura propia del texto, no una grabación.
-- **El taller no se ensayó con personas.** Tiempos de la agenda y rúbrica son de papel; la rúbrica se probó con tres respuestas escritas por mí.
-- **No usé ninguna herramienta de IA de terceros** para correr el prompt: la «respuesta de ejemplo» (§6.3 del material) la redacté yo y la contrasté con el script.
+- **El taller no se ensayó con personas.** Tiempos de la agenda y rúbrica son de papel; la rúbrica se probó con cinco respuestas escritas por mí y con las funciones del script.
+- **No usé ninguna herramienta de IA de terceros** para correr el prompt, que es un **prompt propuesto** sin garantía de que funcione igual en todas: la «respuesta de ejemplo» (§6.3 del material) la redacté yo y la contrasté con el script.
+- **Meta:** las fuentes de Meta que cito **siguen `NO_VERIFICADO` para el revisor** (429, inicio de sesión); no se arreglan declarándolas leídas. El **destino A o B** y la **elegibilidad del número** no están resueltos.
+- **Goldman:** el comunicado primario me dio 403: lo sostengo con la verificación del revisor y de Hermes y con NBC (secundaria).
 - **Meta:** dos páginas oficiales relevantes (aprendizaje completo y mínimos de presupuesto) no se pudieron leer; los nombres exactos del editor de anuncios no se confirmaron en una cuenta; no se sabe si Meta exige etiquetar imágenes de IA.
 - **Referentes:** me apoyé en lo que la skill `edicion-referentes` resume de las fichas del 8-oct; **no reabrí las fichas originales** ni reprodujo ningún trailer de Erik. Que haya estudiado skills **no garantiza calidad**: el auditor decide.
 - **Noticias:** se confirman en su fuente el 23-oct; **se deben reabrir el día de grabar**.
