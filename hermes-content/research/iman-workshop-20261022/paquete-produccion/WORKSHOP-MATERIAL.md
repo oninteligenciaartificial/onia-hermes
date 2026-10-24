@@ -175,12 +175,17 @@ Cada criterio vale 0, 1 o 2. **No es un examen ni un certificado**: sirve para v
 
 | Criterio | 0 | 1 | 2 |
 |---|---|---|---|
-| **Lista** (por tareas concretas) | **0 a 2** tareas concretas, o la mayoría vagas («atender clientes», «todo») | **3 o 4** concretas (en progreso); **9 o más** (hay que seleccionar antes de seguir); o 5 a 8 concretas **con alguna vaga** | **5 a 8** tareas, **todas** concretas |
+| **Lista** (por tareas concretas; **vagas = total − concretas**; la regla de abajo fija el orden) | **Hasta 2** tareas concretas, **o** las vagas superan a las concretas (`vagas > concretas`) | Todo lo que **no** es 0 ni 2: 3 o 4 concretas; 9 o más; o 5 a 8 con alguna vaga, **siempre sin mayoría vaga** | **5 a 8** tareas y **todas** concretas |
 | **Costo en tiempo** | Sin números en ninguna tarea | Números en alguna tarea, pero falta la cuenta completa en otras, o falta el supuesto de 4 semanas, o no se verificó a mano | **Todas** con veces × minutos = minutos por semana y por mes, supuesto dicho y **verificado a mano**; tiempo, no ahorro ni dinero |
 | **Prioridad** | Ninguna, «todas», **más de una**, o **forzada cuando no había candidata** | **Una**, pero sin motivo de tiempo, riesgo y revisión; o «sin candidata» dicho sin decir qué falta | **Una sola** con motivo de tiempo, riesgo y revisión (y por qué no la más larga si es de riesgo alto); **o «sin candidata elegible» con qué falta o qué cambiaría** |
 | **Primer paso** | Genérico («aprender IA») | Concreto, pero falta cuándo, medida, quién revisa o que los datos sean totalmente inventados | Qué, cuándo (esta semana), **datos totalmente inventados**, cómo se mide (minutos antes y después) y quién revisa |
 
-Las categorías de **Lista** son exhaustivas y excluyentes: cualquier combinación de tareas y de tareas concretas cae en una sola (probado en `pruebas/cuentas_workshop.py` para 0, 2, 3, 4, 5, 8 y 9 tareas, 6 tareas con una vaga y 12 tareas).
+**Regla de prioridad de Lista (se evalúa en este orden, sin solapes):**
+1. **0** si hay hasta 2 concretas **o** hay más vagas que concretas.
+2. Si no, **2** si hay de 5 a 8 tareas y todas son concretas.
+3. Si no, **1**.
+
+Cada combinación de total y concretas cae en **exactamente una** de las tres. Ejemplos: 8 tareas con 3 concretas (5 vagas) = **0**; 9 con 3 = **0**; 6 con 3 (3 vagas, no superan) = **1**; 7 con 3 = **0**; 4 concretas de 4 = 1; 5 de 5 = 2; 12 de 12 = 1. Probado en `pruebas/cuentas_workshop.py` con los **120 pares** (0 ≤ concretas ≤ total ≤ 14): la función concuerda con **tres predicados disjuntos** escritos aparte y cada par satisface exactamente uno; más `rubrica_lista(8, 3) == 0` y `rubrica_lista(9, 3) == 0`.
 
 **Lectura (autocontrol):** 7 a 8, lista para llevar; 4 a 6, completar el criterio más bajo; 0 a 3, repetir los pasos.
 

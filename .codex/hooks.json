@@ -7,6 +7,7 @@
           {
             "type": "command",
             "command": "node \"$(git rev-parse --show-toplevel)/.agents/skills/impeccable/scripts/hook.mjs\"",
+            "commandWindows": "node -e \"const c=require('node:child_process');const r=c.execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim();const p=c.spawnSync(process.execPath,[r+'/.agents/skills/impeccable/scripts/hook.mjs'],{stdio:'inherit'});if(p.error)throw p.error;process.exit(p.status===null?1:p.status)\"",
             "timeout": 5,
             "statusMessage": "Checking UI changes"
           }

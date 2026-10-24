@@ -59,14 +59,30 @@ def reconciliar(veces, minutos, manual, ia):
 
 
 def rubrica_lista(n_tareas, n_concretas):
-    """0: 0 a 2 tareas concretas. 2: 5 a 8 tareas, TODAS concretas (verbo + objeto, repetidas cada semana).
-    1: todo lo demas (3-4 concretas; 9 o mas, hay que seleccionar; 5-8 concretas con alguna vaga)."""
+    """Regla de prioridad EXPLICITA y en este orden (vagas = n_tareas - n_concretas):
+    1) lista = 0 si hay hasta 2 concretas O las vagas superan a las concretas (vagas > concretas);
+    2) si no, lista = 2 si hay de 5 a 8 tareas y TODAS son concretas;
+    3) si no, lista = 1 (3-4 concretas sin mayoria vaga; 9 o mas sin mayoria vaga; 5-8 con alguna vaga sin que predominen)."""
     assert 0 <= n_concretas <= n_tareas
-    if n_concretas <= 2:
+    vagas = n_tareas - n_concretas
+    if n_concretas <= 2 or vagas > n_concretas:
         return 0
-    if 5 <= n_concretas <= 8 and n_concretas == n_tareas:
+    if 5 <= n_tareas <= 8 and n_concretas == n_tareas:
         return 2
     return 1
+
+
+# Tres predicados DISJUNTOS, escritos aparte de la funcion, para comprobar la tabla (no solo que el resultado sea 0, 1 o 2).
+def pred_lista_0(n, c):
+    return c <= 2 or (n - c) > c
+
+
+def pred_lista_2(n, c):
+    return not pred_lista_0(n, c) and 5 <= n <= 8 and c == n
+
+
+def pred_lista_1(n, c):
+    return not pred_lista_0(n, c) and not pred_lista_2(n, c)
 
 
 def rubrica_costo(n_tareas, n_con_cuenta_completa, n_con_algun_numero, supuesto_dicho, verificado):
@@ -139,6 +155,22 @@ if __name__ == "__main__":
     assert rubrica_lista(12, 12) == 1  # mas de ocho: hay que seleccionar
     # exhaustiva y excluyente: todas las combinaciones dan exactamente 0, 1 o 2
     assert {rubrica_lista(n, c) for n in range(0, 15) for c in range(0, n + 1)} == {0, 1, 2}
+    # --- Cierre del residual H5: contraejemplos del dictamen y concordancia tabla/funcion ---
+    assert rubrica_lista(8, 3) == 0   # 3 concretas, 5 vagas: mayoria vaga -> 0 (antes devolvia 1)
+    assert rubrica_lista(9, 3) == 0   # 3 concretas, 6 vagas: mayoria vaga -> 0 (antes devolvia 1)
+    assert rubrica_lista(6, 3) == 1   # 3 concretas, 3 vagas: las vagas NO superan -> 1
+    assert rubrica_lista(7, 3) == 0   # 3 concretas, 4 vagas -> 0
+    assert rubrica_lista(14, 7) == 1 and rubrica_lista(14, 6) == 0  # 9 o mas: limite de la mayoria vaga
+    n_pares = 0
+    for n in range(0, 15):
+        for c in range(0, n + 1):
+            p0, p1, p2 = pred_lista_0(n, c), pred_lista_1(n, c), pred_lista_2(n, c)
+            assert (p0 + p1 + p2) == 1, ("solape o hueco", n, c, p0, p1, p2)  # exactamente UNO es verdadero
+            esperado = 0 if p0 else (1 if p1 else 2)
+            assert rubrica_lista(n, c) == esperado, ("la funcion no concuerda con la tabla", n, c)
+            n_pares += 1
+    assert n_pares == 120  # sum(n + 1 for n in 0..14) = 120 pares (concretas <= total <= 14)
+    print("Rubrica lista: 120 pares (0 <= concretas <= total <= 14), cada uno en exactamente 1 de 3 predicados y la funcion concuerda")
 
     # --- Rubrica: costo, prioridad, primer paso ---
     assert rubrica_costo(5, 0, 0, False, False) == 0
