@@ -1,0 +1,1369 @@
+{
+  "fecha": "2026-10-25",
+  "alcance": {
+    "root": "C:/Users/PC/AppData/Local/hermes/skills",
+    "profile": "Hermes default",
+    "manifiestos_fisicos_clasificados": 60,
+    "regla": "Una categoría propuesta por manifiesto. No representa configuración de activación ni autoriza cambios."
+  },
+  "categorias": {
+    "nucleo": "Mantener prioritariamente visible: proceso Hermes/ONIA, QA e investigación transversal.",
+    "por_tarea": "Conservar disponible e invocar solo cuando el encargo coincida con su función.",
+    "ocultar_en_windows": "Ocultar en Windows por incompatibilidad de plataforma; no borrar.",
+    "candidata_desactivar": "Revisar para posible desactivación por nicho/prioridad; no desactivar automáticamente ni por ausencia de uso observado."
+  },
+  "resumen_categorias": {
+    "nucleo": 12,
+    "por_tarea": 39,
+    "ocultar_en_windows": 4,
+    "candidata_desactivar": 5
+  },
+  "contexto_inventario_ampliado": {
+    "fuente": "inventario-skills-20261025.json",
+    "entradas_incluyendo_aliases": 1546,
+    "manifiestos_fisicos_unicos": 1514,
+    "nombres_unicos": 445,
+    "contenidos_unicos_lf": 1216,
+    "skills_markdown_legacy_separadas": 40,
+    "errores_lectura": 0,
+    "raices": {
+      "hermes-default": 60,
+      "onia-hermes-claude": 66,
+      "onia-hermes-agents": 32,
+      "onia-platform-claude": 6,
+      "onia-platform-agents": 16,
+      "user-claude-recursivo": 1268,
+      "user-claude-directo": 113,
+      "user-codex": 66,
+      "user-agents": {
+        "manifiestos_de_entrada": 32,
+        "alias_de": "onia-hermes-agents",
+        "misma_ruta_resuelta": true
+      }
+    },
+    "subarboles_user_claude_no_equivalen_a_skills_activas": [
+      {
+        "nombre": "gstack",
+        "manifiestos": 525
+      },
+      {
+        "nombre": "everything-claude-code",
+        "manifiestos": 429
+      },
+      {
+        "nombre": ".trash",
+        "manifiestos": 127
+      },
+      {
+        "nombre": "synced",
+        "manifiestos": 75
+      }
+    ],
+    "conteo_cli_enabled_only": {
+      "cantidad": 53,
+      "procedencia": "dato del contexto de auditoría; no revalidado aquí porque hermes no está en PATH"
+    },
+    "lectura": "Los conteos recursivos incluyen alias, subárboles, copias y material de respaldo; no son número de skills activas."
+  },
+  "uso_observado": {
+    "fuente": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\.usage.json",
+    "nombres_con_registro": 20,
+    "nombres": [
+      "architecture-diagram",
+      "blocked-page-recovery",
+      "claude-code",
+      "claude-design",
+      "codebase-inspection",
+      "codex",
+      "computer-use",
+      "design-md",
+      "github",
+      "grounded-citations",
+      "hermes-agent",
+      "hermes-agent-skill-authoring",
+      "inspecting-hermes-desktop-dom",
+      "onia-operar-harness",
+      "onia-relevo-sesion",
+      "popular-web-designs",
+      "requesting-code-review",
+      "sdlc-review",
+      "systematic-debugging",
+      "test-driven-development"
+    ],
+    "limite": "El ledger registra eventos/contadores de skill_view. No demuestra lectura del SKILL.md del repo, aplicación correcta ni uso exitoso. Sin entrada significa sin registro, no cero uso. No recomendar baja por ausencia de registro."
+  },
+  "revision_consolidacion_repo": {
+    "fuente_determinista": "duplicados-carpetas-20261025.json",
+    "metodo": "Usar el conteo coordinador sobre los 30 nombres compartidos; SKILL.md se compara normalizando LF y carpeta fuente completa incluye soportes, excluyendo .git, node_modules y __pycache__.",
+    "pares_compartidos": 30,
+    "manifiestos_iguales_normalizando_lf": 29,
+    "nombres_manifiesto_igual": [
+      "captions-overlay", "changelog-video", "cut-the-curve", "faceless-explainer", "figma", "general-video", "higgsfield-generate", "higgsfield-soul-id", "hyperframes", "hyperframes-animation", "hyperframes-cli", "hyperframes-core", "hyperframes-creative", "hyperframes-keyframes", "hyperframes-registry", "impeccable", "media-use", "motion-doctrine", "motion-graphics", "music-to-video", "oversized-cursor", "pr-to-video", "product-launch-video", "remotion-to-hyperframes", "seam-craft", "slideshow", "talking-head-recut", "web-factory-design-research", "web-factory-intake-assets"
+    ],
+    "carpetas_fuente_exactamente_iguales": 13,
+    "nombres_carpetas_exactamente_iguales": [
+      "captions-overlay", "cut-the-curve", "higgsfield-generate", "hyperframes", "hyperframes-cli", "hyperframes-core", "hyperframes-keyframes", "hyperframes-registry", "oversized-cursor", "seam-craft", "slideshow", "talking-head-recut", "web-factory-intake-assets"
+    ],
+    "carpetas_fuente_no_iguales": 17,
+    "nombres_carpetas_no_iguales": [
+      "changelog-video", "embedded-captions", "faceless-explainer", "figma", "general-video", "higgsfield-soul-id", "hyperframes-animation", "hyperframes-creative", "impeccable", "media-use", "motion-doctrine", "motion-graphics", "music-to-video", "pr-to-video", "product-launch-video", "remotion-to-hyperframes", "web-factory-design-research"
+    ],
+    "precedencia_e_imports": {
+      "AGENTS.md": "Líneas 288-291: fuente única .claude/skills para skills propias de ONIA/Codex; indica no copiarlas a .agents/skills.",
+      "CLAUDE.md": "Líneas 681-685: HyperFrames se documenta en ambas raíces locales y se indica que la copia del repo gana sobre la global; no resuelve prioridad entre raíces locales.",
+      "CODEX_SKILL_ROUTING.md": "Líneas 10-14: regla de limpieza del 2026-09-29 contradicha por la restauración del 2026-10-02 que recoge CLAUDE.md; tratar la primera como antecedente, no autoridad actual.",
+      "skills-lock.json": "Revisado como fuente/origen de manifiestos; no acredita por sí mismo qué raíz descubre cada runtime.",
+      "conclusion": "13 pares son candidatos de contenido para futura consolidación, pero la precedencia local y los consumers/imports por agente no quedan cerrados. Mantener copias hasta reconciliar la ruta efectiva."
+    },
+    "propuesta_quitar_copia": false,
+    "decision": "No borrar ni activar. Mantener las 13 parejas por ahora y resolver precedencia/imports antes de recomendar retirar una copia."
+  },
+  "skills": [
+    {
+      "nombre": "airtable",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Airtable REST API via curl. Records CRUD, filters, upserts.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/airtable/SKILL.md",
+        "descripcion_frontmatter": "Airtable REST API via curl. Records CRUD, filters, upserts.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "apple-notes",
+      "categoria_propuesta": "ocultar_en_windows",
+      "razon": "El frontmatter limita la skill a macOS y a Apple Notes; ocultarla en Windows evita una ruta no operable.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "apple/apple-notes/SKILL.md",
+        "descripcion_frontmatter": "Manage Apple Notes via memo CLI: create, search, edit.",
+        "version_frontmatter": "1.0.1",
+        "plataformas_frontmatter": [
+          "macos"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "apple-reminders",
+      "categoria_propuesta": "ocultar_en_windows",
+      "razon": "El frontmatter limita la skill a macOS y a Apple Reminders; ocultarla en Windows evita una ruta no operable.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "apple/apple-reminders/SKILL.md",
+        "descripcion_frontmatter": "Apple Reminders via remindctl: add, list, complete.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "macos"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "architecture-diagram",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Dark-themed SVG architecture/cloud/infra diagrams as HTML.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/architecture-diagram/SKILL.md",
+        "descripcion_frontmatter": "Dark-themed SVG architecture/cloud/infra diagrams as HTML.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 2,
+          "last_viewed_at": "2026-10-24T12:16:33.195722+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "arxiv",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Search arXiv papers by keyword, author, category, or ID.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "research/arxiv/SKILL.md",
+        "descripcion_frontmatter": "Search arXiv papers by keyword, author, category, or ID.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "ascii-video",
+      "categoria_propuesta": "candidata_desactivar",
+      "razon": "Formato de video ASCII muy específico, fuera de las prioridades actuales; evaluar desactivación solo si no se conserva un caso de uso.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/ascii-video/SKILL.md",
+        "descripcion_frontmatter": "ASCII video: convert video/audio to colored ASCII MP4/GIF.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "baoyu-infographic",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Infographics: 21 layouts x 21 styles (信息图, 可视化).. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/baoyu-infographic/SKILL.md",
+        "descripcion_frontmatter": "Infographics: 21 layouts x 21 styles (信息图, 可视化).",
+        "version_frontmatter": "1.56.1",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "blocked-page-recovery",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Use when a fetch fails: 403/429, paywall, WAF, bot wall.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "web/blocked-page-recovery/SKILL.md",
+        "descripcion_frontmatter": "Use when a fetch fails: 403/429, paywall, WAF, bot wall.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 4,
+          "last_viewed_at": "2026-10-23T13:12:46.193229+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "box",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Box manages cloud files, sharing, search, and metadata.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/box/SKILL.md",
+        "descripcion_frontmatter": "Box manages cloud files, sharing, search, and metadata.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "claude-code",
+      "categoria_propuesta": "nucleo",
+      "razon": "Delegación de tareas de codificación dentro del flujo de agentes usado en el proyecto.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "autonomous-ai-agents/claude-code/SKILL.md",
+        "descripcion_frontmatter": "Delegate coding to Claude Code CLI (features, PRs).",
+        "version_frontmatter": "2.2.1",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 13,
+          "last_viewed_at": "2026-10-23T12:30:50.725953+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "claude-design",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Design one-off HTML artifacts (landing, deck, prototype).. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/claude-design/SKILL.md",
+        "descripcion_frontmatter": "Design one-off HTML artifacts (landing, deck, prototype).",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 4,
+          "last_viewed_at": "2026-10-24T02:17:22.345779+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "codebase-inspection",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Inspect codebases w/ pygount: LOC, languages, ratios.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/codebase-inspection/SKILL.md",
+        "descripcion_frontmatter": "Inspect codebases w/ pygount: LOC, languages, ratios.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 3,
+          "last_viewed_at": "2026-10-22T20:42:45.478846+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "codex",
+      "categoria_propuesta": "nucleo",
+      "razon": "Ejecución cerrada de tareas de código; está en el flujo operativo definido para Codex.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "autonomous-ai-agents/codex/SKILL.md",
+        "descripcion_frontmatter": "Delegate coding to OpenAI Codex CLI (features, PRs).",
+        "version_frontmatter": "1.0.1",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 6,
+          "last_viewed_at": "2026-10-22T12:03:32.918004+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "competitor-news-monitor",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Watch named companies for material news; cited digests.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "research/competitor-news-monitor/SKILL.md",
+        "descripcion_frontmatter": "Watch named companies for material news; cited digests.",
+        "version_frontmatter": "0.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "computer-use",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Drive the desktop background-first; escalate on signal.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "autonomous-ai-agents/computer-use/SKILL.md",
+        "descripcion_frontmatter": "Drive the desktop background-first; escalate on signal.",
+        "version_frontmatter": "2.1.0",
+        "plataformas_frontmatter": [
+          "macos",
+          "windows",
+          "linux"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 7,
+          "last_viewed_at": "2026-10-25T13:27:21.110881+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "design-md",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Author/validate/export Google's DESIGN.md token spec files.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/design-md/SKILL.md",
+        "descripcion_frontmatter": "Author/validate/export Google's DESIGN.md token spec files.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 1,
+          "last_viewed_at": "2026-10-24T02:13:01.538516+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "document-to-action-items",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Extract cited obligations, deadlines, tasks from documents.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/document-to-action-items/SKILL.md",
+        "descripcion_frontmatter": "Extract cited obligations, deadlines, tasks from documents.",
+        "version_frontmatter": "0.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "docx",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Create, read, edit, template, and review Word .docx files.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/docx/SKILL.md",
+        "descripcion_frontmatter": "Create, read, edit, template, and review Word .docx files.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "dogfood",
+      "categoria_propuesta": "nucleo",
+      "razon": "QA exploratorio con evidencia sobre aplicaciones web.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/dogfood/SKILL.md",
+        "descripcion_frontmatter": "Exploratory QA of web apps: find bugs, evidence, reports.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "email-inbox-triage",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Triage an inbox: prioritize threads, draft replies safely.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "email/email-inbox-triage/SKILL.md",
+        "descripcion_frontmatter": "Triage an inbox: prioritize threads, draft replies safely.",
+        "version_frontmatter": "0.2.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "findmy",
+      "categoria_propuesta": "ocultar_en_windows",
+      "razon": "El frontmatter limita la skill a macOS y Find My; ocultarla en Windows evita una ruta no operable.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "apple/findmy/SKILL.md",
+        "descripcion_frontmatter": "Track Apple devices/AirTags via FindMy.app on macOS.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "macos"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "gif-search",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Search/download GIFs from Tenor via curl + jq.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "media/gif-search/SKILL.md",
+        "descripcion_frontmatter": "Search/download GIFs from Tenor via curl + jq.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "github",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: GitHub via gh CLI: PRs, issues, reviews, repos, auth.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/github/SKILL.md",
+        "descripcion_frontmatter": "GitHub via gh CLI: PRs, issues, reviews, repos, auth.",
+        "version_frontmatter": "2.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 9,
+          "last_viewed_at": "2026-10-21T23:18:56.706212+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "google-workspace",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/google-workspace/SKILL.md",
+        "descripcion_frontmatter": "Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.",
+        "version_frontmatter": "1.2.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "grounded-citations",
+      "categoria_propuesta": "nucleo",
+      "razon": "Método transversal para investigación y entregables verificables.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "research/grounded-citations/SKILL.md",
+        "descripcion_frontmatter": "Ground answers and documents in cited, verifiable sources.",
+        "version_frontmatter": "1.2.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 7,
+          "last_viewed_at": "2026-10-25T13:27:04.188489+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "hermes-agent",
+      "categoria_propuesta": "nucleo",
+      "razon": "Guía base para operar y configurar Hermes; su ámbito atraviesa el uso del agente.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "autonomous-ai-agents/hermes-agent/SKILL.md",
+        "descripcion_frontmatter": "Use, configure, theme, extend, and orchestrate Hermes Agent.",
+        "version_frontmatter": "3.2.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 123,
+          "last_viewed_at": "2026-10-25T13:27:05.215782+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "hermes-agent-skill-authoring",
+      "categoria_propuesta": "nucleo",
+      "razon": "Mantenimiento estructurado del catálogo de skills.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/hermes-agent-skill-authoring/SKILL.md",
+        "descripcion_frontmatter": "Author in-repo SKILL.md files: frontmatter and structure.",
+        "version_frontmatter": "2.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 7,
+          "last_viewed_at": "2026-10-22T04:20:48.541099+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "himalaya",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Himalaya CLI: IMAP/SMTP email from terminal.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "email/himalaya/SKILL.md",
+        "descripcion_frontmatter": "Himalaya CLI: IMAP/SMTP email from terminal.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "humanizer",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Humanize text: strip AI-isms and add real voice.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/humanizer/SKILL.md",
+        "descripcion_frontmatter": "Humanize text: strip AI-isms and add real voice.",
+        "version_frontmatter": "2.5.1",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "imessage",
+      "categoria_propuesta": "ocultar_en_windows",
+      "razon": "El frontmatter limita la skill a macOS/iMessage; ocultarla en Windows evita una ruta no operable.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "apple/imessage/SKILL.md",
+        "descripcion_frontmatter": "Send and receive iMessages/SMS via the imsg CLI on macOS.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "macos"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "inspecting-hermes-desktop-dom",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Read the live Hermes desktop DOM/CSS over CDP.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/inspecting-hermes-desktop-dom/SKILL.md",
+        "descripcion_frontmatter": "Read the live Hermes desktop DOM/CSS over CDP.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 3,
+          "last_viewed_at": "2026-10-21T23:52:34.201327+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "llm-wiki",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Karpathy's LLM Wiki: build/query interlinked markdown KB.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "research/llm-wiki/SKILL.md",
+        "descripcion_frontmatter": "Karpathy's LLM Wiki: build/query interlinked markdown KB.",
+        "version_frontmatter": "2.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "manim-video",
+      "categoria_propuesta": "candidata_desactivar",
+      "razon": "Animación matemática/algorítmica especializada, fuera de las prioridades actuales; evaluar desactivación solo si no se conserva un caso de uso.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/manim-video/SKILL.md",
+        "descripcion_frontmatter": "Manim CE animations: 3Blue1Brown math/algo videos.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "maps",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/maps/SKILL.md",
+        "descripcion_frontmatter": "Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.",
+        "version_frontmatter": "1.2.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "meeting-action-items",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Turn meeting notes into cited decisions, owners, tickets.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/meeting-action-items/SKILL.md",
+        "descripcion_frontmatter": "Turn meeting notes into cited decisions, owners, tickets.",
+        "version_frontmatter": "0.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "node-inspect-debugger",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Debug Node.js via --inspect + Chrome DevTools Protocol CLI.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/node-inspect-debugger/SKILL.md",
+        "descripcion_frontmatter": "Debug Node.js via --inspect + Chrome DevTools Protocol CLI.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "notion",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Notion API + ntn CLI: pages, databases, markdown, Workers.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/notion/SKILL.md",
+        "descripcion_frontmatter": "Notion API + ntn CLI: pages, databases, markdown, Workers.",
+        "version_frontmatter": "2.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "obsidian",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Read, search, create, and edit notes in the Obsidian vault.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "note-taking/obsidian/SKILL.md",
+        "descripcion_frontmatter": "Read, search, create, and edit notes in the Obsidian vault.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "onia-operar-harness",
+      "categoria_propuesta": "nucleo",
+      "razon": "Proceso ONIA de preparar tareas de harness y comprobar evidencia.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "onia/onia-operar-harness/SKILL.md",
+        "descripcion_frontmatter": "Use when preparing ONIA harness tasks. Check evidence.",
+        "version_frontmatter": "0.1.0",
+        "plataformas_frontmatter": [
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 73,
+          "last_viewed_at": "2026-10-25T13:27:04.203944+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "onia-relevo-sesion",
+      "categoria_propuesta": "nucleo",
+      "razon": "Continuidad y checkpoint entre sesiones ONIA.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "onia/onia-relevo-sesion/SKILL.md",
+        "descripcion_frontmatter": "Use when handing off ONIA work. Preserve checkpoints.",
+        "version_frontmatter": "0.1.0",
+        "plataformas_frontmatter": [
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 17,
+          "last_viewed_at": "2026-10-24T02:22:25.994270+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "opencode",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Delegate coding to OpenCode CLI (features, PR review).. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "autonomous-ai-agents/opencode/SKILL.md",
+        "descripcion_frontmatter": "Delegate coding to OpenCode CLI (features, PR review).",
+        "version_frontmatter": "1.2.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "p5js",
+      "categoria_propuesta": "candidata_desactivar",
+      "razon": "Arte generativo/shaders especializado, fuera de las prioridades actuales; evaluar desactivación solo si no se conserva un caso de uso.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/p5js/SKILL.md",
+        "descripcion_frontmatter": "p5.js sketches: gen art, shaders, interactive, 3D.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "pdf",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: PDF files: create, read, merge, fill, OCR, edit text.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/pdf/SKILL.md",
+        "descripcion_frontmatter": "PDF files: create, read, merge, fill, OCR, edit text.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "popular-web-designs",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: 54 real design systems (Stripe, Linear, Vercel) as HTML/CSS.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/popular-web-designs/SKILL.md",
+        "descripcion_frontmatter": "54 real design systems (Stripe, Linear, Vercel) as HTML/CSS.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 1,
+          "last_viewed_at": "2026-10-24T02:12:08.694911+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "powerpoint",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Create, read, edit .pptx decks with python-pptx.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/powerpoint/SKILL.md",
+        "descripcion_frontmatter": "Create, read, edit .pptx decks with python-pptx.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "product-price-monitor",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Watch product, flight, or listing prices; alert on target.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/product-price-monitor/SKILL.md",
+        "descripcion_frontmatter": "Watch product, flight, or listing prices; alert on target.",
+        "version_frontmatter": "0.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "python-debugpy",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Debug Python: pdb REPL + debugpy remote (DAP).. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/python-debugpy/SKILL.md",
+        "descripcion_frontmatter": "Debug Python: pdb REPL + debugpy remote (DAP).",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "requesting-code-review",
+      "categoria_propuesta": "nucleo",
+      "razon": "Control pre-commit de seguridad y calidad.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/requesting-code-review/SKILL.md",
+        "descripcion_frontmatter": "Pre-commit review: security scan, quality gates, auto-fix.",
+        "version_frontmatter": "2.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 16,
+          "last_viewed_at": "2026-10-24T03:51:43.901030+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "sdlc-review",
+      "categoria_propuesta": "nucleo",
+      "razon": "Revisión de handoffs y resultados del ciclo de trabajo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "devops/sdlc-review/SKILL.md",
+        "descripcion_frontmatter": "Review Kanban handoffs and route verified outcomes.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 1,
+          "last_viewed_at": "2026-10-22T00:28:32.175156+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "simplify-code",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Parallel 4-agent cleanup of recent code changes.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/simplify-code/SKILL.md",
+        "descripcion_frontmatter": "Parallel 4-agent cleanup of recent code changes.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "songsee",
+      "categoria_propuesta": "candidata_desactivar",
+      "razon": "Análisis espectral de audio especializado, fuera de las prioridades actuales; evaluar desactivación solo si no se conserva un caso de uso.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "media/songsee/SKILL.md",
+        "descripcion_frontmatter": "Audio spectrograms/features (mel, chroma, MFCC) via CLI.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "songwriting-and-ai-music",
+      "categoria_propuesta": "candidata_desactivar",
+      "razon": "Composición musical/Suno es un dominio especializado fuera de las prioridades actuales; evaluar desactivación solo si no se conserva un caso de uso.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "creative/songwriting-and-ai-music/SKILL.md",
+        "descripcion_frontmatter": "Songwriting craft and Suno AI music prompts.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "spike",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Throwaway experiments to validate an idea before build.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/spike/SKILL.md",
+        "descripcion_frontmatter": "Throwaway experiments to validate an idea before build.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "systematic-debugging",
+      "categoria_propuesta": "nucleo",
+      "razon": "Método de diagnóstico antes de aplicar arreglos.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/systematic-debugging/SKILL.md",
+        "descripcion_frontmatter": "4-phase root cause debugging: understand bugs before fixing.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 14,
+          "last_viewed_at": "2026-10-24T03:51:44.923644+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "teams-meeting-pipeline",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Teams meeting summaries, job replay, Graph subscriptions.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/teams-meeting-pipeline/SKILL.md",
+        "descripcion_frontmatter": "Teams meeting summaries, job replay, Graph subscriptions.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "test-driven-development",
+      "categoria_propuesta": "nucleo",
+      "razon": "Disciplina de prueba-cambio-refactor para tareas de código.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "software-development/test-driven-development/SKILL.md",
+        "descripcion_frontmatter": "TDD: enforce RED-GREEN-REFACTOR, tests before code.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "vistas_registradas",
+          "view_count": 9,
+          "last_viewed_at": "2026-10-24T02:37:43.398163+00:00"
+        }
+      }
+    },
+    {
+      "nombre": "weekly-review-planning",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Weekly reset: commitments, stalled work, next-week plan.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/weekly-review-planning/SKILL.md",
+        "descripcion_frontmatter": "Weekly reset: commitments, stalled work, next-week plan.",
+        "version_frontmatter": "0.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "xlsx",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: Create, read, edit Excel .xlsx workbooks and CSVs.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "productivity/xlsx/SKILL.md",
+        "descripcion_frontmatter": "Create, read, edit Excel .xlsx workbooks and CSVs.",
+        "version_frontmatter": "1.1.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "xurl",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: X/Twitter via xurl CLI: raw post search, posting, DM, media.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "social-media/xurl/SKILL.md",
+        "descripcion_frontmatter": "X/Twitter via xurl CLI: raw post search, posting, DM, media.",
+        "version_frontmatter": "1.1.3",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    },
+    {
+      "nombre": "youtube-content",
+      "categoria_propuesta": "por_tarea",
+      "razon": "Conservar e invocar solo si la tarea requiere esta capacidad concreta: YouTube transcripts to summaries, threads, blogs.. No es una necesidad permanente del núcleo.",
+      "evidencia": {
+        "root": "hermes-default",
+        "manifest_relative": "media/youtube-content/SKILL.md",
+        "descripcion_frontmatter": "YouTube transcripts to summaries, threads, blogs.",
+        "version_frontmatter": "1.0.0",
+        "plataformas_frontmatter": [
+          "linux",
+          "macos",
+          "windows"
+        ],
+        "ledger_skill_view": {
+          "estado_registro": "sin_entrada_en_ledger",
+          "view_count": null,
+          "last_viewed_at": null
+        }
+      }
+    }
+  ]
+}

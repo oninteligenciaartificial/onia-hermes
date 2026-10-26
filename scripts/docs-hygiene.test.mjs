@@ -8,6 +8,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Active routing instructions are part of documentation hygiene, not an optional unrun check.
+import "./instrucciones-activas.test.mjs";
+
 import { tokenize, fuzzyNameMatch, looksSuperseded, sha256, classifyRootFile, buildMarkdownSummary, buildShortSummary, sortDivergentFindings } from "./docs-hygiene.mjs";
 
 const SCRIPT_PATH = fileURLToPath(new URL("./docs-hygiene.mjs", import.meta.url));

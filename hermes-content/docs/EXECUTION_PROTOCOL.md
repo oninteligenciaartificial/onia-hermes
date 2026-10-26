@@ -30,10 +30,12 @@ defaults to closed execution:
    assumption, document it and continue.
 4. Do not ask step-by-step for reversible local work such as edits, docs,
    scripts, tests, commits and safe pushes.
-5. Corrección 2026-10-09: la autorización vigente es `CLAUDE.md`, sección
-   «Qué se publica sin preguntar». Diseño, infra y migraciones revisados (con
-   backup/rollback) no esperan otro OK. Conservar sus excepciones de contenido,
-   secretos, pagos, terceros, actos legales, borrado y decisiones de negocio.
+5. Corrección 2026-10-22, conforme a la decisión del 19-oct: la autorización
+   vigente es `CLAUDE.md`, sección «Qué se publica sin preguntar». Lo que ve un
+   cliente o el público espera el OK de Sergio Urcullo con captura. Arreglos sin
+   cambio visible, infra y migraciones revisados siguen sus condiciones de
+   backup/rollback. Conservar las excepciones de secretos, pagos, terceros,
+   actos legales, borrado y decisiones de negocio, y el alcance del encargo actual.
    Un encargo cerrado de Codex no autoriza Git ni publicación por sí solo.
 6. Finish with one of three outcomes for each pending item: executed and
    validated, automated with a canonical command/runbook, or blocked by a
@@ -43,9 +45,12 @@ For long-running work, convert the objective into a repo-backed backlog and run
 an execution loop: pick the next item, inspect, implement, validate, document,
 commit/push when coherent, and continue until done or specifically blocked.
 
-Hermes cannot truly run forever inside a single chat turn. Continuous work must
-follow `equipo-de-agentes`: one queue per lane and the mother's review loop.
-Correction 2026-10-09: Codex must not create a competing heartbeat/orchestrator.
+Hermes cannot truly run forever inside a single chat turn. Follow `CLAUDE.md`
+section "Quién orquesta" and the current correction in `equipo-de-agentes`:
+Hermes plans; `scripts/orquesta/` dispatches the canonical queue. Historical
+mother/review loops do not authorize a second coordinator, heartbeat or scheduler.
+Workers execute bounded tasks; documented Orca capabilities do not activate an
+alternative queue or grant permissions. Publication still follows the current task.
 If the runtime cannot continue, record the blocker and next task; do not claim a live loop.
 
 ## Data-First Before Questions
@@ -116,151 +121,16 @@ answer depends on current creative information. If yes:
 
 Use `hermes-content/skills/radar-creativo-onia.md` for this workflow.
 
-## Skill Routing
+## Skill Routing and Legacy Commands
 
-Use these global Codex skills when applicable:
+Use `.claude/skills/onia-router/SKILL.md` for the current task/domain and only the relevant skills. `equipo-de-agentes` applies to delegation/review; `aprender-de-todo` to learning from material. A Markdown procedure is not proof of an installed native skill or command.
 
-- `skill-creator`: creating or updating Codex skills or skill policy.
-- `openai-docs`: OpenAI API/model/product questions.
-- `security-best-practices`: explicit security hardening or review.
-- `notion-*`: Notion research, specs, knowledge capture, or implementation.
-- `playwright` or `browser`: browser testing or UI verification.
-- `vercel-*`, `cloudflare-deploy`, `render-deploy`, `netlify-deploy`: deploys.
+The old duplicate skill list and Telegram/Video Lab command examples are preserved in `hermes-content/docs/historial/protocolo-telegram-anterior-20261025.md`. They do not prove installation, authentication, gateway delivery or permission. Before using a command, confirm the actual binary/schema and the current task's destination/approval.
 
-Use these Hermes local skills for project operations:
+A raw Telegram message does not bypass generation cost, face/voice, publication or production approvals. Use the current canonical handler/skill only when that route is actually available; do not launch historical loops or infer permanent sessions.
 
-- `orquestador-creativo-ia`: visual content, AI models, image/video prompts,
-  ads, reels, TikToks, Shorts, UGC, ecommerce, campaign production and
-  identity-safe creative execution.
-- `video-lab-higgsfield`: video jobs, Higgsfield, reels, approvals.
-- `videos-virales-higgsfield`: viral short-form planning, virality checks and Higgsfield MCP usage.
-- `ugc-empresas-higgsfield`: UGC ads and company/client video briefs.
-- `audio-elevenlabs`: voiceover, TTS, dubbing, sound effects and voice safety.
-- `marca-personal-sergio`: Sergio's personal brand content.
-- `historias-sergio`: Sergio story sequences.
-- `instagram-publicacion`: Instagram publishing through `ig-publish`.
-- `descripciones-sociales-onia`: Instagram captions/descriptions, TikTok
-  descriptions, YouTube Shorts metadata and LinkedIn copy.
-- `flujo-completo-carrusel`: carousel generation and publication.
-- `carruseles-onia`: Onia carousel briefs.
-- `referencias-pinterest`: style/reference extraction.
-- `seguridad-credenciales`: tokens, secrets, env vars.
-- `operaciones-dashboard`: dashboard and gateway status.
-- `centro-comando-telegram`: Telegram as the main Hermes/ONIA command center,
-  general routing, n8n command center, project commands and approvals.
-- `n8n-automatizaciones-onia`: scheduling and longer automations.
-- `orquestacion-proyectos-onia`: route Onia work across DentalGest, Gestios,
-  Web Onia, client websites, Higgsfield marketing, CRM and outreach.
-- `radar-creativo-onia`: current creative research, creator references,
-  workflows, prompts, trends and strategy before content production.
-- `consultoria-onia`: consulting, audits, implementations, installations,
-  Sergio-led advisory, operational setup and client process design.
+## Verification and Closure
 
-## Video Lab Command Router
+Follow AGENTS.md for authority, safe credentials, exact scope and acceptance. Run the checks relevant to the changed component, inspect the real output, update task state, and continue the next authorized step. Technical completion, deployment and editorial acceptance remain separate.
 
-When a Telegram message matches a Video Lab command, execute:
-
-```bash
-video-lab telegram --message "<raw Telegram message>"
-```
-
-Weekly planning commands are deterministic and read-only:
-
-```bash
-hermes-week-status
-hermes-week-plan
-hermes-week-plan --day <dia-o-fecha>
-```
-
-Map Telegram intents:
-
-- `Estado Semana` -> `hermes-week-status`
-- `Plan Semana` -> `hermes-week-plan`
-- `Plan Hoy` -> `hermes-week-plan --day <current day>`
-
-Supported messages:
-
-- `Genera video Sergio: <idea>`
-- `Crea avatar Sergio: <objetivo> | <variante>`
-- `Genera Reel ONIA: <tema> | <objetivo>`
-- `Crea video cliente: <negocio> | <oferta> | <estilo>`
-- `Estado Video Lab [job_id]`
-- `Aprobar video <job_id>`
-- `Rehacer video <job_id>: <cambio>`
-- `Video generado <job_id>: <url_video>`
-- `Publicar video <job_id>`
-
-Use the `telegram_reply` field from the JSON result as the basis for the answer.
-
-## Telegram Command Center
-
-General Hermes/ONIA commands should map to:
-
-```bash
-hermes-command telegram --message "<raw Telegram message>"
-```
-
-Use this for status, planning, project orchestration, sales prep, automation
-state and content-factory requests. The command delegates Video Lab messages to
-`video-lab telegram` and weekly planning messages to `hermes-week-status` or
-`hermes-week-plan`.
-
-Supported general intents:
-
-- `Plan Sergio hoy`
-- `Puedo reunirme <dia> <hora>?`
-- `Modo enfoque`
-- `Estoy saturado`
-- `Modo gym`
-- `Modo novia`
-- `Cierre Sergio`
-- `Estado Semana`
-- `Plan Semana`
-- `Plan Hoy`
-- `Automatizaciones ONIA`
-- `Mapa proyectos ONIA`
-- `Fabrica contenido ONIA`
-- `Radar creativo ONIA`
-- `Cola contenido diaria`
-- `Seguimientos ONIA hoy`
-- `Recordatorios Video Lab detalle`
-- `Platform Copy Queue`
-- `Watcher Higgsfield detalle`
-- `Registro Hermes`
-- `Orquesta ONIA: <empresa o rubro> | <objetivo>`
-- `Prepara venta DentalGest: <clinica>`
-- `Prepara venta Gestios: <empresa>`
-- `Prepara venta Web ONIA: <negocio>`
-- `Prepara consultoria ONIA: <negocio> | <dolor o proceso>`
-
-## Approval Boundaries
-
-- Brief generation is safe.
-- Marking a video as generated is safe if the URL is public and user-provided.
-- Publishing is not safe by default.
-- `Publicar video <job_id>` is treated as explicit publish approval.
-- AI face videos for Sergio still require manual review before publish.
-
-## Safety
-
-- Never reveal tokens.
-- Never publish placeholders.
-- Never publish generated face videos without explicit approval.
-- If a publish command fails, report the exact actionable error.
-
-## Validation
-
-After implementation or deploy, validate:
-
-```bash
-video-lab status --limit 5
-video-lab telegram --message "Estado Video Lab"
-```
-
-For publishing:
-
-```bash
-ig-publish healthcheck
-```
-
-Do not print full tokens or secrets.
+No whole-workspace cleanup, installer, migration, auto-sync, publishing handler or hook test may be run merely to make a checklist green. Preserve exact WIP and history; record a concrete unresolved boundary instead of fabricating success.

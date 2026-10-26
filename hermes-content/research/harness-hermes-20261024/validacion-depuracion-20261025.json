@@ -1,0 +1,131 @@
+{
+  "checks": [
+    {
+      "check": "guardas_secretos_y_siat",
+      "pass": true
+    },
+    {
+      "check": "guardas_gasto_instalacion_y_terceros",
+      "pass": true
+    },
+    {
+      "check": "publicacion_y_rol_codex",
+      "pass": true
+    },
+    {
+      "check": "contexto_y_aislamiento",
+      "pass": true
+    },
+    {
+      "check": "fuente_claude_compartida",
+      "pass": true
+    },
+    {
+      "check": "skills_condicionales_coherentes",
+      "pass": true
+    },
+    {
+      "check": "sin_mandato_buscar_credenciales",
+      "pass": true
+    },
+    {
+      "check": "skill_equipo_sin_arranque_de_loops",
+      "pass": true
+    },
+    {
+      "check": "historia_manifiesto_completa",
+      "pass": true
+    },
+    {
+      "check": "historia_equipo_completa",
+      "pass": true
+    },
+    {
+      "check": "historia_telegram_completa",
+      "pass": true
+    },
+    {
+      "check": "sin_ruteo_legacy_automatico",
+      "pass": true
+    },
+    {
+      "check": "enlaces_historia_existentes",
+      "pass": true
+    },
+    {
+      "check": "entrada_hermes_bajo_limite_documentado",
+      "pass": true
+    },
+    {
+      "check": "diff_sin_errores_whitespace",
+      "pass": true
+    },
+    {
+      "check": "suites_post_edicion_pasan",
+      "pass": true
+    }
+  ],
+  "passed": 16,
+  "suites": [
+    {
+      "suite": "docs-hygiene.test.mjs",
+      "exit_code": 0,
+      "totals": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "skipped": 0
+      },
+      "failure_lines": []
+    },
+    {
+      "suite": "orquesta/orquesta.test.mjs",
+      "exit_code": 0,
+      "totals": {
+        "tests": 27,
+        "pass": 27,
+        "fail": 0,
+        "skipped": 0
+      },
+      "failure_lines": []
+    }
+  ],
+  "inert_hook_fixtures": 25,
+  "metrics": [
+    {
+      "path": "AGENTS.md",
+      "before_bytes": 19383,
+      "after_bytes": 9329,
+      "before_lines": 316,
+      "after_lines": 76,
+      "byte_reduction_percent": 51.9
+    },
+    {
+      "path": "COORDINATION_MANIFEST.md",
+      "before_bytes": 80218,
+      "after_bytes": 3519,
+      "before_lines": 1077,
+      "after_lines": 38,
+      "byte_reduction_percent": 95.6
+    },
+    {
+      "path": ".claude/skills/equipo-de-agentes/SKILL.md",
+      "before_bytes": 15802,
+      "after_bytes": 5281,
+      "before_lines": 169,
+      "after_lines": 56,
+      "byte_reduction_percent": 66.6
+    },
+    {
+      "path": "hermes-content/docs/EXECUTION_PROTOCOL.md",
+      "before_bytes": 11154,
+      "after_bytes": 7600,
+      "before_lines": 271,
+      "after_lines": 136,
+      "byte_reduction_percent": 31.9
+    }
+  ],
+  "backup_manifest": "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\manifest.json",
+  "initial_probe": "Assertion used a different Spanish phrase; inspected the actual source, corrected the checker, no policy changed for this test.",
+  "scope": "Files and inert checks only. No claim of live prompt reload, hook health, measured token savings, deployment or independent QA approval."
+}

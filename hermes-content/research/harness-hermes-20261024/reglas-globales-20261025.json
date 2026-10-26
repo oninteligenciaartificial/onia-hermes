@@ -1,0 +1,1105 @@
+{
+  "fecha_revision": "2026-10-25",
+  "fuente": "C:/Users/PC/.claude/rules",
+  "alcance": "Solo archivos .md bajo la raíz indicada, incluyendo subdirectorios; contenido tratado como datos. Sin lectura de settings o credenciales, sin instalaciones, activación ni cambios en fuentes.",
+  "totales": {
+    "archivos_markdown": 83,
+    "bytes": 152892,
+    "con_paths": 60,
+    "sin_paths": 23
+  },
+  "hallazgos_transversales": [
+    "Alcance: recorrido recursivo solo dentro de `C:/Users/PC/.claude/rules`; 83 Markdown regulares, 152.892 bytes. No se siguieron symlinks ni se leyó fuera de esa raíz.",
+    "60/60 archivos en las 12 carpetas de lenguaje tienen frontmatter `paths` con globs declarados. Esto expresa intención de alcance por ruta; no se comprobó el motor de carga, el proyecto coincidente ni activación en esta sesión Hermes.",
+    "23 archivos no declaran `paths`: 11 `common/`, 7 `web/`, 4 `token-eficiente/` y `README.md`. La ausencia de frontmatter no prueba inyección aquí. README dice que common se instala siempre en el método descrito; no equivale a configuración de Hermes.",
+    "Despacho: `common/agents.md` ordena sin prompt previo para ciertos casos y `ALWAYS` paralelizar operaciones independientes. Riesgo de colisionar con Hermes como planificador y `scripts/orquesta/` como distribuidor; no se activó ni se obedeció esa regla.",
+    "Modelo: `common/performance.md` codifica Haiku 4.5, Sonnet 4.6 y Opus 4.5, más comparativas de capacidad/costo. Es mapeo de marca/versiones para Claude, no política vigente de Hermes.",
+    "Reintentos: no se encontró mandato de reintento infinito. `kotlin/security.md` advierte que defaults de timeout HTTP pueden ser infinitos; `rust/patterns.md` muestra ejemplo acotado a menos de 5 reintentos; Dart solo pide probar el estado retry.",
+    "Git: no hay una regla que ordene auto-commit/auto-push. Sí hay fase `Commit & Push` y flujo PR/push en `common/development-workflow.md` y `common/git-workflow.md`; aplicarlos a Codex chocaría con el contrato vigente sin Git.",
+    "Credenciales: recomendaciones de no hardcodear y usar variables/secret manager son controles de texto, no permiso de acceso. Hay ejemplos `sk-*` de apariencia ficticia en reglas de seguridad. No se leyó bóveda, settings, tokens reales ni se usó credencial.",
+    "Cobertura: `common/testing.md`, `common/code-review.md` y `common/development-workflow.md` imponen 80%/80%+ general y tipos unit/integración/E2E. Algunos tests de lenguajes repiten 80%; otros solo muestran comandos o delegan umbrales a CI. La cobertura no es equivalente a verificar el contrato de la tarea.",
+    "Redundancias/omisiones: desarrollo, revisión y Git repiten agentes, TDD y etapas de commit/PR; el README describe precedencia common/lenguaje. No se encontró política sobre trato a clientes usted vs marca personal vos ni reserva de MFA/gasto/permisos; se mantiene la regla vigente del encargo."
+  ],
+  "acciones_concretas": [
+    "Mantener estos 83 archivos como datos de revisión; no copiarlos ni activarlos en Hermes sin una autorización y verificación de carga separadas.",
+    "Para tareas ONIA, conservar Hermes como planificador y `scripts/orquesta/` como distribuidor; ignorar el `ALWAYS` de despacho cuando no aplique al contrato cerrado.",
+    "No ejecutar commit/push/PR en Codex: el flujo Git de estas reglas no desplaza la autorización vigente.",
+    "Elegir modelo desde el catálogo autorizado vigente y los permisos reales, no desde los nombres/versiones fijos de `common/performance.md`.",
+    "Definir aceptación con pruebas del contrato; tratar 80% como requisito solo si el proyecto/CI lo exige. Permisos, gasto, MFA y uso de credenciales siguen reservados."
+  ],
+  "inventario": [
+    {
+      "ruta": "common/agents.md",
+      "bytes": 1594,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Hallazgo de conflicto: indica uso de agentes sin prompt y ALWAYS paralelizar operaciones independientes; los nombres/ruta son del ecosistema Claude. No sustituye la autoridad actual de Hermes y scripts/orquesta."
+      ]
+    },
+    {
+      "ruta": "common/code-review.md",
+      "bytes": 3626,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Hallazgo de conflicto: fija cobertura mínima general de 80% y exige revisiones/agentes en flujos de commit/merge. Es una regla genérica, no una prueba de aceptación por contrato; Codex no hace Git bajo la autorización vigente."
+      ]
+    },
+    {
+      "ruta": "common/coding-style.md",
+      "bytes": 1450,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Hallazgo: formula inmutabilidad, manejo de errores y validación de límites como absolutos; aplicarlos con criterio del contrato y las excepciones idiomáticas de cada lenguaje."
+      ]
+    },
+    {
+      "ruta": "common/development-workflow.md",
+      "bytes": 2296,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Hallazgo de conflicto alto: prescribe búsquedas GitHub/docs/Exa/registries, agentes planner y TDD, 80%+ coverage y una fase explícita Commit & Push. No es compatible como mandato para Codex de contrato cerrado sin Git; además duplica git-workflow y code-review."
+      ]
+    },
+    {
+      "ruta": "common/git-workflow.md",
+      "bytes": 646,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Hallazgo de conflicto: define flujo de PR y push (`git push -u`); no autoriza esas operaciones en Hermes/Codex y contradice la regla vigente de Codex sin Git si se importa sin filtro."
+      ]
+    },
+    {
+      "ruta": "common/hooks.md",
+      "bytes": 798,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Describe hooks y opciones de permisos de Claude (`~/.claude.json`); advierte contra saltar permisos. Es documentación, no evidencia de hooks activos en Hermes ni autorización para cambiar permisos."
+      ]
+    },
+    {
+      "ruta": "common/patterns.md",
+      "bytes": 1053,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Patrones genéricos de estructura/API; sin conflicto material detectado con el contrato actual."
+      ]
+    },
+    {
+      "ruta": "common/performance.md",
+      "bytes": 1654,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Hallazgo de riesgo: fija marcas/versiones Haiku 4.5, Sonnet 4.6 y Opus 4.5, con claims de capacidad/costo no verificados aquí. Política específica de Claude y sensible al tiempo; no usar para rutear modelos Hermes."
+      ]
+    },
+    {
+      "ruta": "common/security.md",
+      "bytes": 891,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Contiene controles generales favorables para secretos y revisión. Las instrucciones de entorno/secret manager no otorgan permiso para acceder, leer o usar credenciales; no se inspeccionaron bóvedas ni settings."
+      ]
+    },
+    {
+      "ruta": "common/testing.md",
+      "bytes": 799,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Hallazgo de conflicto: exige unit, integración y E2E en todos los casos y 80%+ como mínimo universal. Preferir las pruebas del contrato/aceptación y aplicar umbral solo si el proyecto lo exige."
+      ]
+    },
+    {
+      "ruta": "common/token-eficiente.md",
+      "bytes": 541,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Perfil de instrucciones generales y concisas; sin `paths`. Se superpone con los perfiles de `token-eficiente/`; su presencia no demuestra carga en esta sesión."
+      ]
+    },
+    {
+      "ruta": "cpp/coding-style.md",
+      "bytes": 1273,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cpp",
+        "**/*.hpp",
+        "**/*.cc",
+        "**/*.hh",
+        "**/*.cxx",
+        "**/*.h",
+        "**/CMakeLists.txt"
+      ],
+      "hallazgos": [
+        "Temas: Modern C++ (C++17/20/23); Resource Management; Naming Conventions; Formatting.",
+        "cpp: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "cpp/hooks.md",
+      "bytes": 773,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cpp",
+        "**/*.hpp",
+        "**/*.cc",
+        "**/*.hh",
+        "**/*.cxx",
+        "**/*.h",
+        "**/CMakeLists.txt"
+      ],
+      "hallazgos": [
+        "Temas: Build Hooks; Format check; Static analysis; Build.",
+        "cpp: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "cpp/patterns.md",
+      "bytes": 1383,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cpp",
+        "**/*.hpp",
+        "**/*.cc",
+        "**/*.hh",
+        "**/*.cxx",
+        "**/*.h",
+        "**/CMakeLists.txt"
+      ],
+      "hallazgos": [
+        "Temas: RAII (Resource Acquisition Is Initialization); Rule of Five/Zero; Value Semantics; Error Handling.",
+        "cpp: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "cpp/security.md",
+      "bytes": 1243,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cpp",
+        "**/*.hpp",
+        "**/*.cc",
+        "**/*.hh",
+        "**/*.cxx",
+        "**/*.h",
+        "**/CMakeLists.txt"
+      ],
+      "hallazgos": [
+        "Temas: Memory Safety; Buffer Overflows; Undefined Behavior; Static Analysis.",
+        "cpp: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial."
+      ]
+    },
+    {
+      "ruta": "cpp/testing.md",
+      "bytes": 887,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cpp",
+        "**/*.hpp",
+        "**/*.cc",
+        "**/*.hh",
+        "**/*.cxx",
+        "**/*.h",
+        "**/CMakeLists.txt"
+      ],
+      "hallazgos": [
+        "Temas: Framework; Running Tests; Coverage; Sanitizers.",
+        "cpp: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal."
+      ]
+    },
+    {
+      "ruta": "csharp/coding-style.md",
+      "bytes": 2104,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cs",
+        "**/*.csx"
+      ],
+      "hallazgos": [
+        "Temas: Standards; Types and Models; Immutability; Async and Error Handling.",
+        "csharp: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "csharp/hooks.md",
+      "bytes": 740,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cs",
+        "**/*.csx",
+        "**/*.csproj",
+        "**/*.sln",
+        "**/Directory.Build.props",
+        "**/Directory.Build.targets"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks; Stop Hooks.",
+        "csharp: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "csharp/patterns.md",
+      "bytes": 1442,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cs",
+        "**/*.csx"
+      ],
+      "hallazgos": [
+        "Temas: API Response Pattern; Repository Pattern; Options Pattern; Dependency Injection.",
+        "csharp: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "csharp/security.md",
+      "bytes": 1777,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cs",
+        "**/*.csx",
+        "**/*.csproj",
+        "**/appsettings*.json"
+      ],
+      "hallazgos": [
+        "Temas: Secret Management; SQL Injection Prevention; Input Validation; Authentication and Authorization.",
+        "csharp: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial.",
+        "Contiene valores de ejemplo con formato de API key; tratarlos como placeholders, no copiar ni validar como secretos reales."
+      ]
+    },
+    {
+      "ruta": "csharp/testing.md",
+      "bytes": 1220,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.cs",
+        "**/*.csx",
+        "**/*.csproj"
+      ],
+      "hallazgos": [
+        "Temas: Test Framework; Test Organization; ASP.NET Core Integration Tests; Coverage.",
+        "csharp: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal.",
+        "Declara expresamente objetivo/umbral 80%+; no sustituye pruebas de contrato."
+      ]
+    },
+    {
+      "ruta": "dart/coding-style.md",
+      "bytes": 4710,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.dart",
+        "**/pubspec.yaml",
+        "**/analysis_options.yaml"
+      ],
+      "hallazgos": [
+        "Temas: Formatting; Immutability; Naming; Null Safety.",
+        "dart: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "dart/hooks.md",
+      "bytes": 1366,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.dart",
+        "**/pubspec.yaml",
+        "**/analysis_options.yaml"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks; Recommended Hook Configuration; Pre-commit Checks; Useful One-liners.",
+        "dart: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "dart/patterns.md",
+      "bytes": 7080,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.dart",
+        "**/pubspec.yaml"
+      ],
+      "hallazgos": [
+        "Temas: Repository Pattern; State Management: BLoC/Cubit; State Management: Riverpod; Dependency Injection.",
+        "dart: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "dart/security.md",
+      "bytes": 5320,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.dart",
+        "**/pubspec.yaml",
+        "**/AndroidManifest.xml",
+        "**/Info.plist"
+      ],
+      "hallazgos": [
+        "Temas: Secrets Management; Network Security; Input Validation; Data Protection.",
+        "dart: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial.",
+        "Contiene valores de ejemplo con formato de API key; tratarlos como placeholders, no copiar ni validar como secretos reales."
+      ]
+    },
+    {
+      "ruta": "dart/testing.md",
+      "bytes": 5632,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.dart",
+        "**/pubspec.yaml",
+        "**/analysis_options.yaml"
+      ],
+      "hallazgos": [
+        "Temas: Test Framework; Test Types; Unit Tests: State Managers; BLoC with `bloc_test`.",
+        "dart: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal.",
+        "Declara expresamente objetivo/umbral 80%+; no sustituye pruebas de contrato."
+      ]
+    },
+    {
+      "ruta": "golang/coding-style.md",
+      "bytes": 612,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.go",
+        "**/go.mod",
+        "**/go.sum"
+      ],
+      "hallazgos": [
+        "Temas: Formatting; Design Principles; Error Handling; Reference.",
+        "golang: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "golang/hooks.md",
+      "bytes": 423,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.go",
+        "**/go.mod",
+        "**/go.sum"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks.",
+        "golang: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "golang/patterns.md",
+      "bytes": 934,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.go",
+        "**/go.mod",
+        "**/go.sum"
+      ],
+      "hallazgos": [
+        "Temas: Functional Options; Small Interfaces; Dependency Injection; Reference.",
+        "golang: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "golang/security.md",
+      "bytes": 592,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.go",
+        "**/go.mod",
+        "**/go.sum"
+      ],
+      "hallazgos": [
+        "Temas: Secret Management; Security Scanning; Context & Timeouts.",
+        "golang: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial."
+      ]
+    },
+    {
+      "ruta": "golang/testing.md",
+      "bytes": 488,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.go",
+        "**/go.mod",
+        "**/go.sum"
+      ],
+      "hallazgos": [
+        "Temas: Framework; Race Detection; Coverage; Reference.",
+        "golang: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal."
+      ]
+    },
+    {
+      "ruta": "java/coding-style.md",
+      "bytes": 3616,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.java"
+      ],
+      "hallazgos": [
+        "Temas: Formatting; Immutability; Naming; Modern Java Features.",
+        "java: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "java/hooks.md",
+      "bytes": 485,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.java",
+        "**/pom.xml",
+        "**/build.gradle",
+        "**/build.gradle.kts"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks.",
+        "java: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "java/patterns.md",
+      "bytes": 4152,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.java"
+      ],
+      "hallazgos": [
+        "Temas: Repository Pattern; Service Layer; Constructor Injection; DTO Mapping.",
+        "java: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "java/security.md",
+      "bytes": 3555,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.java"
+      ],
+      "hallazgos": [
+        "Temas: Secrets Management; SQL Injection Prevention; Input Validation; Authentication and Authorization.",
+        "java: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial.",
+        "Contiene valores de ejemplo con formato de API key; tratarlos como placeholders, no copiar ni validar como secretos reales."
+      ]
+    },
+    {
+      "ruta": "java/testing.md",
+      "bytes": 3639,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.java"
+      ],
+      "hallazgos": [
+        "Temas: Test Framework; Test Organization; Unit Test Pattern; Parameterized Tests.",
+        "java: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal.",
+        "Declara expresamente objetivo/umbral 80%+; no sustituye pruebas de contrato."
+      ]
+    },
+    {
+      "ruta": "kotlin/coding-style.md",
+      "bytes": 2767,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.kt",
+        "**/*.kts"
+      ],
+      "hallazgos": [
+        "Temas: Formatting; Immutability; Naming; Null Safety.",
+        "kotlin: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "kotlin/hooks.md",
+      "bytes": 438,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.kt",
+        "**/*.kts",
+        "**/build.gradle.kts"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks.",
+        "kotlin: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "kotlin/patterns.md",
+      "bytes": 3760,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.kt",
+        "**/*.kts"
+      ],
+      "hallazgos": [
+        "Temas: Dependency Injection; ViewModel Pattern; Repository Pattern; UseCase Pattern.",
+        "kotlin: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "kotlin/security.md",
+      "bytes": 2883,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.kt",
+        "**/*.kts"
+      ],
+      "hallazgos": [
+        "Temas: Secrets Management; Network Security; Input Validation; Data Protection.",
+        "kotlin: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial.",
+        "Contiene valores de ejemplo con formato de API key; tratarlos como placeholders, no copiar ni validar como secretos reales."
+      ]
+    },
+    {
+      "ruta": "kotlin/testing.md",
+      "bytes": 3489,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.kt",
+        "**/*.kts"
+      ],
+      "hallazgos": [
+        "Temas: Test Framework; ViewModel Testing with Turbine; Fakes Over Mocks; Coroutine Testing.",
+        "kotlin: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal."
+      ]
+    },
+    {
+      "ruta": "perl/coding-style.md",
+      "bytes": 1183,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.pl",
+        "**/*.pm",
+        "**/*.t",
+        "**/*.psgi",
+        "**/*.cgi"
+      ],
+      "hallazgos": [
+        "Temas: Standards; Immutability; Formatting; Linting.",
+        "perl: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "perl/hooks.md",
+      "bytes": 507,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.pl",
+        "**/*.pm",
+        "**/*.t",
+        "**/*.psgi",
+        "**/*.cgi"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks; Warnings.",
+        "perl: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "perl/patterns.md",
+      "bytes": 1541,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.pl",
+        "**/*.pm",
+        "**/*.t",
+        "**/*.psgi",
+        "**/*.cgi"
+      ],
+      "hallazgos": [
+        "Temas: Repository Pattern; DTOs / Value Objects; Resource Management; Module Interface.",
+        "perl: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "perl/security.md",
+      "bytes": 1543,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.pl",
+        "**/*.pm",
+        "**/*.t",
+        "**/*.psgi",
+        "**/*.cgi"
+      ],
+      "hallazgos": [
+        "Temas: Taint Mode; Input Validation; File I/O; Process Execution.",
+        "perl: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial."
+      ]
+    },
+    {
+      "ruta": "perl/testing.md",
+      "bytes": 991,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.pl",
+        "**/*.pm",
+        "**/*.t",
+        "**/*.psgi",
+        "**/*.cgi"
+      ],
+      "hallazgos": [
+        "Temas: Framework; Runner; Coverage; Mocking.",
+        "perl: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal.",
+        "Declara expresamente objetivo/umbral 80%+; no sustituye pruebas de contrato."
+      ]
+    },
+    {
+      "ruta": "php/coding-style.md",
+      "bytes": 1425,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.php",
+        "**/composer.json"
+      ],
+      "hallazgos": [
+        "Temas: Standards; Immutability; Formatting; Imports.",
+        "php: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "php/hooks.md",
+      "bytes": 705,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.php",
+        "**/composer.json",
+        "**/phpstan.neon",
+        "**/phpstan.neon.dist",
+        "**/psalm.xml"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks; Warnings.",
+        "php: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "php/patterns.md",
+      "bytes": 1238,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.php",
+        "**/composer.json"
+      ],
+      "hallazgos": [
+        "Temas: Thin Controllers, Explicit Services; DTOs and Value Objects; Dependency Injection; Boundaries.",
+        "php: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "php/security.md",
+      "bytes": 1403,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.php",
+        "**/composer.lock",
+        "**/composer.json"
+      ],
+      "hallazgos": [
+        "Temas: Input and Output; Database Safety; Secrets and Dependencies; Auth and Session Safety.",
+        "php: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial."
+      ]
+    },
+    {
+      "ruta": "php/testing.md",
+      "bytes": 1214,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.php",
+        "**/phpunit.xml",
+        "**/phpunit.xml.dist",
+        "**/composer.json"
+      ],
+      "hallazgos": [
+        "Temas: Framework; Coverage; or; Test Organization.",
+        "php: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal.",
+        "Deja umbrales al CI del proyecto; no fija 80% universal."
+      ]
+    },
+    {
+      "ruta": "python/coding-style.md",
+      "bytes": 753,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.py",
+        "**/*.pyi"
+      ],
+      "hallazgos": [
+        "Temas: Standards; Immutability; Formatting; Reference.",
+        "python: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "python/hooks.md",
+      "bytes": 443,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.py",
+        "**/*.pyi"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks; Warnings.",
+        "python: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "python/patterns.md",
+      "bytes": 862,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.py",
+        "**/*.pyi"
+      ],
+      "hallazgos": [
+        "Temas: Protocol (Duck Typing); Dataclasses as DTOs; Context Managers & Generators; Reference.",
+        "python: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "python/security.md",
+      "bytes": 554,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.py",
+        "**/*.pyi"
+      ],
+      "hallazgos": [
+        "Temas: Secret Management; Security Scanning; Reference.",
+        "python: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial."
+      ]
+    },
+    {
+      "ruta": "python/testing.md",
+      "bytes": 619,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.py",
+        "**/*.pyi"
+      ],
+      "hallazgos": [
+        "Temas: Framework; Coverage; Test Organization; Reference.",
+        "python: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal."
+      ]
+    },
+    {
+      "ruta": "README.md",
+      "bytes": 4688,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Documento de estructura/instalación: llama a common `always install` y propone precedencia de lenguaje sobre common. Describe el paquete Claude; no prueba instalación ni inyección en Hermes."
+      ]
+    },
+    {
+      "ruta": "rust/coding-style.md",
+      "bytes": 4326,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.rs"
+      ],
+      "hallazgos": [
+        "Temas: Formatting; Immutability; Naming; Ownership and Borrowing.",
+        "rust: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "rust/hooks.md",
+      "bytes": 422,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.rs",
+        "**/Cargo.toml"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks.",
+        "rust: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "rust/patterns.md",
+      "bytes": 4171,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.rs"
+      ],
+      "hallazgos": [
+        "Temas: Repository Pattern with Traits; Service Layer; Newtype Pattern for Type Safety; Enum State Machines.",
+        "rust: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "rust/security.md",
+      "bytes": 4541,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.rs"
+      ],
+      "hallazgos": [
+        "Temas: Secrets Management; SQL Injection Prevention; Input Validation; Unsafe Code.",
+        "rust: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial.",
+        "Contiene valores de ejemplo con formato de API key; tratarlos como placeholders, no copiar ni validar como secretos reales."
+      ]
+    },
+    {
+      "ruta": "rust/testing.md",
+      "bytes": 4079,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.rs"
+      ],
+      "hallazgos": [
+        "Temas: Test Framework; Test Organization; Unit Test Pattern; Parameterized Tests.",
+        "rust: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal.",
+        "Declara expresamente objetivo/umbral 80%+; no sustituye pruebas de contrato."
+      ]
+    },
+    {
+      "ruta": "swift/coding-style.md",
+      "bytes": 1401,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.swift",
+        "**/Package.swift"
+      ],
+      "hallazgos": [
+        "Temas: Formatting; Immutability; Naming; Error Handling.",
+        "swift: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "swift/hooks.md",
+      "bytes": 529,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.swift",
+        "**/Package.swift"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks; Warning.",
+        "swift: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "swift/patterns.md",
+      "bytes": 1593,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.swift",
+        "**/Package.swift"
+      ],
+      "hallazgos": [
+        "Temas: Protocol-Oriented Design; Value Types; Actor Pattern; Dependency Injection.",
+        "swift: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "swift/security.md",
+      "bytes": 1053,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.swift",
+        "**/Package.swift"
+      ],
+      "hallazgos": [
+        "Temas: Secret Management; Transport Security; Input Validation.",
+        "swift: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial."
+      ]
+    },
+    {
+      "ruta": "swift/testing.md",
+      "bytes": 1050,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.swift",
+        "**/Package.swift"
+      ],
+      "hallazgos": [
+        "Temas: Framework; Test Isolation; Parameterized Tests; Coverage.",
+        "swift: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal."
+      ]
+    },
+    {
+      "ruta": "token-eficiente/agents.md",
+      "bytes": 1064,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Perfil para agentes y salida estructurada; sin `paths`. Puede chocar con el estilo normal solicitado si se importa como regla global; no evidencia de activación."
+      ]
+    },
+    {
+      "ruta": "token-eficiente/analysis.md",
+      "bytes": 1354,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Perfil de análisis/reportes; sin `paths`. Se superpone con instrucciones generales y no evidencia de activación."
+      ]
+    },
+    {
+      "ruta": "token-eficiente/benchmark.md",
+      "bytes": 596,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Perfil de benchmark que prioriza salida mínima; sin `paths`. No debe reducir prueba/calidad del contrato ni reemplazar autorización."
+      ]
+    },
+    {
+      "ruta": "token-eficiente/coding.md",
+      "bytes": 1409,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Perfil de codificación con restricciones de estilo/revisión; sin `paths`. Se superpone con reglas common y no evidencia de activación."
+      ]
+    },
+    {
+      "ruta": "typescript/coding-style.md",
+      "bytes": 4490,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx"
+      ],
+      "hallazgos": [
+        "Temas: Types and Interfaces; Public APIs; Interfaces vs. Type Aliases; Avoid `any`.",
+        "typescript: Reglas idiomáticas de estilo del lenguaje; el frontmatter declara rutas de archivo objetivo."
+      ]
+    },
+    {
+      "ruta": "typescript/hooks.md",
+      "bytes": 583,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx"
+      ],
+      "hallazgos": [
+        "Temas: PostToolUse Hooks; Stop Hooks.",
+        "typescript: Recomendaciones/comandos de hooks para el lenguaje. Las referencias a configuración Claude (`~/.claude/settings.json`) son del cliente externo; no se activó ningún hook."
+      ]
+    },
+    {
+      "ruta": "typescript/patterns.md",
+      "bytes": 1082,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx"
+      ],
+      "hallazgos": [
+        "Temas: API Response Format; Custom Hooks Pattern; Repository Pattern.",
+        "typescript: Ejemplos y patrones de arquitectura propios del lenguaje; valorar contra el diseño/contrato concreto."
+      ]
+    },
+    {
+      "ruta": "typescript/security.md",
+      "bytes": 576,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx"
+      ],
+      "hallazgos": [
+        "Temas: Secret Management; Agent Support.",
+        "typescript: Guía de seguridad del lenguaje. Snippets con cadenas `sk-*` son ejemplos/placeholders visibles, no credenciales verificadas; no se usó ninguna credencial."
+      ]
+    },
+    {
+      "ruta": "typescript/testing.md",
+      "bytes": 393,
+      "paths_declarado": true,
+      "paths": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx"
+      ],
+      "hallazgos": [
+        "Temas: E2E Testing; Agent Support.",
+        "typescript: Framework, comandos y organización de pruebas propios del lenguaje. Los umbrales genéricos varían; aplicar pruebas del contrato y configuración CI del proyecto antes que asumir 80% universal."
+      ]
+    },
+    {
+      "ruta": "web/coding-style.md",
+      "bytes": 2285,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Temas: File Organization; CSS Custom Properties; Animation-Only Properties; Semantic HTML First.",
+        "Estilo/organización web y CSS; no declara `paths`, así que el archivo no expresa filtro por ruta."
+      ]
+    },
+    {
+      "ruta": "web/design-quality.md",
+      "bytes": 2579,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Temas: Anti-Template Policy; Banned Patterns; Required Qualities; Before Writing Frontend Code.",
+        "Criterios de calidad visual/anti-plantilla; incluye no imponer dark mode automáticamente. No declara `paths` ni es una autorización para cambiar una superficie pública."
+      ]
+    },
+    {
+      "ruta": "web/hooks.md",
+      "bytes": 2452,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Temas: Recommended PostToolUse Hooks; Format on Save; Lint Check; Type Check.",
+        "Recomendaciones de checks/hooks web; no declara `paths` y no se observó activación."
+      ]
+    },
+    {
+      "ruta": "web/patterns.md",
+      "bytes": 2076,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Temas: Component Composition; Compound Components; Render Props / Slots; Container / Presentational Split.",
+        "Patrones de composición de componentes; no declara `paths`."
+      ]
+    },
+    {
+      "ruta": "web/performance.md",
+      "bytes": 1904,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Temas: Core Web Vitals Targets; Bundle Budget; Loading Strategy; Image Optimization.",
+        "Targets/guía de rendimiento web; no declara `paths`."
+      ]
+    },
+    {
+      "ruta": "web/security.md",
+      "bytes": 1647,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Temas: Content Security Policy; Nonce-Based CSP; XSS Prevention; Third-Party Scripts.",
+        "Seguridad web (CSP/XSS/scripts); no declara `paths`."
+      ]
+    },
+    {
+      "ruta": "web/testing.md",
+      "bytes": 1437,
+      "paths_declarado": false,
+      "paths": null,
+      "hallazgos": [
+        "Temas: Priority Order; 1. Visual Regression; 2. Accessibility; 3. Performance.",
+        "Prioriza regresión visual, accesibilidad, rendimiento, navegadores y responsive; no declara `paths` ni exige por sí solo un porcentaje concreto."
+      ]
+    }
+  ]
+}

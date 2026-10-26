@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://raw.githubusercontent.com/morluto/rea/f69c52a1cf3940ed1999fcc0859a75dbb913d684/README.md",
+      "title": "REA · README.md",
+      "accessed": "2026-10-25"
+    },
+    {
+      "id": 2,
+      "url": "https://raw.githubusercontent.com/morluto/rea/f69c52a1cf3940ed1999fcc0859a75dbb913d684/docs/installation.md",
+      "title": "REA · docs/installation.md",
+      "accessed": "2026-10-25"
+    }
+  ]
+}

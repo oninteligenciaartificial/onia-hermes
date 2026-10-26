@@ -1,0 +1,12 @@
+{
+  "ficha": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\video-intake\\2026-10-25-leon-harness-z1EaBe9oIME.md",
+  "documentation_tests_exit": 0,
+  "diff_whitespace_check_exit": 0,
+  "checks": {
+    "frontmatter_and_cli_signature": true,
+    "false_coverage_guarantees_removed": true,
+    "empty_asr_not_silence": true,
+    "public_visual_evidence_count": 10
+  },
+  "scope": "video teaching and presentation review; rule/hook edits remain in the parent task"
+}

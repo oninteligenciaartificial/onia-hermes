@@ -30,21 +30,18 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 ## Cómo usar
 1. **Identificá el carril** de la tarea (tabla abajo). Ante duda, ver
    `CLAUDE.md` §4 "Carriles (REGLA)" y `COORDINATION_MANIFEST.md`.
-2. **Cargá el stack de proceso común** (siempre) + las skills del carril.
+2. **Elegí el proceso y las skills pertinentes** al encargo; no cargar todo el stack por rutina.
 3. **Delegá en subagentes** (`general-purpose`/`Explore`; `onia-crm-prospeccion` para prospección)
    cuando la tarea tiene fan-out o varios ángulos.
 4. **Respetá los gates** antes de mergear a `main`.
 
-## Stack de proceso común (TODA sesión, cualquier carril)
-**Corrección 2026-10-09:** cargar primero `equipo-de-agentes` (roles y loop) y
-`aprender-de-todo` (referencias, 12 dimensiones y prueba de uso), también en Codex.
-Las herramientas siguientes se aplican según la tarea; no iniciar orquestadores (orquestan
-Hermes y `scripts/orquesta/`, 19-oct) ni ejecutar Git fuera del encargo recibido.
+## Proceso: selección condicional, no carga de toda la biblioteca
 
-`using-superpowers` · `brainstorming` (antes de construir) · `make-plan`/`writing-plans` ·
-`test-driven-development` · `systematic-debugging`/`investigate` (bugs: no adivinar la causa) ·
-`verification-before-completion` · `code-review` · `security-review` ·
-`dispatching-parallel-agents` · `using-git-worktrees` · memoria vía `claude-mem`.
+Al iniciar, usar este router para elegir las fuentes del dominio. Cargar `equipo-de-agentes`
+al delegar/coordinar/revisar, y `aprender-de-todo` al aprender de material o referencias.
+Planificación, TDD, debugging, verificación, revisión de seguridad y worktrees se aplican
+cuando el cambio los requiere: no invocar una cadena genérica de skills para cada lectura.
+No iniciar orquestadores ni Git fuera del encargo: Hermes planifica y `scripts/orquesta/` reparte.
 
 ## Apartados por área de la empresa (20-oct-2026)
 
@@ -110,7 +107,8 @@ trabajador de la nube no lo tiene.
   break-even son 5 clientes), y por qué **abrir una línea de negocio nueva es la decisión más
   cara disponible** con una sola persona.
 - **Objetivo único por sesión.** Definirlo al inicio; no descarrilar; terminarlo antes de cerrar.
-- **Carriles = 1 sesión = 1 worktree = 1 rama.** Un subagente nunca edita archivos de otro carril.
+- **Para editar: carril, rama/worktree y dueño explícitos.** Un subagente nunca edita archivos de otro carril.
+  Las revisiones de solo lectura pueden compartir checkout con salidas distintas; no necesitan un worktree de adorno.
   Quien lo lanzó verifica rama y ruta antes de integrar; en encargos Codex sin Git,
   el ejecutor comprueba solo la ruta y entrega para revisión (corrección 2026-10-09).
 - **`main` SIEMPRE compila.** Si el avance toca `web-factory/apps/site/**`, `tsc --noEmit` verde
@@ -121,9 +119,9 @@ trabajador de la nube no lo tiene.
   espera el OK de Sergio Urcullo con captura (`CLAUDE.md` §«Qué se publica sin preguntar», 19-oct).
 - **Usted** con clientes, en la web y en los anuncios; marca personal, vos (19-oct).
   **Rubros:** dental → importadora → el resto (29-sep, confirmado el 19-oct).
-- **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear y pushear la rama al terminar;
-  respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct: el hook mueve `main` únicamente en la
-  sesión principal (antes «madre», `ONIA_AUTOSYNC_MAIN=1`) y el integrador (`ONIA_LOOP_ID=onia-cola`).
+- **Auto-sync no autoriza Git ni publicación.** La presencia histórica del hook Stop
+  `scripts/git-autosync.js` no prueba que esté activo ni amplía el encargo. No commitear,
+  pushear o integrar por terminar un turno; verificar rol, permiso, cambios y revisión.
 - **Autonomía máxima:** MCP → CLI/API → skill → script → recién ahí preguntar.
 - **Gasto (actualizado 2026-10-09):** seguir `CLAUDE.md` §Higgsfield: pruebas pequeñas
   de imagen autorizadas el 8-oct, cotizadas y registradas, sin fraccionar lotes.

@@ -11,18 +11,20 @@ description: >
 # Ver Videos — que ONIA "vea" cualquier video
 
 ## Overview
-Dos modos para que ONIA "vea" un video. **Preferí el PRIMARIO (Gemini) siempre que haya key** —
-mira el video NATIVO (imagen + audio juntos, timeline real). Sin key, cae al FALLBACK
-(frames + transcript), que es un parche: cubre el 80% pero pierde movimiento/continuidad.
+Dos modos para analizar video. Usar Gemini nativo cuando haya credencial, permiso y cuota verificados;
+sin eso, recurrir a transcripción + fotogramas. Este fallback no conserva toda la continuidad y no
+tiene un porcentaje fijo de cobertura: informar qué se obtuvo e inspeccionó realmente.
 
-- **PRIMARIO — Gemini nativo** (`scripts/gemini-see-video.mjs`): una llamada, mira video+audio,
-  devuelve resumen + timeline con timestamps + texto en pantalla. Gratis (Google AI Studio free tier).
-  Necesita `GEMINI_API_KEY` (gratis: aistudio.google.com/apikey). Acepta URL de YouTube directa o archivo local (File API).
+- **PRIMARIO — Gemini nativo** (`scripts/gemini-see-video.mjs`): analiza video+audio y devuelve
+  resumen + timeline + texto en pantalla. Es una interpretación auxiliar, no prueba de exactitud ni cobertura completa.
+  Necesita `GEMINI_API_KEY` ya autorizada. Verificar cuota/coste vigentes; no asumir gratuidad por este documento.
+  Acepta URL de YouTube directa o archivo local (File API); no subir media privada ni generar gasto sin su permiso.
 - **FALLBACK — frames + transcript** (`scripts/see-video.sh` + `scripts/transcribe.sh`): sin key,
   con ffmpeg + Speaches. Muestrea fotogramas + transcribe.
 
-**Principio (honestidad):** con Gemini, reportá lo que devolvió (mira todo). Con el fallback, decí la
-cobertura real ("audio 100%, vi N de M fotogramas") — nunca afirmes "vi el video" desde 2 cuadros.
+**Principio (honestidad):** separar análisis del modelo, transcripción, audio escuchado y cuadros inspeccionados.
+Informar la cobertura comprobada; no llamar "audio 100%" a leer subtítulos ni "visionado completo" a muestrear imágenes.
+Un resultado de Gemini tampoco prueba por sí solo que todos los detalles o timestamps sean correctos.
 
 ## PRIMARIO — Ver nativo con Gemini
 ```bash
@@ -39,8 +41,9 @@ GEMINI_API_KEY=... node scripts/gemini-see-video.mjs /ruta/video.mp4
   correrlos con `Promise.all` (ficha `references/video-intake/2026-10-08-orquestacion-e-ingresos-5-posts.md`).
 - Un link `/p/` puede ser carrusel: `fetch-video.mjs` falla con «No video formats found!» y se usa `ig-carousel.mjs`.
 - **Auto-reintento** ante errores transitorios (503 saturado / 429 rate limit / 500 / red): hasta 4 intentos con backoff escalonado ~3s, 8s, 20s (logueado a stderr). Los errores NO transitorios (400/401/403/404) fallan de una.
-- Devuelve resumen + timeline por secciones + texto en pantalla, todo con timestamps. Eso ES "ver el video".
-- Si falla (sin key, cuota, error) → usar el FALLBACK de abajo. Nunca se rompe.
+- Devuelve resumen + timeline por secciones + texto en pantalla; contrastar detalles relevantes con el medio.
+- Si falla (sin key, cuota, error) → intentar el FALLBACK autorizado de abajo. Si también falla, registrar el bloqueo;
+  no inventar una transcripción, atribuir ausencia de voz ni ampliar permisos para esconderlo.
 
 
 ## Bajar el MP4 — `scripts/fetch-video.mjs` (ruta por DEFECTO, 2026-08-09)
@@ -155,13 +158,13 @@ Gemini no es la capacidad: es un atajo barato. La visión propia es el piso y nu
 
 | Orden | Camino | Cuándo | Costo |
 | --- | --- | --- | --- |
-| 1 | **Gemini nativo** | video con audio y timeline que importa | gratis hasta ~20 videos/día (después: `You exceeded your current quota`, y es DIARIO — reintentar no sirve) |
-| 2 | **Whisper/Speaches + fotogramas leídos con visión** | cuota agotada, o hace falta verbatim exacto para citar | gratis, sin límite |
-| 3 | **Solo fotogramas con visión** | video mudo, carrusel, captura de pantalla | gratis; cuesta CONTEXTO, no dinero |
-| 4 | **Caption / texto** | carruseles y posts: casi siempre el 80% del contenido | gratis y barato — probar SIEMPRE primero |
+| 1 | **Gemini nativo** | video con audio y timeline que importa | cuota/precio por cuenta y modelo; no prometer un número diario ni coste cero sin verificación |
+| 2 | **Whisper/Speaches + fotogramas** | fallback o transcripción con timestamps | instalación, recursos y acceso existentes; no asumir disponibilidad ilimitada |
+| 3 | **Solo fotogramas con visión** | evidencia visual puntual | contexto y ruta de visión con su coste/cuota; no acredita movimiento ni audio |
+| 4 | **Caption / texto** | primera lectura del mensaje | bajo volumen, pero no reemplaza inspección visual ni prueba un porcentaje de cobertura |
 
-Regla: reportar la cobertura real de cada camino ("audio 100%, 5 de 7 láminas"), nunca decir
-"vi el video" desde dos cuadros.
+Regla: informar por separado transcripción disponible, audio realmente escuchado y cuadros/láminas inspeccionados.
+No decir "vi el video completo" desde dos cuadros ni desde una transcripción sola.
 
 ## Instagram por MCP de navegador (ruta VIEJA — solo si falla la de arriba)
 
@@ -263,7 +266,10 @@ y el mismo modelo del VPS (`Systran/faster-whisper-small`) → corregir con los 
 oyó mal. Sin clave de Gemini, la edición se mira por cuadros: 1 por segundo, los primeros 3 s cuadro por cuadro y las
 transiciones más lentas. La música y los efectos se deducen del nivel y del espectrograma en las pausas: decirlo así en
 la ficha, porque el audio no se escuchó.
-Un JSON con `text` vacío es respuesta válida: el audio no tiene voz (así se confirmó que ese reel es solo música). `scripts/transcribe.sh` usa ese camino (base64 → SSH → docker exec en onia-center → Speaches). Detalle de infra: [[onia-hermes-stack-y-radar]].
+Un JSON con `text` vacío puede ser una respuesta válida, un fallo o una limitación del ASR: **no prueba que no haya voz**.
+Comprobar audio/duración y, si importa, escucharlo por una vía autorizada antes de concluir silencio o solo música.
+El camino remoto de `scripts/transcribe.sh` usa SSH/docker/Speaches; no se ejecuta por defecto si no está autorizado.
+Detalle de infra: [[onia-hermes-stack-y-radar]].
 
 ## Common mistakes
 - **Afirmar que "viste" el video con 1-2 cuadros.** Muestreá una tanda repartida y decí la cobertura.
@@ -307,7 +313,11 @@ con otra cuenta y pisarlo dejaría el intake sin sesión.
 
 **Actualización 9-oct-2026:** este mínimo se amplía con `aprender-de-todo`: revisar las doce dimensiones y marcar no observado/no aplica en vez de inventar. Link sin instrucción = aprender, no producir. Ficha → regla en skill → prueba de uso por una sesión: hasta ese último paso queda «incorporado», no «aplicado». Cobertura de la semana: `hermes-content/references/video-intake/COBERTURA-APRENDIZAJE.md`.
 
-**Lección del 8-oct:** la ficha `2026-10-08-referente-gadzhi.md` §0.3 documenta que el CLI de `gemini-see-video.mjs` ignoró el segundo argumento de prompt. Para una pasada de edición específica, usar el método documentado `seeLocalVideo(path, prompt)` y comprobar la respuesta; no dar por ejecutado un prompt solo porque se pasó un argumento. En `2026-10-09-reel-DePBfHouarG.md` falló la transcripción: no concluir ausencia de voz ni medir montaje desde una muestra de cuadros.
+**Prompt específico:** el fallo del 8-oct queda como historia en `2026-10-08-referente-gadzhi.md` §0.3.
+El CLI actual lee `process.argv[3]` y sí acepta un prompt propio; también están `seeYouTube(url, prompt)` y
+`seeLocalVideo(path, prompt)`. Comprobar el código y la respuesta, no asumir que la limitación histórica sigue viva.
+En `2026-10-09-reel-DePBfHouarG.md` falló la transcripción: no concluir ausencia de voz ni medir montaje continuo
+desde una muestra de cuadros.
 
 No alcanza con resumen y timeline. Cada video se analiza en tres partes:
 - **mensaje**: qué dice y a quién;

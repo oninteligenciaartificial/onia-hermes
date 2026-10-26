@@ -1,122 +1,50 @@
-# Empezá acá
+# Empezá acá — empresa y marca personal
 
-> **390 documentos.** Casi ninguno hace falta para decidir hoy. Esta hoja dice cuáles sí.
-> Si estás perdido, leé los de acá y ninguno más.
->
-> **Un tema = un archivo sin fecha.** Si un doc tiene `YYYYMMDD` en el nombre, es la foto de
-> un día: es historia, no fuente. Cuando un doc con fecha contradice a uno sin fecha, **gana
-> el que no tiene fecha.**
+Índice canónico. Leer la sección del encargo, no toda la biblioteca. El nombre sin fecha no acredita vigencia: contrastar autoridad, estado y evidencia. Un documento fechado puede ser evidencia útil, pero no permiso ni inventario vivo.
 
-Reescrito el **2026-08-27**. La versión anterior decía "163 documentos" (hay 390) y **5 de
-sus 6 punteros iban a `historial/`**: quien empezaba por acá aterrizaba en historia y
-reconstruía lo que ya estaba escrito. Por eso esta hoja se EDITA, no se reemplaza.
+## 1. Empresa · estrategia y producto
 
----
-
-## 0. Los precios NO viven en ningún documento
-
-Se leen del código del producto (`C:\dev\proyectos\onia-platform`). Es la regla que más se
-rompió: llegamos a tener **cuatro precios vivos del mismo chatbot al mismo tiempo**, y un
-one-pager que citaba la fuente correcta mientras escribía otro número.
-
-| Qué | Dónde manda |
+| Necesidad | Fuente existente |
 |---|---|
-| **Planes de suscripción** | `onia-platform/lib/subscription-plans.ts` → `DEFAULT_PLAN_AMOUNTS`. **Es lo que valida el cobro:** si un doc dice otro monto, el pago se rechaza |
-| **Add-ons** y los nombres visibles de los planes | `onia-platform/lib/pricing.ts` (`PLAN_LABELS`) |
-| **Para vender** (precio + función, cruzado contra el código) | **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`** |
+| Etapa, foco y límites de negocio | `ONIA_ESTRATEGIA_DE_EMPRESA.md` |
+| Qué existe y se puede ofrecer | `ONIA_CATALOGO_DE_VENTA.md`, `ONIA_PUEDO_VENDER_HOY.md` |
+| Cliente y canal | `ONIA_CLIENTE_IDEAL.md`, `ONIA_ADQUISICION_Y_PAUTA.md` |
+| Plan de producto | `ONIA_PLAN_DE_VERSIONES.md`, `ONIA_PLAN_DESARROLLO_Y_VENTA.md` |
 
-Hoy: **Básico Bs 320 · Profesional Bs 750 · Completo Bs 1.500 · Empresa Bs 2.900** (anual =
-10 meses) · **chatbot de WhatsApp Bs 390/mes, sin cargo inicial**. Si leés otra cosa en
-cualquier lado, el otro lado está roto.
+Un producto con cinco rubros; dental → importadora → resto. El código está en `C:/dev/proyectos/onia-platform`, no se traslada aquí por ordenar carpetas. Los precios se verifican en el código/fuente comercial vigente: este índice no mantiene una segunda tabla ni afirma acceso actual a producción.
 
-🔴 **Excepción, y hay que respetarla:** **webs, consultoría y automatización NO llevan lista
-de precios.** Se cotizan caso por caso (decisión del 2026-08-24, `ONIA_WEB_COMO_SE_VENDE.md`).
-`pricing.ts` **no cubre** esa línea: "corregir" un precio de web contra ese archivo es
-romper, no ordenar.
+## 2. Empresa · ventas y entrega
 
-⚠️ `ONIA_PRICING_2026.md` se autodeclaraba canónico y **quedó degradado**. Sirve por sus
-reglas comerciales; no por sus cifras.
+`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`, `ONIA_WEB_COMO_SE_VENDE.md`, `ONIA_CHATBOT_LINEA_DE_ENTREGA.md` y las skills `onia-ventas-pauta`/`onia-propuestas` según tarea. Material y generador en `../sales-kit/` y `../propuestas/`. No prometer capacidades no acreditadas ni abrir ventas/campañas por leer un playbook.
 
----
+## 3. Empresa · operación, finanzas y legal
 
-## 1. Los que mandan — venta y producto
+`ONIA_INFRA_LIMPIEZA_Y_ORDEN.md`, `ONIA_FACTURACION_ESTADO_REAL.md`, `ONIA_LEGAL_BOLIVIA_ESTADO.md`, `ONIA_AGENTES_COSTO_API.md`; subcarpetas `infra/` cuando exista y `legal/`. Son fuentes para contrastar, no certificación del estado ni autorización de operar SIAT, pagar, cambiar credenciales o producción.
 
-| Doc | Responde |
-|---|---|
-| **`ONIA_ESTRATEGIA_DE_EMPRESA.md`** | **Por qué NO hace falta financiación ni equipo de desarrollo**, y las 4 etapas de freelancer a empresa. Ordena a los de abajo: si una tarea no sirve a la etapa vigente, se anota y no se hace |
-| **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`** | La tabla única: cada plan y add-on con su precio, su función y su **estado real** |
-| `ONIA_CATALOGO_DE_VENTA.md` | Qué existe por rubro: vivo / construido sin probar / futuro |
-| `ONIA_PLAN_DESARROLLO_Y_VENTA.md` | Qué se construye, en qué orden, y por qué ese orden lo dicta la venta |
-| `ONIA_PLAN_DE_VERSIONES.md` | Qué se vende ya y qué entra por parche |
-| `ONIA_PENDIENTES_PARA_LANZAR.md` | Qué está a medias y en qué orden se mata |
-| `ONIA_PUEDO_VENDER_HOY.md` | Estado verificado: qué se puede prometer sin mentir |
-| `ONIA_WEB_COMO_SE_VENDE.md` | La línea de webs — y por qué no tiene lista de precios |
+## 4. Marca personal · separada de ONIA comercial
 
-## 2. Los que mandan — plata, fiscal y legal
+`MARCA_PERSONAL_OPERACION_DIARIA.md`, `handoff/marca-personal.md`, las fuentes `../skills/marca-personal-sergio.md` y `guiones-diarios-onia.md`, y la skill `diseno-contenido-onia`. Identidad personal: vos, foto B/N y objeto verde; no imponerla a clientes.
 
-| Doc | Responde |
-|---|---|
-| `ONIA_FECHAS_CRITICAS_PLAN.md` | Las fechas que corren solas (Meta 1-oct, SIAT, runway) |
-| `ONIA_FACTURACION_ESTADO_REAL.md` | Facturación: qué emite de verdad y qué es mock |
-| `ONIA_LEGAL_BOLIVIA_ESTADO.md` | Estado legal: SEPREC, NIT, marca |
-| `ONIA_AGENTES_COSTO_API.md` | Cuánto cuesta de API cada agente y chatbot, y dónde está el margen real |
-| `ONIA_PSICOLOGIA_PRECIOS_COMPETENCIA.md` | Qué hace la competencia con sus precios y qué copiamos |
+Sitio y medios: `../sitio-sergiourcullo/`, `../references/marca-personal/`, `../references/marca-personal-sergio/` y `../../videos/marca-personal/`. Talleres/comunidad: `comunidad/` y su handoff. Una entrega rechazada sigue rechazada aunque pase QA técnico.
 
-## 3. Los que mandan — infra, chatbot y skills
+## 5. Formación y referencias compartidas
 
-| Doc | Responde |
-|---|---|
-| `ONIA_INFRA_LIMPIEZA_Y_ORDEN.md` | VPS y base: qué está encendido y qué hay que limpiar |
-| `ONIA_CHATBOT_LINEA_DE_ENTREGA.md` | De contrato firmado a bot vivo, con tiempos |
-| `ONIA_CHATBOT_ALTA_WHATSAPP_CLIENTE.md` | Las rutas de alta en Meta, comparadas y decididas |
-| `ONIA_AGENTES_IA_DISENO_FUNCIONAL.md` | Cómo están diseñados los agentes 24/7 |
-| `ONIA_WEB_FACTORY_Y_PRODUCTO_UI.md` | Qué comparten Web Factory y el producto, y qué falta |
-| `ONIA_SKILLS_STACK_Y_SUBAGENTES.md` | Qué skill y qué subagente usar para cada carril |
+[Selección de repos de la semana 19–25 de octubre](../research/harness-hermes-20261024/REPOS-SEMANA-20261019-25.md): los 25 mostrados, tres README contrastados y límites de adopción; no instalaciones.
 
-## 4. El estado de cada carril, al día
+[Anunciante Supremo, clase de diez skills y cuatro notas](../references/formacion/anunciante-supremo/README.md): originales locales preservados con hashes, no instalados. Fichas de aprendizaje en `../references/video-intake/`; investigación en `../research/` y `research/` según la fuente ya existente. No duplicar el mismo material para empresa y marca: referenciar su ubicación canónica.
 
-**`handoff/<carril>.md`** — un archivo por carril, sin fecha, sobrescrito al cerrar. Siete
-campos, y el que más sirve es **intentos fallidos**: es lo que evita repetir el callejón.
-La plantilla está en `handoff/README.md`. **Es la única carpeta 100% en regla — copiá ese
-modelo.**
+## 6. Sistema · agentes, modelos y verificación
 
-## 5. Lo que hay que tener siempre presente
+`../../AGENTS.md`, `../../COORDINATION_MANIFEST.md`, `AI_MODEL_ROUTING_2026.md`, `EXECUTION_PROTOCOL.md` y `.claude/skills/equipo-de-agentes` en la raíz del repo. Elegir modelo/contexto por contrato y verificar el resultado real; no cambiar modelo/esfuerzo por una tabla ni convertir un hook en permiso.
 
-1. **Onia es UNA plataforma con módulos por rubro.** `DentalGest`, `GestiOS`, `Ganadero OS`
-   y `ProveeGest` **no son productos ni marcas**: son nombres viejos de packs. Al cliente se
-   le nombra el rubro ("módulo dental"). Todo doc que los trate como marcas separadas está
-   desactualizado en lo comercial, aunque su contenido técnico sirva.
-2. **El código del producto vive en `C:\dev\proyectos\onia-platform`.** Este repo,
-   `onia-hermes`, es **el cerebro**: docs, memoria, core, propuestas y la landing. Están
-   separados **por acceso**, no por desorden.
-3. **Cero clientes pagando.** Ningún material —web, propuesta, demo— puede sugerir lo
-   contrario: prohibido inventar testimonios, logos o porcentajes.
-4. **La venta nunca exhibe obra.** Nada de "muy pronto", "en construcción" ni "beta" en una
-   superficie que ve un cliente. Lo que no está listo **no se nombra**.
-5. **Verificar es MIRAR.** Un HTTP 200 y un `grep` no son verificación. Un `grep` sirve para
-   **descartar**, nunca para **confirmar**.
+En TUI: `/agents` → seleccionar → `d` detalles/modelo, `t` actividad. Esa vista no es la lista completa de pendientes. El inventario de archivos no prueba que estén cargados en el prompt ni que sean inútiles.
 
-## 6. Abierto y cuesta plata
+## 7. Estado e historia
 
-- 🟡 **La contraseña de la base de producción quedó commiteada** en el `.claude/settings.json`
-  del repo del producto (mayo). El repo es privado, pero **hay que rotarla**.
-  ⚠️ Dato heredado de la versión anterior de esta hoja: **contarlo de nuevo antes de actuar**,
-  no repetirlo.
-- ✅ **Cerrado:** `onia-core/logic/fx.logic.mjs` ya **no** cae en silencio a un tipo de cambio
-  de 6,96 — `officialRate()` lanza si no le llega un TCO válido. Facturaba ~41% subvaluada
-  sin avisar.
+`handoff/<carril>.md` conserva objetivo, permisos, pruebas e intentos fallidos. Las tareas actuales se concilian con la lista de la sesión y el registro existente en `../../.hermes/plans/`; no reanudar handles/loops por una captura vieja. `historial/` conserva versiones retiradas, no instrucciones actuales.
 
-## 7. Dónde está el resto
+El índice anterior completo está en [entradas anteriores](historial/entradas-anteriores-20261025.md). No repetir sus precios, cuentas, métricas o instrucciones como estado vivo.
 
-- **`historial/`** — lo que fue verdad y ya no se consulta. No se borró nada.
-- **`research/`** — investigación de fondo.
-- **`handoff/`** — el estado al cerrar cada carril.
-- **`../sales-kit/`** — material comercial listo para usar.
-- **`../propuestas/`** — el generador. **Nunca escribir HTML de propuesta a mano.**
+## Para que el orden se mantenga
 
-## 8. Regla para no volver a llenar esto de ruido
-
-**Un doc nuevo se crea solo si alguien lo va a leer para decidir algo.** Si es el reporte de
-algo ya ejecutado, va directo a `historial/`. Si reemplaza a otro, **se edita el que ya
-existe** — no se crea uno nuevo con la fecha de hoy y se dejan los dos vivos diciendo cosas
-distintas. Eso es exactamente lo que produjo los cuatro precios.
+Un tema tiene una fuente canónica. Editar la existente cuando cambia una decisión; evidencia cerrada va al archivo correspondiente. No borrar/mover originales, medios, worktrees o skills por antigüedad o duplicación. Antes de una migración física: dueño, consumidores, hash, mapa origen→destino, rollback y pruebas. No llamar «repo reorganizado» a un índice o a un movimiento parcial.

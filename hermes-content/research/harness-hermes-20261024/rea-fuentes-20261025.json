@@ -1,0 +1,77 @@
+{
+  "commit": "f69c52a1cf3940ed1999fcc0859a75dbb913d684",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/morluto/rea/f69c52a1cf3940ed1999fcc0859a75dbb913d684/README.md",
+      "repository": "morluto/rea",
+      "commit": "f69c52a1cf3940ed1999fcc0859a75dbb913d684",
+      "source_file": "README.md",
+      "sha256": "3a7f76363e62c0e188cc93261fc5292d734b23e2139f087885ad90296d7f3b32",
+      "excerpts": [
+        {
+          "term": "REA: Reverse Engineer Anything",
+          "excerpt": "/README_ur-Latn.md) · [Română](docs/readme/README_ro.md)\n\n# REA: Reverse Engineer Anything\n\n### One MCP for reverse engineering across binaries, applications, and runtime behavior.\n\n**See a feature you like. Understand how it works, down to the binary level.**\n\n[![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)\n[![MCP tool catalog](https://img.shields.io/bad"
+        },
+        {
+          "term": "connects your agent",
+          "excerpt": "ow the evidence, and build a version for your project.\n\nREA connects your agent to tools for inspecting native binaries, JavaScript and Electron apps, .NET assemblies, and websites. You can also use the same tools from your terminal. Analysis runs locally, and results include the evidence and limitations behind each conclusion.\n\nSetup registers REA with your agent and installs matching workflow instructions. Native analysis can use an e"
+        },
+        {
+          "term": "Skill-only installation",
+          "excerpt": "ll the matching instructions, then restart\nyour agent. See [skill-only installation](docs/installation.md#skill-only-installation).\n\n</details>\n\n<details>\n<summary><strong>What code does REA return?</strong></summary>\n\nNative analysis returns pseudocode and assembly. JavaScript/Electron analysis\nrecovers modules and their relationships. Your agent uses these findings to\nwrite and test an implementation; the [showcases](#showcases) give "
+        },
+        {
+          "term": "Windows",
+          "excerpt": "e the path with your target, such as `\"D:/apps/example\"` on Windows.\n\nTo install the `rea` command for regular use:\n\n```bash\nnpm install --global rea-agents\nrea --help\n```\n\nFor native analysis, configure a provider first. See the\n[CLI and Evidence guide](docs/cli.md) for native commands, provider selection,\nsnapshots and scripting.\n\n### Update REA\n\nREA changes quickly, and new releases include frequent bug fixes. Keep your\ninstallation "
+        },
+        {
+          "term": "Ghidra",
+          "excerpt": "w instructions. Native analysis can use an existing Hopper, Ghidra, or IDA installation; setup can optionally install Hopper with approval. Static JavaScript analysis needs no native analysis engine.\n\n> **[Visit the REA website](https://rea.tools/)** for setup instructions, illustrated guides, and real case studies.\n\n## Quick start\n\nOn Linux, Ghidra, JADX, firmware tool launches and static JavaScript/Electron\nanalysis require a procps-c"
+        },
+        {
+          "term": "Hopper",
+          "excerpt": "l.\n\n<div align=\"center\">\n\n<br />\n\n<img src=\"docs/assets/rea-hopper-analysis.png\" alt=\"REA launching its analysis bridge inside Hopper while inspecting a native binary\" width=\"1200\" />\n\n<br /><br />\n\n<table aria-label=\"REA community\">\n<tr>\n<td align=\"center\" width=\"360\">\n  <a href=\"https://discord.gg/GkcryMnJDM\">\n    <img src=\"docs/assets/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Join the Reverse Engineering Community</"
+        },
+        {
+          "term": "approve",
+          "excerpt": "p\n```\n\nChoose your agents, review the proposed changes, and approve them. Setup adds\nREA's MCP server and matching workflow instructions, with backups of existing\nconfiguration. Restart your agent afterward.\n\nSetup supports Claude Code, Codex, Cursor, Gemini CLI, Grok Build and\n[other agents](docs/installation.md#supported-agents). See\n[installation and setup](docs/installation.md) for provider configuration and\nmanual MCP registration."
+        }
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/morluto/rea/f69c52a1cf3940ed1999fcc0859a75dbb913d684/docs/installation.md",
+      "repository": "morluto/rea",
+      "commit": "f69c52a1cf3940ed1999fcc0859a75dbb913d684",
+      "source_file": "docs/installation.md",
+      "sha256": "577cb4e4b29aca55a0e945af45a28d5cd24641860c8e41f1312db67b3f455e38",
+      "excerpts": [
+        {
+          "term": "Skill-only installation",
+          "excerpt": "d, scoped setup plan, then restart/reconnect the agent.\n\n## Skill-only installation\n\n```bash\nnpx skills add morluto/rea --skill reverse-engineer-anything\n```\n\nThis installs agent instructions and bundled references, not REA MCP\nregistration or analysis engines. Follow the skill's\n[conditional connection guide](https://github.com/morluto/rea/blob/main/.agents/skills/reverse-engineer-anything/SKILL.md#connect-only-when-needed).\nWorking to"
+        },
+        {
+          "term": "Hermes",
+          "excerpt": " 17 client IDs\nin that release, including Qwen Code, Pi and Hermes. Seven client IDs are\nincluded from 6.5.0 and were absent from the checked npm 6.4.0 package: `droid`,\n`dsh`, `kimi`, `qoder`, `trae`, `workbuddy` and `zcode`.\nThe 6.4.0 registry check does not establish 6.5.0 publication or live DeepSeek\nAPI integration.\nOpenCode's plan selected\n`OPENCODE_CONFIG_DIR` even when that directory did not yet exist. These checks\nused an isola"
+        },
+        {
+          "term": "Windows",
+          "excerpt": "g, because a running app can overwrite the registration; on\nWindows, see [where Claude Desktop reads its configuration](client-configuration.md#claude-desktop).\n\nDuring package resolution, npm may print a deprecation warning for `prebuild-install`\nfrom transitive native dependencies (such as Frida). This warning originates from\nthe upstream dependency tree and does not affect REA or indicate setup failure.\n\nFor the latest published rele"
+        },
+        {
+          "term": "Ghidra",
+          "excerpt": "|\n| Configure an analysis engine      | [Hopper](#hopper), [Ghidra](#ghidra), the [IDA guide](ida-provider.md), or [Kuna](kuna-provider.md) |\n| Update or remove REA              | [Maintenance](#diagnose-update-and-remove)                                                          |\n| Resolve a client-specific problem | [Client configuration](client-configuration.md)                                                     |\n\n## Start setup\n\n`"
+        },
+        {
+          "term": "Hopper",
+          "excerpt": "                   |\n| Configure an analysis engine      | [Hopper](#hopper), [Ghidra](#ghidra), the [IDA guide](ida-provider.md), or [Kuna](kuna-provider.md) |\n| Update or remove REA              | [Maintenance](#diagnose-update-and-remove)                                                          |\n| Resolve a client-specific problem | [Client configuration](client-configuration.md)                                                     |"
+        },
+        {
+          "term": "approve",
+          "excerpt": "ts to configure, review the proposed paths and changes, and\napprove the plan. npm's package-download approval and REA's setup approval are\nseparate. Setup asks before changing agent configuration or installing Hopper.\nRestart the agents named in the completion message. Quit Claude Desktop fully\nbefore approving, because a running app can overwrite the registration; on\nWindows, see [where Claude Desktop reads its configuration](client-co"
+        }
+      ]
+    }
+  ],
+  "installation_executed": false,
+  "scope": "Primary source metadata and bounded evidence excerpts; no skill/MCP setup."
+}

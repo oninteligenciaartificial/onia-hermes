@@ -1,0 +1,21 @@
+{
+  "coverage": {
+    "expected": 60,
+    "actual": 60,
+    "unique_names": 60,
+    "missing": [],
+    "extra": []
+  },
+  "category_counts": {
+    "por_tarea": 39,
+    "ocultar_en_windows": 4,
+    "candidata_desactivar": 5,
+    "nucleo": 12
+  },
+  "all_rows_have_reason_and_evidence": true,
+  "macos_frontmatter_verified": true,
+  "duplicate_counts_match_coordinator": true,
+  "native_cli_count_independently_measured_by_coordinator": 53,
+  "no_skill_changes_or_deletions": true,
+  "source_file": "clasificacion-skills-hermes-20261025.json"
+}

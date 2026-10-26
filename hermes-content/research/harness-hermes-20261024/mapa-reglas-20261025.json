@@ -1,0 +1,388 @@
+{
+  "schema_version": "1.0",
+  "fecha_revision": "2026-10-25",
+  "workspace": "C:/dev/proyectos/onia-hermes",
+  "resultado": "Propuesta de depuración; no se modificó ninguna instrucción original ni se activaron tareas/hooks/loops.",
+  "loader_hermes": {
+    "regla": "Una sola fuente de contexto de proyecto gana por prioridad; SOUL.md es independiente.",
+    "orden_consultado": [
+      ".hermes.md / HERMES.md (búsqueda hasta git root)",
+      "AGENTS.md / agents.md (cwd)",
+      "CLAUDE.md / claude.md (cwd)",
+      ".cursorrules / .cursor/rules (cwd)"
+    ],
+    "estado_raiz_repo": {
+      "AGENTS.md": "presente; fuente cargada en el contexto actual",
+      "CLAUDE.md": "presente; sombreada para Hermes por AGENTS.md",
+      "hermes_md_HERMES_md_cursorrules_claude_rules": "no encontrados en raíz repo"
+    },
+    "SOUL.md": "se carga aparte cuando existe en HERMES_HOME.",
+    "evidencia": [
+      "C:/Users/PC/AppData/Local/hermes/hermes-agent/agent/prompt_builder.py",
+      "C:/Users/PC/AppData/Local/hermes/hermes-agent/tests/agent/test_context_file_sources.py",
+      "C:/Users/PC/AppData/Local/hermes/skills/autonomous-ai-agents/hermes-agent/references/project-context-files.md"
+    ],
+    "limitacion": "La documentación del runtime indica 20,000 caracteres por context file; CLAUDE.md del repo supera ese límite, pero ya queda sombreada por AGENTS.md en Hermes."
+  },
+  "archivos_revisados": [
+    {
+      "path": "C:/dev/proyectos/onia-hermes/AGENTS.md",
+      "size_bytes": 19383,
+      "role": "Reglas de proyecto compartidas; fuente raíz portable.",
+      "carga_probable": "Hermes: activa en cwd raíz; gana frente a CLAUDE.",
+      "fundamento": "Loader local: AGENTS precede CLAUDE; contenido de contexto proporcionado."
+    },
+    {
+      "path": "C:/dev/proyectos/onia-hermes/CLAUDE.md",
+      "size_bytes": 48042,
+      "role": "Detalle de política, negocio, producto y workflow de Claude.",
+      "carga_probable": "Hermes: sombreada si AGENTS.md existe en cwd; Claude Code: probable.",
+      "fundamento": "Loader Hermes first-match; headings y contenido del archivo."
+    },
+    {
+      "path": "C:/dev/proyectos/onia-hermes/COORDINATION_MANIFEST.md",
+      "size_bytes": 80218,
+      "role": "Estado/propiedad de carriles y antecedentes; no es regla de carga automática.",
+      "carga_probable": "Manual, porque AGENTS.md §Flujo obligatorio indica leerlo.",
+      "fundamento": "Referencia explícita en AGENTS.md §Flujo obligatorio; tamaño local medido."
+    },
+    {
+      "path": "C:/dev/proyectos/onia-hermes/hermes-content/docs/EXECUTION_PROTOCOL.md",
+      "size_bytes": 11154,
+      "role": "Protocolo para acciones productivas/infra/secretos.",
+      "carga_probable": "Manual y condicional, no auto-cargado.",
+      "fundamento": "AGENTS.md §Flujo obligatorio, paso 2."
+    },
+    {
+      "path": "C:/dev/proyectos/onia-hermes/.claude/skills/onia-router/SKILL.md",
+      "size_bytes": 19176,
+      "role": "Router de tarea, skill y fuentes.",
+      "carga_probable": "Manual; invocada por instrucción de arranque de CLAUDE/AGENTS.",
+      "fundamento": "AGENTS.md tabla Skills y CLAUDE.md §Skills del proyecto."
+    },
+    {
+      "path": "C:/dev/proyectos/onia-hermes/.claude/skills/equipo-de-agentes/SKILL.md",
+      "size_bytes": 15802,
+      "role": "Roles/delegación; conserva secciones históricas de madre/loops.",
+      "carga_probable": "Manual; AGENTS la marca obligatoria al iniciar Codex.",
+      "fundamento": "AGENTS.md tabla Skills; encabezado y aviso de historia en la skill."
+    },
+    {
+      "path": "C:/dev/proyectos/onia-hermes/.claude/skills/aprender-de-todo/SKILL.md",
+      "size_bytes": 9756,
+      "role": "Captura de aprendizajes y prueba de aplicación.",
+      "carga_probable": "Manual; AGENTS la marca obligatoria al iniciar Codex.",
+      "fundamento": "AGENTS.md tabla Skills; descripción y alcance de la skill."
+    },
+    {
+      "path": "C:/Users/PC/.claude/AGENTS.md",
+      "size_bytes": 8241,
+      "role": "Reglas globales ECC: agentes, TDD y cobertura.",
+      "carga_probable": "Claude Code: posible/global; Hermes en repo: no carga desde home.",
+      "fundamento": "Ruta global y loader Hermes de archivos de proyecto."
+    },
+    {
+      "path": "C:/Users/PC/.claude/CLAUDE.md",
+      "size_bytes": 5878,
+      "role": "Reglas globales: autonomía, objetivos, n8n/secretos.",
+      "carga_probable": "Claude Code: probable/global; Hermes en repo: no carga desde home.",
+      "fundamento": "Ruta global; contiene búsqueda de credenciales en archivos (líneas 43–48)."
+    },
+    {
+      "path": "C:/Users/PC/.codex/AGENTS.md",
+      "size_bytes": 6107,
+      "role": "Reglas globales de Codex y ONIA.",
+      "carga_probable": "Codex: probable al trabajar desde ese ámbito; Hermes en repo: no carga.",
+      "fundamento": "Ruta global separada y loader Hermes."
+    },
+    {
+      "path": "C:/Users/PC/AppData/Local/hermes/SOUL.md",
+      "size_bytes": 667,
+      "role": "Identidad/configuración del agente, no reglas de proyecto.",
+      "carga_probable": "Hermes: siempre si existe, separada del context file.",
+      "fundamento": "Referencia y test locales de prompt_builder."
+    },
+    {
+      "path": "C:/dev/proyectos/onia-hermes/.claude/settings.json",
+      "size_bytes": 403,
+      "role": "Hooks de proyecto SessionStart y Stop.",
+      "carga_probable": "Claude Code: configurados para el repo; ejecución real no observada.",
+      "fundamento": "Se leyeron solo claves hooks: SSH al iniciar y auto-sync al parar."
+    },
+    {
+      "path": "C:/Users/PC/.claude/settings.json",
+      "size_bytes": 10234,
+      "role": "Hooks globales Claude Code (protección, acumulador, Orca y cierre).",
+      "carga_probable": "Claude Code: configurados globalmente; Hermes no los usa como reglas.",
+      "fundamento": "Se leyeron solo claves hooks, no otros campos."
+    },
+    {
+      "path": "C:/Users/PC/AppData/Local/hermes/hermes-agent/agent/prompt_builder.py",
+      "size_bytes": 114846,
+      "role": "Implementación local de descubrimiento/carga de context files.",
+      "carga_probable": "Runtime Hermes, fuente de prioridad.",
+      "fundamento": "Inspección del archivo fuente local instalado."
+    },
+    {
+      "path": "C:/Users/PC/AppData/Local/hermes/hermes-agent/tests/agent/test_context_file_sources.py",
+      "size_bytes": 6288,
+      "role": "Pruebas de prioridad, sombreado y carga de SOUL.",
+      "carga_probable": "No prompt: evidencia de comportamiento del runtime.",
+      "fundamento": "Prueba local confirma AGENTS cargado y CLAUDE sombreado."
+    },
+    {
+      "path": "C:/Users/PC/AppData/Local/hermes/skills/autonomous-ai-agents/hermes-agent/references/project-context-files.md",
+      "size_bytes": 3285,
+      "role": "Referencia de prioridad y límite de contexto Hermes.",
+      "carga_probable": "Skill de referencia consultada; no es regla ONIA.",
+      "fundamento": "Leída vía skill_view; indica first-match y límite de 20,000 caracteres."
+    }
+  ],
+  "descubrimientos_de_reglas": {
+    "reglas_usuario_claude": [
+      {
+        "path": "C:/Users/PC/.claude/rules/README.md",
+        "size_bytes": 4688,
+        "carga_probable": "Candidata a regla global de Claude Code; no se inyecta como context file Hermes según el loader consultado.",
+        "fundamento": "Inventariada bajo C:/Users/PC/.claude/rules; contenido no analizado en las recomendaciones de esta pasada."
+      },
+      {
+        "path": "C:/Users/PC/.claude/rules/common/agents.md",
+        "size_bytes": 1594,
+        "carga_probable": "Candidata a regla global de Claude Code; no se inyecta como context file Hermes según el loader consultado.",
+        "fundamento": "Inventariada bajo C:/Users/PC/.claude/rules; contenido no analizado en las recomendaciones de esta pasada."
+      },
+      {
+        "path": "C:/Users/PC/.claude/rules/token-eficiente/agents.md",
+        "size_bytes": 1064,
+        "carga_probable": "Candidata a regla global de Claude Code; no se inyecta como context file Hermes según el loader consultado.",
+        "fundamento": "Inventariada bajo C:/Users/PC/.claude/rules; contenido no analizado en las recomendaciones de esta pasada."
+      }
+    ],
+    "subarboles_repo": [
+      {
+        "path": "C:/dev/proyectos/onia-hermes/.hermes/video-lab/split-screen-onia/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/.hermes/video-lab/split-screen-onia/CLAUDE.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/hermes-content/scripts/hyperframes/onia-sting-01/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/hermes-content/scripts/hyperframes/onia-sting-01/CLAUDE.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/out/videos/conversacion-chatbot/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/out/videos/conversacion-chatbot/CLAUDE.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/scripts/orquesta/cuartitos/humanizer/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/videos/marca-personal/2026-09-21/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/videos/marca-personal/2026-09-21/CLAUDE.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/videos/onia-community-teaser/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/videos/onia-community-teaser/CLAUDE.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/web-factory/apps/dentalgest-landing/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/web-factory/apps/dentalgest-landing/CLAUDE.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/web-factory/apps/onia-platform/AGENTS.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      },
+      {
+        "path": "C:/dev/proyectos/onia-hermes/web-factory/apps/onia-platform/CLAUDE.md",
+        "size_bytes": null,
+        "carga_probable": "Solo según cwd/herramienta en ese subárbol; no es contexto raíz de esta revisión.",
+        "fundamento": "Inventario de nombres; contenido no leído para no tocar áreas WIP ajenas."
+      }
+    ],
+    "copias_en_worktrees_y_plugins": "El inventario encontró copias en worktrees separados, caches y repositorios/plugin snapshots; no se trataron como reglas de la raíz ONIA ni se editaron.",
+    "raices_usuario": "C:/Users/PC/.claude/AGENTS.md y CLAUDE.md presentes; C:/Users/PC/.codex/AGENTS.md presente; HERMES_HOME/SOUL.md presente. No se encontró `.hermes.md`/HERMES.md/`.cursorrules` de raíz para el repo."
+  },
+  "duplicaciones": [
+    {
+      "tema": "credenciales/sesiones",
+      "fuentes": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "C:/Users/PC/.claude/CLAUDE.md",
+        "C:/Users/PC/.codex/AGENTS.md"
+      ],
+      "accion": "Un núcleo breve de seguridad por runtime; eliminar repeticiones, no salvaguardas."
+    },
+    {
+      "tema": "autonomía, data-first, cierre y relevo",
+      "fuentes": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "EXECUTION_PROTOCOL.md",
+        "equipo-de-agentes/SKILL.md"
+      ],
+      "accion": "Dejar principio y límites en reglas activas; procedimiento detallado solo en su fuente especializada."
+    },
+    {
+      "tema": "arranque/aprendizaje/agentes",
+      "fuentes": [
+        "AGENTS.md tabla de skills",
+        "CLAUDE.md §Skills del proyecto",
+        "onia-router",
+        "equipo-de-agentes",
+        "aprender-de-todo"
+      ],
+      "accion": "Carga por condición de tarea; no imponer las tres skills ni editar una skill tras cada tarea."
+    },
+    {
+      "tema": "preservación/conocimiento",
+      "fuentes": [
+        "AGENTS.md §Regla de preservación",
+        "CLAUDE.md §Skills del proyecto",
+        "aprender-de-todo"
+      ],
+      "accion": "Registrar conocimiento durable sin duplicar; lección reusable solo cuando exista."
+    }
+  ],
+  "contradicciones_y_riesgos": [
+    {
+      "hallazgo": "AGENTS cita CLAUDE como reglas compartidas, pero Hermes carga solo AGENTS en esta raíz.",
+      "riesgo": "Reglas de CLAUDE sobre negocio/publicación pueden no estar presentes en Hermes."
+    },
+    {
+      "hallazgo": "AGENTS empuja continuidad/subagentes por defecto; CLAUDE actual declara Hermes + programa fijo y que ya no existe madre. La skill conserva rondas/loops históricas.",
+      "riesgo": "Reactivar producción o trabajo fuera del encargo."
+    },
+    {
+      "hallazgo": "AGENTS permite commit/push cuando el árbol está coherente; la regla de Codex limita Git al encargo y el hook Stop del repo invoca auto-sync.",
+      "riesgo": "Hook o regla general pueden exceder permisos del ejecutor."
+    },
+    {
+      "hallazgo": "C:/Users/PC/.claude/CLAUDE.md ordena buscar tokens/credenciales en archivos del sistema.",
+      "riesgo": "Exposición/uso no autorizado de secretos; contradice el procedimiento seguro."
+    },
+    {
+      "hallazgo": "El manifiesto (80 KB) y CLAUDE (48 KB) conservan mucho detalle histórico; el runtime Hermes no auto-carga el manifiesto y limita el context file.",
+      "riesgo": "Lectura costosa, instrucciones obsoletas y falsa expectativa de carga."
+    }
+  ],
+  "cambios_recomendados": [
+    {
+      "id": 1,
+      "prioridad": "P0",
+      "ancla": "AGENTS.md (raíz); CLAUDE.md §Trato y criterio / §Qué se publica sin preguntar / §Quién orquesta",
+      "conservar": "Resumen Hermes de autoridad, secretos, gasto, trato, no exhibición y aprobación pública.",
+      "retirar_o_mover": "Quitar la suposición de que AGENTS hereda CLAUDE; CLAUDE queda como detalle Claude.",
+      "motivo_y_riesgo": "El loader solo inyecta una fuente; hoy gana AGENTS."
+    },
+    {
+      "id": 2,
+      "prioridad": "P0",
+      "ancla": "AGENTS.md §§Regla de ejecución cerrada por defecto y Regla de completitud operativa; CLAUDE.md §Objetivo por sesión",
+      "conservar": "Cerrar el objetivo autorizado o dejar bloqueo concreto.",
+      "retirar_o_mover": "Acotar continuidad y reanudación asíncrona a tarea/permisos/regla de parada; no loops ni trabajos auto-disparados.",
+      "motivo_y_riesgo": "Evita que “seguir hasta terminar” active producción o tareas nuevas."
+    },
+    {
+      "id": 3,
+      "prioridad": "P0",
+      "ancla": "C:/Users/PC/.claude/CLAUDE.md §Regla crítica — Autonomía máxima, líneas 43–48",
+      "conservar": "Comprobar el mecanismo/sesión autorizados y escalar MFA/consentimiento.",
+      "retirar_o_mover": "Retirar la búsqueda de tokens/credenciales dentro de archivos.",
+      "motivo_y_riesgo": "Reduce exposición de secretos y contradicción con seguridad."
+    },
+    {
+      "id": 4,
+      "prioridad": "P1",
+      "ancla": "CLAUDE.md §Quién orquesta; AGENTS.md reglas Codex; equipo-de-agentes §§1–4 bis",
+      "conservar": "Hermes planifica, scripts/orquesta reparte, Codex ejecuta contrato cerrado.",
+      "retirar_o_mover": "Quitar “madre” como rol vivo, rondas y equivalencias entre mensaje/hook y autorización.",
+      "motivo_y_riesgo": "Evita resucitar patrón histórico."
+    },
+    {
+      "id": 5,
+      "prioridad": "P1",
+      "ancla": "AGENTS.md §Skills de ONIA para Codex; CLAUDE.md §Skills del proyecto",
+      "conservar": "Router para inicio; las otras skills según delegación o aprendizaje solicitado.",
+      "retirar_o_mover": "No cargar equipo-de-agentes y aprender-de-todo obligatoriamente en toda tarea.",
+      "motivo_y_riesgo": "Reduce contexto/mandatos duplicados sin perder especialidad."
+    },
+    {
+      "id": 6,
+      "prioridad": "P1",
+      "ancla": "equipo-de-agentes/SKILL.md §§1–4 bis y §8",
+      "conservar": "§5 publicación, §6 trato y trampas de seguridad todavía aplicables.",
+      "retirar_o_mover": "Mover instrucciones históricas de loops/latidos/rondas y trampas ya resueltas a historia existente.",
+      "motivo_y_riesgo": "La advertencia histórica no evita que el detalle contradiga reglas actuales."
+    },
+    {
+      "id": 7,
+      "prioridad": "P1",
+      "ancla": "COORDINATION_MANIFEST.md §Modelo de carriles (2026-07-05) — HISTÓRICO, superado por la sección de arriba",
+      "conservar": "Asignaciones y propiedad actual verificadas, incluidas las WIP vigentes.",
+      "retirar_o_mover": "Mover snapshots cerrados/fechados e inventarios antiguos a historial/handoffs existentes.",
+      "motivo_y_riesgo": "Baja volumen manual sin borrar estado vivo ni crear otro índice."
+    },
+    {
+      "id": 8,
+      "prioridad": "P1",
+      "ancla": "AGENTS.md §§Flujo obligatorio, Agentes por frente, Regla de delegación; .claude/settings.json",
+      "conservar": "Checks de seguridad, validación y hooks configurados existentes.",
+      "retirar_o_mover": "Condicionar listas de agentes; dejar claro que SessionStart SSH y Stop auto-sync no conceden permiso. Limitar ECC genérico a lo que el contrato ONIA acepta.",
+      "motivo_y_riesgo": "Previene Git/publicación por hook fuera del rol y gates de cobertura no aplicables."
+    }
+  ],
+  "limites": "El primer inventario recursivo amplio agotó el tiempo; se recuperó con una pasada acotada por nombres. Los archivos de subárbol, reglas globales adicionales y plugins se inventariaron por ruta; no se leyó contenido de WIP ni secretos. Los settings se inspeccionaron solo en sus claves de hooks."
+}

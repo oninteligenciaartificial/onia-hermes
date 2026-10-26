@@ -1,0 +1,47 @@
+[
+  {
+    "app": "Notion",
+    "host": "www.notion.com",
+    "path": "/",
+    "title": "The AI workspace that works for you. | Notion",
+    "loginControls": true,
+    "passwordField": false,
+    "googleAccountGate": false,
+    "challenge": false,
+    "uiMarkers": {
+      "myDrive": false,
+      "notionWorkspace": false,
+      "higgsfieldCredits": false
+    }
+  },
+  {
+    "app": "Higgsfield",
+    "host": "higgsfield.ai",
+    "path": "/es",
+    "title": "🐴 Higgsfield AI — suite creativa nativa de IA",
+    "loginControls": true,
+    "passwordField": false,
+    "googleAccountGate": false,
+    "challenge": false,
+    "uiMarkers": {
+      "myDrive": false,
+      "notionWorkspace": false,
+      "higgsfieldCredits": false
+    }
+  },
+  {
+    "app": "Google Drive",
+    "host": "accounts.google.com",
+    "path": "/v3/signin/identifier",
+    "title": "🐴 Google Drive: inicio de sesión",
+    "loginControls": false,
+    "passwordField": true,
+    "googleAccountGate": true,
+    "challenge": false,
+    "uiMarkers": {
+      "myDrive": false,
+      "notionWorkspace": false,
+      "higgsfieldCredits": false
+    }
+  }
+]

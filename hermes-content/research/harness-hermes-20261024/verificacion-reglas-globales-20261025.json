@@ -1,0 +1,34 @@
+{
+  "before_inventory": {
+    "archivos_markdown": 83,
+    "bytes": 152892,
+    "con_paths": 60,
+    "sin_paths": 23
+  },
+  "coordinator_verified_all_names_and_sizes_before_changes": true,
+  "after_bytes": 154806,
+  "modified_files": [
+    "C:\\Users\\PC\\.claude\\rules\\common\\agents.md",
+    "C:\\Users\\PC\\.claude\\rules\\common\\performance.md",
+    "C:\\Users\\PC\\.claude\\rules\\common\\development-workflow.md",
+    "C:\\Users\\PC\\.claude\\rules\\common\\git-workflow.md",
+    "C:\\Users\\PC\\.claude\\rules\\common\\testing.md",
+    "C:\\Users\\PC\\.claude\\rules\\common\\code-review.md"
+  ],
+  "checks": {
+    "parallel_capacity_and_contract": true,
+    "no_stale_models_or_cost_claims": true,
+    "no_mandatory_external_research_or_document_factory": true,
+    "git_authority_explicit": true,
+    "testing_keeps_existing_gates": true,
+    "review_security_section_unchanged": true,
+    "backups_verified": true,
+    "rule_paths_preserved": true,
+    "unmodified_rule_sizes_match_snapshot": true
+  },
+  "passed": 9,
+  "backup_manifest": "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\reglas-globales-manifest.json",
+  "unmodified_language_paths": 60,
+  "runtime_reload_or_hooks_changed": false,
+  "review_budget_note": "Child used9APIcalls against a requested maximum4toolcalls; recorded as a budget miss, not evidence of cheaper execution."
+}

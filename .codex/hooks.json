@@ -7,6 +7,7 @@
           {
             "type": "command",
             "command": "node \"$(git rev-parse --show-toplevel)/.agents/skills/impeccable/scripts/hook.mjs\"",
+            "commandWindows": "node C:/Users/PC/.codex/onia-hooks/codex-windows.cjs impeccable",
             "timeout": 5,
             "statusMessage": "Checking UI changes"
           }

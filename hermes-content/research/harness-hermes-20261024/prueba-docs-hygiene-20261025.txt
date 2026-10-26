@@ -1,0 +1,36 @@
+✔ tokenize: drops years, dates and bare numbers (1.3371ms)
+✔ tokenize: light singularization (0.1469ms)
+✔ tokenize: drops stopwords like 'and' (0.1029ms)
+✔ fuzzyNameMatch: catches every known root<->docs pair in this repo (0.2468ms)
+✔ fuzzyNameMatch: does not match unrelated docs (0.1033ms)
+✔ fuzzyNameMatch: two unrelated single-word names sharing only noise tokens do not match (0.0799ms)
+✔ looksSuperseded: flags common stale-doc markers (0.1205ms)
+✔ sha256: identical buffers hash the same, different buffers do not (1.3053ms)
+✔ classifyRootFile: identical content -> identical (regardless of name) (0.2645ms)
+✔ classifyRootFile: same basename, different hash -> divergent (name match) (1.3291ms)
+✔ classifyRootFile: different basename, fuzzy match, different hash -> divergent (fuzzy) (0.1974ms)
+✔ classifyRootFile: no name/fuzzy/hash match -> new_in_root (0.1164ms)
+✔ classifyRootFile: root newer than docs twin is flagged distinctly (not silently treated as stale) (0.082ms)
+✔ classifyRootFile: with multiple fuzzy candidates, picks the tightest match (Jaccard) not just the one with more raw shared tokens (0.1254ms)
+✔ sortDivergentFindings: exact-name matches sort before fuzzy matches (7.0804ms)
+✔ buildMarkdownSummary / buildShortSummary: render without throwing and mention counts (0.3873ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FINANCE_LOG_2026.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'HERMES_DAILY_CRONS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'HERMES_OPERATIONS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'hermes-content/docs/DAILY_CRONS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'hermes-content/docs/OPERATIONS.md', LF will be replaced by CRLF the next time Git touches it
+✔ CLI --apply: deletes only the byte-identical root duplicate, leaves divergent/new files, commits (804.8208ms)
+warning: in the working copy of 'HERMES_OPERATIONS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'hermes-content/docs/OPERATIONS.md', LF will be replaced by CRLF the next time Git touches it
+✔ CLI dry-run (no --apply): never deletes or commits (502.5938ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1391.094
+

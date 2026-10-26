@@ -1,0 +1,49 @@
+{
+  "scope": "local Chromium desktop/narrow viewport, not physical mobile",
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "geometry": {
+        "docWidth": 1440,
+        "viewport": 1440,
+        "svgCount": 1,
+        "sections": [
+          "1. Nuestro harness, por capas",
+          "2. Qué ocurre dentro de un turno de Hermes",
+          "3. Ajustes que sí comprobamos"
+        ],
+        "legendOutsideSvg": true,
+        "brokenImages": 0,
+        "mainTitle": "Un responsable.Varios ejecutores. Evidencia real."
+      },
+      "pageErrors": [],
+      "externalRequests": [],
+      "screenshot": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\research\\harness-hermes-20261024\\esquema-1440.png"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "docWidth": 390,
+        "viewport": 390,
+        "svgCount": 1,
+        "sections": [
+          "1. Nuestro harness, por capas",
+          "2. Qué ocurre dentro de un turno de Hermes",
+          "3. Ajustes que sí comprobamos"
+        ],
+        "legendOutsideSvg": true,
+        "brokenImages": 0,
+        "mainTitle": "Un responsable.Varios ejecutores. Evidencia real."
+      },
+      "pageErrors": [],
+      "externalRequests": [],
+      "screenshot": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\research\\harness-hermes-20261024\\esquema-390.png"
+    }
+  ]
+}

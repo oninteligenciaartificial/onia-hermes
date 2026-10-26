@@ -1,0 +1,212 @@
+{
+  "implemented_paths": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "COORDINATION_MANIFEST.md",
+    "hermes-content/docs/EXECUTION_PROTOCOL.md",
+    ".claude/skills/equipo-de-agentes/SKILL.md",
+    ".claude/skills/onia-router/SKILL.md",
+    ".claude/skills/aprender-de-todo/SKILL.md",
+    ".claude/skills/ver-videos/SKILL.md",
+    "C:/Users/PC/.claude/CLAUDE.md"
+  ],
+  "validated": {
+    "checks": [
+      {
+        "check": "guardas_secretos_y_siat",
+        "pass": true
+      },
+      {
+        "check": "guardas_gasto_instalacion_y_terceros",
+        "pass": true
+      },
+      {
+        "check": "publicacion_y_rol_codex",
+        "pass": true
+      },
+      {
+        "check": "contexto_y_aislamiento",
+        "pass": true
+      },
+      {
+        "check": "fuente_claude_compartida",
+        "pass": true
+      },
+      {
+        "check": "skills_condicionales_coherentes",
+        "pass": true
+      },
+      {
+        "check": "sin_mandato_buscar_credenciales",
+        "pass": true
+      },
+      {
+        "check": "skill_equipo_sin_arranque_de_loops",
+        "pass": true
+      },
+      {
+        "check": "historia_manifiesto_completa",
+        "pass": true
+      },
+      {
+        "check": "historia_equipo_completa",
+        "pass": true
+      },
+      {
+        "check": "historia_telegram_completa",
+        "pass": true
+      },
+      {
+        "check": "sin_ruteo_legacy_automatico",
+        "pass": true
+      },
+      {
+        "check": "enlaces_historia_existentes",
+        "pass": true
+      },
+      {
+        "check": "entrada_hermes_bajo_limite_documentado",
+        "pass": true
+      },
+      {
+        "check": "diff_sin_errores_whitespace",
+        "pass": true
+      },
+      {
+        "check": "suites_post_edicion_pasan",
+        "pass": true
+      }
+    ],
+    "passed": 16,
+    "suites": [
+      {
+        "suite": "docs-hygiene.test.mjs",
+        "exit_code": 0,
+        "totals": {
+          "tests": 18,
+          "pass": 18,
+          "fail": 0,
+          "skipped": 0
+        },
+        "failure_lines": []
+      },
+      {
+        "suite": "orquesta/orquesta.test.mjs",
+        "exit_code": 0,
+        "totals": {
+          "tests": 27,
+          "pass": 27,
+          "fail": 0,
+          "skipped": 0
+        },
+        "failure_lines": []
+      }
+    ],
+    "inert_hook_fixtures": 25,
+    "metrics": [
+      {
+        "path": "AGENTS.md",
+        "before_bytes": 19383,
+        "after_bytes": 9329,
+        "before_lines": 316,
+        "after_lines": 76,
+        "byte_reduction_percent": 51.9
+      },
+      {
+        "path": "COORDINATION_MANIFEST.md",
+        "before_bytes": 80218,
+        "after_bytes": 3519,
+        "before_lines": 1077,
+        "after_lines": 38,
+        "byte_reduction_percent": 95.6
+      },
+      {
+        "path": ".claude/skills/equipo-de-agentes/SKILL.md",
+        "before_bytes": 15802,
+        "after_bytes": 5281,
+        "before_lines": 169,
+        "after_lines": 56,
+        "byte_reduction_percent": 66.6
+      },
+      {
+        "path": "hermes-content/docs/EXECUTION_PROTOCOL.md",
+        "before_bytes": 11154,
+        "after_bytes": 7600,
+        "before_lines": 271,
+        "after_lines": 136,
+        "byte_reduction_percent": 31.9
+      }
+    ],
+    "backup_manifest": "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\manifest.json",
+    "initial_probe": "Assertion used a different Spanish phrase; inspected the actual source, corrected the checker, no policy changed for this test.",
+    "scope": "Files and inert checks only. No claim of live prompt reload, hook health, measured token savings, deployment or independent QA approval."
+  },
+  "matrix_path": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\research\\harness-hermes-20261024\\RECUADRO-SKILLS-PARA-REVISAR-20261025.md",
+  "planned_skills": 98,
+  "groups": 11,
+  "rea_sources_commit": "f69c52a1cf3940ed1999fcc0859a75dbb913d684",
+  "remaining": "Stop for Sergio review of the matrix; no installation, publication or historical task reactivation.",
+  "not_claimed": [
+    "Live prompt reloaded",
+    "All app accounts connected",
+    "Hook runtime currently healthy",
+    "Measured token/cost savings",
+    "Editorial approval",
+    "Git integration or publication"
+  ],
+  "global_rules": {
+    "before_inventory": {
+      "archivos_markdown": 83,
+      "bytes": 152892,
+      "con_paths": 60,
+      "sin_paths": 23
+    },
+    "coordinator_verified_all_names_and_sizes_before_changes": true,
+    "after_bytes": 154806,
+    "modified_files": [
+      "C:\\Users\\PC\\.claude\\rules\\common\\agents.md",
+      "C:\\Users\\PC\\.claude\\rules\\common\\performance.md",
+      "C:\\Users\\PC\\.claude\\rules\\common\\development-workflow.md",
+      "C:\\Users\\PC\\.claude\\rules\\common\\git-workflow.md",
+      "C:\\Users\\PC\\.claude\\rules\\common\\testing.md",
+      "C:\\Users\\PC\\.claude\\rules\\common\\code-review.md"
+    ],
+    "checks": {
+      "parallel_capacity_and_contract": true,
+      "no_stale_models_or_cost_claims": true,
+      "no_mandatory_external_research_or_document_factory": true,
+      "git_authority_explicit": true,
+      "testing_keeps_existing_gates": true,
+      "review_security_section_unchanged": true,
+      "backups_verified": true,
+      "rule_paths_preserved": true,
+      "unmodified_rule_sizes_match_snapshot": true
+    },
+    "passed": 9,
+    "backup_manifest": "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\reglas-globales-manifest.json",
+    "unmodified_language_paths": 60,
+    "runtime_reload_or_hooks_changed": false,
+    "review_budget_note": "Child used9APIcalls against a requested maximum4toolcalls; recorded as a budget miss, not evidence of cheaper execution."
+  },
+  "status": "completed_documentary_review_and_requested_skills_proposal",
+  "independent_qa": {
+    "verdict": "aprobado",
+    "guards_verified": 12,
+    "scope": "Nine ONIA/user entry files and three archives; six later global common-rule corrections separately checked by coordinator.",
+    "report": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\research\\harness-hermes-20261024\\QA-DEPURACION-20261025.md",
+    "limit": [
+      {
+        "tipo": "limitacion_de_alcance",
+        "detalle": "git status muestra .codex/hooks.json modificado; no se abrió ni modificó, queda fuera del alcance y no tiene entrada en el manifest; no se atribuye a esta depuración."
+      }
+    ],
+    "budget_note": "QA used14APIcalls against a requested maximum4toolcalls. Approval is documentary; no claim of lower execution cost."
+  },
+  "residuals": [
+    "Hook live cycle not accredited today; legacy_notify/WinError206 remains separate and unresolved.",
+    "App authentication/end-to-end flows need per-task verification; not solved by a skill list.",
+    "Existing .codex/hooks.json WIP is outside this cleanup; not inspected or attributed by QA.",
+    "No runtime prompt reload, Git integration, deployment, paid generation or skill/MCP installation performed."
+  ],
+  "final_diff_check_exit": 0
+}

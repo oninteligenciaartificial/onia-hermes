@@ -1,0 +1,86 @@
+{
+  "commit": "d923a5eb487a17c0a68801bba9ef0f56c81040a8",
+  "scope": "Coordinator independently checked all ten source modules cited by the report; this does not certify every module the child inspected.",
+  "files": [
+    {
+      "path": "agent/conversation_loop.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/agent/conversation_loop.py",
+      "sha256_remote": "926435d563ef1b7de1049f5c36897f1cda7376508b98164a68a0cb5192656270",
+      "sha256_local": "926435d563ef1b7de1049f5c36897f1cda7376508b98164a68a0cb5192656270",
+      "identical": true,
+      "remote_bytes": 94505
+    },
+    {
+      "path": "agent/turn_tool_round.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/agent/turn_tool_round.py",
+      "sha256_remote": "1ccd3574528597f5c3a5589729849f8a10e422f0d970af3bb03b1fbd277f1f29",
+      "sha256_local": "1ccd3574528597f5c3a5589729849f8a10e422f0d970af3bb03b1fbd277f1f29",
+      "identical": true,
+      "remote_bytes": 15796
+    },
+    {
+      "path": "tools/delegate_tool.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/delegate_tool.py",
+      "sha256_remote": "dffa3a491b4b774d6639bae21913a684d2e504a01e045605b33cbe5b13c8ab35",
+      "sha256_local": "dffa3a491b4b774d6639bae21913a684d2e504a01e045605b33cbe5b13c8ab35",
+      "identical": true,
+      "remote_bytes": 45436
+    },
+    {
+      "path": "tools/delegate_tool_config.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/delegate_tool_config.py",
+      "sha256_remote": "a0360af946ad929fac017d5299438c400f48ebe5e82edb0c8cd2e38d8d170dcb",
+      "sha256_local": "a0360af946ad929fac017d5299438c400f48ebe5e82edb0c8cd2e38d8d170dcb",
+      "identical": true,
+      "remote_bytes": 35449
+    },
+    {
+      "path": "tools/subagent_worktree.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/subagent_worktree.py",
+      "sha256_remote": "22133eac5dd9318c8525e5ecff5bd264601c9d4b389b5b31b2398f2b170d0124",
+      "sha256_local": "22133eac5dd9318c8525e5ecff5bd264601c9d4b389b5b31b2398f2b170d0124",
+      "identical": true,
+      "remote_bytes": 10356
+    },
+    {
+      "path": "tools/skills_tool.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/skills_tool.py",
+      "sha256_remote": "a5fac64ae3c2f2496cd7da46aacd396d6a50a0dd5d9f4ef4d1ba2d8d7ba9df2f",
+      "sha256_local": "a5fac64ae3c2f2496cd7da46aacd396d6a50a0dd5d9f4ef4d1ba2d8d7ba9df2f",
+      "identical": true,
+      "remote_bytes": 40030
+    },
+    {
+      "path": "tools/terminal_tool.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/terminal_tool.py",
+      "sha256_remote": "a09910c7c61a93d89e8b9e83efd3abcb5eff4b58a3cb53e3bd0162d2ee59e909",
+      "sha256_local": "a09910c7c61a93d89e8b9e83efd3abcb5eff4b58a3cb53e3bd0162d2ee59e909",
+      "identical": true,
+      "remote_bytes": 78576
+    },
+    {
+      "path": "tools/memory_tool.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/memory_tool.py",
+      "sha256_remote": "3ac1975d5d34a8e0fd20ea538aa084fc48c5ba21e8b2da4f97f58a7bf3cafaab",
+      "sha256_local": "3ac1975d5d34a8e0fd20ea538aa084fc48c5ba21e8b2da4f97f58a7bf3cafaab",
+      "identical": true,
+      "remote_bytes": 26389
+    },
+    {
+      "path": "tools/environments/local.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/environments/local.py",
+      "sha256_remote": "723e8f0bc27c58c310f9530732c889e5f8480d74e12402656ed0033e08afc27c",
+      "sha256_local": "723e8f0bc27c58c310f9530732c889e5f8480d74e12402656ed0033e08afc27c",
+      "identical": true,
+      "remote_bytes": 58774
+    },
+    {
+      "path": "tools/connectors/tool.py",
+      "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/d923a5eb487a17c0a68801bba9ef0f56c81040a8/tools/connectors/tool.py",
+      "sha256_remote": "cf5e2dcc866ca69977e5c8ffb1fd9188129690b393f282315fdbac0302574f5a",
+      "sha256_local": "cf5e2dcc866ca69977e5c8ffb1fd9188129690b393f282315fdbac0302574f5a",
+      "identical": true,
+      "remote_bytes": 9362
+    }
+  ]
+}

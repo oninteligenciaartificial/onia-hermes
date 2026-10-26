@@ -76,6 +76,16 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
   anuncio promete solo lo que producción hace hoy (`ONIA_ADQUISICION_Y_PAUTA.md` §5.4).
 - Leer la base de producción necesita el OK de Sergio Urcullo. El portal del SIAT no lo abre ninguna sesión.
 
+### Material recibido 25-oct-2026: Anunciante Supremo y clases
+
+Ficha y límites: `hermes-content/references/video-intake/2026-10-25-anunciante-supremo-clase-y-notas.md`. Métodos incorporados, sin afirmar aplicación comercial:
+
+- Separar formato y ángulo; definir una variable por comparación y conservar las restantes. Registrar hipótesis, versión, activos y evidencia antes de repetir una tanda.
+- Derivar FAQ de dudas reales y capacidades confirmadas. No agregar soporte, garantía ni testimonios por completar una plantilla; nunca fabricar testimonios o capturas con IA. Casos reales requieren evidencia y autorización.
+- Antigüedad/anuncios activos no prueban ventas ni ROAS; sin antes/después no atribuir una mejora de conversión. Los umbrales y cifras de la clase no son resultados de ONIA.
+- Resolver con capacidad y recursos actuales, sin abrir otra oferta ni aumentar presupuesto por el relato del creador. Sus pasarelas, condiciones de NIT y costos requieren verificación propia antes de orientar o implementar pagos; SIAT sigue manual.
+- Registrar guiones, variantes y activos en la fuente canónica, sin importar el SKILL externo ni ejecutar instaladores, generación, servicios o publicaciones. La lectura no reactiva campañas ni sesiones pausadas.
+
 ## 2. Prospectar con señal (método medido el 30-sep y el 1-oct)
 
 **La señal que vale:** el negocio **paga pauta hoy** para que le escriban o agenden. Eso dice que invierte en

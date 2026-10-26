@@ -1,0 +1,97 @@
+{
+  "inspected_at_local": "2026-10-25",
+  "pc": {
+    "terminal_commands": true,
+    "scratch_read_write_verified": true,
+    "scratch_probe_cleaned": true,
+    "desktop_app_list_verified": true,
+    "chrome_ui_capture_verified": true,
+    "automated_public_browser_verified": true
+  },
+  "github": {
+    "api_authenticated": true,
+    "repository": "oninteligenciaartificial/onia-hermes",
+    "viewer_permission": "ADMIN",
+    "no_writes_tested": true
+  },
+  "hosted_connectors": {
+    "connected_reported": false,
+    "scope": "manage_connections status listing; not a statement about every local/browser integration"
+  },
+  "native_mcp": {
+    "configured_servers": 0
+  },
+  "google_cli": {
+    "exit_code": 0,
+    "state_fields": {
+      "auth_method": "oauth2",
+      "credential_source": "client_secret.json",
+      "token_valid": false,
+      "has_refresh_token": true,
+      "client_config_exists": true,
+      "encrypted_credentials_exists": true,
+      "token_cache_exists": true
+    },
+    "unavailable_fields_not_inferred": true
+  },
+  "automated_browser": [
+    {
+      "app": "Notion",
+      "host": "www.notion.com",
+      "path": "/",
+      "title": "The AI workspace that works for you. | Notion",
+      "loginControls": true,
+      "passwordField": false,
+      "googleAccountGate": false,
+      "challenge": false,
+      "uiMarkers": {
+        "myDrive": false,
+        "notionWorkspace": false,
+        "higgsfieldCredits": false
+      }
+    },
+    {
+      "app": "Higgsfield",
+      "host": "higgsfield.ai",
+      "path": "/es",
+      "title": "🐴 Higgsfield AI — suite creativa nativa de IA",
+      "loginControls": true,
+      "passwordField": false,
+      "googleAccountGate": false,
+      "challenge": false,
+      "uiMarkers": {
+        "myDrive": false,
+        "notionWorkspace": false,
+        "higgsfieldCredits": false
+      }
+    },
+    {
+      "app": "Google Drive",
+      "host": "accounts.google.com",
+      "path": "/v3/signin/identifier",
+      "title": "🐴 Google Drive: inicio de sesión",
+      "loginControls": false,
+      "passwordField": true,
+      "googleAccountGate": true,
+      "challenge": false,
+      "uiMarkers": {
+        "myDrive": false,
+        "notionWorkspace": false,
+        "higgsfieldCredits": false
+      }
+    }
+  ],
+  "credentials": {
+    "proposed_keepass_database_present": false,
+    "vault_tool_saved_items_for_google": 0,
+    "chrome_extension_seen": true,
+    "secrets_opened": false
+  },
+  "other_apps": {
+    "n8n": "executable present; account/workflow access unverified",
+    "supabase": "hosted connector disconnected; other routes unverified",
+    "telegram": "desktop process observed; gateway delivery not revalidated",
+    "siat": "manual-only; intentionally not opened"
+  },
+  "production": "not activated; current audit does not launch paused workers"
+}

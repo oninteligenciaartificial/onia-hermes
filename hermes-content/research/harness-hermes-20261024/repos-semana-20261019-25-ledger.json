@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://trendshift.io/weekly",
+      "title": "",
+      "accessed": "2026-10-25"
+    },
+    {
+      "id": 2,
+      "url": "https://github.com/DietrichGebert/ponytail/blob/main/README.md",
+      "title": "",
+      "accessed": "2026-10-25"
+    },
+    {
+      "id": 3,
+      "url": "https://github.com/Graphify-Labs/graphify/blob/v8/README.md",
+      "title": "",
+      "accessed": "2026-10-25"
+    },
+    {
+      "id": 4,
+      "url": "https://github.com/cloudflare/security-audit-skill/blob/main/README.md",
+      "title": "",
+      "accessed": "2026-10-25"
+    }
+  ]
+}

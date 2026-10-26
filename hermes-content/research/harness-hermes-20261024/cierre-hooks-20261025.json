@@ -1,0 +1,130 @@
+{
+  "tested_on": "2026-10-25",
+  "command": "python .hermes/tasks/check-codex-hook-launcher.py",
+  "exit_code": 0,
+  "script_sha256": "a55805009eaf1452178c9c13dc5469205d977c977877645f6ad08bde4ab1f12a",
+  "result": {
+    "tests_count": 25,
+    "tests": [
+      {
+        "action": "version-check",
+        "form": "raw_codex",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "version-check",
+        "form": "argv_cmd",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "start",
+        "form": "raw_codex",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "start",
+        "form": "argv_cmd",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "context",
+        "form": "raw_codex",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "context",
+        "form": "argv_cmd",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "session-init",
+        "form": "raw_codex",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "session-init",
+        "form": "argv_cmd",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "file-context",
+        "form": "raw_codex",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "file-context",
+        "form": "argv_cmd",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "observation",
+        "form": "raw_codex",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "observation",
+        "form": "argv_cmd",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "summarize",
+        "form": "raw_codex",
+        "stdin_args": "pass"
+      },
+      {
+        "action": "summarize",
+        "form": "argv_cmd",
+        "stdin_args": "pass"
+      },
+      {
+        "nonzero_exit_propagation": "pass"
+      },
+      {
+        "action": "file-context",
+        "deny_stop_continue_preserved": "pass"
+      },
+      {
+        "action": "file-context",
+        "input_event": "Stop",
+        "output_untouched": "pass"
+      },
+      {
+        "action": "file-context",
+        "input_event": "missing",
+        "output_untouched": "pass"
+      },
+      {
+        "action": "file-context",
+        "input_event": "malformed",
+        "output_untouched": "pass"
+      },
+      {
+        "action": "observation",
+        "deny_stop_continue_preserved": "pass"
+      },
+      {
+        "action": "observation",
+        "input_event": "Stop",
+        "output_untouched": "pass"
+      },
+      {
+        "action": "observation",
+        "input_event": "missing",
+        "output_untouched": "pass"
+      },
+      {
+        "action": "observation",
+        "input_event": "malformed",
+        "output_untouched": "pass"
+      },
+      {
+        "other_event_untouched": "pass"
+      },
+      {
+        "malformed_output_not_hidden": "pass"
+      }
+    ],
+    "scope": "inert fixtures only, not runtime certification"
+  },
+  "limitation": "Inert synthetic scripts only. Does not certify real hook handlers, resolve legacy_notify WinError206, or change .codex/hooks.json."
+}

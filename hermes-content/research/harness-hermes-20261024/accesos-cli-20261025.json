@@ -1,0 +1,22 @@
+{
+  "gws_auth_status": {
+    "exit_code": 0,
+    "state_fields": {
+      "auth_method": "oauth2",
+      "credential_source": "client_secret.json",
+      "token_valid": false,
+      "has_refresh_token": true,
+      "client_config_exists": true,
+      "encrypted_credentials_exists": true,
+      "token_cache_exists": true
+    },
+    "unavailable_fields_not_inferred": true
+  },
+  "gh_repo_access": {
+    "exit_code": 0,
+    "result": {
+      "nameWithOwner": "oninteligenciaartificial/onia-hermes",
+      "viewerPermission": "ADMIN"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "video_id": "z1EaBe9oIME",
+  "url": "https://www.youtube.com/watch?v=z1EaBe9oIME",
+  "media": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "av1",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio"
+      }
+    ],
+    "format": {
+      "duration": "969.851066"
+    }
+  },
+  "captions": {
+    "language": "en-orig",
+    "source": "YouTube automatic",
+    "segments": 421,
+    "text_read_complete": true,
+    "independently_ear_corrected": false,
+    "first_start": 0.0,
+    "last_end": 971.64
+  },
+  "visual": {
+    "interval_samples": 32,
+    "interval_seconds": 30,
+    "exact_seek_times": [
+      112,
+      218,
+      290,
+      410,
+      455,
+      523,
+      677,
+      792
+    ],
+    "contact_sheets_opened": 2,
+    "continuous_viewing": false
+  },
+  "limits": [
+    "No Gemini key present in process; no new key or paid generation requested.",
+    "Spanish auto-caption download returned429; no retry or evasion. English captions available.",
+    "No software used to author slides confirmed solely from rendered video.",
+    "No performance benchmark reproduced."
+  ],
+  "raw_media_directory": "C:\\Users\\PC\\AppData\\Local\\hermes\\cache\\scratch\\harness-z1EaBe9oIME",
+  "canonical_visual_evidence": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\video-intake\\evidencia-leon-harness-z1EaBe9oIME-20261025"
+}

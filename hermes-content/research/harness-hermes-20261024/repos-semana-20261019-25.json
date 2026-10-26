@@ -1,0 +1,158 @@
+{
+  "week": "2026-10-19/2026-10-25",
+  "observed_on": "2026-10-25",
+  "scope": "25 displayed weekly cards; non-weekly promoted links and five Live Meta sidebar repos excluded; no functional audit",
+  "ranking_source": "https://trendshift.io/weekly",
+  "ranked": [
+    {
+      "rank": 1,
+      "repository": "Gathin23/cleanyourtv",
+      "trendshift_detail": "/repositories/310225"
+    },
+    {
+      "rank": 2,
+      "repository": "morluto/rea",
+      "trendshift_detail": "/repositories/82054"
+    },
+    {
+      "rank": 3,
+      "repository": "cloudflare/security-audit-skill",
+      "trendshift_detail": "/repositories/64056"
+    },
+    {
+      "rank": 4,
+      "repository": "deepseek-ai/DeepInfer",
+      "trendshift_detail": "/repositories/312526"
+    },
+    {
+      "rank": 5,
+      "repository": "peach-mitao/peach",
+      "trendshift_detail": "/repositories/309486"
+    },
+    {
+      "rank": 6,
+      "repository": "google-research/harness2",
+      "trendshift_detail": "/repositories/307358"
+    },
+    {
+      "rank": 7,
+      "repository": "Ebony-Vinyl/dsh-our-free-model",
+      "trendshift_detail": "/repositories/261203"
+    },
+    {
+      "rank": 8,
+      "repository": "ai-job-search-dev/ai-job-search",
+      "trendshift_detail": "/repositories/43622"
+    },
+    {
+      "rank": 9,
+      "repository": "KnifeLemon/Filee",
+      "trendshift_detail": "/repositories/276987"
+    },
+    {
+      "rank": 10,
+      "repository": "DietrichGebert/ponytail",
+      "trendshift_detail": "/repositories/50668"
+    },
+    {
+      "rank": 11,
+      "repository": "Graphify-Labs/graphify",
+      "trendshift_detail": "/repositories/25296"
+    },
+    {
+      "rank": 12,
+      "repository": "Zagitta/gpu-unlock",
+      "trendshift_detail": "/repositories/314044"
+    },
+    {
+      "rank": 13,
+      "repository": "deepseek-ai/deepseek-harness",
+      "trendshift_detail": "/repositories/146135"
+    },
+    {
+      "rank": 14,
+      "repository": "stablyai/orca",
+      "trendshift_detail": "/repositories/26256"
+    },
+    {
+      "rank": 15,
+      "repository": "ly05010419/MacNativeGames",
+      "trendshift_detail": "/repositories/310285"
+    },
+    {
+      "rank": 16,
+      "repository": "debpalash/VoiceStudio",
+      "trendshift_detail": "/repositories/28176"
+    },
+    {
+      "rank": 17,
+      "repository": "AhmadHassan-BTed/Turnitout-Humanizer",
+      "trendshift_detail": "/repositories/229188"
+    },
+    {
+      "rank": 18,
+      "repository": "xerj-org/xerj",
+      "trendshift_detail": "/repositories/116361"
+    },
+    {
+      "rank": 19,
+      "repository": "YuJunZhiXue/dsh-purge",
+      "trendshift_detail": "/repositories/182834"
+    },
+    {
+      "rank": 20,
+      "repository": "lemomo-ai/lemo-opuscar",
+      "trendshift_detail": "/repositories/262645"
+    },
+    {
+      "rank": 21,
+      "repository": "yihui-dev/awesome-opus5-5-videos",
+      "trendshift_detail": "/repositories/264443"
+    },
+    {
+      "rank": 22,
+      "repository": "Fractal-Compute-Orchestrations/FractalWorkspace",
+      "trendshift_detail": "/repositories/127371"
+    },
+    {
+      "rank": 23,
+      "repository": "Comfy-Org/ComfyUI",
+      "trendshift_detail": "/repositories/17421"
+    },
+    {
+      "rank": 24,
+      "repository": "xiaoyang111222/cn-math-taxonomy",
+      "trendshift_detail": "/repositories/310564"
+    },
+    {
+      "rank": 25,
+      "repository": "seedds/nxnative",
+      "trendshift_detail": "/repositories/309689"
+    }
+  ],
+  "primary_readmes": [
+    {
+      "repository": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail/blob/main/README.md",
+      "git_blob_sha": "79529b3c536ff31540714deb0ebcd32f24ae6ef9"
+    },
+    {
+      "repository": "Graphify-Labs/graphify",
+      "url": "https://github.com/Graphify-Labs/graphify/blob/v8/README.md",
+      "git_blob_sha": "a2240fea8f624fe86467911821cb9a55cede4e26"
+    },
+    {
+      "repository": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill/blob/main/README.md",
+      "git_blob_sha": "c80305c88cd5087db37f76a0d230c1fc092c864c"
+    }
+  ],
+  "reviewer": {
+    "delegation": "deleg_23c0bd7a",
+    "model": "gpt-6-luna",
+    "api_calls": 1,
+    "seconds": 24.95,
+    "source_package": "incomplete; not independent source verification"
+  },
+  "installed_or_executed": false
+}

@@ -1,0 +1,45 @@
+{
+  "verdict": "aprobado",
+  "findings": [
+    {
+      "tipo": "limitacion_de_alcance",
+      "detalle": "git status muestra .codex/hooks.json modificado; no se abrió ni modificó, queda fuera del alcance y no tiene entrada en el manifest; no se atribuye a esta depuración."
+    }
+  ],
+  "checked_paths": [
+    "C:\\dev\\proyectos\\onia-hermes\\AGENTS.md",
+    "C:\\dev\\proyectos\\onia-hermes\\CLAUDE.md",
+    "C:\\dev\\proyectos\\onia-hermes\\COORDINATION_MANIFEST.md",
+    "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\docs\\EXECUTION_PROTOCOL.md",
+    "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\equipo-de-agentes\\SKILL.md",
+    "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-router\\SKILL.md",
+    "C:\\Users\\PC\\.claude\\CLAUDE.md",
+    ".claude/skills/aprender-de-todo/SKILL.md",
+    ".claude/skills/ver-videos/SKILL.md",
+    "hermes-content/docs/historial/coordination-manifest-hasta-20261025.md",
+    "hermes-content/docs/historial/equipo-agentes-anterior-20261025.md",
+    "hermes-content/docs/historial/protocolo-telegram-anterior-20261025.md",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\manifest.json",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\00-AGENTS.md",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\01-CLAUDE.md",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\02-COORDINATION_MANIFEST.md",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\03-EXECUTION_PROTOCOL.md",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\04-SKILL.md",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\05-SKILL.md",
+    "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\depuracion-instrucciones-20261025-102255\\06-CLAUDE.md"
+  ],
+  "preserved_guards": [
+    "SIAT/impuestos manual",
+    "Google/MFA/CAPTCHA humano",
+    "Instalaciones con aprobación",
+    "Gastos/terceros/producción/cara-voz con aprobación",
+    "Clientes usted/marca vos",
+    "Client-facing con captura/video y OK",
+    "Codex sin Git/merge/push fuera de encargo",
+    "Worktree no aísla credenciales/permisos",
+    "Preservar WIP/originales/evidencia",
+    "Una sola vía de despacho",
+    "Criterio de parada",
+    "Hook no autoriza commit/push"
+  ]
+}

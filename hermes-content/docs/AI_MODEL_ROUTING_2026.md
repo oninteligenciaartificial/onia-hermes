@@ -5,6 +5,11 @@ elegir modelo. La disponibilidad puede variar por producto y cuenta.
 
 ## Decisión
 
+La tabla es criterio de selección, no una orden de cambiar el principal. El pedido vigente,
+el contrato, el catálogo autenticado y el cupo real mandan; una lectura de este documento no
+autoriza subir modelo/esfuerzo, gasto o concurrencia. Distinguir default guardado, modelo
+del coordinador y modelo observado en el resultado del trabajador.
+
 | Trabajo | Modelo y esfuerzo inicial | Motivo |
 |---|---|---|
 | Arquitectura ambigua, decisiones de negocio, investigación multi-fuente, campaña final, revisión legal/comercial o cambios end-to-end | `gpt-6-astra` · `medium` | El costo de una mala decisión supera el ahorro de tokens |

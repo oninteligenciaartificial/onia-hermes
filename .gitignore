@@ -102,3 +102,9 @@ hermes-content/carousels/out/*/assets/
 
 # yt-dlp: el .info.json puede llevar cookies de sesion (ver-videos/fetch-video.mjs)
 *.info.json
+
+# Material de formación enviado por Sergio: originales locales, no publicar ni sincronizar.
+hermes-content/references/formacion/anunciante-supremo/originales/
+
+# Vista operativa local: datos de sesión y capturas, no publicación.
+hermes-content/research/harness-hermes-20261024/panel-ejecucion/

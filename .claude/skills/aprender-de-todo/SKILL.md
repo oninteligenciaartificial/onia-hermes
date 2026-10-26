@@ -33,8 +33,8 @@ Si hay un encargo explícito, aprender y ejecutar solamente ese alcance.
    carril con fecha y enlace a la ficha. Si contradice una decisión de Sergio Urcullo,
    corregir la regla vieja en origen o dejar la propuesta pendiente, sin adoptarla.
 6. Preparar la prueba de aplicación en la próxima tarea pertinente de la cola.
-   No producir una pieza solo para marcar una casilla. La madre coordina la adopción
-   entre sesiones; Codex devuelve su ficha y cambios dentro del encargo cerrado.
+   No producir una pieza solo para marcar una casilla. Hermes mantiene la responsabilidad
+   de comprobar su aplicación; Codex devuelve su ficha y cambios dentro del encargo cerrado.
 
 ## Dimensiones: método y destino
 

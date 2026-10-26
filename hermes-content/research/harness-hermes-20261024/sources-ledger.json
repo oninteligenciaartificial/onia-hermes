@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://hermes-agent.nousresearch.com/docs/developer-guide/architecture",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "The synchronous orchestration engine",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/security",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "Container isolation — Docker/Modal (and the Singularity plugin) sandboxing with hardened settings",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/profiles",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "A profile is a separate Hermes home directory.",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/skills",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "They follow a progressive disclosure pattern to minimize token usage",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "url": "https://hermes-agent.nousresearch.com/docs/guides/delegation-patterns",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "Only the final summary comes back — intermediate tool calls never enter your context window.",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "url": "https://hermes-agent.nousresearch.com/docs/developer-guide/agent-loop",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "Each iteration of the agent loop follows this sequence:",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "url": "https://hermes-agent.nousresearch.com/docs/developer-guide/provider-runtime",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "shared provider runtime resolver used across:",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/delegation",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "By default, subagents share the parent's working directory",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "Tool responses always show the live state.",
+          "added": "2026-10-24"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "url": "https://hermes-agent.nousresearch.com/docs/developer-guide/context-compression-and-caching",
+      "title": "",
+      "accessed": "2026-10-24",
+      "quotes": [
+        {
+          "text": "floored at 0.75 below 512K windows",
+          "added": "2026-10-24"
+        }
+      ]
+    }
+  ]
+}

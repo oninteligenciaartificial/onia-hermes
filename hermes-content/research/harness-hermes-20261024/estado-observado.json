@@ -1,0 +1,53 @@
+{
+  "scope": "Solo lectura 24-oct-2026. Configuracion resuelta no equivale a estado vivo. Sin reanudar trabajadores ni modificar ajustes.",
+  "saved": {
+    "model.default": "gpt-6.1-sol",
+    "model.provider": "openai-codex",
+    "delegation.model": "gpt-6-luna",
+    "delegation.provider": "openai-codex",
+    "delegation.max_concurrent_children": 2,
+    "delegation.max_iterations": 40,
+    "compression.enabled": true,
+    "compression.threshold": 0.5,
+    "auxiliary.compression.model": "",
+    "auxiliary.compression.provider": "auto",
+    "terminal.backend": "local"
+  },
+  "current_orca_runtime": "a7b1db39-758c-46ff-a519-3540356e922a",
+  "previous_orca_runtime": "16f58d86-6980-48da-8797-12ffb51301e2",
+  "live_terminal_inventory": [{"handle": "term_f4070152-4d08-49dd-911b-11e700ad3735", "agent": "hermes", "worktree": "C:/dev/proyectos/onia-hermes"}],
+  "previous_worker_handles": "terminal_handle_stale: no prueban agentes vivos ni procesos terminados; no se recuperan por este encargo",
+  "effort": "max solicitado y comprobado antes; footer actual no lo expone, no revalidado aqui",
+  "canonical_dispatch": "scripts/orquesta/ por issues; documentacion leida, cola/Actions/VPS no ejecutados ni verificados activos",
+  "local_dispatch_pilot": "Orca Run run_66e1d03c2397 conserva historial; no prueba vinculacion del nuevo coordinador",
+  "worktrees": [
+    {
+      "path": "C:/dev/proyectos/onia-hermes",
+      "displayName": "00 · Coordinación",
+      "branch": "refs/heads/main",
+      "parentWorktreeId": null
+    },
+    {
+      "path": "C:/Users/PC/orca/workspaces/onia-hermes/iman-workshop-20261022",
+      "displayName": "01.1 · Workshop",
+      "branch": "refs/heads/oninteligenciaartificial/iman-workshop-20261022",
+      "parentWorktreeId": "19314abe-775f-401e-8530-4e5b5f368db0::C:/Users/PC/orca/workspaces/onia-hermes/marca-personal-20261024"
+    },
+    {
+      "path": "C:/Users/PC/orca/workspaces/onia-hermes/marca-personal-20261024",
+      "displayName": "01 · Marca personal",
+      "branch": "refs/heads/oninteligenciaartificial/marca-personal-20261024",
+      "parentWorktreeId": "19314abe-775f-401e-8530-4e5b5f368db0::C:/dev/proyectos/onia-hermes"
+    },
+    {
+      "path": "C:/Users/PC/orca/workspaces/onia-platform/startup-onia-20261024",
+      "displayName": "02 · Onia Platform · startup",
+      "branch": "refs/heads/oninteligenciaartificial/startup-onia-20261024",
+      "parentWorktreeId": null
+    }
+  ],
+  "coordinator_runtime_system": "gpt-6.1-sol/openai-codex",
+  "run": "run_66e1d03c2397",
+  "production_scope": "paused after setup; investigate only",
+  "installed_version": "v0.22.2 d923a5eb48; Orca1.4.238"
+}

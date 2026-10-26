@@ -1,10 +1,9 @@
 # CLAUDE.md — Onia
 
-Instrucciones de proyecto. Override sobre defaults.
+Instrucciones de proyecto. Leer primero `AGENTS.md`, entrada compartida de autoridad y límites; este archivo conserva detalle por dominio para Claude. Un encargo más acotado no hereda permisos de Git, publicación o producción por estas reglas.
 
-> Ordenado por **cuándo se necesita**: arriba lo de cada sesión, abajo el detalle de
-> dominio. Cada regla lleva el caso real que la originó — una regla sin su historia se
-> desobedece; con la historia, no.
+> Ordenado por **cuándo se necesita**: arriba lo vigente, abajo el detalle de dominio.
+> Consultar el antecedente cuando cambie una decisión; no cargar historia como una orden nueva.
 
 ---
 
@@ -12,27 +11,11 @@ Instrucciones de proyecto. Override sobre defaults.
 
 ## Acceso local a apps, credenciales y sesiones (regla compartida)
 
-Origen: Sergio Urcullo, 2026-09-28. Evitar que Codex y Claude pidan iniciar
-sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
-
-- Antes de pedir claves o un login, leer `hermes-content/skills/seguridad-credenciales.md`
-  y comprobar la sesión y el mecanismo local de acceso ya autorizados para esa cuenta.
-- La bóveda KeePassXC prevista es `C:/Users/PC/BovedaPrivada/Agentes.kdbx`, fuera
-  del repo. Verificar su existencia y la integración; KeePassXC abierto no concede
-  acceso automático a Codex, Claude Code, Playwright ni agentes remotos.
-- Reutilizar la sesión vigente mediante la herramienta de navegador disponible
-  y sus permisos. Los perfiles persistentes se guardan fuera de Git y se usan
-  de forma serializada; no crear un contexto efímero nuevo por cada tarea.
-- Usar la credencial necesaria mediante un puente configurado. No volcar la bóveda,
-  mostrar contraseñas/tokens/cookies, exportar secretos a texto ni pedir la
-  contraseña maestra por chat. Google, consentimiento y MFA requieren a Sergio
-  Urcullo cuando corresponda; no prometer sesiones permanentes.
-- El acceso a una cuenta mantiene el alcance de la tarea autorizada. Pagos,
-  generaciones pagadas, publicaciones, contacto con terceros y producción
-  conservan sus aprobaciones específicas.
-- Antes de descargar o instalar herramientas, dependencias, navegadores,
-  plugins o extensiones, explicar qué componente y propósito y pedir aprobación.
-  El VPS de ONIA Platform no se usa para alojar esta bóveda o sesiones personales.
+Rige `AGENTS.md` §«Credenciales y acciones reservadas» y el procedimiento
+`hermes-content/skills/seguridad-credenciales.md`: comprobar la sesión y el puente
+ya autorizados antes de pedir login. No buscar ni exponer secretos, copiar perfiles
+o prometer acceso por una extensión/bóveda presente. Consentimiento/MFA, instalaciones,
+gasto, terceros, cara/voz y producción mantienen su aprobación. SIAT es exclusivamente manual.
 
 
 ## Objetivo por sesión (REGLA)
@@ -50,10 +33,20 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   le pide nada más. Relevar no es cerrar a medias: el objetivo no cambia de dueño ni de definición de «hecho».
   El aviso del 80 % lo arma el Panel ONIA (en construcción el 20-oct); mientras no esté, se mira el indicador de
   contexto de la app.
+- **Detectar degradación y relevar sin perder el trabajo** (Sergio Urcullo, 22-oct-2026).
+  Revisar la ocupación efectiva de contexto y señales observables: pérdida de instrucciones, contradicciones
+  con pruebas ya obtenidas o comprobaciones repetidas sin necesidad. Un aviso de compresiones es una alerta,
+  no una medición de precisión; los tokens acumulados tampoco miden ocupación. Si faltan métricas, declararlo.
+  Al detectar esas señales o alcanzar el umbral de relevo, terminar sólo la operación segura en curso y guardar
+  objetivo, permisos, artefactos, pruebas, pendientes, procesos y siguiente acción. Continuar el mismo encargo
+  desde una sesión nueva con recepción y primera acción verificadas, sin pedir que Sergio lo explique otra vez.
+  Mantener un solo coordinador responsable: abrir una pestaña vacía no completa el relevo. No borrar historia,
+  ampliar permisos ni activar otra cola para liberar contexto; Git y publicación conservan el permiso del encargo.
 - **Orquestan Hermes y el programa fijo, no una sesión** (Sergio Urcullo, 19-oct-2026; ver «Quién orquesta»,
   abajo). La sesión principal es donde él trabaja conmigo; sus subagentes y los carriles independientes sí
   trabajan en paralelo. Codex ejecuta encargos cerrados.
-- Cada subagente: worktree con **ruta explícita** y gates en su propio árbol.
+- Cada ejecutor que **edita**: worktree con **ruta explícita**, archivos propios y gates en su árbol.
+  Una revisión de solo lectura puede compartir checkout con artefactos distintos; no crea otro worktree por rutina.
   Corrección 2026-10-09: en un encargo Codex sin Git, quien lo lanzó verifica rama y hace
   commit/integración; Codex no ejecuta ni siquiera consultas Git. Quien lo lanzó
   mantiene el objetivo, el orden y el PR a `main`.
@@ -97,9 +90,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **La primera respuesta de cada sesión nombra las skills que cargó** (Sergio Urcullo, 20-oct: el taller hizo la
   página sin las skills de diseño y nadie lo vio). Una línea, con los nombres exactos de la fila de su área en
   `onia-router`. Quien abre una sesión de un área le pasa esa fila en el prompt, no solo «arrancá con onia-router».
-- **Desde 2026-10-09, Claude y Codex cargan también `equipo-de-agentes` y
-  `aprender-de-todo`.** Registrar cada referencia por dimensión; guardar una regla
-  no demuestra aprendizaje aplicado: hace falta una tarea que la use.
+- **Cargar según el encargo:** `equipo-de-agentes` al delegar/coordinar/revisar;
+  `aprender-de-todo` al analizar o aprender de material. No cargar los tres cuerpos por rutina.
+  Cuando hay referencias, registrar sus dimensiones: guardar una regla no demuestra aplicación.
 - **Al tocar el producto (`onia-platform`) son OBLIGATORIAS sus skills propias**
   (`onia-frontend/backend/db/seguridad/deploy/verificacion` en su `.claude/skills/`) —
   solo se autolistan en sesiones abiertas DENTRO de ese repo.

@@ -1,0 +1,1277 @@
+{
+  "date": "2026-10-25",
+  "state": "Propuesta para revisar con Sergio; no instala/activa/desactiva ni certifica ejecuciones.",
+  "groups": 11,
+  "planned_skills": 98,
+  "source_counts": {
+    "hermes-default": 29,
+    "onia-hermes-claude": 63,
+    "onia-platform-claude": 6
+  },
+  "skills": [
+    {
+      "group": "Coordinación y continuidad",
+      "name": "hermes-agent",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\autonomous-ai-agents\\hermes-agent\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "claude-code",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\autonomous-ai-agents\\claude-code\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "codex",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\autonomous-ai-agents\\codex\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "onia-operar-harness",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\onia\\onia-operar-harness\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "onia-relevo-sesion",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\onia\\onia-relevo-sesion\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "onia-router",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-router\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "equipo-de-agentes",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\equipo-de-agentes\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "onia-continuidad",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-continuidad\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "Coordinación y continuidad",
+      "name": "orca",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\orca\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Base y delegación; ejecutores solo por contrato. No todos se cargan en cada turno."
+    },
+    {
+      "group": "GitHub y revisión de entrega",
+      "name": "github",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\software-development\\github\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Repo/PR/revisión; gh ya existe. Lectura no autoriza commit, push o merge."
+    },
+    {
+      "group": "GitHub y revisión de entrega",
+      "name": "requesting-code-review",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\software-development\\requesting-code-review\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Repo/PR/revisión; gh ya existe. Lectura no autoriza commit, push o merge."
+    },
+    {
+      "group": "GitHub y revisión de entrega",
+      "name": "verification-loop",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\verification-loop\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Repo/PR/revisión; gh ya existe. Lectura no autoriza commit, push o merge."
+    },
+    {
+      "group": "GitHub y revisión de entrega",
+      "name": "security-review",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\security-review\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Repo/PR/revisión; gh ya existe. Lectura no autoriza commit, push o merge."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "claude-design",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\creative\\claude-design\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "design-md",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\creative\\design-md\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "popular-web-designs",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\creative\\popular-web-designs\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "dogfood",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\software-development\\dogfood\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "impeccable",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\impeccable\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "onia-web-factory",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-web-factory\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "web-factory-design-research",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\web-factory-design-research\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "web-factory-intake-assets",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\web-factory-intake-assets\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "figma",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\figma\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "oversized-cursor",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\oversized-cursor\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "seam-craft",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\seam-craft\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Diseño y UI web",
+      "name": "onia-frontend",
+      "source_root": "onia-platform-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-platform\\.claude\\skills\\onia-frontend\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Diseñar con referencias, implementar, abrir y verificar capturas/flujos. Figma requiere su ruta autorizada."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "test-driven-development",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\software-development\\test-driven-development\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "systematic-debugging",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\software-development\\systematic-debugging\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "spike",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\software-development\\spike\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "onia-core",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-core\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "api-design",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\api-design\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "backend-patterns",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\backend-patterns\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "postgres-patterns",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\postgres-patterns\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "database-migrations",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\database-migrations\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "onia-backend",
+      "source_root": "onia-platform-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-platform\\.claude\\skills\\onia-backend\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "onia-db",
+      "source_root": "onia-platform-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-platform\\.claude\\skills\\onia-db\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "onia-seguridad",
+      "source_root": "onia-platform-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-platform\\.claude\\skills\\onia-seguridad\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "onia-verificacion",
+      "source_root": "onia-platform-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-platform\\.claude\\skills\\onia-verificacion\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Producto, backend y datos",
+      "name": "onia-deploy",
+      "source_root": "onia-platform-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-platform\\.claude\\skills\\onia-deploy\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Según el cambio y las seis skills propias del producto; ni deploy ni migración automáticos."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "computer-use",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\autonomous-ai-agents\\computer-use\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "inspecting-hermes-desktop-dom",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\software-development\\inspecting-hermes-desktop-dom\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "onia-infra",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-infra\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "onia-hermes-jarvis",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-hermes-jarvis\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "docker-patterns",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\docker-patterns\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "deployment-patterns",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\deployment-patterns\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "n8n-workflow-patterns",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\n8n-workflow-patterns\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Infra, Hermes y automatización",
+      "name": "n8n-mcp-tools-expert",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\n8n-mcp-tools-expert\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Herramientas/SSH/Docker presentes no prueban permisos ni servidor sano; gates y aprobación aplican."
+    },
+    {
+      "group": "Investigación y aprendizaje",
+      "name": "grounded-citations",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\research\\grounded-citations\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Evidencia por dimensión, fuente actual y prueba de uso. No abrir otra investigación para posponer entrega."
+    },
+    {
+      "group": "Investigación y aprendizaje",
+      "name": "youtube-content",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\media\\youtube-content\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Evidencia por dimensión, fuente actual y prueba de uso. No abrir otra investigación para posponer entrega."
+    },
+    {
+      "group": "Investigación y aprendizaje",
+      "name": "blocked-page-recovery",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\web\\blocked-page-recovery\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Evidencia por dimensión, fuente actual y prueba de uso. No abrir otra investigación para posponer entrega."
+    },
+    {
+      "group": "Investigación y aprendizaje",
+      "name": "architecture-diagram",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\creative\\architecture-diagram\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Evidencia por dimensión, fuente actual y prueba de uso. No abrir otra investigación para posponer entrega."
+    },
+    {
+      "group": "Investigación y aprendizaje",
+      "name": "aprender-de-todo",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\aprender-de-todo\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Evidencia por dimensión, fuente actual y prueba de uso. No abrir otra investigación para posponer entrega."
+    },
+    {
+      "group": "Investigación y aprendizaje",
+      "name": "deep-research",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\deep-research\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Evidencia por dimensión, fuente actual y prueba de uso. No abrir otra investigación para posponer entrega."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "humanizer",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\creative\\humanizer\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "powerpoint",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\productivity\\powerpoint\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "diseno-contenido-onia",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\diseno-contenido-onia\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "content-strategy",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\content-strategy\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "copywriting",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\copywriting\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "ad-creative",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\ad-creative\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "competitor-profiling",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\competitor-profiling\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Marca, educación y presentaciones",
+      "name": "pricing",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\pricing\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Entrada, pasos, salida y habilidad observable; usted comercial / vos marca. Valor editorial separado de QA."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "gif-search",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\media\\gif-search\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "ver-videos",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\ver-videos\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "sacar-prompt",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\sacar-prompt\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "edicion-referentes",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\edicion-referentes\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "editor-videos",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\editor-videos\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "media-use",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\media-use\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "general-video",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\general-video\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "motion-doctrine",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\motion-doctrine\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "motion-graphics",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\motion-graphics\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "captions-overlay",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\captions-overlay\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "embedded-captions",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\embedded-captions\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "cut-the-curve",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\cut-the-curve\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Video: ver, cortar, audio y captions",
+      "name": "talking-head-recut",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\talking-head-recut\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Proceso según el medio; no añadir música/SFX, descargar ni publicar por la mera presencia de la skill."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "hyperframes",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\hyperframes\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "hyperframes-cli",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\hyperframes-cli\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "hyperframes-core",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\hyperframes-core\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "hyperframes-animation",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\hyperframes-animation\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "hyperframes-creative",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\hyperframes-creative\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "hyperframes-keyframes",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\hyperframes-keyframes\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "hyperframes-registry",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\hyperframes-registry\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "slideshow",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\slideshow\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "changelog-video",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\changelog-video\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "faceless-explainer",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\faceless-explainer\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "product-launch-video",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\product-launch-video\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "pr-to-video",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\pr-to-video\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "music-to-video",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\music-to-video\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Render y formatos de video",
+      "name": "remotion-to-hyperframes",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\remotion-to-hyperframes\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Elegir un render y el formato pertinente, no todos. Verificar runtime y resultado real."
+    },
+    {
+      "group": "Ventas, propuestas y bot",
+      "name": "onia-ventas-pauta",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-ventas-pauta\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Solo oferta/capacidades acreditadas. Sin envío a prospectos, gasto, campaña o publicación no autorizados."
+    },
+    {
+      "group": "Ventas, propuestas y bot",
+      "name": "onia-propuestas",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-propuestas\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Solo oferta/capacidades acreditadas. Sin envío a prospectos, gasto, campaña o publicación no autorizados."
+    },
+    {
+      "group": "Ventas, propuestas y bot",
+      "name": "onia-chatbot",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-chatbot\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Solo oferta/capacidades acreditadas. Sin envío a prospectos, gasto, campaña o publicación no autorizados."
+    },
+    {
+      "group": "Ventas, propuestas y bot",
+      "name": "panel-onia",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\panel-onia\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Solo oferta/capacidades acreditadas. Sin envío a prospectos, gasto, campaña o publicación no autorizados."
+    },
+    {
+      "group": "Documentos y operaciones",
+      "name": "pdf",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\productivity\\pdf\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Archivo local o cuenta conectada cuando la tarea lo pida. SIAT exclusivamente manual; no operar el portal."
+    },
+    {
+      "group": "Documentos y operaciones",
+      "name": "docx",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\productivity\\docx\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Archivo local o cuenta conectada cuando la tarea lo pida. SIAT exclusivamente manual; no operar el portal."
+    },
+    {
+      "group": "Documentos y operaciones",
+      "name": "xlsx",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\productivity\\xlsx\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Archivo local o cuenta conectada cuando la tarea lo pida. SIAT exclusivamente manual; no operar el portal."
+    },
+    {
+      "group": "Documentos y operaciones",
+      "name": "document-to-action-items",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\productivity\\document-to-action-items\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Archivo local o cuenta conectada cuando la tarea lo pida. SIAT exclusivamente manual; no operar el portal."
+    },
+    {
+      "group": "Documentos y operaciones",
+      "name": "google-workspace",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\productivity\\google-workspace\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Archivo local o cuenta conectada cuando la tarea lo pida. SIAT exclusivamente manual; no operar el portal."
+    },
+    {
+      "group": "Documentos y operaciones",
+      "name": "notion",
+      "source_root": "hermes-default",
+      "canonical_path": "C:\\Users\\PC\\AppData\\Local\\hermes\\skills\\productivity\\notion\\SKILL.md",
+      "read_route": "skill_view",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Archivo local o cuenta conectada cuando la tarea lo pida. SIAT exclusivamente manual; no operar el portal."
+    },
+    {
+      "group": "Documentos y operaciones",
+      "name": "onia-contabilidad-bolivia",
+      "source_root": "onia-hermes-claude",
+      "canonical_path": "C:\\dev\\proyectos\\onia-hermes\\.claude\\skills\\onia-contabilidad-bolivia\\SKILL.md",
+      "read_route": "read_file canonical .claude/skills path",
+      "installed_manifest": true,
+      "loaded_by_default": false,
+      "runtime_execution_certified_by_this_matrix": false,
+      "trigger_and_limit": "Archivo local o cuenta conectada cuando la tarea lo pida. SIAT exclusivamente manual; no operar el portal."
+    }
+  ],
+  "reserves": [
+    {
+      "name": "apple-notes",
+      "source_root": "hermes-default",
+      "reason": "No usar en este Windows; plataforma macOS."
+    },
+    {
+      "name": "apple-reminders",
+      "source_root": "hermes-default",
+      "reason": "No usar en este Windows; plataforma macOS."
+    },
+    {
+      "name": "findmy",
+      "source_root": "hermes-default",
+      "reason": "No usar en este Windows; plataforma macOS."
+    },
+    {
+      "name": "imessage",
+      "source_root": "hermes-default",
+      "reason": "No usar en este Windows; plataforma macOS."
+    },
+    {
+      "name": "opencode",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "ascii-video",
+      "source_root": "hermes-default",
+      "reason": "Nicho opcional; proponer mantener fuera del habitual, sin desactivar ni borrar."
+    },
+    {
+      "name": "baoyu-infographic",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "manim-video",
+      "source_root": "hermes-default",
+      "reason": "Nicho opcional; proponer mantener fuera del habitual, sin desactivar ni borrar."
+    },
+    {
+      "name": "p5js",
+      "source_root": "hermes-default",
+      "reason": "Nicho opcional; proponer mantener fuera del habitual, sin desactivar ni borrar."
+    },
+    {
+      "name": "songwriting-and-ai-music",
+      "source_root": "hermes-default",
+      "reason": "Nicho opcional; proponer mantener fuera del habitual, sin desactivar ni borrar."
+    },
+    {
+      "name": "sdlc-review",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "email-inbox-triage",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "himalaya",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "songsee",
+      "source_root": "hermes-default",
+      "reason": "Nicho opcional; proponer mantener fuera del habitual, sin desactivar ni borrar."
+    },
+    {
+      "name": "obsidian",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "airtable",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "box",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "maps",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "meeting-action-items",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "product-price-monitor",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "teams-meeting-pipeline",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "weekly-review-planning",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "arxiv",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "competitor-news-monitor",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "llm-wiki",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "xurl",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "codebase-inspection",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "hermes-agent-skill-authoring",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "node-inspect-debugger",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "python-debugpy",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "simplify-code",
+      "source_root": "hermes-default",
+      "reason": "Especialidad en reserva; no necesaria para el stack propuesto actual."
+    },
+    {
+      "name": "higgsfield-generate",
+      "source_root": "onia-hermes-claude",
+      "reason": "Generación condicionada a cuenta, gasto y cara/voz; no parte de esta propuesta operativa."
+    },
+    {
+      "name": "higgsfield-soul-id",
+      "source_root": "onia-hermes-claude",
+      "reason": "Generación condicionada a cuenta, gasto y cara/voz; no parte de esta propuesta operativa."
+    },
+    {
+      "name": "onia-sesion-madre",
+      "source_root": "onia-hermes-claude",
+      "reason": "Archivo histórico/canales, no autoridad ni loop actual."
+    }
+  ],
+  "rea": {
+    "repository": "morluto/rea",
+    "skill": "reverse-engineer-anything",
+    "manifest_found_in_audited_roots": false,
+    "commands_on_path": false,
+    "decision": "Optional and outside the proposed stack until an authorized reverse-engineering task justifies MCP/engine setup.",
+    "source_commit": "f69c52a1cf3940ed1999fcc0859a75dbb913d684"
+  },
+  "gaps": [
+    "Conexión/autorización y prueba por aplicación cuando exista un encargo: Figma, Google Workspace, Notion u otro servicio; no equivale a que falte una skill.",
+    "Acreditar ciclo real actual de hooks y resolver legacy_notify/WinError206 por separado; las25fixtures inertes no lo prueban.",
+    "SkilIs canónicas ONIA/producto se leen por ruta si el índice Hermes no las expone; no importar bibliotecas/cuentas/permisos completos."
+  ],
+  "no_mandatory_new_skill_identified_for_proposed_stack": true
+}

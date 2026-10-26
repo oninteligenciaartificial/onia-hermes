@@ -1,0 +1,52 @@
+{
+  "url": "https://www.youtube.com/watch?v=z1EaBe9oIME",
+  "metadata_exit": 0,
+  "id": "z1EaBe9oIME",
+  "title": "The 3 Levels of Harness Engineering (Beginner to Pro)",
+  "channel": "Leon van Zyl",
+  "duration": 970,
+  "upload_date": "20261014",
+  "chapters": [
+    {
+      "start_time": 0,
+      "title": "Harness Engineering Explained",
+      "end_time": 83
+    },
+    {
+      "start_time": 83,
+      "title": "What Is an Agent Harness",
+      "end_time": 237
+    },
+    {
+      "start_time": 237,
+      "title": "Level 1 Harness Configuration",
+      "end_time": 393
+    },
+    {
+      "start_time": 393,
+      "title": "Claude Code Hooks",
+      "end_time": 474
+    },
+    {
+      "start_time": 474,
+      "title": "Level 2 Custom Coding Harness",
+      "end_time": 583
+    },
+    {
+      "start_time": 583,
+      "title": "Coding Harness for Local LLMs",
+      "end_time": 780
+    },
+    {
+      "start_time": 780,
+      "title": "Level 3 Orchestration Harness",
+      "end_time": 832
+    },
+    {
+      "start_time": 832,
+      "title": "AI Software Factory",
+      "end_time": 970
+    }
+  ],
+  "description": "Harness engineering has three levels, and most people building with AI never get past the first.\n\n🎁 Build your own coding harness with my free course in the community: https://skool.com/leonvanzyl\n\n🚀 Agentic Labs — exclusive AI coding courses, live Q&As, workshops & deep dives: https://skool.com/agentic-labs\n\nMost people install Claude Code, Codex or OpenCode, add a few rules, and think that's the whole job. That's only level one of harness engineering. The real gains come when you build your own harness, or one that runs a team of agents for you. Do that and you can make small local models punch above their weight, give a whole team one consistent setup, and leave agents working for days without babysitting them.\n\nI walk through all three levels with real examples, ending with a swarm of coding agents working in a 3D office. You'll also see how changing only the harness took one model from 6.7% to almost 70%.\n\nResources Mentioned\n🧩 Smol Coder, my coding harness for local models: https://github.com/leonvanzyl/smolcoder\n🔁 AutoForge, my harness for long-running coding tasks: https://github.com/AutoForgeAI/autoforge\n🧊 cubefarm, my agent swarm in 3D: https://github.com/leonvanzyl/cubefarm\n🎥 My Smol Coder video: https://youtu.be/u2vaM7ppzuE\n\n▶️ Watch next: I Built the Simplest Software Factory (You Can Copy It): https://youtu.be/AsvzMlLyQ38\n\n⏱️ Chapters\n0:00 Harness Engineering Explained\n1:23 What Is an Agent Harness\n3:57 Level 1 Harness Configuration\n6:33 Claude Code Hooks\n7:54 Level 2 Custom Coding Harness\n9:43 Coding Harness for Local LLMs\n13:00 Level 3 Orchestration Harness\n13:52 AI Software Factory\n\nConnect\nX: https://x.com/leonvz\nTikTok: https://www.tiktok.com/@leonvanzylofficial\n\nBusiness & sponsorships: leon@cognaitiv.ai"
+}

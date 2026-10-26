@@ -1,0 +1,618 @@
+{
+  "audit_date": "2026-10-25",
+  "timezone": "UTC-04:00",
+  "scope": "Read-only inventory of configured Claude/Codex hooks and selected Hermes config; no handler/config change or handler execution.",
+  "field_allowlist": [
+    "role",
+    "event",
+    "script_path",
+    "origin",
+    "configured_state",
+    "risk",
+    "test_available",
+    "route_state"
+  ],
+  "sources": [
+    {
+      "id": "repo_claude",
+      "origin": "C:\\dev\\proyectos\\onia-hermes\\.claude\\settings.json",
+      "kind": "definition",
+      "present": true,
+      "configured_items": 2,
+      "load_or_trust": "not established by file presence"
+    },
+    {
+      "id": "repo_codex",
+      "origin": "C:\\dev\\proyectos\\onia-hermes\\.codex\\hooks.json",
+      "kind": "definition",
+      "present": true,
+      "configured_items": 1,
+      "load_or_trust": "not established by file presence"
+    },
+    {
+      "id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "kind": "definition",
+      "present": true,
+      "configured_items": 16,
+      "load_or_trust": "not established by file presence"
+    },
+    {
+      "id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "kind": "definition",
+      "present": true,
+      "configured_items": 9,
+      "load_or_trust": "not established by file presence"
+    },
+    {
+      "id": "claude_mem_codex",
+      "origin": "C:\\Users\\PC\\.codex\\plugins\\cache\\claude-mem-local\\claude-mem\\13.4.0\\hooks\\codex-hooks.json",
+      "kind": "cached_plugin_definition",
+      "present": true,
+      "configured_items": 7,
+      "load_or_trust": "not established by file presence"
+    }
+  ],
+  "entries": [
+    {
+      "source_id": "claude_mem_codex",
+      "origin": "C:\\Users\\PC\\.codex\\plugins\\cache\\claude-mem-local\\claude-mem\\13.4.0\\hooks\\codex-hooks.json",
+      "role": "command",
+      "event": "PostToolUse",
+      "script_path": "$_Q/scripts/bun-runner.js",
+      "route_state": "not found at checked base",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "claude_mem_codex",
+      "origin": "C:\\Users\\PC\\.codex\\plugins\\cache\\claude-mem-local\\claude-mem\\13.4.0\\hooks\\codex-hooks.json",
+      "role": "command",
+      "event": "PreToolUse",
+      "script_path": "$_Q/scripts/bun-runner.js",
+      "route_state": "not found at checked base",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "claude_mem_codex",
+      "origin": "C:\\Users\\PC\\.codex\\plugins\\cache\\claude-mem-local\\claude-mem\\13.4.0\\hooks\\codex-hooks.json",
+      "role": "command",
+      "event": "SessionStart",
+      "script_path": "$_Q/scripts/bun-runner.js",
+      "route_state": "not found at checked base",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 2
+    },
+    {
+      "source_id": "claude_mem_codex",
+      "origin": "C:\\Users\\PC\\.codex\\plugins\\cache\\claude-mem-local\\claude-mem\\13.4.0\\hooks\\codex-hooks.json",
+      "role": "command",
+      "event": "SessionStart",
+      "script_path": "$_Q/scripts/version-check.js",
+      "route_state": "not found at checked base",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "claude_mem_codex",
+      "origin": "C:\\Users\\PC\\.codex\\plugins\\cache\\claude-mem-local\\claude-mem\\13.4.0\\hooks\\codex-hooks.json",
+      "role": "command",
+      "event": "Stop",
+      "script_path": "$_Q/scripts/bun-runner.js",
+      "route_state": "not found at checked base",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "claude_mem_codex",
+      "origin": "C:\\Users\\PC\\.codex\\plugins\\cache\\claude-mem-local\\claude-mem\\13.4.0\\hooks\\codex-hooks.json",
+      "role": "command",
+      "event": "UserPromptSubmit",
+      "script_path": "$_Q/scripts/bun-runner.js",
+      "route_state": "not found at checked base",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "repo_claude",
+      "origin": "C:\\dev\\proyectos\\onia-hermes\\.claude\\settings.json",
+      "role": "command",
+      "event": "SessionStart",
+      "script_path": "scripts/nube-ssh-vps.mjs",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "repo_claude",
+      "origin": "C:\\dev\\proyectos\\onia-hermes\\.claude\\settings.json",
+      "role": "command",
+      "event": "Stop",
+      "script_path": "scripts/git-autosync.js",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "repo_codex",
+      "origin": "C:\\dev\\proyectos\\onia-hermes\\.codex\\hooks.json",
+      "role": "command",
+      "event": "PostToolUse",
+      "script_path": "$(git rev-parse --show-toplevel)/.agents/skills/impeccable/scripts/hook.mjs",
+      "route_state": "not found at checked base",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "PermissionRequest",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "PostCompact",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "PostToolUse",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "PostToolUse",
+      "script_path": "C:\\Users\\PC\\.claude\\scripts\\hooks\\post-edit-accumulator.js",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "PostToolUseFailure",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "PreToolUse",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "PreToolUse",
+      "script_path": "C:\\Users\\PC\\.claude\\scripts\\hooks\\config-protection.js",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "SessionEnd",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "SessionStart",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "Stop",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "Stop",
+      "script_path": "C:\\Users\\PC\\.claude\\scripts\\hooks\\stop-format-typecheck.js",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "StopFailure",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "SubagentStart",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "SubagentStop",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "TeammateIdle",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_claude",
+      "origin": "C:\\Users\\PC\\.claude\\settings.json",
+      "role": "command",
+      "event": "UserPromptSubmit",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/orca-agent-hook.exe",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "Interrupt",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "PermissionRequest",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "PostToolUse",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "PreToolUse",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "SessionStart",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "Stop",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "SubagentStart",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "SubagentStop",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    },
+    {
+      "source_id": "user_codex",
+      "origin": "C:\\Users\\PC\\.codex\\hooks.json",
+      "role": "command",
+      "event": "UserPromptSubmit",
+      "script_path": "C:/Users/PC/.orca/agent-hooks/codex-hook.cmd",
+      "route_state": "file present",
+      "configured_state": "on-disk definition only; loaded/trusted/executed not proven",
+      "risk": "exec-capable route; handler was not run",
+      "test_available": "fixture scripts exist; not run; not proof of this handler",
+      "definitions": 1
+    }
+  ],
+  "companion_targets": [
+    {
+      "id": "codex_hook_cmd_dispatcher",
+      "origin": "C:\\Users\\PC\\.orca\\agent-hooks\\codex-hook.cmd",
+      "present": true,
+      "kind": "configured Codex command target",
+      "references_windows_adapter": false,
+      "execution": "not run",
+      "bytes": 924
+    },
+    {
+      "id": "orca_agent_hook_binary",
+      "origin": "C:\\Users\\PC\\.orca\\agent-hooks\\orca-agent-hook.exe",
+      "present": true,
+      "kind": "Claude/Codex shared configured target",
+      "execution": "not run",
+      "bytes": 308000
+    },
+    {
+      "id": "codex_windows_adapter",
+      "origin": "C:\\Users\\PC\\.codex\\onia-hooks\\codex-windows.cjs",
+      "present": true,
+      "kind": "adapter source; direct config linkage not assumed",
+      "execution": "not run",
+      "bytes": 4039
+    }
+  ],
+  "hermes_config_checks": [
+    {
+      "origin": "C:\\Users\\PC\\AppData\\Local\\hermes\\config.yaml",
+      "present": true,
+      "hook_notify_sections_found": 0,
+      "sections": []
+    },
+    {
+      "origin": "C:\\Users\\PC\\.hermes\\config.yaml",
+      "present": true,
+      "hook_notify_sections_found": 0,
+      "sections": []
+    }
+  ],
+  "backup_reference_only": {
+    "directory": "C:\\Users\\PC\\AppData\\Local\\hermes\\backups\\codex-hooks-20261024",
+    "present": true,
+    "json_filenames": [
+      "canonical-hooks.json",
+      "claude-mem-codex-hooks.json",
+      "workshop-hooks.json"
+    ],
+    "hook_definition_counts": {
+      "canonical-hooks.json": 1,
+      "claude-mem-codex-hooks.json": 7,
+      "workshop-hooks.json": 1
+    },
+    "active": false
+  },
+  "observed_health": {
+    "orca_status": {
+      "command": "orca agent hooks status",
+      "read_only": true,
+      "exit_code": 0,
+      "allowlisted_hook_state_fields_extracted": [],
+      "interpretation": "CLI returned successfully, but no current hook health state was established"
+    },
+    "execution_trace": {
+      "present": true,
+      "records": 181,
+      "first_timestamp_utc": "2026-10-24T04:15:29.745Z",
+      "last_timestamp_utc": "2026-10-24T05:02:45.956Z",
+      "event_tag_counts": {
+        "unspecified": 5,
+        "fixture": 53,
+        "SessionStart": 12,
+        "UserPromptSubmit": 8,
+        "PreToolUse": 42,
+        "PostToolUse": 53,
+        "Stop": 8
+      },
+      "exit_code_counts_by_event": {
+        "unspecified": {
+          "0": 5
+        },
+        "fixture": {
+          "0": 50,
+          "7": 3
+        },
+        "SessionStart": {
+          "0": 12
+        },
+        "UserPromptSubmit": {
+          "0": 8
+        },
+        "PreToolUse": {
+          "0": 42
+        },
+        "PostToolUse": {
+          "0": 53
+        },
+        "Stop": {
+          "0": 8
+        }
+      },
+      "nonzero_exit_records": 3,
+      "nonempty_error_code_records": 0,
+      "byte_totals": {
+        "inputBytes": 629340,
+        "stdoutBytes": 32165,
+        "stderrBytes": 0
+      },
+      "prompts_or_payloads_retained_in_report": false
+    },
+    "fixtures": [
+      {
+        "path": ".hermes/tasks/check-codex-hook-windows.py",
+        "present": true,
+        "bytes": 4687,
+        "executed_in_this_audit": false,
+        "coverage_limit": "fixture/stub boundary only; not a real handler cycle"
+      },
+      {
+        "path": ".hermes/tasks/check-codex-hook-launcher.py",
+        "present": true,
+        "bytes": 4463,
+        "executed_in_this_audit": false,
+        "coverage_limit": "fixture/stub boundary only; not a real handler cycle"
+      }
+    ]
+  },
+  "historical_context_not_current_health": {
+    "prior_fixture_passes_reported": 25,
+    "prior_real_cycle_1": {
+      "invocations": 17,
+      "handlers": 8,
+      "exit_zero": true
+    },
+    "prior_real_cycle_2": {
+      "invocations": 12,
+      "handlers": 5,
+      "exit_zero": true
+    },
+    "source": "task-provided antecedent; not independently re-run or treated as current state"
+  },
+  "separate_unclosed_issue": "legacy_notify WinError 206, carried as prior context; not exercised here",
+  "review_document_paths": [
+    "C:\\dev\\proyectos\\onia-hermes\\.hermes\\tasks\\codex-hooks-repair-review.md"
+  ],
+  "limitations": [
+    "File presence/configuration does not prove runtime loading, trust, or successful execution.",
+    "No live Claude/Codex /hooks screen or current real cycle was inspected.",
+    "The latest located trace ends before 2026-10-25; current health is therefore unproven."
+  ]
+}

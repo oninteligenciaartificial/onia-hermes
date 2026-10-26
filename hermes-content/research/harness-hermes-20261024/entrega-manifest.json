@@ -1,0 +1,35 @@
+{
+  "scope": "research and local diagram; production not activated",
+  "files": [
+    {
+      "path": "ESQUEMA-HARNESS.html",
+      "sha256": "f48a99bb547c7d0318442743ca66f12fcfb600d16359595e39ba9ab5aa631373",
+      "bytes": 15857
+    },
+    {
+      "path": "NUESTRO-HARNESS.md",
+      "sha256": "5e7e38f338ba4952740c35bdafe66ac0aee1279ed4b27ede0dee1f24cc552fcb",
+      "bytes": 11674
+    },
+    {
+      "path": "INVESTIGACION-OFICIAL.md",
+      "sha256": "0642ddb463f90a86b02e7c0f5d1e1c1391a4cf72956f4d98c4cf5a9926ad1536",
+      "bytes": 7246
+    },
+    {
+      "path": "estado-observado.json",
+      "sha256": "19aedfb01b9307d2037b7492d3cc9fd199e9df752cd2605385d101b000a13870",
+      "bytes": 2659
+    },
+    {
+      "path": "sources-ledger.json",
+      "sha256": "3ab93bc9607d43fe1172143e8191e7491c603e46b27adf4a46e8f1e9b62c29d7",
+      "bytes": 3410
+    },
+    {
+      "path": "qa-diagrama.json",
+      "sha256": "6539cad6c59f144b6352bbdbbe629a81b452a1db7969a3de14e6838499f7446f",
+      "bytes": 1448
+    }
+  ]
+}
