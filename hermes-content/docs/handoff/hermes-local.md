@@ -1,7 +1,8 @@
 # Handoff — hermes-local (Hermes Agent en la PC, dentro de Orca)
 
 **Objetivo**
-Dejar a Hermes local configurado una sola vez como coordinador que lee las reglas y skills de ONIA, no se salta permisos y aprende por PR. Hecho = Hermes arranca desde un worktree limpio, `/context` muestra el AGENTS.md acordado, el índice de skills nombra las de `.claude/skills` y un `git push` le pide aprobación.
+Dejar a Hermes local configurado una sola vez como coordinador que lee las reglas y skills de ONIA, no se salta permisos y aprende por PR. Hecho = Hermes arranca desde un worktree limpio, `/context` muestra el AGENTS.md acordado, el índice de skills nombra las de `.claude/skills`, un `git -C . push` sale bloqueado y `--dry` de
+`scripts/orquesta/cargar-issue.mjs` muestra `necesita-ok`.
 Estado al 26-oct: **auditoría hecha, decisiones tomadas y todo escrito en un PR en borrador. La configuración no
 se aplicó.** La auditoría completa está en `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`.
 
@@ -20,6 +21,15 @@ En el PR quedaron:
 - `hermes-content/docs/ONIA_HARNESS.md`, reescrito: el mapa de archivos, el flujo de un encargo y qué se queda,
   sale y falta.
 - La fila «Cerebro» de `scripts/orquesta/README.md`.
+- `scripts/orquesta/cargar-issue.mjs` con su prueba: las barandas del VPS portadas a la PC.
+- La skill `equipo-de-agentes` reescrita sin la madre.
+
+Una revisión independiente encontró que el primer `approvals.deny` se esquivaba con `git -C x push` y con `git.exe`,
+y que con un `gh issue create` suelto un `check: cmd` corría sin sandbox en la PC. El `deny` se rehízo con patrones
+probados contra la lógica real de Hermes, y la carga pasó al cargador.
+
+Lo que sigue abierto: el `deny` no resuelve alias ni variables, no frena `write_file` (por eso
+`HERMES_WRITE_SAFE_ROOT`) y no se sabe si lo heredan los hijos.
 
 **Qué quedó EN PRODUCCIÓN**
 Nada. No se cambió ni la config de Hermes ni la de Orca ni ningún archivo de reglas.
@@ -56,4 +66,5 @@ Los pasos A1 a A5, B1 a B9 y C1 a C9 de la sección 10 de la auditoría, en ese 
 - A1 (respaldo de config, SOUL y USER) y A2 (bundle de las ramas que solo existen en local): los archivos existen en disco.
 - A3 (worktree base `E:/onia-wt/hermes-base` sobre origin/main): `git worktree list` lo muestra.
 - A4 (PR en borrador con AGENTS.md compacto, SOUL ONIA, la skill `onia-coordinar` y el contrato único): el PR abierto, con el enlace mandado a Sergio Urcullo.
-- B3 (config.yaml): Hermes arranca, `/context` lo confirma y `git push` le pide aprobación.
+- B3 (config.yaml, SOUL y `HERMES_WRITE_SAFE_ROOT`): Hermes arranca, `/context` lo confirma, `git -C . push` sale bloqueado y `--dry` del cargador muestra `necesita-ok`.
+- El paso 5 de §7 de `ONIA_HARNESS.md` (cambio de `aplicar.sh` para pausar la revisión de cada 3 h del VPS) va en un PR propio.

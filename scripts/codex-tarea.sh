@@ -16,7 +16,7 @@
 #   de la app trae `danger-full-access`; sin esto, un resume corría sin sandbox (revisión del #151).
 # - Codex NO commitea: no recibe el `.git` común (hooks y config corren fuera del sandbox la próxima
 #   vez que la madre use git). La madre revisa el diff de la carpeta y commitea ella.
-# - Modelos (equipo-de-agentes §4 bis, 9-oct): gpt-6.1-sol por defecto, también para código cerrado;
+# - Modelos (equipo-de-agentes §2; la regla es del 9-oct): gpt-6.1-sol por defecto, también para código cerrado;
 #   gpt-6-astra para seguridad, cobros, infra con root o lógica de riesgo. Se escala por riesgo o
 #   por un fallo demostrado, no por tamaño ni por costumbre.
 # CODEX_BIN=<ruta> elige otro binario.

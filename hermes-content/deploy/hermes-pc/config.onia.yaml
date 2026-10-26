@@ -1,7 +1,17 @@
 # Claves que ONIA fija en %LOCALAPPDATA%\hermes\config.yaml (Hermes de la PC, v0.22.2).
 # El resto del archivo lo maneja Hermes. Se aplica con Hermes cerrado y con el respaldo A1 hecho
-# (handoff/hermes-local.md). (P) = la clave sale de la documentación de Hermes y no se probó.
+# (handoff/hermes-local.md). (P) = la clave sale de la documentación de Hermes y no se probó en vivo.
 # Sin secretos: las llaves viven en .env y auth.json de esa carpeta, nunca acá.
+#
+# approvals.deny se probó el 26-oct contra la lógica real de Hermes con probar-deny.py (en esta carpeta; 0 fallas).
+# Se vuelve a correr después de cada actualización de Hermes. Cómo compara (_deny_command_variants + fnmatch, de
+# tools/approval_detection.py y approval_floors.py): el glob se compara sin mayúsculas contra el comando entero
+# y contra cada ejecutable que aparezca (;, &&, $(...), bash -c). NO resuelve variables ni alias
+# ($g='git'; & $g push pasa), y deny no es un sandbox (security.md:182-184). Por eso además:
+# - sin execute_code ni scripts con -e/-c en el allowlist (en modo manual piden aprobación);
+# - HERMES_WRITE_SAFE_ROOT (variable de usuario de Windows, separador ;) limita write_file y patch a
+#   E:\onia-wt\hermes-base\hermes-content\docs\handoff y %LOCALAPPDATA%\hermes. Lo de la terminal
+#   (Set-Content, etc.) solo lo frenan los permisos del sistema operativo.
 
 model: {default: gpt-6.1-sol}            # Astra solo en una sesión nueva; nunca Claude (falló el 21 y 22-oct)
 
@@ -12,14 +22,87 @@ memory: {write_approval: true}
 auxiliary: {background_review: {enabled: false}}   # origen de 131 de las 194 reescrituras de sus propias skills
 
 approvals:
+  mode: manual                           # (P) es el default (approval.py:253); se fija para que --yolo no quede implícito
   timeout: 500
-  deny: ["git push*", "git commit*", "git merge*", "git reset --hard*", "git checkout -- *", "git clean*",
-         "git stash*", "gh pr merge*", "gh issue edit*", "gh label*", "gh api*", "gh workflow*", "gh secret*",
-         "ssh *", "scp *", "Remove-Item*", "rm -rf*", "higgsfield generate create*"]
-command_allowlist: [cua:click:background]   # sin execute_code ni scripts con -e/-c: un push desde Python se salta deny
+  deny:
+    # git que escribe, también con opciones globales (git -C x push, git -c a=b push) y con git.exe por ruta
+    - "git* push*"
+    - "git* commit*"
+    - "git* merge"
+    - "git* merge *"                     # no bloquea git merge-base, que es lectura
+    - "git* pull*"
+    - "git* rebase*"
+    - "git* cherry-pick*"
+    - "git* revert*"
+    - "git* am *"
+    - "git* update-ref*"
+    - "git* tag *"
+    - "git* reset*"
+    - "git* checkout -- *"
+    - "git* restore*"
+    - "git* clean*"
+    - "git* stash*"
+    - "git* branch -d*"
+    - "git* branch -D*"
+    - "git* credential*"
+    - "*git.exe* push*"
+    - "*git.exe* commit*"
+    - "powershell* -c*git*"              # git dentro de otra shell: deny no mira adentro de las comillas
+    - "pwsh* -c*git*"
+    - "cmd* /c*git*"
+    # GitHub: cargar issues va solo por scripts/orquesta/cargar-issue.mjs; nada de aprobar, soltar, mergear ni despachar
+    - "gh issue create*"
+    - "gh issue edit*"
+    - "gh issue comment*"
+    - "gh issue close*"
+    - "gh issue reopen*"
+    - "gh issue delete*"
+    - "gh issue transfer*"
+    - "gh pr merge*"
+    - "gh pr review*"
+    - "gh pr edit*"
+    - "gh pr create*"
+    - "gh pr comment*"
+    - "gh pr ready*"
+    - "gh pr close*"
+    - "gh label create*"                 # no gh label*: bloquearía gh label list
+    - "gh label edit*"
+    - "gh label delete*"
+    - "gh label clone*"
+    - "gh api*"
+    - "gh workflow*"
+    - "gh run rerun*"
+    - "gh run cancel*"
+    - "gh secret*"
+    - "gh variable*"
+    - "gh auth token*"                   # no gh auth*: bloquearía gh auth status
+    - "gh auth refresh*"
+    - "gh alias*"
+    - "gh extension*"
+    - "*api.github.com*"
+    # otros agentes, pasadas de la orquesta y el VPS
+    - "claude *"
+    - "codex *"
+    - "*orquesta.mjs*"
+    - "*codex-tarea*"
+    - "schtasks*"
+    - "start-scheduledtask*"
+    - "ssh*"
+    - "scp*"
+    - "sftp*"
+    - "plink*"
+    - "wsl*"
+    # borrar y gastar
+    - "Remove-Item*"
+    - "rm -rf*"
+    - "del *"
+    - "rd /s*"
+    - "rmdir*"
+    - "higgsfield generate create*"
+command_allowlist: []                    # sin cua:click:background: con GitHub abierto podía soltar o mergear a clics
 
 delegation: {model: gpt-6.1-sol, provider: openai-codex, max_iterations: 120,
-             max_concurrent_children: 2, child_timeout_seconds: 900}   # hijos solo para leer y verificar
+             max_concurrent_children: 2, child_timeout_seconds: 900}   # hijos solo para leer y verificar (P: falta medir si heredan deny)
 
 compression:
   threshold: 0.50

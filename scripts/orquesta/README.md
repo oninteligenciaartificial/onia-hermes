@@ -7,7 +7,7 @@ Un programa fijo reparte el trabajo; los modelos solo trabajan. Por qué así y 
 
 | Pieza | Dónde | Qué hace |
 |---|---|---|
-| Cerebro | Hermes de la PC (desde el 26-oct) | Planifica: carga issues con `gh issue create`, siempre con `origen:hermes` + `necesita-ok`, y verifica las entregas. El Hermes del VPS solo carga lo que Sergio Urcullo le dicta por Telegram (`scripts/loops/orquesta-hermes.sh`); su revisión de cada 3 h queda por pausar. Mapa completo: `hermes-content/docs/ONIA_HARNESS.md` |
+| Cerebro | Hermes de la PC (desde el 26-oct) | Planifica: carga issues solo con `scripts/orquesta/cargar-issue.mjs` (siempre `origen:hermes` + `necesita-ok`; sección «Cómo carga Hermes de la PC», abajo) y verifica las entregas. El Hermes del VPS solo carga lo que Sergio Urcullo le dicta por Telegram (`scripts/loops/orquesta-hermes.sh`); su revisión de cada 3 h queda por pausar. Mapa completo: `hermes-content/docs/ONIA_HARNESS.md` |
 | Manos 24/7 | GitHub Actions (`.github/workflows/orquesta.yml`) | `orquesta.mjs --donde nube` con Claude Code y el token de Max (`CLAUDE_CODE_OAUTH_TOKEN`) |
 | Manos con logins | PC de Sergio Urcullo | `orquesta.mjs --donde pc`: lo que usa sus sesiones o archivos (video, Meta, Instagram, Higgsfield, Buffer) |
 
@@ -132,3 +132,48 @@ La nube corre sola: al etiquetar o comentar un issue de la orquesta y cada 3 h d
 Necesita el secreto `CLAUDE_CODE_OAUTH_TOKEN` (lo crea Sergio Urcullo con `claude setup-token`).
 
 `ORQUESTA_TELEGRAM=1` manda el resumen de la pasada al resumen diario de Hermes (aduana, sin interrumpir).
+
+## Cómo carga Hermes de la PC (26-oct)
+
+El Hermes Agent de la PC carga tareas **solo** con `scripts/orquesta/cargar-issue.mjs`; `gh issue create*` está
+bloqueado en su config. Por qué: un issue `orquesta` sin `necesita-ok` lo toma el workflow al instante (el autor es la
+cuenta de Sergio Urcullo, que está en `autores`) y su `check: cmd …` corre con shell y sin sandbox en la PC. Es el
+port en Node de `--crear` de `scripts/loops/orquesta-hermes.sh` (el del VPS, que no corre en Windows).
+
+```powershell
+Get-Content -Encoding UTF8 pedido.txt | node scripts/orquesta/cargar-issue.mjs --titulo "Comparar precios de Dapta y Lety"
+Get-Content -Encoding UTF8 pedido.txt | node scripts/orquesta/cargar-issue.mjs --titulo "Comparar precios de Dapta y Lety" --dry
+node scripts/orquesta/cargar-issue.mjs --archivo pedido.txt --titulo "Comparar precios de Dapta y Lety"   # lo más seguro
+```
+
+Medido el 26-oct en Windows PowerShell 5.1: sin `-Encoding UTF8`, `Get-Content` lee el archivo como ANSI y llega
+«acciÃ³n» (el script lo rechaza); y con el `$OutputEncoding` de fábrica (ASCII, sin el perfil) las tildes llegan como
+«?», y eso no se puede detectar. `--archivo` lee el UTF-8 directo y evita las dos.
+
+`pedido.txt`: sin `--titulo`, la primera línea es el título (con o sin `titulo:` delante, como el formato del VPS).
+Después, la cabecera y el texto:
+
+```
+carril: investigacion
+nivel: normal
+donde: nube
+check: urls
+salida: hermes-content/docs/orquesta/investigacion/precios.md
+
+Qué hay que hacer.
+Hecho cuando: cómo se comprueba.
+```
+
+Qué valida, igual que el del VPS: `carril` de `carriles.json`, `nivel` (rapido|normal|profundo) y `donde` (pc|nube)
+obligatorios; `check` obligatorio y solo `urls`, `cmd npm run test:<x>`, `cmd npm test` o `cmd node --test <ruta>`,
+sin un caracter de shell, sin opciones, sin `..` ni unidad (`C:`); `salida` solo en `hermes-content/docs/` (`docs/` en
+plataforma); `base` un nombre de rama; `ok: sergio`; `motor` claude|codex; nada de `modelo:` ni campos desconocidos;
+título de una línea y hasta 120 caracteres; texto de hasta 4000 con `Hecho cuando:`; sin caracteres invisibles, de
+control ni letras de otros alfabetos. Siempre pone `orquesta`, `carril:<x>`, `origen:hermes` y `necesita-ok`
+(`necesita-ok: no` se acepta y no cambia nada). Tope: 10 issues `origen:hermes` por día de La Paz, contados en GitHub
+(entran las del VPS); si no puede contar, no crea. Rechaza la misma tarea (título, carril y texto) de las últimas 24 h.
+Llama a `gh` sin shell, con argumentos en array y el cuerpo por `--body-file`; si el issue quedara sin `necesita-ok`,
+lo cierra. `--dry` muestra título, labels y cuerpo sin llamar a `gh` (no mira el tope).
+
+Salidas: 0 cargada · 64 uso (el pedido como argumento, por ejemplo) · 65 pedido inválido · 75 tope o repetida ·
+1 `gh` falló o no se sabe si se cargó (lo dice). Pruebas: `node --test scripts/orquesta/cargar-issue.test.mjs`.

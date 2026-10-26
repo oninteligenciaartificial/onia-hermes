@@ -29,10 +29,10 @@
 | Agente | Carga | No carga |
 |---|---|---|
 | Claude Code | `CLAUDE.md` y `AGENTS.md` del repo; `~/.claude/CLAUDE.md` y `~/.claude/rules/`; skills de `.claude/skills` y `~/.claude/skills` (con el mismo nombre gana la personal); `.claude/agents/` | — |
-| Codex | `~/.codex/AGENTS.md` y el `AGENTS.md` del repo; `~/.codex/config.toml`; skills de `~/.codex/skills` y `.agents/skills` | `CLAUDE.md`. Las skills de `.claude/skills` las recibe por ruta en el contrato |
+| Codex | `~/.codex/AGENTS.md` y el `AGENTS.md` del repo donde trabaja; `~/.codex/config.toml`; skills de `~/.codex/skills` y `.agents/skills`. En el carril plataforma el repo es `onia-platform`, que tiene su propio `AGENTS.md`: ahí las reglas duras de ONIA le llegan por el global | `CLAUDE.md`. Las skills de `.claude/skills` las recibe por ruta en el contrato |
 | Hermes de la PC | `SOUL.md` de su home; **un solo** archivo del cwd (`AGENTS.md`); su memoria; skills de su home y de `skills.external_dirs` | `CLAUDE.md`, porque `AGENTS.md` lo tapa; `~/.claude/**`, que lo rechaza a propósito |
 | Hermes del VPS | `/root/.hermes/SOUL.md`, `config.yaml` y `skills/<nombre>/SKILL.md` | Lo que `aplicar` no copió (un `.md` suelto en `skills/` no se carga) |
-| Trabajador de la orquesta | Lo de su motor (Claude o Codex), en un worktree limpio, con `scripts/orquesta/trabajador.settings.json` | — |
+| Trabajador de la orquesta | Lo de su motor, en un worktree limpio, más el prompt de `orquesta.mjs` («no hagas commit, push ni merge»). Claude, con `scripts/orquesta/trabajador.settings.json`; Codex, con `-s workspace-write` | — |
 
 ## 3. Fuente en el repo y dónde se usa
 
@@ -43,10 +43,12 @@
 | Skills de ONIA | `.claude/skills/<nombre>/SKILL.md` | Los tres agentes | Claude: nativo. Hermes de la PC: `external_dirs` → `E:/onia-wt/hermes-base/.claude/skills`. Codex: por ruta en el contrato | Hermes ve 0 de 66 |
 | Subagentes de Claude | `.claude/agents/` | Claude | Nativo | Vivo |
 | Hermes de la PC: quién es | `hermes-content/deploy/hermes-pc/SOUL.md` | `%LOCALAPPDATA%\hermes\SOUL.md` | `Copy-Item`, con Hermes cerrado | Hoy usa el de fábrica |
-| Hermes de la PC: config | `hermes-content/deploy/hermes-pc/config.onia.yaml` | `%LOCALAPPDATA%\hermes\config.yaml` | Esas claves, con Hermes cerrado | Hoy corre con `--yolo` y sin `deny` |
+| Hermes de la PC: config | `hermes-content/deploy/hermes-pc/config.onia.yaml`, con su prueba `probar-deny.py` | `%LOCALAPPDATA%\hermes\config.yaml` | Esas claves, con Hermes cerrado | Hoy corre con `--yolo` y sin `deny` |
 | Hermes del VPS | `hermes-content/deploy/hermes-agent/SOUL.md` y `hermes-content/skills/` | `/root/.hermes` | Workflow `hermes-jarvis` → `aplicar` | El SOUL es viejo: habla de loops y del tablero archivado |
 | Codex global | `hermes-content/deploy/codex/AGENTS.global.md` | `~/.codex/AGENTS.md` | `Copy-Item` | Hoy tiene el texto de agencia de las nueve líneas de negocio |
 | Reparto | `scripts/orquesta/` y `carriles.json` | GitHub Actions y la PC | Git | Vivo |
+| Carga de tareas desde la PC | `scripts/orquesta/cargar-issue.mjs` | Hermes de la PC | Lo corre Hermes; `gh issue create` le queda bloqueado | Nuevo, en PR |
+| Skills del Hermes del VPS | `hermes-content/skills/*.md` (`planificar-orquesta`, `agenda-calendario`…) | Solo el VPS | `aplicar` las copia a `skills/<nombre>/SKILL.md` | El Hermes de la PC no las ve, y no las necesita |
 | Estado de cada carril | `hermes-content/docs/handoff/<carril>.md` | Todos | Git | Vivo |
 
 ## 4. Lo que vive solo en cada home
@@ -80,20 +82,26 @@
 1. Sergio Urcullo pide algo. Puede hacerlo de dos formas:
    - en la TUI del Hermes de la PC, abierta a mano en PowerShell desde `E:/onia-wt/hermes-base`, sin `--yolo`;
    - dictándoselo al Hermes del VPS por Telegram.
-2. Hermes arma el contrato (`AGENTS.md` §4) y abre el issue con los labels `orquesta`, `carril:<área>`,
-   `origen:hermes` y `necesita-ok`.
-3. Sergio Urcullo lo suelta sacándole `necesita-ok`, incluso desde el celular.
+2. Hermes arma el contrato (`AGENTS.md` §4) y lo carga:
+   - el de la PC, con `node scripts/orquesta/cargar-issue.mjs` (primero con `--dry`, para mostrárselo);
+   - el del VPS, con `scripts/loops/orquesta-hermes.sh`.
+
+   El issue lleva `orquesta`, `carril:<área>`, `origen:hermes` y `necesita-ok`.
+3. Sergio Urcullo lo suelta sacándole `necesita-ok`, incluso desde el celular. El workflow no escucha cuando se saca
+   un label, así que arranca en la próxima pasada (hasta 3 h) o antes, si comenta el issue.
 4. `scripts/orquesta/orquesta.mjs` lo toma:
    - marca, comunidad e investigación corren en la nube (GitHub Actions);
    - plataforma y video corren en la PC (tarea programada).
 
-   Para cada uno crea un worktree en `E:/onia-orquesta/<carril>-<n>` y corre al trabajador del carril con el modelo
-   de `carriles.json`: Codex en plataforma, Claude en el resto.
-5. Revisa otro modelo, con contexto limpio. Si pasa, deja un PR y un comentario con el recibo. Si no, le pone el
-   label `bloqueada` con el motivo.
+   Crea un worktree limpio (en la PC, `E:/onia-orquesta/<carril>-<n>`; en Actions, bajo `runner.temp`) y corre al
+   trabajador del carril con el modelo de `carriles.json`: Codex en plataforma, Claude en el resto.
+5. Revisa otro modelo, con contexto limpio. Si pasa, deja un PR y un comentario con el recibo. Si falla, reintenta
+   una vez; a la segunda falla seguida le pone el label `bloqueada`, con el motivo.
 6. Con `ok: sergio`, el issue queda en `espera-ok`, con capturas, hasta que él conteste.
-7. El Hermes de la PC lee el issue y el PR, compara el recibo con el «hecho cuando» y propone el handoff. El del VPS
-   lo cuenta en el resumen de las 06:30 y en el cierre de las 21:30.
+7. El Hermes de la PC lee el issue y el PR y compara el recibo con el «hecho cuando». Escribe el handoff en
+   `E:/onia-wt/hermes-base`, y lo commitea la sesión principal de Claude. Antes de actualizar `hermes-base` a
+   `origin/main`, ese handoff tiene que estar commiteado. El del VPS cuenta el avance en el resumen de las 06:30 y
+   en el cierre de las 21:30.
 8. Mergea Sergio Urcullo o la sesión principal de Claude Code, siempre por PR revisado. La publicación sigue
    `AGENTS.md` §3 y §6.
 
@@ -119,13 +127,26 @@ Nada más es una vía de despacho: ni Orca Orchestration, ni `.hermes/plans`, ni
 
 Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
 
-1. Mergear el PR con `AGENTS.md`, este mapa, el SOUL y la config de Hermes de la PC, y el `AGENTS.global.md` de
-   Codex.
+1. Mergear el PR. Lleva `AGENTS.md`, este mapa, el SOUL y la config de Hermes de la PC, el cargador de issues y el
+   `AGENTS.global.md` de Codex.
 2. Crear el worktree base `E:/onia-wt/hermes-base`. Hermes se lanza desde ahí, nunca desde el checkout principal.
-3. Con Hermes cerrado y el respaldo hecho, aplicar `config.onia.yaml` y copiar el SOUL. Después, `/context` tiene que
-   mostrar `AGENTS.md` y un `git push` tiene que pedir aprobación.
+3. Con Hermes cerrado y el respaldo hecho:
+   - aplicar `config.onia.yaml`;
+   - copiar el SOUL;
+   - crear la variable de usuario `HERMES_WRITE_SAFE_ROOT` (va con su OK, porque es una variable del sistema).
+
+   Prueba de hecho:
+   - `/context` muestra `AGENTS.md`;
+   - `git -C . push` sale bloqueado sin preguntar;
+   - `--dry` del cargador muestra `necesita-ok`;
+   - `python -I hermes-content/deploy/hermes-pc/probar-deny.py hermes-content/deploy/hermes-pc/config.onia.yaml` da
+     0 fallas. Se vuelve a correr en cada actualización de Hermes.
 4. Copiar `AGENTS.global.md` a `~/.codex/AGENTS.md`.
-5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. Va con `aplicar` y lo despacha él.
+5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. **Hoy `aplicar` no puede hacerlo**: su
+   control previo falla si el SOUL no trae `## Planificar la orquesta` (`aplicar.sh:309-314`), y además crea ese
+   trabajo y no tiene un paso para pausarlo. Hace falta cambiar `aplicar.sh` y su prueba
+   (`hermes-jarvis-aplicar.test.mjs`) en un PR propio, junto con `hermes-content/skills/planificar-orquesta.md`, que
+   todavía dice «vos planificás». Después lo despacha él.
 6. Orca: no lanzar Hermes desde ahí y no activar Orchestration. Cerrar la corrida `run_66e1d03c2397`.
 7. Pasar a issues lo vigente de `.hermes/plans` y `.hermes/tasks`, y archivar el resto.
 8. Decidir si se mantienen o se revierten las seis reglas globales de Claude que tocó Hermes.
@@ -144,8 +165,9 @@ se pueda recuperar. La evidencia está en las secciones 3, 4 y 6 de la auditorí
 | Los handoffs de siete campos | Son lo que deja retomar el trabajo |
 | Issues `orquesta`, `scripts/orquesta/`, `carriles.json` y el revisor distinto del autor | Es la cola única y el reparte sin un LLM que coordine |
 | El Hermes del VPS para Telegram, y el workflow `hermes-jarvis` | Los avisos funcionan, también con la PC apagada |
-| Skills que sirven: `onia-router`, `onia-core`, `onia-propuestas`, `onia-contabilidad-bolivia`, `onia-infra`, `panel-onia`, `aprender-de-todo`, `planificar-orquesta`, `agenda-calendario`, `orca` | Son concretas y están al día |
-| `equipo-de-agentes` | Corrigiéndola: menciona 26 veces a la madre |
+| Skills que sirven: `onia-router`, `onia-core`, `onia-propuestas`, `onia-contabilidad-bolivia`, `onia-infra`, `panel-onia`, `aprender-de-todo`, `orca`, y del VPS `planificar-orquesta` y `agenda-calendario` | Son concretas y están al día. `planificar-orquesta` necesita el cambio del paso 5 de §7 |
+| `equipo-de-agentes` | Reescrita en este PR sin la madre; lo de esa época pasó a `historial/` |
+| `scripts/orquesta/cargar-issue.mjs` | Nuevo en este PR: las barandas del VPS portadas a la PC |
 | Claude Code como sesión principal, Codex con contratos cerrados y Orca como tablero | Cada uno tiene un solo papel |
 | El cambio que Hermes le hizo a Codex el 25-oct (`on-request`, `workspace-write`) | Es más seguro que lo que había |
 
@@ -171,11 +193,12 @@ se pueda recuperar. La evidencia está en las secciones 3, 4 y 6 de la auditorí
 | Qué | Para qué |
 |---|---|
 | El worktree base `E:/onia-wt/hermes-base` | Que Hermes lea un repo limpio y no el `main` sucio |
-| `planificar-orquesta` en versión PC, con `gh` en lugar de curl | El cómo exacto de cargar y verificar un issue. Con el SOUL y `AGENTS.md` alcanza; no hace falta otra skill de coordinación |
-| El SOUL nuevo del VPS | Que el del VPS sepa que solo avisa |
+| El cambio de `aplicar.sh` y el SOUL nuevo del VPS (§7, paso 5) | Que el del VPS deje de planificar solo y lo sepa |
+| `HERMES_WRITE_SAFE_ROOT` puesta en Windows | `approvals.deny` frena comandos pero no `write_file`, y así fue el incidente del 25-oct |
 | Descripciones de skills que digan cuándo usarlas en los primeros 57 caracteres | El índice de Hermes corta a los 60 |
 | Una prueba que falle si `.agents/skills` se aparta de `.claude/skills` (ignorando CR), o borrar las copias. Ojo: `media-use` la usa `editor-videos` | Que Codex no lea otra versión |
-| Una barrera dura sobre `main` | GitHub la cobra en repos privados: el 26-oct la API respondió «Upgrade to GitHub Pro». Mientras tanto, la barrera es local: el `deny` de Hermes y Codex sin Git |
+| Una barrera dura sobre `main` | GitHub la cobra en repos privados: el 26-oct la API respondió «Upgrade to GitHub Pro». Mientras tanto, la barrera es local: el `deny` de Hermes y Codex sin Git. El `deny` no resuelve alias ni variables (`$g='git'; & $g push` pasa), así que no es un sandbox |
 | Una cuenta de GitHub aparte para Hermes | Hoy carga issues con el token de Sergio Urcullo y la orquesta le cree todo |
-| Medir si los hijos de Hermes reciben `AGENTS.md` | 21 de 30 prompts de sistema medidos no lo traían |
+| Medir si los hijos de Hermes reciben `AGENTS.md` y heredan `approvals.deny` | 21 de 30 prompts de sistema medidos no traían `AGENTS.md` |
+| Qué shell usa la terminal de Hermes en la PC | Decide si `cmd /c git push` se le escapa al `deny` |
 | Que la prueba de higiene de docs falle con un doc fechado en la raíz sin aviso | Que no vuelva a acumularse historia leída como si fuera vigente |
