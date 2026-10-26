@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "operacion": "output/ → out/output/",
+  "movimientos": [
+    {
+      "origen": "output/pdf/ONIA_VENDOR_MANUAL_2026.pdf",
+      "destino": "out/output/pdf/ONIA_VENDOR_MANUAL_2026.pdf",
+      "sha256": "5e6fa817a698d2bacc49628eaa3c99ef2a2ab9fb5ae00de52b400c9b24eb20ab"
+    },
+    {
+      "origen": "output/tipografia-marca/.gitignore",
+      "destino": "out/output/tipografia-marca/.gitignore",
+      "sha256": "36128cb61aa1118ca4f2393f09853cc53bab8288df002037c704b3a5ea637362"
+    },
+    {
+      "origen": "output/tipografia-marca/apoyo-estatico-stat.png",
+      "destino": "out/output/tipografia-marca/apoyo-estatico-stat.png",
+      "sha256": "4d836ef2c294c9bfe7441c11ab4f9e832937204c646755857de16a3987523532"
+    },
+    {
+      "origen": "output/tipografia-marca/frame-highlight-mismo.png",
+      "destino": "out/output/tipografia-marca/frame-highlight-mismo.png",
+      "sha256": "2df12f158fd3717d50a72c5f5943bbebacc18fc497027d492c5e2f413077234a"
+    },
+    {
+      "origen": "output/tipografia-marca/frame-subtitulo-bricolage-recorte.png",
+      "destino": "out/output/tipografia-marca/frame-subtitulo-bricolage-recorte.png",
+      "sha256": "e1df70fdb1afda790acf68f7bf1a30826c57af7ff65817824670a4e442ffb0a5"
+    },
+    {
+      "origen": "output/tipografia-marca/frame-subtitulo-bricolage.png",
+      "destino": "out/output/tipografia-marca/frame-subtitulo-bricolage.png",
+      "sha256": "f6a98e958f0cfa0ed5f37ca103380611487f5c647b79aee67f50a9f7eaef42b6"
+    },
+    {
+      "origen": "output/tipografia-marca/frame-subtitulo-neutro.png",
+      "destino": "out/output/tipografia-marca/frame-subtitulo-neutro.png",
+      "sha256": "59e5e19efdbbafb318b8540932be2dfb60c9ec2b998aade70874007963b8d777"
+    },
+    {
+      "origen": "output/tipografia-marca/segments-prueba.json",
+      "destino": "out/output/tipografia-marca/segments-prueba.json",
+      "sha256": "80c31bc53233af33e9f97f29fcbdea5d243b6ae8563f44020f86896c74578a95"
+    },
+    {
+      "origen": "output/tipografia-marca/subtitulos-bricolage-neutro.ass",
+      "destino": "out/output/tipografia-marca/subtitulos-bricolage-neutro.ass",
+      "sha256": "a2ed3f69fdfce838a7c72902c68fb8605d3b486fdf635dbd3b8130d655145642"
+    },
+    {
+      "origen": "output/tipografia-marca/subtitulos-bricolage-neutro.mp4",
+      "destino": "out/output/tipografia-marca/subtitulos-bricolage-neutro.mp4",
+      "sha256": "71a37b8ac203d7bf6debabf51ee454770855b4b0a7d39a26d148d4a3981bc891"
+    },
+    {
+      "origen": "output/tipografia-marca/subtitulos-bricolage.ass",
+      "destino": "out/output/tipografia-marca/subtitulos-bricolage.ass",
+      "sha256": "a2ed3f69fdfce838a7c72902c68fb8605d3b486fdf635dbd3b8130d655145642"
+    },
+    {
+      "origen": "output/tipografia-marca/tarjeta-browser.png",
+      "destino": "out/output/tipografia-marca/tarjeta-browser.png",
+      "sha256": "546c6fa2e8cf8ee41653bc29aab8ed5b485ca46f9760461ea403a44785b62c9e"
+    },
+    {
+      "origen": "output/tipografia-marca/tarjeta-lower-third.png",
+      "destino": "out/output/tipografia-marca/tarjeta-lower-third.png",
+      "sha256": "9c9a3f45803ad787304e651c976e3e67fa9372166e7221847ae24aa16acc59e3"
+    },
+    {
+      "origen": "output/tipografia-marca/tarjeta-phone.png",
+      "destino": "out/output/tipografia-marca/tarjeta-phone.png",
+      "sha256": "4751090000663808dac5034b41b00790b445223a786a6bfd3183e1bdaa980d1a"
+    },
+    {
+      "origen": "output/tipografia-marca/tarjeta-quote.png",
+      "destino": "out/output/tipografia-marca/tarjeta-quote.png",
+      "sha256": "778f659ce5df80721b8505667961f7211eab0b1d6e9440d7d8beeffc46aae40d"
+    },
+    {
+      "origen": "output/tipografia-marca/tarjeta-stat-A-mono-SHIPPED.png",
+      "destino": "out/output/tipografia-marca/tarjeta-stat-A-mono-SHIPPED.png",
+      "sha256": "9b82ca89041ec024ef86117a2811f32e362cd0e386b3b7b9d09cdb5afe78e972"
+    },
+    {
+      "origen": "output/tipografia-marca/tarjeta-stat-B-bricolage-ALTERNATIVA.png",
+      "destino": "out/output/tipografia-marca/tarjeta-stat-B-bricolage-ALTERNATIVA.png",
+      "sha256": "c1a2d44ed154f3ce3873bba6ca92017f33b48e954732b03d4a5340521e5b435c"
+    },
+    {
+      "origen": "output/tipografia-marca/tarjeta-stat-render-real-1200.png",
+      "destino": "out/output/tipografia-marca/tarjeta-stat-render-real-1200.png",
+      "sha256": "f1002f6465c337963f802b46db7ece2ffc672589fe434c020af865395554c248"
+    }
+  ],
+  "consumidores_editados": [],
+  "testlog": {
+    "comando": "node scripts/repo-output-move.test.mjs",
+    "resultado": "PASS",
+    "verificado": "18 destinos existentes; 18 origenes ausentes; hashes SHA-256 coinciden"
+  }
+}
