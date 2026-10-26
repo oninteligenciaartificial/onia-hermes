@@ -1,0 +1,93 @@
+{
+  "tests_count": 19,
+  "tests": [
+    {
+      "action": "version-check",
+      "form": "raw_codex",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "version-check",
+      "form": "argv_cmd",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "start",
+      "form": "raw_codex",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "start",
+      "form": "argv_cmd",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "context",
+      "form": "raw_codex",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "context",
+      "form": "argv_cmd",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "session-init",
+      "form": "raw_codex",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "session-init",
+      "form": "argv_cmd",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "file-context",
+      "form": "raw_codex",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "file-context",
+      "form": "argv_cmd",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "observation",
+      "form": "raw_codex",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "observation",
+      "form": "argv_cmd",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "summarize",
+      "form": "raw_codex",
+      "stdin_args": "pass"
+    },
+    {
+      "action": "summarize",
+      "form": "argv_cmd",
+      "stdin_args": "pass"
+    },
+    {
+      "nonzero_exit_propagation": "pass"
+    },
+    {
+      "action": "file-context",
+      "deny_stop_continue_preserved": "pass"
+    },
+    {
+      "action": "observation",
+      "deny_stop_continue_preserved": "pass"
+    },
+    {
+      "other_event_untouched": "pass"
+    },
+    {
+      "malformed_output_not_hidden": "pass"
+    }
+  ],
+  "scope": "inert fixtures only, not runtime certification"
+}
