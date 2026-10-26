@@ -67,7 +67,7 @@ log() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*"; }
 exec 9>"$ESTADO/lock"
 if ! flock -n 9; then log "la vuelta anterior sigue corriendo: salgo"; exit 0; fi
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
-directo() { ONIA_TG_DIRECTO=1 "$TG" "$1" >/dev/null 2>&1; }
+directo() { ONIA_TG_DIRECTO=1 ONIA_AVISO_DECISION=1 "$TG" "$1" >/dev/null 2>&1; }
 espera() {  # minutos -> texto corto
   local m=$1
   if [ "$m" -lt 60 ]; then echo "$m min"

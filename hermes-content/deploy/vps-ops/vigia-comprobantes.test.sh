@@ -54,8 +54,9 @@ FIN
 # problema (🔴) por el camino por defecto devuelve `TAREA <id>`.
 cat > "$TMP/tg.sh" <<'FIN'
 #!/usr/bin/env bash
-printf 'DIRECTO=%s\n%s\n---\n' "${ONIA_TG_DIRECTO:-0}" "$1" >> "$TMP_MENSAJES"
+printf 'DIRECTO=%s\nDECISION=%s\n%s\n---\n' "${ONIA_TG_DIRECTO:-0}" "${ONIA_AVISO_DECISION:-0}" "$1" >> "$TMP_MENSAJES"
 [ "${TG_FALLA:-0}" = "1" ] && exit 1
+[ -n "${TG_RC:-}" ] && exit "$TG_RC"
 case "$1" in *🔴*) [ "${ONIA_TG_DIRECTO:-0}" = "1" ] || printf 'TAREA t_c0ffee01\n' ;; esac
 exit 0
 FIN
@@ -92,6 +93,7 @@ filas ""; run
 filas "$(fila pay_1 comprobante 'Clinica Sonrisa' professional mensual 450 12)"; run
 [ "$(cuantos)" = 1 ] && ok "pago nuevo: un aviso" || falla "pago nuevo" "1 aviso" "$MSGS"
 case "$MSGS" in DIRECTO=1*) ok "va DIRECTO a Telegram, no al tablero" ;; *) falla "directo" "DIRECTO=1" "$MSGS" ;; esac
+grep -qx 'DECISION=1' "$TMP/mensajes.txt" && ok "el pago lleva marcador explícito de decisión" || falla "marcador de decisión" "DECISION=1" "$MSGS"
 for dato in "Comprobante nuevo" "Clinica Sonrisa" "professional" "mensual" "Bs 450" "12 min" "https://app.onia.com.bo/admin/payments"; do
   case "$MSGS" in *"$dato"*) ok "el aviso trae: $dato" ;; *) falla "dato del aviso" "$dato" "$MSGS" ;; esac
 done
@@ -111,6 +113,13 @@ TG_FALLA=1 run
 grep -qxF pay_3 "$TMP/estado/avisados" && falla "fallo de Telegram" "pay_3 sin marcar" "quedo marcado" || ok "Telegram fallo: no lo marca como avisado"
 run
 case "$MSGS" in *"Tienda Luz"*) ok "la vuelta siguiente lo reintenta" ;; *) falla "reintento" "Tienda Luz" "$MSGS" ;; esac
+
+# Una decisión diferida por horario no se considera entregada.
+filas "$(fila pay_diferido comprobante 'Tienda Espera' basic mensual 290 1)"
+TG_RC=75 run
+grep -qxF pay_diferido "$TMP/estado/avisados" && falla "decisión diferida" "sin marcar" "quedó marcada" || ok "75 no marca el pago como avisado"
+run
+grep -qxF pay_diferido "$TMP/estado/avisados" && ok "el pago diferido se entrega en la vuelta posterior" || falla "reintento del pago diferido" "marcado tras éxito" "$MSGS"
 
 # 6. El nombre del negocio lo escribe el cliente: se escapa para el HTML de Telegram.
 filas "$(fila pay_4 comprobante 'A & B <Dental>' basic mensual 290 1)"; run

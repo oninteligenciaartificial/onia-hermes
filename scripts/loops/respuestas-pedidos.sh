@@ -212,7 +212,9 @@ entregar() {  # entregar <id> <estado> <texto> -> 0 entregada · 2 repetida · 1
 $cabeza ($carril)
 
 $(printf '%s' "$texto" | esc)"
-  ONIA_AVISO=interrumpe ONIA_AVISO_CLAVE="pedido-$id-$estado" ONIA_AVISO_EMISOR=claude \
+  local decision=0
+  [ "$estado" = necesita-ok ] && decision=1
+  ONIA_AVISO=interrumpe ONIA_AVISO_DECISION="$decision" ONIA_AVISO_CLAVE="pedido-$id-$estado" ONIA_AVISO_EMISOR=claude \
     "$TG" "$msg" </dev/null >/dev/null 2>&1 || return 1
   printf '%s\t%s\t%s\n' "$(date -u +%s)" "$id" "$estado" >> "$RESPUESTAS"
 }

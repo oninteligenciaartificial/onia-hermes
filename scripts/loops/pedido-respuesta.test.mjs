@@ -133,6 +133,84 @@ exit 0
     rechazosAvisados: () => leer("pedidos/rechazos-avisados.tsv").split("\n").filter(Boolean).length };
 }
 
+// Integración sin red: caller real, router real y transporte/tablero falsos.
+function conRouterReal(b, { bloque = false } = {}) {
+  const dir = join(b.dir, "router-real");
+  const bin = join(dir, "bin");
+  const estado = join(dir, "estado");
+  mkdirSync(bin, { recursive: true });
+  mkdirSync(estado);
+  writeFileSync(join(estado, "activo"), "");
+  writeFileSync(join(estado, "solo-decisiones"), "");
+  if (bloque) writeFileSync(join(estado, "bloques-hoy.tsv"), "2026-10-21\t0900\t1100\tClase\n");
+  const envios = join(dir, "envios").replaceAll("\\", "/");
+  const curl = join(bin, "curl");
+  writeFileSync(curl, `#!/usr/bin/env bash
+echo x >> "${envios}"
+echo '{"ok":true,"result":{"message_id":42}}'
+`);
+  const tablero = join(dir, "tablero.sh");
+  writeFileSync(tablero, '#!/usr/bin/env bash\n[ "$1" = "create" ] && echo "Created t_0000aaaa"\nexit 0\n');
+  chmodSync(curl, 0o755);
+  chmodSync(tablero, 0o755);
+  return {
+    correr: (hm) => b.correr([], {
+      PATH: `${bin}${process.platform === "win32" ? ";" : ":"}${b.env.PATH}`,
+      ONIA_TG: resolve(AQUI, "onia-tg.sh"),
+      ONIA_TG_ENV: join(dir, "no-existe.env"),
+      ONIA_TG_LOG: join(dir, "router.log"),
+      ONIA_AVISO_ESTADO: estado,
+      ONIA_TABLERO: tablero,
+      TELEGRAM_BOT_TOKEN: "token-de-mentira",
+      TELEGRAM_HOME_CHANNEL: "0",
+      ONIA_AVISO_HM: hm,
+      ONIA_AVISO_FECHA: "2026-10-21",
+    }),
+    envios: () => existsSync(envios) ? readFileSync(envios, "utf8").split("\n").filter(Boolean).length : 0,
+    log: () => readFileSync(join(dir, "router.log"), "utf8"),
+  };
+}
+
+for (const bloque of [false, true]) {
+  test(`con router real: necesita-ok diferido por ${bloque ? "bloque" : "noche"} se reintenta sin perderse`, () => {
+    const b = banco();
+    const router = conRouterReal(b, { bloque });
+    b.responder(ID, "necesita-ok", "¿Autorizás esta entrega concreta?");
+    assert.equal(router.correr(bloque ? "1000" : "2300").status, 0);
+    assert.match(router.log(), /DECISION-DIFERIDA/);
+    assert.equal(router.envios(), 0);
+    assert.equal(b.entregadas(), 0);
+    assert.equal(b.ramas(), `refs/heads/respuesta/${ID}`);
+    assert.equal(router.correr(bloque ? "1200" : "1000").status, 0);
+    assert.equal(router.envios(), 1);
+    assert.equal(b.entregadas(), 1);
+    assert.equal(b.ramas(), "");
+    router.correr("1200");
+    assert.equal(router.envios(), 1, "una decisión no se repite después de entregada");
+  });
+}
+
+for (const estado of ["listo", "no-se-pudo"]) {
+  test(`con router real: ${estado} queda procesado sin notificación`, () => {
+    const b = banco();
+    const router = conRouterReal(b);
+    b.responder(ID, estado, "Resultado registrado para quien coordina.");
+    assert.equal(router.correr("1000").status, 0);
+    assert.equal(router.envios(), 0);
+    assert.equal(b.entregadas(), 1);
+  });
+}
+
+test("con router real: un rechazo se registra sin avisar al teléfono", () => {
+  const b = banco();
+  const router = conRouterReal(b);
+  b.responderCrudo(ID, "listo", "Respuesta no autorizada", { sello: "0".repeat(32) });
+  assert.equal(router.correr("1000").status, 0);
+  assert.equal(router.envios(), 0);
+  assert.equal(b.entregadas(), 0);
+  assert.equal(b.rechazosAvisados(), 1);
+});
+
 test("la respuesta de un pedido de Hermes sale por la aduana, como interrupción con clave propia", () => {
   const b = banco();
   b.responder(ID, "listo", "Listo: el botón ya confirma. PR #91 abierto en borrador.");

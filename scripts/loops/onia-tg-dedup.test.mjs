@@ -83,6 +83,8 @@ exit 9
         PATH: `${dir}:${process.env.PATH}`,
         ONIA_TABLERO: tablero,
         ONIA_TG_LOG: join(dir, "onia-tg.log"),
+        ONIA_TG_ENV: join(dir, "no-existe.env"),
+        ONIA_AVISO_ESTADO: join(dir, "estado"),
         TELEGRAM_BOT_TOKEN: "token-de-mentira",
         TELEGRAM_CHAT_ID: "0",
         TELEGRAM_HOME_CHANNEL: "0",

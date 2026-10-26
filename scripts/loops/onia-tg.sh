@@ -87,6 +87,22 @@ esac
 POLITICA=0
 [ -f "$ESTADO/activo" ] && POLITICA=1
 
+# ── SOLO DECISIONES (opt-in): $ESTADO/solo-decisiones ────────────────────────
+# Con ese archivo, al teléfono SOLO llega `interrumpe` con ONIA_AVISO_DECISION=1 (o DIRECTO con
+# el marcador). Es una clasificación del mensaje, no un permiso para ejecutar nada. Todo lo
+# demás se degrada: `interrumpe` sin marcador pasa a `sistema` (log/tarea/dedup; AHORA=1 no lo
+# salva) y `resumen` queda en el log sin alimentar el digest. PUEDO no pide marcador. Sin el
+# archivo nada de esto corre y el comportamiento legado queda intacto.
+SOLO=0
+if [ -f "$ESTADO/solo-decisiones" ]; then
+  SOLO=1
+  if [ "${ONIA_AVISO_SOLTAR:-0}" != "1" ] && [ "${ONIA_AVISO_PUEDO:-0}" != "1" ] \
+     && [ "$CATEGORIA" = interrumpe ] && [ "${ONIA_AVISO_DECISION:-0}" != "1" ]; then
+    printf '%s SOLO-DECISIONES interrumpe sin marcador -> sistema emisor=%s titulo=%s\n' "$(ahora)" "${ONIA_AVISO_EMISOR:-?}" "$(titulo_de "$MSG")" >> "$LOG"
+    CATEGORIA=sistema
+  fi
+fi
+
 # Hora de La Paz sin depender de tzdata: Bolivia es UTC-4 todo el año, sin horario de verano.
 hm_lapaz() { if [ -n "${ONIA_AVISO_HM:-}" ]; then printf '%s' "$ONIA_AVISO_HM"; else date -u -d '-4 hours' +%H%M; fi; }
 en_silencio() {
@@ -123,6 +139,11 @@ fi
 # ── soltar: lo retenido durante un bloque sale junto, cuando el bloque termina ──
 if [ "${ONIA_AVISO_SOLTAR:-0}" = "1" ]; then
   R="$ESTADO/retenidos.log"
+  if [ "$SOLO" = 1 ]; then
+    # Las colas viejas no se clasificaron como decisión: ni se envían ni se vacían.
+    printf '%s SOLTAR-OMITIDO solo-decisiones: colas intactas\n' "$(ahora)" >> "$LOG"
+    exit 0
+  fi
   { [ "$POLITICA" = 1 ] && [ -s "$R" ]; } || exit 0
   en_bloque >/dev/null && exit 0            # sigue ocupado: se espera al final del bloque
   N=$(grep -c . "$R")
@@ -155,7 +176,9 @@ fi
 # ── resumen: al resumen del día, nunca al teléfono ───────────────────────────
 if [ "$CATEGORIA" = resumen ]; then
   TITULO=$(titulo_de "$MSG"); [ -n "$TITULO" ] || TITULO="aviso sin titulo"
-  if [ "$POLITICA" = 1 ]; then
+  if [ "$SOLO" = 1 ]; then
+    printf '%s RESUMEN-SOLO-LOG %s titulo=%s\n' "$(ahora)" "${ONIA_AVISO_EMISOR:-?}" "$TITULO" >> "$LOG"
+  elif [ "$POLITICA" = 1 ]; then
     encolar resumen "${ONIA_AVISO_CLAVE:-$(clave_de "$TITULO")}" "$TITULO"
     printf '%s RESUMEN %s titulo=%s\n' "$(ahora)" "${ONIA_AVISO_EMISOR:-?}" "$TITULO" >> "$LOG"
   else
@@ -212,6 +235,12 @@ if [ "$CATEGORIA" = interrumpe ]; then
       printf '%s REPETIDO-CALLADO clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
       exit 0
     fi
+  fi
+  if [ "$SOLO" = 1 ] && [ "$POLITICA" = 1 ] && [ "${ONIA_AVISO_AHORA:-0}" != "1" ] && { en_silencio || en_bloque >/dev/null; }; then
+    # Una decisión real no se encola para un resumen suprimido ni se marca como enviada:
+    # 75 (EX_TEMPFAIL) y quien llama reintenta cuando se la pueda interrumpir.
+    printf '%s DECISION-DIFERIDA clave=%s titulo=%s\n' "$(ahora)" "$CLAVE" "$TITULO" >> "$LOG"
+    exit 75
   fi
   if [ "$POLITICA" = 1 ] && [ "${ONIA_AVISO_AHORA:-0}" != "1" ] && en_silencio; then
     # De 22:00 a 06:30 no suena nada: va al resumen de la manana, UNA vez por clave.

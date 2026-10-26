@@ -157,7 +157,7 @@ if [ "$SI" = 0 ]; then
 
 Si es lo que pediste, contestale a Hermes con el código <b>$CODE</b>. Si no, no contestes nada."
   # DIRECTO a él (la salida de este comando la lee Hermes, el código NO va ahí).
-  if ! ONIA_AVISO=interrumpe ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="pedido-codigo-$HASH-$CODE" ONIA_AVISO_EMISOR=pedidos \
+  if ! ONIA_AVISO=interrumpe ONIA_AVISO_DECISION=1 ONIA_AVISO_AHORA=1 ONIA_AVISO_CLAVE="pedido-codigo-$HASH-$CODE" ONIA_AVISO_EMISOR=pedidos \
        "$TG" "$MSG" </dev/null >/dev/null 2>&1; then
     echo "No le pude mandar el código a Sergio Urcullo: el pedido no puede salir." >&2
     exit 1
