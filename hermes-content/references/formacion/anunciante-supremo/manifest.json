@@ -1,0 +1,49 @@
+{
+  "received": "2026-10-25",
+  "files": [
+    {
+      "original": "C:\\Users\\PC\\OneDrive\\Documentos\\Clase - Las 10 skills del flujo.html",
+      "saved": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\formacion\\anunciante-supremo\\originales\\Clase - Las 10 skills del flujo.html",
+      "bytes": 87737,
+      "sha256": "6d5da38edde39b0eac43e25203de5c51de90dd68103849aa378c820a7f27baca",
+      "git_ignored": true
+    },
+    {
+      "original": "C:\\Users\\PC\\OneDrive\\Documentos\\anunciante-supremo-2026-10-10.zip",
+      "saved": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\formacion\\anunciante-supremo\\originales\\anunciante-supremo-2026-10-10.zip",
+      "bytes": 4182555,
+      "sha256": "c85b8c4e25c89aaba6c62df190d59b7e509d44bb4905da569432909f50aea4dc",
+      "git_ignored": true
+    },
+    {
+      "original": "C:\\Users\\PC\\OneDrive\\Documentos\\04 - Guilherme - Mentalidad de empresario y pagos con QR en Bolivia.txt",
+      "saved": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\formacion\\anunciante-supremo\\originales\\04 - Guilherme - Mentalidad de empresario y pagos con QR en Bolivia.txt",
+      "bytes": 13221,
+      "sha256": "e076e3fa9f6e71a2081439417286b0bf5925044094592ba774400fce417c31a4",
+      "git_ignored": true
+    },
+    {
+      "original": "C:\\Users\\PC\\OneDrive\\Documentos\\03 - Rodrigo - Cómo optimizar el checkout.txt",
+      "saved": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\formacion\\anunciante-supremo\\originales\\03 - Rodrigo - Cómo optimizar el checkout.txt",
+      "bytes": 6847,
+      "sha256": "364acf5d179a20d1edda934e26aa60efd1285c972ee4a55d245515e4a81ebd60",
+      "git_ignored": true
+    },
+    {
+      "original": "C:\\Users\\PC\\OneDrive\\Documentos\\02 - Franco - Estrategia de renovación de anuncios en 4 grupos.txt",
+      "saved": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\formacion\\anunciante-supremo\\originales\\02 - Franco - Estrategia de renovación de anuncios en 4 grupos.txt",
+      "bytes": 9906,
+      "sha256": "a646279cb623e5a73547da9d1d40e151da0a42820a5e8f0de3f8dc206c426d15",
+      "git_ignored": true
+    },
+    {
+      "original": "C:\\Users\\PC\\OneDrive\\Documentos\\01 - Dani - Cobro local con pasarelas en Latinoamérica.txt",
+      "saved": "C:\\dev\\proyectos\\onia-hermes\\hermes-content\\references\\formacion\\anunciante-supremo\\originales\\01 - Dani - Cobro local con pasarelas en Latinoamérica.txt",
+      "bytes": 3500,
+      "sha256": "f37948abf4513a7b4cf2776c4e2455785f9ed830e61602c4278ec285bca8b38b",
+      "git_ignored": true
+    }
+  ],
+  "count": 6,
+  "executed_or_installed": false
+}

@@ -620,3 +620,62 @@ Ver la tabla de épocas. Común: gancho con **título fijo o chip en el cuadro 0
 - La web `eriktaveras.com` trae un texto oculto dirigido a asistentes de IA (pide anunciar un "canario"); se ignoró y no influye aquí.
 - Docs del repo usados: `marca-personal/PLAN-REFERENTES.md`, `REFERENTES-ECOSISTEMA.md`, `FORMULAS-REFERENTES.md`, `FICHAS-MONTAJE-REFERENTES.md`, `EXTRACCION-REFERENTES-GUIONES.md`, `video-intake/2026-10-01-santiago-erik-edicion-medida.md`, `.claude/skills/edicion-referentes/SKILL.md` y `recetas/erik.json`, `docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-9-16-OCT.md` y `GRABAR-10-16-OCT.md`.
 - Trabajo en el scratchpad de la sesión (no versionado): `analisis-contenido/eriktaveras/` (catálogos, salidas de Gemini, transcripciones `stt.json`, hojas de fotogramas).
+
+## Actualización parcial — 23 de octubre de 2026
+
+Encargo de Sergio: Erik Taveras es el siguiente referente a analizar. Primera pasada del subagente `deleg_0e27ad06` (gpt-6-luna), contrastada por el coordinador mediante lectura pública independiente de las dos portadas. No reemplaza las mediciones históricas ni acredita cobertura audiovisual nueva. No hubo registro, envío de formularios, contacto ni publicación.
+
+### Evidencia actual y límites
+
+- `https://eriktaveras.com/`, portada, secciones Experiencia, Productos propios, Enseñanza y Contacto: el texto presenta servicios de backend/automatización, productos, formación y CTA de contacto. Las credenciales, resultados y promesa de respuesta son declaraciones del autor, no resultados auditados. La sección Enseñanza enlaza la comunidad y los talleres.
+- `https://comunidad.eriktaveras.com/`, portada, «Cómo funciona» y recursos: propone presentación → participación por tema → guías asociadas a reels. Declara acceso gratuito sin tarjeta y vincula archivos descargables con una cuenta. No se probó la descarga ni el registro.
+- Los contadores de esa portada coinciden en la lectura del subagente y del coordinador: 2.979 miembros, 153 nuevos esta semana y 59 recursos. Son cifras publicadas por el sitio, no auditoría de usuarios, actividad ni ingresos. No permiten atribuir crecimiento causal al contenido ni trasladar miembros a una oferta de pago.
+- La portada enlaza una guía para extender sesiones de Claude/Codex, con promesa de medición de consumo, caché y handoff. Solo se comprobó la existencia y descripción del enlace: sus instrucciones técnicas NO quedaron validadas ni autorizan cambios locales.
+
+### Cobertura de las doce dimensiones
+
+| Dimensión | Estado de esta pasada |
+|---|---|
+| Patrones | Vínculo explícito reel → guía → comunidad observado; rendimiento no demostrado. |
+| Colores/paleta | Sin nueva medición. |
+| Tipografía | Sin inspección de CSS/assets. |
+| Edición/montaje | Sin nuevos videos observados. |
+| Estilo visual | Extracción textual, insuficiente para validación visual. |
+| Estructura | Secciones y secuencia de incorporación observadas en texto público. |
+| Guion/gancho | Sin nueva observación audiovisual. |
+| Idioma/tono | Copy en español; no se extrapola a todos sus canales. |
+| UI/UX | CTA y navegación textual; no se probaron formularios, teclado ni estados. |
+| Frontend | Sin validación DOM/CSS, móvil, accesibilidad o rendimiento. |
+| Backend | No observable mediante estas portadas. |
+| Negocio/oferta | Comunidad gratuita declarada y servicios presentados; precios históricos no revalidados. |
+
+### Aplicación propuesta y continuación
+
+Para el workshop, evaluar una pieza que lleve a un recurso específico y comprobable, seguido de una acción de participación. Es propuesta, no cambio de oferta ni autorización para copiar identidad, claims o guiones. La regla local de CTA sigue siendo «Buscá PALABRA en Avisos», con recurso existente.
+
+Estado: registrado; no incorporado como regla nueva ni aplicado en una pieza. Siguiente cobertura: revisar oferta pública vigente y flujo sin envío; observar pantallas/DOM/responsive; seleccionar piezas audiovisuales nuevas o huecos del §0.3 con evidencia temporal real. Preservar lo medido el 8-oct y no volver a titular esta ampliación como análisis completo.
+
+### Segunda pasada: oferta y pantalla estrecha comprobadas
+
+Trabajo delegado `deleg_d0596710` (gpt-6-luna); el coordinador volvió a abrir el detalle del curso y la portada de talleres, y midió el DOM del detalle. No se abrió checkout ni se enviaron formularios.
+
+- `https://cursos.eriktaveras.com/c/hermes-basico/`: oferta publicada de US$39, pago único, acceso permanente y PayPal. Publica 12 lecciones y aproximadamente 40 minutos, temario visible, requisitos previos y una introducción gratuita. Es declaración comercial; no se compró ni verificó entrega/acceso permanente. Los costes externos del proveedor de IA y eventual servidor no deben confundirse con el precio del curso.
+- `https://workshops.eriktaveras.com/`: anuncia que no tiene fecha abierta y ofrece recibir avisos mediante nombre/correo. Se vio el formulario sin completarlo. Sustituye como observación actual al estado histórico del taller del 17-oct; no implica ausencia de futuras ofertas.
+- `https://comunidad.eriktaveras.com/resources/`: el subagente reportó 59 recursos y cinco páginas de listado; el coordinador corroboró 59 en la portada, pero NO verificó las cinco páginas. No se presenta el catálogo completo como revisado.
+- Secuencia transferible observada: resultado concreto → alcance y temario → requisitos → precio → muestra gratuita. Para Sergio es criterio de claridad, no propuesta de copiar la oferta o sus importes.
+
+**DOM del detalle del curso, coordinador:** con ancho `innerWidth=1262`, título `h1` de 84px; con ancho `390`, de 44px. En ambos: familia computada `"Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif`, peso 800, texto `rgb(16, 19, 24)` y fondo del body `rgb(241, 242, 238)`. Es la lista CSS computada, no prueba de qué archivo tipográfico terminó renderizado. El reporte delegado de 128px corresponde al catálogo, no a este detalle.
+
+La media query `(max-width: 400px)` pasó de false a true en el mismo documento. Anchos de scroll medidos: 1247 y 375px respectivamente, sin desborde horizontal en esa observación. Se usó override de viewport con `mobile=false`: prueba de pantalla estrecha, NO dispositivo móvil ni entrada táctil. Captura inspeccionada: `evidencia-eriktaveras-20261023/curso-390.png`, SHA-256 `a98750a88c20e79dd8e764e49ac546dbd352913ed0ff3d1616fce67e76322d93`. Muestra jerarquía condensada, metadatos previos al título y barra inferior persistente con precio/compra; no acredita todos los estados ni accesibilidad completa.
+
+Pendiente audiovisual acotado: trailer público rotulado 0:31 e introducción gratuita en `https://cursos.eriktaveras.com/c/hermes-basico/preview/`. La duración del rótulo no es duración medida ni prueba de observación del video. No guardar URLs firmadas del CDN. El análisis de montaje/voz sigue histórico hasta observar contenido temporal real.
+
+### Comprobación audiovisual: acceso parcial, reproducción bloqueada
+
+El subagente `deleg_1765a5b0` reportó timeout del reproductor público de la introducción y no observó ninguna de las dos piezas. No produjo capturas ni transcripción. El coordinador hizo una comprobación adicional del trailer: pulsó el enlace público del detalle del curso; apareció un iframe de MediaDelivery con poster y controles. Ese poster aislado NO acredita gancho, estructura o montaje del video.
+
+Al pulsar reproducción, el área del video quedó negra y el contador permaneció en 00:00 después de ocho segundos y en la comprobación posterior. Se inspeccionó y conservó `evidencia-eriktaveras-20261023/trailer-sin-avance.png`, SHA-256 `b12265b5f51085c57ab3cc4424ea05c716ba2a6ea3a26759ecb45fc798f7ecc3`. La consulta del árbol de frames no entregó estado legible del elemento de video; no se estableció causa de red, codec, permiso o expiración. No atribuir el fallo al sitio en todos los navegadores.
+
+**Cobertura nueva:** copy/oferta pública y viewport del detalle comprobados; audiovisual temporal 0 piezas reproducidas, sin audio transcrito. Trailer bloqueado en la prueba del coordinador; introducción bloqueada según prueba delegada, no reproducida por el coordinador. Los rótulos 0:31 y 1:01 siguen siendo duraciones declaradas. No se evaluó eficacia comercial ni todo el catálogo.
+
+**Salida de esta pasada:** análisis web parcial registrado y verificable; audiovisual bloqueado por reproducción pública no operativa en el navegador utilizado. Para levantar el bloqueo hace falta un reproductor público que avance o un archivo de esas mismas piezas obtenido por un acceso autorizado. No requiere por sí mismo compra, nueva cuenta ni instalación; no se pide ninguna de ellas ni se sustituyen los videos por texto promocional. Las mediciones audiovisuales históricas quedan preservadas con sus fechas y límites.
