@@ -1,0 +1,6 @@
+concepto,valor,unidad
+subtotal_productos,6350,centavos_BOB
+descuento_productos,10,porcentaje
+envio_confirmado_solo_para_R07,800,centavos_BOB
+total_erroneo_construido,6415,centavos_BOB
+total_correcto,6515,centavos_BOB

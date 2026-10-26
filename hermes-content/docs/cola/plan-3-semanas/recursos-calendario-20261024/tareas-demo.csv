@@ -1,0 +1,4 @@
+tarea,veces_semana,minutos_por_vez,riesgo,decision
+copiar pedidos,20,3,bajo,borrador con revision
+autorizar devoluciones,5,20,alto,no ejecutar automaticamente
+armar reporte,2,15,bajo,segunda candidata

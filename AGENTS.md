@@ -1,4 +1,14 @@
-# Hermes Agent Orchestration Order
+# ONIA — entrada del worktree de Marca personal
+
+## Autoridad vigente para esta preparación local
+
+Leer primero la entrada canónica actual `C:/dev/proyectos/onia-hermes/AGENTS.md` y el contrato INF-01 a INF-07 en `C:/dev/proyectos/onia-hermes/.hermes/plans/puesta-en-orden-hermes.md`. No copiar skills propias a `.agents/skills/`; leer sus fuentes canónicas. Las secciones conservadas abajo son antecedentes y no reactivan permisos, modelos ni tareas.
+
+Sergio Urcullo exige revisar tareas y referentes antes de lanzar producción. Esta preparación permite lecturas y cambios locales de infraestructura expresamente asignados, pero no producción de contenido, instalaciones, gasto, conexiones nuevas, commit, push, deploy ni contacto con terceros. No ejecutar auto-sync por cerrar un turno. Hermes es el único coordinador y el cupo total es de dos ejecutores, incluyendo revisores.
+
+Las skills son mejorables: cuestionar supuestos y proponer cambios con evidencia, sin defender lo propio por costumbre ni frenar la entrega con auditorías indefinidas. Antes de declarar terminado un hito, un revisor independiente contrasta pedido, artefactos y pruebas; la aceptación editorial sigue siendo de Sergio Urcullo.
+
+## Antecedentes conservados — no son el contrato vigente
 
 ## Acceso local a apps, credenciales y sesiones (regla compartida)
 
