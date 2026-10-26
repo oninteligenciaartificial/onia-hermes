@@ -8,7 +8,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { generateKeyPairSync } from "node:crypto";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -31,6 +31,15 @@ import {
   EMISION_CASES,
   EMISION_CASES_SOPORTADOS,
   EMISION_CASES_VIII,
+  PAQUETE_CASES,
+  PAQUETE_VALIDACIONES,
+  MASIVA_CASES,
+  MASIVA_VALIDACIONES,
+  LOTE_CASE_TARGETS,
+  paqueteCaseId,
+  masivaCaseId,
+  validacionCaseId,
+  applyPortalSnapshot,
   MODALIDAD_ELECTRONICA,
   SERVICIO_POR_DOC_SECTOR,
   SERVICIO_POR_DOC_SECTOR_ELECTRONICA,
@@ -484,7 +493,7 @@ describe("normalizeCuisResult (SIN 980 con CUIS vigente, verificado en vivo 2026
 describe("plan de etapas", () => {
   it("los targets son POR CASO, no totales (X no aplica; VIII entro el 12-sep)", () => {
     assert.deepEqual(STAGE_TARGETS, {
-      I: 1, II: 50, III: 100, IV: 125, V: 5, VI: 280, VII: 125, VIII: 115, IX: 80, XI: 125,
+      I: 1, II: 50, III: 100, IV: 125, V: 5, VI: 10, VII: 125, VIII: 115, IX: 10, XI: 125,
     });
     assert.deepEqual(STAGE_ORDER, ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "XI"]);
   });
@@ -503,10 +512,10 @@ describe("plan de etapas", () => {
     assert.equal(STAGE_TARGETS.III * pv, STAGE_TOTALS.III);
     assert.equal(STAGE_TARGETS.IV * combos, STAGE_TOTALS.IV);
     assert.equal(STAGE_TARGETS.V * motivos * pv, STAGE_TOTALS.V);
-    assert.equal(STAGE_TARGETS.VI * pv, STAGE_TOTALS.VI);
+    assert.equal(PAQUETE_CASES.length * 10 + PAQUETE_VALIDACIONES.length * 70, STAGE_TOTALS.VI);
     assert.equal(STAGE_TARGETS.VII * combos, STAGE_TOTALS.VII);
     assert.equal(STAGE_TARGETS.VIII * EMISION_CASES_VIII.length, STAGE_TOTALS.VIII);
-    assert.equal(STAGE_TARGETS.IX * pv, STAGE_TOTALS.IX);
+    assert.equal(MASIVA_CASES.length * 10 + MASIVA_VALIDACIONES.length * 20, STAGE_TOTALS.IX);
     assert.equal(STAGE_TARGETS.XI * combos, STAGE_TOTALS.XI);
     assert.deepEqual(Object.keys(STAGE_PLAN).sort(), [...STAGE_ORDER].sort());
   });
@@ -519,6 +528,230 @@ describe("plan de etapas", () => {
       "validacionRecepcionMasivaFactura",
       "validacionRecepcionPaqueteFactura",
     ]);
+  });
+});
+
+describe("VI/IX: filas reales del portal y conciliacion del checkpoint", () => {
+  const portal = JSON.parse(readFileSync(new URL("../portal-fase1-20260927.json", import.meta.url), "utf8"));
+
+  it("la matriz enumera 32 y 12 filas unicas con sus cantidades exactas", () => {
+    assert.equal(PAQUETE_CASES.length, 28);
+    assert.equal(PAQUETE_VALIDACIONES.length, 4);
+    assert.equal(MASIVA_CASES.length, 8);
+    assert.equal(MASIVA_VALIDACIONES.length, 4);
+    assert.equal(Object.keys(LOTE_CASE_TARGETS.VI).length, 32);
+    assert.equal(Object.keys(LOTE_CASE_TARGETS.IX).length, 12);
+    assert.equal(new Set(PAQUETE_CASES.map(paqueteCaseId)).size, 28);
+    assert.equal(new Set(MASIVA_CASES.map(masivaCaseId)).size, 8);
+    assert.ok(PAQUETE_CASES.every((c) => c.cantidad === (c.pv === 1 ? 500 : 2)));
+    assert.ok(MASIVA_CASES.some((c) => c.cantidad === 1000));
+    assert.ok(MASIVA_CASES.some((c) => c.cantidad < 1000));
+  });
+
+  it("preserva contadores antiguos como auditoria y no informa 100% antes de conciliar", () => {
+    const old = migrateState({ etapas: {
+      VI: { done: 0, attempts: 560, cases: { pv0: 280, pv1: 280 }, blockedCases: {} },
+      IX: { done: 0, attempts: 160, cases: { pv0: 80, pv1: 80 }, blockedCases: {} },
+    } });
+    assert.deepEqual(old.etapas.VI.legacyCases, { pv0: 280, pv1: 280 });
+    assert.deepEqual(old.etapas.IX.legacyCases, { pv0: 80, pv1: 80 });
+    const r = Object.create(Runner.prototype);
+    r.state = old;
+    assert.match(r.summary().general, /sin conciliar/);
+    assert.equal(r.summary().etapas.find((e) => e.etapa === "VI").hechas, null);
+    assert.throws(() => r.requirePortalReconciliation("VI"), /Conciliar primero/);
+    const reconciled = applyPortalSnapshot(old, portal);
+    r.state = reconciled;
+    assert.equal(r.summary().etapas.find((e) => e.etapa === "VI").hechas, 150);
+    assert.equal(r.summary().etapas.find((e) => e.etapa === "IX").hechas, 60);
+    assert.equal(r.state.etapas.VI.cases["recepcion-ds1-motivo1-pv0-menor500"], 10);
+    assert.equal(r.state.etapas.IX.cases["recepcion-ds17-pv1-igual1000"], 0);
+    assert.deepEqual(r.state.etapas.VI.legacyCases, { pv0: 280, pv1: 280 });
+    assert.doesNotThrow(() => r.requirePortalReconciliation("VI"));
+    assert.throws(() => applyPortalSnapshot(reconciled, portal), /ya fue conciliada/);
+  });
+
+  it("rechaza marcadores imposibles antes de reemplazar el checkpoint", () => {
+    const state = migrateState({ etapas: { VI: { cases: { pv0: 280 } } } });
+    assert.throws(() => applyPortalSnapshot(state, {
+      ...portal,
+      VI: { totalCorrectos: 151, cases: portal.VI.cases },
+    }), /suma 150/);
+    assert.deepEqual(state.etapas.VI.legacyCases, { pv0: 280 });
+  });
+
+  it("la CLI importa el portal sin credenciales ni SOAP y guarda respaldo", () => {
+    const dir = mkdtempSync(join(tmpdir(), "fase1-portal-"));
+    const stateFile = join(dir, "state.json");
+    try {
+      writeFileSync(stateFile, JSON.stringify({ etapas: {
+        VI: { cases: { pv0: 280, pv1: 280 } },
+        IX: { cases: { pv0: 80, pv1: 80 } },
+      } }));
+      const output = execFileSync(process.execPath, [
+        fileURLToPath(new URL("../src/fase1-runner.mjs", import.meta.url)),
+        "--portal-snapshot", fileURLToPath(new URL("../portal-fase1-20260927.json", import.meta.url)),
+        "--state", stateFile,
+      ], { cwd: dir, encoding: "utf8", env: { PATH: process.env.PATH } });
+      assert.match(output, /sin trafico SOAP/);
+      const current = JSON.parse(readFileSync(stateFile, "utf8"));
+      assert.equal(current.etapas.VI.cases["validacion-ds1-pv0"], 70);
+      const backups = readdirSync(dir).filter((f) => f.startsWith("state.json.pre-portal-"));
+      assert.equal(backups.length, 1);
+      const previous = JSON.parse(readFileSync(join(dir, backups[0]), "utf8"));
+      assert.equal(previous.etapas.VI.cases.pv0, 280);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("un caso controlado envia solo la fila elegida con 500/1000 facturas, sector 17 incluido", async () => {
+    for (const [stage, caseId, expected] of [
+      ["VI", "recepcion-ds17-motivo2-pv1-igual500", 500],
+      ["IX", "recepcion-ds17-pv1-igual1000", 1000],
+    ]) {
+      const r = Object.create(Runner.prototype);
+      r.state = applyPortalSnapshot(emptyState(), portal);
+      r.state.etapas[stage].done = 0;
+      r.state.etapas[stage].attempts = 0;
+      r.state.etapas[stage].blockedCases = {};
+      for (const [id, target] of Object.entries(LOTE_CASE_TARGETS[stage])) r.state.etapas[stage].cases[id] = target;
+      r.state.etapas[stage].cases[caseId] -= 1;
+      r.state.catalogs.eventos = [{ codigoClasificador: 2, descripcion: "INACCESIBILIDAD" }];
+      r.combo = { ...DEFAULT_COMBO };
+      r.caseFilter = caseId;
+      r.log = () => {};
+      r.checkpoint = () => {};
+      r.ensureCufd = async () => {};
+      r.eventWindowNow = () => ({ inicioMs: Date.now() - 120000, finMs: Date.now() - 1000 });
+      r.registrarEvento = async () => ({ ok: true, body: "<codigoRecepcionEventoSignificativo>EV</codigoRecepcionEventoSignificativo>" });
+      r.recepcionBase = (codigoEmision) => ({ codigoAmbiente: 2, codigoDocumentoSector: r.combo.codigoDocumentoSector,
+        codigoEmision, codigoModalidad: 2, codigoPuntoVenta: r.combo.codigoPuntoVenta,
+        codigoSistema: "SIS", codigoSucursal: 0, cufd: "CUFD", cuis: "CUIS", nit: "5371375010", tipoFacturaDocumento: 1 });
+      r.sinNow = () => "2026-09-27T00:00:00.000";
+      const lotes = [];
+      const posts = [];
+      r.buildLote = (count) => {
+        lotes.push({ count, sector: r.combo.codigoDocumentoSector, pv: r.combo.codigoPuntoVenta });
+        return { archivo: "TEST", hashArchivo: "HASH", cantidad: count };
+      };
+      r.post = async (_service, envelope, meta) => {
+        posts.push({ envelope, meta });
+        return { ok: true, parsed: { transaccion: true, codigoRecepcion: "REC" } };
+      };
+      if (stage === "VI") await r.etapaVI();
+      else await r.etapaIX();
+      assert.deepEqual(lotes, [{ count: expected, sector: 17, pv: 1 }]);
+      assert.equal(posts.length, 1);
+      assert.match(posts[0].envelope, new RegExp(`<cantidadFacturas>${expected}</cantidadFacturas>`));
+      assert.equal(r.state.etapas[stage].cases[caseId], 10);
+      assert.deepEqual(r.state.recepcionesLote[stage]["validacion-ds17-pv1"], ["REC"]);
+    }
+  });
+
+  it("el lote real del sector 17 incluye XML de hospital con campos medicos y CAFC", () => {
+    const r = Object.create(Runner.prototype);
+    r.nit = "5371375010";
+    r.state = emptyState();
+    r.state.numeroFactura = 1;
+    r.state.cufdByPv["1"] = { codigo: "CUFD", codigoControl: "AB-12" };
+    r.state.catalogs = {
+      productos: [{ codigoProducto: 1, codigoActividad: "620100", descripcionProducto: "Software" }],
+      leyendas: [{ codigoActividad: "620100", descripcionLeyenda: "Ley 453" }],
+      unidadesMedida: [{ codigoClasificador: 58 }],
+      metodosPago: [{ codigoClasificador: 1 }],
+      tiposDocIdentidad: [{ codigoClasificador: 5, descripcion: "NIT" }],
+    };
+    r.combo = { ...DEFAULT_COMBO, codigoDocumentoSector: 17, codigoPuntoVenta: 1 };
+    r.sinNow = () => "2026-09-27T00:00:00.000";
+    const lote = r.buildLote(2, { tipoEmision: 2, baseIndex: 0, cafc: "CAFC-TEST" });
+    const tar = gunzipSync(Buffer.from(lote.archivo, "base64")).toString("utf8");
+    assert.equal(lote.cantidad, 2);
+    assert.equal((tar.match(/<cabecera>/g) ?? []).length, 2);
+    assert.match(tar, /<nroQuirofanoSalaOperaciones>1<\/nroQuirofanoSalaOperaciones>/);
+    assert.match(tar, /<nombreApellidoMedico>MEDICO DE PRUEBAS<\/nombreApellidoMedico>/);
+    assert.match(tar, /<cafc>CAFC-TEST<\/cafc>/);
+  });
+
+  it("validacion solo cuenta 908 VALIDADA y conserva el recibo para reintento", async () => {
+    const r = Object.create(Runner.prototype);
+    r.state = emptyState();
+    r.state.recepcionesLote.IX["validacion-ds17-pv1"] = ["REC"];
+    r.state.etapas.IX = { done: 0, attempts: 0, cases: {}, blockedCases: {}, portalReconciledAt: portal.readAt };
+    r.combo = { ...DEFAULT_COMBO, codigoDocumentoSector: 17, codigoPuntoVenta: 1 };
+    r.ensureCufd = async () => {};
+    r.recepcionBase = (codigoEmision) => ({ codigoAmbiente: 2, codigoDocumentoSector: 17,
+      codigoEmision, codigoModalidad: 2, codigoPuntoVenta: 1, codigoSistema: "SIS",
+      codigoSucursal: 0, cufd: "CUFD", cuis: "CUIS", nit: "5371375010", tipoFacturaDocumento: 1 });
+    r.log = () => {};
+    r.checkpoint = () => {};
+    let calls = 0;
+    r.post = async () => ({ ok: true, parsed: { transaccion: true, codigoEstado: ++calls === 1 ? 902 : 908 } });
+    await r.loop("IX", 1, (done) => r.validarRecepcion("IX", "validacion-ds17-pv1", done, "validacionRecepcionMasivaFactura"), { caseId: "validacion-ds17-pv1" });
+    assert.equal(calls, 2);
+    assert.equal(r.state.etapas.IX.cases["validacion-ds17-pv1"], 1);
+  });
+
+  it("retoma una fila parcialmente validada con los recibos NUEVOS y conserva el indice al reiniciar", async () => {
+    const key = "validacion-ds17-pv1";
+    const partial = structuredClone(portal);
+    partial.IX.cases[key] = 5;
+    partial.IX.totalCorrectos += 5;
+    const r = Object.create(Runner.prototype);
+    r.state = applyPortalSnapshot(emptyState(), partial);
+    r.combo = { ...DEFAULT_COMBO, codigoDocumentoSector: 17, codigoPuntoVenta: 1 };
+    r.ensureCufd = async () => {};
+    r.recepcionBase = (codigoEmision) => ({ codigoAmbiente: 2, codigoDocumentoSector: 17,
+      codigoEmision, codigoModalidad: 2, codigoPuntoVenta: 1, codigoSistema: "SIS",
+      codigoSucursal: 0, cufd: "CUFD", cuis: "CUIS", nit: "5371375010", tipoFacturaDocumento: 1 });
+    r.log = () => {};
+    r.checkpoint = () => {};
+    const sent = [];
+    r.post = async (_service, envelope) => {
+      sent.push(envelope.match(/<codigoRecepcion>(.*?)<\/codigoRecepcion>/)?.[1]);
+      return { ok: true, parsed: { transaccion: true, codigoEstado: 908 } };
+    };
+    for (const codigoRecepcion of ["NUEVO-1", "NUEVO-2"]) {
+      r.guardarRecepcion("IX", key, { ok: true, parsed: { transaccion: true, codigoRecepcion } });
+    }
+    await r.loop("IX", 6, (done) => r.validarRecepcion("IX", key, done, "validacionRecepcionMasivaFactura"), { caseId: key });
+    r.state = migrateState(JSON.parse(JSON.stringify(r.state)));
+    await r.loop("IX", 7, (done) => r.validarRecepcion("IX", key, done, "validacionRecepcionMasivaFactura"), { caseId: key });
+    assert.deepEqual(sent, ["NUEVO-1", "NUEVO-2"]);
+    assert.equal(r.state.etapas.IX.cases[key], 7);
+    assert.equal(r.state.etapas.IX.attempts, 2);
+  });
+
+  it("un snapshot en cero sustituye el contador global legado y conserva recibos antiguos solo como auditoria", () => {
+    const state = emptyState();
+    state.etapas.VI = { done: 560, cases: {}, attempts: 560 };
+    state.recepcionesLote.VI["validacion-ds17-pv1"] = ["LEGADO"];
+    const r = Object.create(Runner.prototype);
+    r.state = applyPortalSnapshot(state, { ...portal, VI: { totalCorrectos: 0, cases: {} } });
+    assert.equal(r.summary().etapas.find((e) => e.etapa === "VI").hechas, 0);
+    assert.deepEqual(r.state.recepcionesLote.VI, {});
+    assert.deepEqual(r.state.legacyRecepcionesLote.VI["validacion-ds17-pv1"], ["LEGADO"]);
+    assert.deepEqual(state.recepcionesLote.VI["validacion-ds17-pv1"], ["LEGADO"]);
+  });
+
+  it("un case de validacion con count 1 no multiplica la meta por motivos o tamanos", async () => {
+    for (const stage of ["VI", "IX"]) {
+      const r = Object.create(Runner.prototype);
+      r.state = applyPortalSnapshot(emptyState(), portal);
+      r.combo = { ...DEFAULT_COMBO };
+      r.caseFilter = "validacion-ds17-pv1";
+      r.log = () => {};
+      r.checkpoint = () => {};
+      let calls = 0;
+      r.validarRecepcion = async () => {
+        calls += 1;
+        return { ok: true, parsed: { transaccion: true, codigoEstado: 908 } };
+      };
+      await r.runStage(stage, 1);
+      await r.runStage(stage, 1); // meta acumulada: retomar no repite lo terminado
+      assert.equal(calls, 1, stage);
+      assert.equal(r.state.etapas[stage].cases[r.caseFilter], 1);
+    }
   });
 });
 
@@ -696,6 +929,34 @@ describe("--solo-informe: leer el avance sin tocar al SIN ni pedir credenciales"
       const viii = informe.etapas.find((r) => r.etapa === "VIII");
       assert.equal(viii.corrio, false, "el informe tiene que NOMBRAR la etapa que falta");
       assert.equal(readFileSync(stateFile, "utf8"), antes, "un informe no escribe el checkpoint");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("sin --etapa aborta antes de credenciales, checkpoint y SOAP, incluso con --retry-blocked", () => {
+    const dir = mkdtempSync(join(tmpdir(), "fase1-sin-etapa-"));
+    const stateFile = join(dir, "state.json");
+    const original = JSON.stringify({ etapas: { VI: { cases: { pv0: 280 }, blockedCases: { pv0: { key: "viejo" } } } } });
+    writeFileSync(stateFile, original, "utf8");
+    try {
+      for (const extras of [[], ["--retry-blocked"]]) {
+        let fallo = null;
+        try {
+          execFileSync(process.execPath, [RUNNER_CLI, "--state", stateFile, ...extras], {
+            encoding: "utf8",
+            env: { PATH: process.env.PATH },
+          });
+        } catch (err) {
+          fallo = err;
+        }
+        assert.ok(fallo);
+        assert.equal(fallo.status, 1);
+        assert.match(fallo.stderr, /requiere --etapa explicita/);
+        assert.doesNotMatch(fallo.stderr, /faltan SIAT_PILOT_TOKEN/);
+        assert.equal(readFileSync(stateFile, "utf8"), original);
+        assert.deepEqual(readdirSync(dir), ["state.json"]);
+      }
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -1290,6 +1551,8 @@ describe("el CUFD se renueva en TODAS las etapas que lo usan, no solo en las que
     r.pace = 0;
     r.state = emptyState();
     r.state.numeroFactura = 0;
+    r.state.etapas.VI = { done: 0, attempts: 0, cases: {}, blockedCases: {}, portalReconciledAt: "2026-09-27" };
+    r.state.etapas.IX = { done: 0, attempts: 0, cases: {}, blockedCases: {}, portalReconciledAt: "2026-09-27" };
     r.state.catalogs = {
       productos: [{ codigoProducto: 1, codigoActividad: "620100", descripcionProducto: "Software" }],
       leyendas: [{ codigoActividad: "620100", descripcionLeyenda: "Ley 453" }],
@@ -1304,6 +1567,7 @@ describe("el CUFD se renueva en TODAS las etapas que lo usan, no solo en las que
     r.vistos = [];
     r.log = () => {};
     r.checkpoint = () => {};
+    r.buildLote = (cantidad) => ({ archivo: "TEST", hashArchivo: "HASH", cantidad });
     const vencido = Date.now() - CUFD_VIGENCIA_MS - 60_000;
     for (const pv of PUNTOS_VENTA) {
       r.state.cuisByPv[String(pv)] = `CUIS-${pv}`;
@@ -1351,6 +1615,7 @@ describe("el CUFD se renueva en TODAS las etapas que lo usan, no solo en las que
 
   it("la etapa IX (masiva) renueva el CUFD vencido antes de mandar el lote", async () => {
     const r = runnerCufdVencido();
+    r.caseFilter = masivaCaseId(MASIVA_CASES[0]);
     await r.etapaIX(1);
     assert.equal(
       primeraOpDe(r.vistos, "IX"),
@@ -1368,6 +1633,7 @@ describe("el CUFD se renueva en TODAS las etapas que lo usan, no solo en las que
    */
   it("la etapa VI (paquetes) renueva el CUFD vencido antes de registrar el evento", async () => {
     const r = runnerCufdVencido();
+    r.caseFilter = paqueteCaseId(PAQUETE_CASES.find((c) => c.motivo === 2));
     const orden = [];
     const realEnsure = Runner.prototype.ensureCufd.bind(r);
     r.ensureCufd = async () => {
@@ -1468,107 +1734,23 @@ describe("un prerequisito TRANSITORIO no se bloquea para siempre", () => {
   });
 });
 
-describe("run-fase1-volumen.sh corre TODAS las etapas del plan", () => {
-  // Por que existe este gate, con su costo medido:
-  //
-  // El script orquestador tipeaba su propia lista de etapas ("for E in IV VII XI").
-  // Eso es una lista de INCLUSION escrita a mano al lado de STAGE_ORDER, que es la
-  // fuente real — y una lista asi solo cubre los casos que YA fallaron: ninguna
-  // etapa nueva nace cubierta.
-  //
-  // Ya costo un mes: cuando ensureCufd() se cableo en IV, VII y XI, las etapas VI y
-  // IX quedaron clavadas en 20 desde el 6-ago y NADA se puso rojo, porque el
-  // instrumento corria justo las tres que ya estaban sanas.
-  //
-  // Y el 2026-09-10 se midio la segunda mitad del mismo defecto, todavia viva: la
-  // lista omitia la etapa I, que es la que pide el CUIS por punto de venta. O sea
-  // que el dia que exista el Punto de Venta 1, correr este script NO lo desbloquea:
-  // los 11 combos pv1 (1.169 documentos de cobertura) seguirian cayendo con
-  // "sin CUIS para el punto de venta 1: correr la etapa I antes".
-  //
-  // La invariante no es "que esten estas etapas" (eso seria la misma lista de
-  // nuevo, un archivo mas alla): es que el script DERIVE las etapas del runner.
-  const script = readFileSync(
-    new URL("../run-fase1-volumen.sh", import.meta.url),
-    "utf8",
-  );
-  // El shell no tiene comentarios de bloque: se filtran por linea, si no la
-  // bitacora que explica el defecto absuelve al gate que lo persigue.
-  const codigo = script
-    .split("\n")
-    .filter((l) => !l.trimStart().startsWith("#"))
-    .join("\n");
-
-  it("no tipea la lista de etapas a mano", () => {
-    const aMano = codigo.match(/for\s+\w+\s+in\s+([IVX][IVX\s]*)\s*;?\s*do/);
-    assert.equal(
-      aMano,
-      null,
-      `run-fase1-volumen.sh tipea sus etapas ("${aMano?.[1].trim()}") en vez de ` +
-        `derivarlas de STAGE_ORDER. Una lista a mano se desincroniza en silencio: ` +
-        `hoy STAGE_ORDER tiene ${STAGE_ORDER.length} etapas.`,
-    );
-  });
-
-  it("deriva las etapas del runner, que es la fuente", () => {
-    assert.match(
-      codigo,
-      /STAGE_ORDER/,
-      "el script tiene que pedirle las etapas al runner (STAGE_ORDER), no repetirlas",
-    );
-  });
-
-  it("corre la etapa I, que es la que desbloquea un punto de venta nuevo", () => {
-    // Sin CUIS por PdV, TODO combo de ese punto de venta queda bloqueado.
-    //
-    // Este caso EJECUTA la derivacion del script, no la lee. La primera version
-    // resolvia por texto ("si nombra STAGE_ORDER, entonces corre STAGE_ORDER") y
-    // era TAUTOLOGICA: comparaba la fuente contra si misma, asi que un script que
-    // derivara filtrando la I (.filter(s => s !== "I")) pasaba en VERDE. Se vio
-    // mutando DESPUES de arreglar, nunca antes.
-    const etapas = etapasQueCorreElScript(codigo);
-    assert.ok(
-      etapas.includes("I"),
-      `las etapas que el script REALMENTE corre (${etapas.join(" ")}) no incluyen ` +
-        `la I: un punto de venta nuevo se quedaria sin CUIS y todos sus combos ` +
-        `bloqueados`,
-    );
-    assert.deepEqual(etapas, STAGE_ORDER);
-  });
-});
-
-/**
- * Que etapas termina corriendo el script, DE VERDAD: se le extrae el `node -e` y
- * se lo corre contra los modulos reales, en un cwd que imita el layout del VPS
- * (emisor/src/). Si no deriva, se cae a leer la lista que tipeo.
- *
- * Ejecutar es el punto: cualquier atajo que resuelva por texto vuelve el caso
- * tautologico y lo deja pasando en verde sobre un script recortado.
- */
-function etapasQueCorreElScript(codigo) {
-  const expr = codigo.match(/node -e "([\s\S]*?)"\s*\)/);
-  if (!expr) {
-    const m = codigo.match(/for\s+\w+\s+in\s+([IVX][IVX\s]*)\s*;?\s*do/);
-    return m ? m[1].trim().split(/\s+/) : [];
-  }
-  // El shell expande sus variables antes de que node vea el codigo: si no se
-  // hace lo mismo aca, `$RUNNER` llega literal y el caso falla por el motivo
-  // equivocado (que se lee como el defecto, y manda a arreglar un script sano).
-  const runner = codigo.match(/^RUNNER=(\S+)/m);
-  assert.ok(runner, "no encontre la asignacion RUNNER= en el script");
-  const rutaRunner = join("emisor/src", runner[1].split("/").pop());
-  const codigoNode = expr[1].replaceAll("$RUNNER", rutaRunner);
-
-  const dir = mkdtempSync(join(tmpdir(), "siat-etapas-"));
-  try {
-    mkdirSync(join(dir, "emisor"), { recursive: true });
-    symlinkSync(fileURLToPath(new URL("../src", import.meta.url)), join(dir, "emisor/src"));
-    const salida = execFileSync(process.execPath, ["-e", codigoNode], {
-      cwd: dir,
-      encoding: "utf8",
+describe("los wrappers historicos abortan antes de leer credenciales o enviar SOAP", () => {
+  for (const name of ["run-fase1-volumen.sh", "run-fase1-pdv1.sh"]) {
+    it(`${name} queda retirado y solo orienta a un caso explicito`, () => {
+      const script = fileURLToPath(new URL(`../${name}`, import.meta.url));
+      const commands = readFileSync(script, "utf8").split(/\r?\n/)
+        .map((line) => line.trim()).filter((line) => line && !line.startsWith("#"));
+      // Revisar antes de ejecutar: una version vieja no puede alcanzar /opt ni env.
+      assert.match(commands[0], /^echo "ABORTA:.*retirado/);
+      assert.equal(commands[1], "exit 1");
+      const shell = process.platform === "win32"
+        ? join(process.env.ProgramFiles ?? "C:/Program Files", "Git/bin/bash.exe")
+        : "/bin/sh";
+      assert.throws(() => execFileSync(shell, [script], { encoding: "utf8", stdio: "pipe" }), (error) => {
+        assert.equal(error.status, 1);
+        assert.match(error.stderr, /ABORTA:.*retirado/);
+        return true;
+      });
     });
-    return salida.trim().split(/\s+/).filter(Boolean);
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
   }
-}
+});

@@ -38,7 +38,7 @@ LISTO medible; el estado es del 10-sep y se re-mide, no se hereda:
 | 2 | Recorrido de los 5 rubros | cada rubro cierra su flujo core sin romperse | 🟡 `recorrido-cliente` patrulla diario (hoy 13:12 exit 0) |
 | 3 | Cobro | comprobante → APPROVED → plan activo solo | ✅ probado 10-sep; 12-sep: escalera C (320/550/890/1.290, bot en Full) DESPLEGADA — el checkout valida los montos nuevos |
 | 4 | El plan manda | trial vencido bloquea; topes se cumplen | ✅ modal + topes (`f05b2fc` «el tope que nadie aplicaba») + reservas de cuenta apagada cerradas (`ba2270b`) |
-| 5 | Factura SIAT | la suscripción cobrada emite factura | 🟢 13-sep 03:00: **FASE 1 COMPLETA AL 100 % (checkpoint local): 5.732/5.732** — matriz base 5042/5042 (VI cerró 560/560 en la pasada 3) **+ etapa VIII 690/690 en `908 VALIDADA`** con firma XMLDSig propia (node:crypto, cero deps) y certificado autofirmado con NIT en `serialNumber` — el piloto no valida cadena, medido en vivo (SIN 922/914 como guardas). Wrapper F1.4 desplegado (health verde :8517). Quedan, y son de Sergio: (1) cotejar el marcador del portal (2 min, login suyo); (2) si da 100 %: **solicitar Fase 2 (inspección), pedir VIRTUAL** (15 min); (3) Leslie: certificado de PRODUCCIÓN Bs 70 en solicitud.firmadigital.bo — no bloquea la Fase 1. Guía: `ONIA_SIAT_TU_PARTE_DEL_TRAMITE.md` |
+| 5 | Factura SIAT | la suscripción cobrada emite factura | 🔴 **Fase 1 incompleta** (portal SIN leído 27-sep): **80 % general; VI 150/560, IX 60/160; 510 casos pendientes**. El checkpoint local anterior decía 5.732/5.732, pero contaba respuestas SOAP sin separar los casos del portal. VIII sí quedó validada (690/690). Corregir matriz VI/IX, conciliar checkpoint con el portal y probar primero un caso controlado; solo con 100 % confirmado en portal corresponde pedir Fase 2. Ver `ONIA_SIAT_ESTADO_HOMOLOGACION.md` §4. |
 | 6 | Chatbot atiende solo (web + WhatsApp) | responde, califica y agenda demo | 🟢 12-sep: reinicio-por-vencimiento DESPLEGADO (deploy-bot 16 archivos, backup 224551Z) — las conversaciones viejas reviven; conocimiento con escalera C vivo (951 tests). Los 3 prospectos de agosto: ORDEN de Sergio 12-sep — se escriben SOLO con el chatbot perfeccionado y la 1.0 lista; si no, no |
 | 7 | Panel del dueño estilo Hostinger | pestañas agrupadas y cada sección cierra su flujo | ✅ estructura VIVA (grupos + Primeros pasos + fecha La Paz + 2FA); queda `feat/canal-meta` (App Review = Sergio Urcullo) |
 | 8 | Cero promesas falsas | lo que cada pantalla promete por rubro/plan se abre | 🟡 barridos 8-sep y 9-sep (`e843507` estética/dental) + 10-sep el NOMBRE del plan (`fe6eb65`, gate `nombre-de-plan-a-mano`); el recorrido caza el resto |
@@ -6055,6 +6055,12 @@ y sin operar. Acá se opera, con verificación por ítem.
 
 - [ ] 🔴 **SIAT entra en la v1.0 — decisión de Sergio Urcullo, 2026-09-07: «sin factura no se
       vende». Y el rótulo de este ítem estaba MAL, que es por qué llevaba semanas al final.**
+      **Actualización 2026-09-27:** lectura directa del portal: **EN PRUEBAS, 80 % general,
+      VI 150/560 e IX 60/160**; las otras ocho etapas están al 100 %. Faltan 510 casos.
+      El checkpoint que mostraba 5.732/5.732 no representa las filas de VI/IX.
+      La Fase 1 sigue abierta y no corresponde pedir la Fase 2 todavía. La cronología
+      y los marcadores antiguos de abajo se preservan como historial, no como estado actual.
+
       Este mismo ítem decía *«es un trámite externo, no código»* y *«va último a propósito»*.
       Medido hoy contra `ONIA_SIAT_ESTADO_HOMOLOGACION.md`: lo que falta **no es un trámite**,
       son **5 de 6 tipos de caso sin cubrir**. El NIT está limpio y no bloquea nada.
