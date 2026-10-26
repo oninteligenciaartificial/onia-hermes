@@ -23,6 +23,12 @@
         "3320"
       ],
       "port": 3320
+    },
+    {
+      "name": "hermes-dashboard",
+      "runtimeExecutable": "C:/Users/PC/AppData/Local/hermes/bin/hermes.exe",
+      "runtimeArgs": ["dashboard", "--no-open"],
+      "port": 9119
     }
   ],
   "autoVerify": false
