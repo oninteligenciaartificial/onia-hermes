@@ -33,12 +33,25 @@ Lo que sigue abierto: el `deny` no resuelve alias ni variables, no frena `write_
 `HERMES_WRITE_SAFE_ROOT`) y no se sabe si lo heredan los hijos.
 
 **Qué quedó EN PRODUCCIÓN**
-Nada. No se cambió ni la config de Hermes ni la de Orca ni ningún archivo de reglas.
+Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
+- Reglas globales: se mantienen las 6 que tocó Hermes; tres perfiles token-eficiente y el README pasaron a
+  `~/.claude/rules-archivo/20261026`; las reglas web cargan solo con archivos de interfaz.
+- Se archivaron 15 skills personales viejas en `~/.claude/skills-archivadas-20261026`.
+- Se borraron 178 ramas locales ya mergeadas. Los nombres y los SHA están en
+  `E:/respaldo-ramas-mergeadas-20261026.txt`, por si hay que recrearlas.
 
 **Qué quedó a medias, y dónde**
-- Nada de esta sesión. Rama `claude/hermes-orca-config-b2d5eb` (worktree `onia-madre-v2-pr-review-2d85bb`) con la auditoría, este handoff y la skill `orca` actualizada.
-- **Lo que está en vuelo y es de Hermes, no nuestro:** en el checkout principal `C:/dev/proyectos/onia-hermes` (rama `main`) hay 51 cambios sin commitear. Entre ellos están AGENTS.md (9.929 B; en origin/main pesa 17.995 B), CLAUDE.md, COORDINATION_MANIFEST, EXECUTION_PROTOCOL y 5 skills que Hermes reescribió el 25-oct, y el hook Stop de autosync borrado. **Si alguien hace `git checkout -- .` o `git stash` ahí, se pierde.** Los originales están en `%LOCALAPPDATA%\hermes\backups\depuracion-instrucciones-20261025-102255` (con `manifest.json`).
-- Reglas globales de Claude reescritas por Hermes el 25-oct 11:00, fuera de Git: `~/.claude/rules/common/{agents,code-review,testing,git-workflow,development-workflow,performance}.md`. Los originales están en el mismo respaldo, como `global-rule-*.md`.
+- PR [#269](https://github.com/oninteligenciaartificial/onia-hermes/pull/269) en borrador (rama
+  `claude/hermes-orca-config-b2d5eb`). No se mergea hasta correr el paso 0.
+- **Checkout principal (paso 0).** Sus 116 cambios, incluida la reescritura de Hermes, están en
+  `rescate/checkout-principal-20261026`, pusheada y verificada archivo por archivo. Pero el checkout sigue sucio:
+  la revisión de seguridad no dejó borrar desde la sesión. Lo limpia `E:\onia-wt\limpiar-checkout-principal.ps1`.
+  Si alguien hace `git checkout -- .` antes, no se pierde nada: está en esa rama.
+- **Worktrees.** El trabajo sin commitear de otros 13 está en ramas `rescate/<carpeta>-20261026`, pusheadas, y las
+  11 ramas que solo existían en la PC, en `E:/respaldo-ramas-solo-locales-20261026.bundle`. Los saca, y mueve a E:
+  las 41 huérfanas, `E:\onia-wt\limpiar-worktrees.ps1`.
+  - `onia-hermes-contenido` no se rescató: tiene clips de Lucía de más de 5 MB. No lo toca ningún script.
+- Hermes, Codex y el VPS siguen sin configurar: van con `aplicar.ps1` después del merge (`ONIA_HARNESS.md` §7).
 
 **Archivos y cambios**
 - Home de Hermes: `C:/Users/PC/AppData/Local/hermes` (config.yaml, SOUL.md de fábrica, memories/USER.md, skills/onia con 2 skills creadas por él). `C:/Users/PC/.hermes` lo escribe Orca y Hermes no lo lee.
@@ -57,7 +70,10 @@ Nada. No se cambió ni la config de Hermes ni la de Orca ni ningún archivo de r
    frena ese despacho desde una sesión).
 3. Orca: Hermes ya no corre ahí y Orchestration queda apagado (sale de la decisión 2). Falta Workspace Directory en
    E:, la telemetría apagada y la regla de firewall del puerto 6768 solo en el perfil Privado.
-4. Mantener o revertir las 6 reglas globales y `~/.codex/config.toml` que tocó Hermes.
+4. ~~Reglas globales y `~/.codex/config.toml`~~: se mantienen (26-oct). Lo de Hermes era mejor que lo anterior.
+7. Correr los dos scripts de limpieza de `E:\onia-wt\`, mergear #269 y correr `aplicar.ps1` con Hermes cerrado.
+8. Cerrar el PR #226 (reemplazado por #269): la sesión no tiene permiso para escribir en GitHub.
+9. Sacar del autosync la excepción del integrador apagado (`scripts/git-autosync.js:43`), en un PR propio con su prueba.
 5. La protección de la rama `main` en GitHub. Medido el 26-oct: en un repo privado del plan gratis la API responde
    «Upgrade to GitHub Pro». Es un gasto, así que lo decide él; mientras tanto, la barrera es local.
 6. Cerrar una de las dos TUI.
