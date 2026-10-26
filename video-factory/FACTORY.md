@@ -38,4 +38,4 @@ reemplazable.
 - onia: gate de brief + costo + identidad; no publicable.
 - sergio: gate de brief + costo + identidad; no publicable.
 
-Ver `../hermes-content/docs/VIDEO_FACTORY_DESIGN.md` para el diseño completo.
+Ver `../hermes-content/docs/historial/VIDEO_FACTORY_DESIGN.md` para el diseño completo.

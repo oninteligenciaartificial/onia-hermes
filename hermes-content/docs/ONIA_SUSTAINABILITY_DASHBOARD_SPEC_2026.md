@@ -553,7 +553,7 @@ recuperar capital Sergio/ONIA.
 Referencia canonica:
 
 ```text
-hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md
+hermes-content/docs/historial/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md
 ```
 
 ## Decisiones para llevar al dashboard

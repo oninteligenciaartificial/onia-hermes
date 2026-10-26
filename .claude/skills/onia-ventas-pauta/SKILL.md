@@ -304,7 +304,7 @@ Trampas pagadas armando v3 (2-oct):
 
 - **Dónde están:** `hermes-content/research/competencia/anuncios/<anunciante>/` + `CAPTURAS-HECHAS.md` (18 de 22,
   capturados por la madre desde la PC el 1-oct). La nube no abre `facebook.com`: un pedido nuevo de capturas se le
-  manda a la madre con la lista de id (`PEDIDO-CAPTURAS.md` es el formato).
+  manda a la madre con la lista de id (`hermes-content/docs/historial/research/competencia/PEDIDO-CAPTURAS.md` es el formato).
 - **La única señal de rendimiento pública es la antigüedad.** `grep -o 'En circulación desde[^\n]*' */*.txt`: lo que
   pasa ~6 semanas al aire sin cortarse le rinde a quien lo paga; lo que tiene horas no prueba nada, por prolijo
   que se vea. **Se aprende de los que sobreviven, no de los más nuevos ni de los más lindos.**

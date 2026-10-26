@@ -7,7 +7,7 @@
 
 
 > **Doc canonico de la identidad Onia.** Blanco, negro y verde. Minimalista, agencia seria.
-> Supersede a `ONIA_BRAND_2026.md` (v1, queda de archivo) y **reconcilia** el conflicto con
+> Supersede a `hermes-content/docs/historial/web-factory/ONIA_BRAND_2026.md` (v1, queda de archivo) y **reconcilia** el conflicto con
 > `ONIA_LOGO_SPEC_20260726.md` (ver §1.4). Los tokens de §5 son los que estan VIVOS en
 > `web-factory/apps/onia-platform/src/app/globals.css` — doc y codigo dicen lo mismo.
 >

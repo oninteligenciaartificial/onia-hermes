@@ -43,7 +43,7 @@ ningún add-on se entrega hoy sin horas de Sergio Urcullo.
 **Qué existe hoy.**
 - ✔ **`onia.com.bo/servicios/webs` responde 200** con el configurador: *Landing de Captación Bs 2.000 · Web Profesional Bs 4.500 · Web Pro Onia
   «lo vemos en una llamada»*, **Cuidado Web Bs 190 / 390 / 690 al mes**, registro de contactos en CRM/n8n con setup de Bs 790. Pago 50/50.
-- El motor `web-factory` está **construido sin probar de punta a punta:** *«Sitio generado → publicado: NO EXISTE»* (publicar es manual, `handoff/web-creator.md` §5b).
+- El motor `web-factory` está **construido sin probar de punta a punta:** *«Sitio generado → publicado: NO EXISTE»* (publicar es manual, `historial/handoff/web-creator.md` §5b).
   **0 pagos:** solo propuestas (AW Climatización, BENCH) y demos de ejemplo. Entregar cuesta 4-6 h (landing) o 1,5-2 días (profesional) de Sergio Urcullo
   (`ONIA_WEB_COMO_SE_VENDE.md` §3-4).
 - **Dos listas de precio vivas:** 790 / 1.500 / 2.900 en `ONIA_WEB_COMO_SE_VENDE.md` §5 y `ONIA_CATALOGO_DE_IDEAS.md`, contra 2.000 / 4.500 en la web.
@@ -83,7 +83,7 @@ y un solo layout por bloque (límites del motor, §8.5). *Sergio Urcullo:* decid
 
 ## 4. Consultorías — solo la «Puesta en marcha» es add-on
 
-**Qué existe.** Solo documento: `ONIA_CONSULTING_SERVICES_2026.md` trae un tarifario de Bs 250 a 9.500; `ONIA_PRICING_2026.md` lo llama *«referencia histórica, no un tarifario»*.
+**Qué existe.** Solo documento: `historial/ONIA_CONSULTING_SERVICES_2026.md` trae un tarifario de Bs 250 a 9.500; `historial/ONIA_PRICING_2026.md` lo llama *«referencia histórica, no un tarifario»*.
 Hoy **las asesorías van gratis** (3 por semana de 20 min). ✔ **`/servicios/consultoria` redirige a la portada** en producción: la página existe en el código pero está apagada. **0 cobrados.**
 
 **Quién lo vende.** Bolivia **no publica tarifa por hora.** Lo que sí se publica son suscripciones de bot: ✔ Xmart Cloud **Bs 349/mes** (API de WhatsApp; citas +Bs 149, API propia +Bs 299, facturación desde Bs 990; releído hoy), Chicha Bs 199 / 399 / 799 (P).
@@ -170,7 +170,7 @@ para mantenerlo hay que sostener ≥ 500 llamadas exitosas cada 15 días con < 1
 **Reglas y riesgos.** Meta (P, 1-jun-2026): etiqueta *«AI info»* si el anuncio usa su IA, y un humano fotorrealista generado lleva etiqueta junto a «Sponsored». En salud, un presentador IA **no puede hacerse pasar por paciente ni odontólogo** (`CLAUDE.md`).
 **Rendimiento (con cautela):** Taboola midió CTR 0,76 % con IA contra 0,65 % con humano, pero **no eran avatares**; Ipsos/Syracuse, con 3.000 consumidores, vio +14 % en ventas de corto plazo para los anuncios humanos.
 
-**Test.** ❌ **la 1** (el cliente de la plataforma no compra influencers) · ❌ **la 2** (funciona solo) · ❌ **la 3** («el 80 % del valor es el operador», `ONIA_ADDON_CONTENIDO.md`) → **otro producto entero** (§10). **La única forma que pasa** es *«creativos con presentador IA para SU pauta»*,
+**Test.** ❌ **la 1** (el cliente de la plataforma no compra influencers) · ❌ **la 2** (funciona solo) · ❌ **la 3** («el 80 % del valor es el operador», `historial/ONIA_ADDON_CONTENIDO.md`) → **otro producto entero** (§10). **La única forma que pasa** es *«creativos con presentador IA para SU pauta»*,
 que es un insumo del add-on de campañas (§6), a USD 30-70 por pieza *(est.)*, sin influencer propia.
 
 **Esfuerzo.** *Sergio Urcullo y Marca* (operador); *Higgsfield* solo con costo cotizado (`CLAUDE.md`).

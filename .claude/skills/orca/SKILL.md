@@ -10,7 +10,8 @@ Medido el 16-oct-2026 (docs oficiales onorca.dev + instalación de la PC, solo l
 ## Qué es
 - ADE de Stably AI, gratis y MIT. Corre Claude Code, Codex y ~27 CLI más, **cada tarea en su worktree**.
 - Usa las suscripciones que ya están logueadas en la PC. No vende nube.
-- Instalado: `C:/Users/PC/AppData/Local/Programs/orca` (v1.4.224; la última era 1.4.227 el 16-oct).
+- Instalado: `C:/Users/PC/AppData/Local/Programs/orca` (v1.4.240, medido el 26-oct en `resources/app.asar`;
+  el 16-oct era la 1.4.224).
   Estado en `C:/Users/PC/AppData/Roaming/orca`. CLI fuera del PATH: `resources/bin/orca.exe`.
 
 ## Qué ve y qué NO
@@ -32,16 +33,27 @@ Medido el 16-oct-2026 (docs oficiales onorca.dev + instalación de la PC, solo l
 ## Ajustes a corregir (cada uno con el OK de Sergio Urcullo)
 1. **Lanza sin permisos:** `claude --dangerously-skip-permissions` y
    `codex --dangerously-bypass-approvals-and-sandbox` por defecto. Choca con la regla global
-   «nunca dangerously-skip-permissions».
+   «nunca dangerously-skip-permissions». En la v1.4.240 se corrige en Settings → Agents → Agent
+   permissions (Manual / Auto / Yolo), no editando los argumentos.
 2. **Worktrees en C:** (~6 GB cada uno; C: al 97 %). Settings > General > Workspace >
    Workspace Directory → E:. Afecta solo a los nuevos.
 3. **Clon huérfano** `C:/Users/PC/orca/onia-hermes` (8,1 GB, índice git vacío, no registrado en Orca).
 4. Telemetría anónima encendida (Settings > Privacy). Actualizar es instalar: pide OK.
 
 ## No hacer
-- No activar Settings > Experimental > Orchestration, Cloud VM ni `orca serve`: sería un segundo
-  orquestador o infraestructura remota nueva. La madre es una sola.
+- No activar Orchestration, Cloud VM ni `orca serve`: sería un segundo orquestador o infraestructura remota
+  nueva. En la v1.4.240 Orchestration está en Settings → Orchestration (Agent Orchestration y Orchestration skill),
+  no en Experimental como dice todavía la doc web (corregido el 26-oct). Aunque se dé por apagado, la corrida
+  `run_66e1d03c2397` sigue en `%APPDATA%/orca/orchestration.db`.
 - No borrar `ponyfish` (lo maneja Orca) con `git worktree remove`: se borra desde Orca.
 - Las capturas de computer-use salen negras con la ventana de Orca: se aprende por la doc y por la CLI.
 
-Relacionado: skill `onia-sesion-madre` (la madre), proyecto «ONIA · Hermes» en claude.ai/code (madre en la nube).
+## Hermes dentro de Orca (medido el 26-oct-2026)
+- **Orca lanza `hermes --tui --yolo`** con `Set-Location C:/dev/proyectos/onia-hermes`, es decir, en el checkout de `main` y no en un worktree. Sin approvals: `--yolo` solo respeta `approvals.deny` y la lista fija.
+- **Home desdoblada:** en Windows nativo Hermes usa `%LOCALAPPDATA%\hermes` (`hermes_constants.py:51-58`). Orca le pone el plugin `orca-status` en `C:/Users/PC/.hermes`, que Hermes no lee: Orca no recibe su estado.
+- **Hermes lee UN solo archivo de proyecto** (`.hermes.md` → `AGENTS.override.md` → `AGENTS.md` → `CLAUDE.md`): con AGENTS.md en la raíz, el CLAUDE.md de la raíz nunca entra (el de una subcarpeta sí, si no tiene AGENTS.md). No carga `~/.claude/**` ni `.claude/skills` como contexto (sus herramientas sí pueden leer y escribir ahí); para las skills hace falta `skills.external_dirs`, que es ESCRIBIBLE: primero `skills.write_approval: true`.
+- **El portal** es `hermes dashboard --no-open` → `127.0.0.1:9119` (entrada `hermes-dashboard` en `.claude/launch.json`). Sesiones, skills y config se leen en solo lectura desde `/api/*`, con `window.__HERMES_SESSION_TOKEN__`.
+- **Puerto 6768** de Orca: escucha en `0.0.0.0`, con el firewall abierto en el perfil Público.
+- Auditoría completa y plan: `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`; estado: `handoff/hermes-local.md`.
+
+Relacionado: `onia-sesion-madre` (historia: `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`), proyecto «ONIA · Hermes» en claude.ai/code (madre en la nube).

@@ -1,6 +1,6 @@
 # L05 · Lunes: cero llamadas para agendar — instrucción completa (método Santiago)
 
-Una instrucción por video, ejecutada ENTERA. **Receta: `.claude/skills/editor-videos/SKILL.md` § «Reels de Lucía»** (leerla primero). Guion: `hermes-content/docs/cola/lucia-diario/S1-GUIONES.md`
+Una instrucción por video, ejecutada ENTERA. **Receta: `.claude/skills/editor-videos/SKILL.md` § «Reels de Lucía»** (leerla primero). Guion: `hermes-content/docs/historial/cola/lucia-diario/S1-GUIONES.md`
 § L05. R = `/home/user/onia-hermes` · ES = `R/.claude/skills/editor-videos/scripts/` · P = `R/videos/lucia-l05/`.
 
 ## OBJETIVO

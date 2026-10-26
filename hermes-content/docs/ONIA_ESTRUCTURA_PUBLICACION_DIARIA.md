@@ -60,6 +60,6 @@ semana» del 11-sep. Cómo se sostiene sin romperse:
 ⚠️ **El costo real del diario es la edición, no la grabación.** La receta que lo hace
 posible es la de la sesión «edicion» de Codex (14-sep): deck + cara, faster-whisper,
 `edit.py` — documentada en
-[`cola/GUIONES-RODAJE-17-20-SEP.md`](cola/GUIONES-RODAJE-17-20-SEP.md). Si un día el
+[`historial/cola/marca-personal-sep/GUIONES-RODAJE-17-20-SEP.md`](historial/cola/marca-personal-sep/GUIONES-RODAJE-17-20-SEP.md). Si un día el
 largo no llega editado, se publica igual el corto del día y el largo corre un día — la
 serie no se rompe por un día, se rompe por prometer y no cumplir.

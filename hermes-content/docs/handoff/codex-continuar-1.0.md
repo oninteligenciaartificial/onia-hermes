@@ -1,5 +1,7 @@
 # Handoff — la 1.0 de Onia (Codex → Claude, 28/29-sep)
 
+> 🗄️ **Contexto del 29-sep, no reglas (26-oct-2026).** Su cola, sus órdenes de merge y sus reglas de Git ya no valen: el trabajo de la 1.0 se pide como issue `carril:plataforma` y Codex no hace Git (`AGENTS.md` §1 y §6).
+
 > ## 🧭 EMPEZÁ ACÁ (Claude, 30-sep-2026 madrugada) — cierre del día; los bloques de abajo son historia
 >
 > **1. Objetivo.** Publicar la 1.0 usable y vendible (5 rubros) con el OK de Sergio Urcullo, y seguir
@@ -221,7 +223,7 @@
 > `public/correo/onia-logo-banda.png` (`scripts/marca/generar-logo-correo.mjs`),
 > `scripts/gen-app-icons.mjs`; guards `__tests__/lib/email-marca-real.test.ts`,
 > `lib/checkout/medio-de-pago-derivado.test.ts`. hermes: `web-factory/apps/onia-platform/src/content/medio-de-pago.ts`,
-> `docs/research/2026-09-26-web-estructura-yeezy-skims-y-push.md`.
+> `docs/historial/research/2026-09-26-web-estructura-yeezy-skims-y-push.md`.
 >
 > **5. Intentos fallidos y trampas (no repetirlos).**
 > - **Empujar una rama `claude/*` = publicarla** en los DOS repos (`onia-cola.md` líneas 407 y 465 la
@@ -303,7 +305,7 @@
 > (`claude/icono-app-verde-20260926`, `a700b4cb`, respaldo `origin/wip/icono-app-verde-20260926`;
 > ojo: el logo del encabezado móvil y `/book` usan `public/icon.svg` y también pasan al tile verde).
 > Los dos esperan «OK pago» / «OK ícono» en https://claude.ai/artifact/USZ5yuxFc8jpcrSGfuaMWq.
-> Análisis Yeezy/SKIMS + push en la web: `research/2026-09-26-web-estructura-yeezy-skims-y-push.md`
+> Análisis Yeezy/SKIMS + push en la web: `historial/research/2026-09-26-web-estructura-yeezy-skims-y-push.md`
 > (push en la web: NO; propuesta de 7 cambios de estructura, sin aplicar; FAQ 6 «homologación en
 > trámite» = obra en la venta, decide Sergio).
 >

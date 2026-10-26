@@ -20,7 +20,7 @@
 > ⛔ **No es fuente de precios.** Los planes se leen de `onia-platform/lib/subscription-plans.ts`
 > (`DEFAULT_PLAN_AMOUNTS`), los add-ons de `lib/pricing.ts`.
 >
-> **Reemplaza como vigente** a `ONIA_PAUTA_COMPETENCIA_20260815.md` y `ONIA_ADS_CAMPANA_1_LISTA_20260813.md`,
+> **Reemplaza como vigente** a `historial/ONIA_PAUTA_COMPETENCIA_20260815.md` y `historial/ONIA_ADS_CAMPANA_1_LISTA_20260813.md`,
 > que quedan como fotos de agosto. **Medido el 2026-09-30** (Biblioteca de Anuncios de Meta, código de
 > `onia-platform` en `master` `c3b9206` y en la 1.0 sin publicar `wip/v1-integracion-20260928`, fuentes
 > públicas). Las cuatro investigaciones completas, con cada fuente, están en `research/*_20260930.md` (§9).
@@ -82,7 +82,7 @@
 El veredicto completo (y por qué no se borra ningún rubro del producto) vive en
 `ONIA_CLIENTE_IDEAL.md` §6. Acá va lo que lo sostiene desde el lado de la adquisición.
 
-**Tamaño del segmento** [inferencia, dos métodos cruzados — `research/ONIA_MERCADO_COMPETENCIA_BOLIVIA_20260930.md` §1.2]:
+**Tamaño del segmento** [inferencia, dos métodos cruzados — `historial/research/ONIA_MERCADO_COMPETENCIA_BOLIVIA_20260930.md` §1.2]:
 
 - **Método A — estructura del SEDES:** 125 clínicas + 1.812 consultorios dentales registrados en el
   departamento (~2018) × crecimiento a 2026 × no registradas × concentración en la capital → **~110–220**.
@@ -107,7 +107,7 @@ exigente con un rubro y una ciudad): el techo pide sumar estética u otra ciudad
 
 Medido con `ads_library_search` (MCP de Meta Ads, solo lectura pública), país `BO`, el 2026-09-30. Se lee
 el **metadato** (página, fecha, título, moneda); los creativos **no se miraron** porque el proxy de la
-sesión no llega a `facebook.com`. Detalle y los id de cada anuncio: `research/ONIA_BIBLIOTECA_ANUNCIOS_20260930.md`.
+sesión no llega a `facebook.com`. Detalle y los id de cada anuncio: `historial/research/ONIA_BIBLIOTECA_ANUNCIOS_20260930.md`.
 **Los creativos se miraron después** (1-oct, desde la PC, 18 de 22): §2.5.
 
 ### 2.1 Quién le pauta software de clínica a Bolivia
@@ -331,7 +331,7 @@ vigente la decide Sergio Urcullo (`CLAUDE.md` §1); acá solo se deja la cuenta 
 ## 5. La campaña de Meta
 
 Diseño apoyado en el Centro de ayuda de Meta (leído con `ads_get_help_article`) y en la práctica
-documentada; el detalle, con cada fuente, en `research/ONIA_META_ADS_PLAYBOOK_20260930.md`.
+documentada; el detalle, con cada fuente, en `historial/research/ONIA_META_ADS_PLAYBOOK_20260930.md`.
 
 ### 5.1 Clic a WhatsApp, y no formulario ni web
 
@@ -470,7 +470,7 @@ escribió el 25-ago al WhatsApp de Onia y **recibió cero mensajes**. Antes de e
 En dólares **depende del tipo de cambio al que el banco le cobre la tarjeta a la cuenta publicitaria**:
 ~USD 225 al oficial (6,96), ~USD 138 a 11,37 (el que usa el carril Plataforma), ~USD 105 a 15. **Con el
 tipo de cambio real el techo es la mitad de lo que parece**: hay que conocer ese número antes de la prueba.
-Los supuestos del embudo están en `research/ONIA_META_ADS_PLAYBOOK_20260930.md` §4.6.
+Los supuestos del embudo están en `historial/research/ONIA_META_ADS_PLAYBOOK_20260930.md` §4.6.
 
 ### 5.7 Cortar o seguir
 
@@ -818,6 +818,6 @@ grep -n "TRATAMIENTO_A_MEDIAS_DIAS =" lib/onia-core/modules/agents-tratamiento-a
 grep -rn -E "utm_|fbclid|fbq\(" web-factory/apps/onia-platform/src/app/\(sitio\)/
 ```
 
-Investigaciones completas del 2026-09-30: `research/ONIA_MERCADO_COMPETENCIA_BOLIVIA_20260930.md` ·
-`research/ONIA_TENDENCIAS_AGENTES_20260930.md` · `research/ONIA_MARKETPLACE_EVALUACION_20260930.md` ·
-`research/ONIA_META_ADS_PLAYBOOK_20260930.md` · `research/ONIA_BIBLIOTECA_ANUNCIOS_20260930.md`.
+Investigaciones completas del 2026-09-30: `historial/research/ONIA_MERCADO_COMPETENCIA_BOLIVIA_20260930.md` ·
+`historial/research/ONIA_TENDENCIAS_AGENTES_20260930.md` · `historial/research/ONIA_MARKETPLACE_EVALUACION_20260930.md` ·
+`historial/research/ONIA_META_ADS_PLAYBOOK_20260930.md` · `historial/research/ONIA_BIBLIOTECA_ANUNCIOS_20260930.md`.

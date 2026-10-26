@@ -39,6 +39,7 @@ const ROOT_ALLOWLIST = new Set([
   "CONTRIBUTING.md",
   "COORDINATION_MANIFEST.md",
   "CODEX_SKILL_ROUTING.md",
+  "PRODUCT.md", // contexto del skill impeccable: lo busca en el cwd (.claude/skills/impeccable/scripts/context.mjs)
 ]);
 
 const STOPWORDS = new Set(["and", "the", "of", "a", "en", "de", "la", "el", "y"]);

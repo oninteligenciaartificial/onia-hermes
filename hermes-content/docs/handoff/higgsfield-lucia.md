@@ -4,7 +4,7 @@
 > Rama `claude/confident-ramanujan-j79bkq` (sesión en la nube, entorno `Default`). Todo está en
 > `main`: PR oninteligenciaartificial/onia-hermes#42, #43 y #44, integrados por el autosync.
 > Última escritura: **2026-09-30 ~02:50 UTC**, en el cambio de sesión.
-> Reemplaza a `HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
+> Reemplaza a `historial/handoff/HIGGSFIELD-LUCIA-SYSTEM-2026-09-22.md`, que queda como historia.
 
 ## ▶ ESTADO VIGENTE — 5-oct-2026 (cambio de sesión madre; lo de abajo es historia)
 
@@ -186,12 +186,12 @@ verificados y en manos de Sergio Urcullo para el OK.
 
 **Qué quedó hecho (en el repo, no publicado):**
 - **Regla de Sergio Urcullo (1-oct): todo video que sale a redes se edita con `editor-videos`; Higgsfield solo genera el
-  clip.** Está en `higgsfield-generate` (las dos copias), en `HIGGSFIELD_VIDEO_SYSTEM.md` y en `cola/lucia-diario/FLUJO.md`.
+  clip.** Está en `higgsfield-generate` (las dos copias), en `HIGGSFIELD_VIDEO_SYSTEM.md` y en `historial/cola/lucia-diario/FLUJO.md`.
   La receta vive en una sola fuente: `editor-videos/SKILL.md` § «Reels de Lucía».
 - **Receta medida contra Santiago Muñoz y Erik Taveras:** sus últimos videos (TikTok, 19-sep a 1-oct), cuadro por cuadro,
   con crítico. Ficha: `references/video-intake/2026-10-01-santiago-erik-edicion-medida.{md,json}`.
 - **L02, L05 y L08 editados** (`videos/lucia-lNN/`, final en `v4/feed/`, preview 360p mandado a Sergio Urcullo). Un
-  subagente por pieza, dos verificadores y una ronda de arreglo. Guiones: `cola/lucia-diario/S1-GUIONES.md`.
+  subagente por pieza, dos verificadores y una ronda de arreglo. Guiones: `historial/cola/lucia-diario/S1-GUIONES.md`.
   - L08: 10,25 s, −14,1 LUFS, identidad 0,75–0,79. Panel-diagrama (−24 h, −2 h, confirmar/cancelar); remate con
     sello y voz que baja.
   - L05 v3: 6,04 s, sin voz, sello «CERO.».
@@ -367,7 +367,7 @@ siendo la de las 21:25:51 UTC.
 | `hermes-content/references/modelos/lucia/v4/PROCEDENCIA.jsonl` | Cada imagen con job, modelo, seed, método, referencias usadas y costo. Ahora también el puntaje de identidad (filas `qa_identidad`) |
 | `hermes-content/references/modelos/lucia/v4/prompts/dataset-vida.json` | Los 13 prompts del dataset: cambia lo que rodea a la cara, nunca la cara |
 | `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md` §«Verificado en vivo 2026-09-29» (puntos 1–9) | Términos, costos, límites, cómo se consigue la misma cara y **cómo se mide** |
-| `hermes-content/docs/research/INFLUENCER_IA_PIPELINE_PRO_20260929.md` | Nodos contra código (Pletor), operación diaria, etiquetas IA y costos |
+| `hermes-content/docs/historial/research/INFLUENCER_IA_PIPELINE_PRO_20260929.md` | Nodos contra código (Pletor), operación diaria, etiquetas IA y costos |
 
 **Intentos fallidos** (y por qué, para no repetirlos)
 

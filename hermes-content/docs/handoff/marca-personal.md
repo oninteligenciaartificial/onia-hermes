@@ -474,15 +474,15 @@ contesta en el transcript.
 
 **3. A medias y dónde (todo en la rama `claude/marca-personal-contenido-ae658c`, PR #76 abierto en draft):**
 - **2 videos GRABADOS, sin editar** (Sonnet 5.5 = D01-B, «lo cambié un poco»; modo auto = N03, tal cual). Están en la PC.
-  Guía de edición lista: `cola/plan-3-semanas/EDICION-VIDEOS-20261001.md`. Próximo paso: que Sergio Urcullo comparta los
+  Guía de edición lista: `historial/cola/plan-3-semanas/EDICION-VIDEOS-20261001.md`. Próximo paso: que Sergio Urcullo comparta los
   brutos por Drive y editarlos con `editor-videos` (tabla de cortes + preview ANTES de cortar).
 - **Carruseles K2v3, K8v3, K11, K12, K13: NO HECHOS.** El workflow que los hacía se cortó a propósito por el relevo, antes
-  de escribir nada. El script está en `cola/plan-3-semanas/auditoria-20260930/workflow-drops-carruseles-20261001.js`: rehacé
+  de escribir nada. El script está en `historial/cola/plan-3-semanas/auditoria-20260930/workflow-drops-carruseles-20261001.js`: rehacé
   esa fase con esos prompts. K12 ya puede usar «424 commits» (confirmado por la madre).
-- **17 drops escritos, sin enviar:** `cola/drops/2026-10-01-drops-noticias-repos.md`. Incluye drop 2 corregido, drop 14
+- **17 drops escritos, sin enviar:** `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. Incluye drop 2 corregido, drop 14
   corregido, EFFORT, N01–N06 y R01–R07. Pasaron una vuelta de revisor y arreglo, pero no se re-verificaron después del
   arreglo: leelos antes de mandarlos.
-- **Vuelta de la comunidad + reto:** `cola/drops/2026-10-01.md`, sin enviar. Las fechas se corren al día real.
+- **Vuelta de la comunidad + reto:** `historial/cola/drops/2026-10-01.md`, sin enviar. Las fechas se corren al día real.
 - **Programar carruseles:** pedido de Sergio Urcullo («programalos para postear, subido a drive»). Falta: (a) que vea cada
   carrusel y dé el «ok»; (b) re-alinear `CARRUSELES-DIARIOS.md` con el calendario nuevo de videos. Propuesta: vie 2 K10 ·
   sáb 3 K1 (después del reto) · dom 4 K2 · lun 5 K6 · mar 6 K3 · mié 7 K11 · jue 8 K4 · vie 9 K9 · sáb 10 K12 · dom 11 K5 ·
@@ -490,8 +490,8 @@ contesta en el transcript.
   + `agendar-publicacion.sh`. Eso exige la llave del VPS (`ONIA_VPS_SSH_KEY_B64`) o pedírselo a la madre.
 
 **4. Archivos clave:** `cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md` (38 guiones, calendario 1–14 oct, ya con las
-verificaciones de la madre) · `cola/plan-3-semanas/VERIFICACION-LAPTOP-20261001.md` · `auditoria-20260930/LOTE-A…D.md` ·
-`EDICION-VIDEOS-20261001.md` · `cola/drops/` · `carousels/out/sergio-historias-comunidad-20261001/` y
+verificaciones de la madre) · `historial/cola/plan-3-semanas/VERIFICACION-LAPTOP-20261001.md` · `auditoria-20260930/LOTE-A…D.md` ·
+`historial/cola/plan-3-semanas/EDICION-VIDEOS-20261001.md` · `cola/drops/` · `carousels/out/sergio-historias-comunidad-20261001/` y
 `sergio-comunidad-reto-presupuestos-20261001/`.
 
 **5. Intentos fallidos (no repetir):**
@@ -527,17 +527,17 @@ La local arranca con `git pull` de `claude/marca-personal-contenido-ae658c` y le
 - **Guiones de dos semanas, auditados:** `cola/plan-3-semanas/GUIONES-2-SEMANAS-1-14-OCT.md` — 38 piezas, calendario
   jue 1 → mié 14 (tutorial · informativo · caso por día; YouTube sáb 3, mar 6, vie 9, mar 13). Auditoría con qué se
   cambió y por qué: `cola/plan-3-semanas/auditoria-20260930/LOTE-A…D.md`. **Nada grabado todavía.**
-- **Comunidad de WhatsApp:** textos de la vuelta + reto de los presupuestos en `cola/drops/2026-10-01.md`
+- **Comunidad de WhatsApp:** textos de la vuelta + reto de los presupuestos en `historial/cola/drops/2026-10-01.md`
   (con imágenes en `carousels/out/sergio-comunidad-reto-presupuestos-20261001/`). **No enviados.** Las fechas de ese
   archivo (jue 1 / vie 2) se corren al día real en que Sergio Urcullo los mande.
 - **Historias de IG:** `carousels/out/sergio-historias-comunidad-20261001/` (2, con ilustraciones de Higgsfield).
 - **K1** sale en opción B (`carousels/out/sergio-k1-opcion-b-clay-20260929/`), después del reto.
 
-**Lo primero que tiene que hacer la sesión local** (lo que la nube no pudo): `cola/plan-3-semanas/PEDIDO-LAPTOP-20261001.md`.
+**Lo primero que tiene que hacer la sesión local** (lo que la nube no pudo): `historial/cola/plan-3-semanas/PEDIDO-LAPTOP-20261001.md`.
 Lo urgente es la página de precios de WhatsApp de Meta antes de grabar D02-B. Después: OpenAI DevDay, la web
 `sergiourcullo.vercel.app`, gitdiagram, la memoria de los 424 commits y el filtro de n8n.
 
-**1-oct, verificaciones de la madre integradas** (`VERIFICACION-LAPTOP-20261001.md`): D02-B confirmado; S2-D08-C y
+**1-oct, verificaciones de la madre integradas** (`historial/cola/plan-3-semanas/VERIFICACION-LAPTOP-20261001.md`): D02-B confirmado; S2-D08-C y
 su drop 4 corregidos (ventana de anuncios «hasta 7 días», no 72 h); DD-A (GPT-6.1 Sol) entra el vie 2 y N02 pasa al
 dom 4 (R04 al mié 14, G01 a reserva); 424 commits confirmado; n8n hoy 38 activos de 96 (el 44 es del 20-ago).
 **Pendiente que depende de Sergio Urcullo:** la web `sergiourcullo.vercel.app/claude-code` sigue diciendo «3 subagentes»
@@ -593,7 +593,7 @@ Una sola lista. Se toca de a uno, en este orden salvo que Sergio Urcullo diga ot
 
 | # | Punto | Estado | Qué falta |
 |---|---|---|---|
-| 1 | **Vuelta de la comunidad de WhatsApp** (~30 miembros, callada desde el 22-sep) | Mensajes listos en `cola/drops/2026-10-01.md` | Que Sergio Urcullo diga si sostiene audio del domingo y wins del viernes; que los pegue |
+| 1 | **Vuelta de la comunidad de WhatsApp** (~30 miembros, callada desde el 22-sep) | Mensajes listos en `historial/cola/drops/2026-10-01.md` | Que Sergio Urcullo diga si sostiene audio del domingo y wins del viernes; que los pegue |
 | 2 | **Atraer gente a la comunidad** (puerta del curso: 100 miembros) | Aclarado 30-sep: el video de YouTube es público y ADEMÁS se comparte en la comunidad (primero) | Armar el embudo: CTA en cada pieza, link en la bio, palabra clave → DM, invitación de miembros |
 | 3 | **Historias de Instagram** | Sube 2-3/día. Primeras 2 plantillas hechas (`out/sergio-historias-comunidad-20261001`) | Rutina fija de 3; destacado «Comunidad» |
 | 4 | **Perfiles** (IG, TikTok, YouTube, LinkedIn: bio, link, destacados) | Sin auditar | Desde la nube: con capturas que mande Sergio Urcullo. Con Chrome logueado: laptop |
@@ -719,13 +719,13 @@ rescatado en una sola rama.
 - **Guiones para grabar:** [`cola/GUIONES-PARA-GRABAR-2026-09-29.md`](../cola/GUIONES-PARA-GRABAR-2026-09-29.md)
   — 1 YouTube (Opus 5.5 vs Sonnet 5.5) + 9 verticales + 5 ideas POV Ray-Ban + enseñanza.
   **Sin aprobación editorial de Sergio todavía.**
-- **Producción:** [`cola/PRODUCCION-GUIONES-2026-09-29.md`](../cola/PRODUCCION-GUIONES-2026-09-29.md)
+- **Producción:** [`historial/cola/marca-personal-sep/PRODUCCION-GUIONES-2026-09-29.md`](../historial/cola/marca-personal-sep/PRODUCCION-GUIONES-2026-09-29.md)
   — fuentes verificadas el 28-sep, las dos pruebas ejecutadas con sus salidas, pantallas por
   pieza y los 6 drops que tienen que estar en la comunidad ANTES de publicar cada video.
 - **Rescate:** las cuatro ramas de Codex del carril (`codex/marca-comunidad-plan`,
   `codex/marca-sergio-guiones-20260927`, `codex/guiones-referentes-20260928`,
   `codex/guiones-reinicio-20260928`) quedaron mergeadas en esta rama. Conflictos resueltos:
-  `RODAJE-MARCA-PERSONAL-2026-09-27.md` → versión 28-sep (referentes);
+  `historial/cola/marca-personal-sep/RODAJE-MARCA-PERSONAL-2026-09-27.md` → versión 28-sep (referentes);
   `ONIA_MARCA_PERSONAL_TRES_CARRILES.md` → se conservan las decisiones de Sergio del 21-sep
   (pilares, estructura diaria) + el párrafo «el cómo sí va» del 28-sep;
   `COORDINATION_MANIFEST.md` → ambas entradas.
@@ -735,14 +735,14 @@ rescatado en una sola rama.
 - **Nada grabado, nada publicado.** Postiz daba 502 el 27-sep; no se tocó.
 - **Drops de comunidad** (6, en PRODUCCION §Drops): escritos, NO publicados en Announcements.
 - **Carruseles** SERGIO-CAR-01/02/03-V2: listos y verificados por Codex el 27-sep, esperan
-  aprobación: `cola/APROBACION-CARRUSELES-SERGIO-2026-09-27.md`.
+  aprobación: `historial/cola/marca-personal-sep/APROBACION-CARRUSELES-SERGIO-2026-09-27.md`.
 - **Rama `codex/sergio-vault-growth`** (21-sep) NO se mergeó: toca `sitio-sergiourcullo/*` y
   `scripts/carousel_*.js` con tests. Publicar la web es permiso aparte; decidir con Sergio.
-- **Cotizador demo** (`cola/cotizador-tarjetas-demo.html`): falta probar en navegador real.
+- **Cotizador demo** (`historial/cola/marca-personal-sep/cotizador-tarjetas-demo.html`): falta probar en navegador real.
 
 ## 4. Archivos
 
-`cola/GUIONES-PARA-GRABAR-2026-09-29.md` · `cola/PRODUCCION-GUIONES-2026-09-29.md` ·
+`cola/GUIONES-PARA-GRABAR-2026-09-29.md` · `historial/cola/marca-personal-sep/PRODUCCION-GUIONES-2026-09-29.md` ·
 `handoff/marca-personal.md` (este) · assets de Opus: `hermes-content/captures/opus-5-5/`.
 Fuentes de estructura: `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` (reparto 10-13, Samuel hace
 pilar y yap), `ONIA_DONDE_VA_CADA_COSA.md` (Instagram · YouTube · web · Onia Community).
@@ -784,6 +784,6 @@ pilar y yap), `ONIA_DONDE_VA_CADA_COSA.md` (Instagram · YouTube · web · Onia 
 
 ## Historial (no es fuente; se conserva)
 
-`EDICION-MARCA-PERSONAL-2026-09-21.md` · `marca-personal-carruseles.md` ·
-`marca-sergio-guiones-20260927.md` · `REINICIO-GUIONES-2026-09-28.md` ·
-`CONTINUAR-GUIONES-CLAUDE-2026-09-28.md`.
+`historial/handoff/EDICION-MARCA-PERSONAL-2026-09-21.md` · `historial/handoff/marca-personal-carruseles.md` ·
+`historial/handoff/marca-sergio-guiones-20260927.md` · `historial/handoff/REINICIO-GUIONES-2026-09-28.md` ·
+`historial/handoff/CONTINUAR-GUIONES-CLAUDE-2026-09-28.md`.

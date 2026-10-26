@@ -87,7 +87,7 @@ Dashboard local para preparar lotes de prompts de Mara, revisar QA y exportar
 colas para ComfyUI:
 
 ```text
-hermes-content/docs/MARA_POND_VIDEO_LAB_DASHBOARD_2026.html
+hermes-content/docs/historial/MARA_POND_VIDEO_LAB_DASHBOARD_2026.html
 ```
 
 Config canonica:

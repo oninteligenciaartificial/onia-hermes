@@ -12,7 +12,7 @@
 **Lo que cambió:** la ancla (`191be0be`) es un retrato cara-y-hombros de FRENTE, calma,
 manos fuera de cuadro, generado con `nano_banana_pro` + `902eeebb`. Con esa ancla los dos
 modelos quedan bien. **El problema era la ancla, no (solo) el modelo.** Ver regla en
-`VIDEO_MODEL_STACK_DECISION_2026.md`.
+`hermes-content/docs/historial/references/VIDEO_MODEL_STACK_DECISION_2026.md`.
 
 - **Voz (los 3):** ElevenLabs "Lucia-ONIA" `wrXs6GqcC7X03dDKMoeT` → mp3 subido a Higgsfield
   (`2e376e85`) → pasado como `audio_references`. Confirma que wan2_7 Y seedance_2_0_mini
@@ -23,7 +23,7 @@ modelos quedan bien. **El problema era la ancla, no (solo) el modelo.** Ver regl
 - ✅ Ropa: 5 fichas turnaround control (`lucia-fit-*-v2`), sin marca, todos los ángulos.
 - ✅ Generación original: cara-Element + ficha + escena en texto (no copia fotos viejas).
 - ✅ Voz propia: ElevenLabs "Lucia-ONIA" `wrXs6GqcC7X03dDKMoeT`, en VPS.
-- ✅ Stack de video definido (`VIDEO_MODEL_STACK_DECISION_2026.md`).
+- ✅ Stack de video definido (`hermes-content/docs/historial/references/VIDEO_MODEL_STACK_DECISION_2026.md`).
 - ✅ Lipsync con su voz (este demo) + b-roll (minimax/kling) + edición.
 
 Pendiente (no técnico): crear cuenta IG (handle+bio), y armar el template Remotion del

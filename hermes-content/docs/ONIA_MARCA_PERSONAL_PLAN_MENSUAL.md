@@ -68,7 +68,7 @@ Todos cierran con lámina CTA → comunidad.
    cifra con fuente o no se escribe). El tema es el mismo
 5. **"16 años, 0 empleados: las 6 herramientas que son mi equipo"** (S3 — espejo del video de 5.4K)
    ✅ 02-sep, 8 láminas en `carousels/out/carrusel-equipo-no-cobra/` + caption listo en
-   `docs/cola/PARA-PUBLICAR-CARRUSEL-EQUIPO.md`.
+   `docs/historial/cola/marca-personal-sep/PARA-PUBLICAR-CARRUSEL-EQUIPO.md`.
    ⚠️ Salió sin el **"0 empleados"**: no hay fuente para esa cifra en el carril y es una
    afirmación sobre la empresa que el loop no puede verificar. Se usó el nombre de la serie
    ya validada — *"Mi equipo no cobra"* — que habla de las herramientas, no de una nómina.

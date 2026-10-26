@@ -1,7 +1,7 @@
 # Sistema Marca Personal Sergio — Etapa 2 (versión acordada, para firma)
 
 > Reemplaza al PDF de Samuel del 2026-08-29 como texto de referencia del acuerdo.
-> Análisis y negociación: `ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md`.
+> Análisis y negociación: `historial/ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md`.
 > **Estado: ACEPTADO POR AMBAS PARTES el 2026-08-31** (mensaje de Samuel confirmando
 > punto por punto, incluidas las 3 condiciones de Sergio: yapping a mitad, crudos con
 > copia a 48 h, historias con tema+hook semanal). Falta solo: números de Etapa 1 +

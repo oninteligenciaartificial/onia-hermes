@@ -146,7 +146,7 @@ Desde el 9-jul-2026 Codex vive dentro de la app de escritorio de ChatGPT (ya no 
 
 **Repo Onia:**
 - `hermes-content/docs/handoff/hermes-jarvis.md` (estado del 5-oct y pendientes de Sergio Urcullo).
-- `.claude/skills/onia-hermes-jarvis/SKILL.md` · `hermes-content/docs/HERMES_AGENT.md` · `hermes-content/docs/TELEGRAM_COMMAND_CENTER.md`.
+- `.claude/skills/onia-hermes-jarvis/SKILL.md` · `hermes-content/docs/historial/HERMES_AGENT.md` · `hermes-content/docs/TELEGRAM_COMMAND_CENTER.md`.
 - `hermes-content/docs/research/ONIA_INVENTARIO_IA_20261002.md`: costo de Hermes.
 - `hermes-content/docs/research/onia-1.0-29sep/FRENTES_DE_APOYO.md` §2: `plan_type=prolite` y 99% del cupo semanal el 28-sep.
 - Memoria: `codex-cuenta-y-reparto.md` (cupo agotado 3 semanas, `codex-tarea.sh`), `sergio-menor-de-edad-quien-firma.md` (16 años, confirmado el 25-jul).

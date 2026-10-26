@@ -403,7 +403,7 @@ Mandale a tu bot un audio y mirá qué texto le llegó. Lo tenés completo en la
 
 ### D11-C · Vertical · Negocio: cómo cobra una empresa de software desde Bolivia sin Stripe
 **Fórmula:** F6 · Construyo en público · **Pilar:** SaaS desde Bolivia · **Destino:** comunidad (drop 12)
-**Evidencia:** https://stripe.com/global (29-sep: Bolivia no figura) · `hermes-content/deploy/vps-ops/vigia-comprobantes.sh` (24-sep) · `docs/handoff/cobro-e2e.md` (probado E2E 10-sep). NO mostrar cuenta, banco ni comprobantes.
+**Evidencia:** https://stripe.com/global (29-sep: Bolivia no figura) · `hermes-content/deploy/vps-ops/vigia-comprobantes.sh` (24-sep) · `docs/historial/handoff/cobro-e2e.md` (probado E2E 10-sep). NO mostrar cuenta, banco ni comprobantes.
 
 Si vendés software desde Bolivia, olvidate de Stripe. Lo revisé el veintinueve de septiembre en su página de países: Bolivia no está.
 
@@ -646,7 +646,7 @@ Capa 3 · Prueba: 10 frases que deben bloquearse («Bs 999 por mes, oferta espec
 
 **4 · Cuánto cuesta tu bot desde el 1-oct (D08-C, comunidad)**
 ⚠️ **Corregido 1-oct (noche):** a la ventana gratis le faltaba la primera condición que dice el guion final
-S2-D08-C: contestar dentro de las 24 h (fuente: `docs/research/ONIA_META_ADS_PLAYBOOK_20260930.md` l.180).
+S2-D08-C: contestar dentro de las 24 h (fuente: `docs/historial/research/ONIA_META_ADS_PLAYBOOK_20260930.md` l.180).
 ```
 A = mensajes que manda tu negocio por día · B = días que atendés por mes · C = A × B (mensajes al mes)
 D = tarifa de tu país en la tabla de Meta (columna utilidad: la de servicio es la misma) · E = (C − 1000) × D (costo al mes; los primeros 1.000 de servicio por mes y por número son gratis; si da negativo, es 0)

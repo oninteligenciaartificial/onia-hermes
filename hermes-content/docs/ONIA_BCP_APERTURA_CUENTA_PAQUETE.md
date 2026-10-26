@@ -3,7 +3,7 @@
 > Consolidado 2026-08-18 desde el trámite trabajado en otra sesión (chat compartido).
 > **Este trámite es la ruta crítica del cobro automático**: sin cuenta corriente
 > empresa no hay API de QR del BCP, y sin eso el checkout sigue siendo comprobante a
-> mano. Ver `ONIA_BCP_API_QR_INTEGRACION.md` y `ONIA_PUEDO_VENDER_HOY.md`.
+> mano. Ver `ONIA_BCP_API_QR_INTEGRACION.md` y `historial/ONIA_PUEDO_VENDER_HOY.md`.
 > ⚠️ Firma **Leslie Mercado Moreno** (titular SEPREC). Sergio no firma: es menor.
 
 ## Estado del trámite

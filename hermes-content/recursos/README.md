@@ -11,7 +11,7 @@ No confundir con:
 
 Cada recurso nuevo debe:
 - estar atado a una palabra clave concreta. Hoy solo hay dos vigentes: **SISTEMA** y
-  **LISTA** (ver `docs/ONIA_CRONOGRAMA_CONTENIDO_20260814.md` §0). No sumar una tercera sin
+  **LISTA** (ver `docs/historial/ONIA_CRONOGRAMA_CONTENIDO_20260814.md` §0). No sumar una tercera sin
   revisar ese doc primero — el punto de tener solo dos es que se recuerden sin anotar.
 - decir de qué pieza/ciclo sale y linkear el doc del ciclo en `docs/`.
 - citar la fuente del contenido que empaqueta. No se fabrica contenido acá: se empaqueta lo
@@ -19,7 +19,7 @@ Cada recurso nuevo debe:
 
 | Recurso | Palabra clave | Ciclo | Se manda cuando |
 |---|---|---|---|
-| `checklist-seguridad-ia-10-puntos.md` | SISTEMA | `docs/ONIA_CICLO_COMENTARIO_DM_20260815.md` | Alguien comenta SISTEMA en el reel del checklist de seguridad |
+| `checklist-seguridad-ia-10-puntos.md` | SISTEMA | `docs/historial/ONIA_CICLO_COMENTARIO_DM_20260815.md` | Alguien comenta SISTEMA en el reel del checklist de seguridad |
 | `lista-por-donde-empezar.pdf` | **LISTA** | `contenido/ONIAHQ.md` | Alguien comenta LISTA en cualquier pieza de `@oniahq` |
 
 ## `lista-por-donde-empezar` — cómo se hizo y por qué así

@@ -53,7 +53,7 @@ Astro 4 + `@astrojs/react` 3 + `@astrojs/tailwind` 5 + Tailwind 3 +
 
 ## Recomendacion para Web Factory
 
-Escala de 3 niveles (ver `docs/WEB_FACTORY_STACK_AND_MATERIALS_20260703.md`):
+Escala de 3 niveles (ver `hermes-content/docs/historial/web-factory/WEB_FACTORY_STACK_AND_MATERIALS_20260703.md`):
 
 - **Nivel 1 — estatico** (`packages/templates`): presencia, catalogo, panel/
   mockup. Charts SVG. Default.

@@ -37,7 +37,8 @@ briefings/daily`) + seguimientos de CRM y WorkItems pendientes.
   saldo pendiente. Regla: solo cuenta si queda registrado con evidencia.
 
 ### 3. Recomendaciones y tendencias
-Fuente: skills `radar-creativo-onia`, `tendencias-ia-redes` (SearXNG local +
+Fuente: skill `radar-creativo-onia` (`tendencias-ia-redes` es historia:
+`hermes-content/docs/historial/skills/tendencias-ia-redes.md`) (SearXNG local +
 Tavily cuando este la key). Aplicar la regla de radar creativo: investigar
 fuentes actuales primero, extraer principios, rankear utilidad.
 - 3 tendencias accionables de hoy (IA, redes, formato viral o del rubro activo).
@@ -70,7 +71,8 @@ Aprobacion pendiente:
   no prueban que hoy se ejecuten ni que lean el calendario real de Sergio.
 - El parche del router es LOCAL: no actualiza `/root/.hermes/cron/jobs.json` ni horarios.
 - Conservar Hermes cron; no activar otro scheduler ni OAuth desde este brief.
-- Para cambios de workflow usar skill `hermes-automation` / `n8n-automatizaciones-onia`
+- Para cambios de workflow usar las skills `n8n-*` y `onia-infra` (`n8n-automatizaciones-onia` es historia:
+  `hermes-content/docs/historial/skills/n8n-automatizaciones-onia.md`)
   y la autorizacion especifica de la accion.
 
 ## Reglas

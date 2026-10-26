@@ -5,7 +5,7 @@ dorada + dos tarjetas de frase + sello «SEGUIME.» con golpe de zoom + 3 pops. 
 en primera persona. Costo: **0** (nada generado: el clip ya existía; tarjetas y sello en HTML/CSS; SFX de la librería
 de HyperFrames).
 Instrucción ejecutada: [`INSTRUCCION.md`](INSTRUCCION.md) · receta: `.claude/skills/editor-videos/SKILL.md` § «Reels de
-Lucía» · guion: `hermes-content/docs/cola/lucia-diario/S1-GUIONES.md` § L02.
+Lucía» · guion: `hermes-content/docs/historial/cola/lucia-diario/S1-GUIONES.md` § L02.
 
 | Qué | Ruta |
 |---|---|

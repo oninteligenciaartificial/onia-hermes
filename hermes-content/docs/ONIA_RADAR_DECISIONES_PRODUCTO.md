@@ -202,7 +202,7 @@ Verificado **contra el motor que corre**, no contra el repo:
 → **vacío**. Cero construcción, tal como dice. Con 0 clientes pagando el chat, la condición que
 el propio punto se puso para reabrirse **no se cumplió**. No hay nada que decidir: hay que
 esperar. La arquitectura y la regla F1 (separar llamadas de mensajes ANTES de encender nada)
-quedan en `ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md`, que existe y no se toca.
+quedan en `historial/ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md`, que existe y no se toca.
 
 **I. §5 Requisitos del chatbot — se cerró solo, y lo dice en su propio texto.** El punto ya fue
 corregido el 2026-09-02: de las cuatro capacidades "a investigar", **tres están vivas en
@@ -270,7 +270,7 @@ sin publicar) · pipeline intake→web a escala con clientes reales.
 
 ## 3. ~~Bots de LLAMADAS~~ — PARTE DE ESTADO, no hay decisión — CERRADO 2026-09-04, ver **H** arriba
 
-- Arquitectura YA escrita: `ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md` (1.058
+- Arquitectura YA escrita: `historial/ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md` (1.058
   líneas). Bolivia NO está excluida de la Calling API de Meta (verificado 15-ago).
 - **Regla F1 antes de encender NADA**: separar llamadas de mensajes — si se habilita
   `calls` en la misma app, los webhooks de llamada caen en Chatwoot, responde 200 y
@@ -1070,7 +1070,7 @@ enlaza.
 Diez cosas esperan a Sergio — la 2 se resolvió el 1-sep y queda tachada. Están ordenadas por lo
 que desbloquean, no por urgencia
 aparente. Cada una tiene su detalle arriba en este archivo o en
-`hermes-content/docs/handoff/claude-git-status-935f47.md`.
+`hermes-content/docs/historial/handoff/claude-git-status-935f47.md`.
 
 **1. ~~¿Publicamos `onia.com.bo`?~~ ✅ CERRADO — ya está publicado.** Ver "Cerradas → A"
 arriba: build `qinaKbiNJ_V9rh9loH5MO` del 2026-09-01 21:42 UTC, sin la promesa vieja.
@@ -2676,7 +2676,7 @@ Elements en la misma bolsa.
 
 - `ONIA_MODELOS_RAIZ.md` — **sin fecha, así que manda por la regla de `CLAUDE.md`** — rotula
   `452d8375…` como *"Element (PRIMER PLANO)"* y `902eeebb…` como *"Element (photoshoot)"*.
-- `ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe lo inverso y con motivo: `nano_banana_2 +
+- `historial/ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe lo inverso y con motivo: `nano_banana_2 +
   <<<902eeebb…>>>` **para primer plano**, porque es el ancla que resolvió el *"se ve muy IA"*
   después de 11 avatares malos.
 

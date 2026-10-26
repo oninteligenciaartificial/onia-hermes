@@ -191,7 +191,7 @@ en esa constante y las tres salidas (canonical, sitemap, robots) siguen solas.
 ⚠️ **Apex vs `www` — sin resolver.** La constante declara el apex (`https://dentalgest.app`),
 pero varias referencias del repo apuntan a `www.dentalgest.app`
 (`hermes-content/deploy/n8n/workflows/dentalgest-email-intake.json`,
-`docs/DENTALGEST_EMAIL_INTAKE_CONNECTOR_2026.md`). No está verificado cuál de los dos sirve la
+`docs/historial/DENTALGEST_EMAIL_INTAKE_CONNECTOR_2026.md`). No está verificado cuál de los dos sirve la
 landing hoy. **Importa para indexabilidad**: si el sitio vive en `www` y el canonical apunta al
 apex (o al revés) sin redirección 301 de uno al otro, se parte la señal entre dos hosts.
 Resolver antes de publicar: elegir un host, redirigir el otro con 301, y que la constante

@@ -80,7 +80,7 @@ Las webs sueltas ayudan, pero no estabilizan. El servicio recurrente si.
 > ⚠️ **Esto NO es la plataforma Onia y no se mide contra `pricing.ts` (2026-08-27).**
 > Onia Motor Local es la línea de servicio (webs, contenido, automatización), que por
 > decisión del **2026-08-24 no lleva lista de precios: se cotiza caso por caso**
-> (`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.5). Los montos de abajo son rango histórico de
+> (`historial/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.5). Los montos de abajo son rango histórico de
 > referencia. **No los corrijas contra `pricing.ts`** — ese archivo cubre planes y add-ons de
 > la plataforma, no esta línea.
 > Los precios de la PLATAFORMA (Básico 320 · Profesional 750 · Completo 1.500 · Empresa 2.900,

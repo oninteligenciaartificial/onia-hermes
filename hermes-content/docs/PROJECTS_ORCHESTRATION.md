@@ -16,7 +16,7 @@ aprueba acciones client-facing.
 | Web Onia | `C:\dev\Proyectos\Web-Onia` | Sitio y vitrina de Onia | Prospectos que investigan antes de comprar | Autoridad, portfolio, landing y captacion |
 | Paginas web Onia | por cliente | Servicio cash-flow | Negocios locales y profesionales | Landing/web + formulario + seguimiento |
 | Marketing Higgsfield | Hermes Video Lab | Pausado como oferta principal | Uso interno y muestras aprobadas | No vender videos IA por ahora |
-| Consultoria Onia | `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md` | Diagnostico, instalacion y acompanamiento | Negocios que necesitan ordenar procesos antes de comprar herramientas | Auditoria, roadmap, instalacion, capacitacion y soporte consultivo |
+| Consultoria Onia | `hermes-content/docs/historial/ONIA_CONSULTING_SERVICES_2026.md` | Diagnostico, instalacion y acompanamiento | Negocios que necesitan ordenar procesos antes de comprar herramientas | Auditoria, roadmap, instalacion, capacitacion y soporte consultivo |
 | AlfredHQ | `C:\dev\Proyectos\AlfredHQ` | Sistema/experimento interno | Uso interno | Evaluar antes de vender |
 
 ## Escalera comercial
@@ -111,7 +111,7 @@ Consultoria e implementaciones:
 
 Referencia canonica de precios de PLATAFORMA: `onia-platform/lib/subscription-plans.ts`
 (planes) y `onia-platform/lib/pricing.ts` (add-ons), transcritos con sus funciones en
-`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el
+`historial/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`historial/ONIA_PRICING_2026.md` quedó degradado el
 2026-08-27.)* Las cifras de web/consultoría de arriba no tienen fuente en código y **se
 cotizan caso por caso** (decisión 2026-08-24): no se corrigen contra `pricing.ts`.
 

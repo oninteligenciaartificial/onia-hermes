@@ -145,7 +145,7 @@ guión del bot separado que se desincronice del catálogo. Ver
   con borradores marcados, no con contenido inventado.
 - Validar comercialmente qué productos entran en cada rutina (evitar recomendar
   profesional/mesoterapia al público — misma regla que el price watcher, ver
-  `docs/NUVIA_PRICE_AUTOMATION.md`).
+  `hermes-content/docs/historial/web-factory/NUVIA_PRICE_AUTOMATION.md`).
 
 ## Plan de implementación (cuando se apruebe)
 

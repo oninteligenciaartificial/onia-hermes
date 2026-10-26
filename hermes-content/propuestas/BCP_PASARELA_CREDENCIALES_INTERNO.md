@@ -14,7 +14,7 @@ transacciones. ONIA solo hace la **integración técnica** una vez que el client
 tiene sus claves API.
 
 > Nunca poner la cuenta de cobro a nombre de ONIA. La cuenta, contrato y
-> comisión BCP van a nombre del cliente (regla `ONIA_PRICING_2026.md`).
+> comisión BCP van a nombre del cliente (regla `hermes-content/docs/historial/ONIA_PRICING_2026.md`).
 
 ---
 

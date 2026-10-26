@@ -94,7 +94,8 @@ con una frase fija).
 - La key vive en `onia-hermes/.env` como `OPENAI_API_KEY=sk-...` (gitignored).
   Si falla la auth, verificar que el .env tenga el prefijo `OPENAI_API_KEY=`.
 - Nunca copiar assets de referencias (Pinterest u otros); referencias solo como
-  notas de estilo via skill `referencias-pinterest`.
+  notas de estilo (ficha por dimensión con `aprender-de-todo`; la vieja `referencias-pinterest` es historia:
+  `hermes-content/docs/historial/skills/referencias-pinterest.md`).
 
 ## Estructura narrativa
 - Entre 3 y 10 slides (default 8 para pauta; 6 para orgánico breve).

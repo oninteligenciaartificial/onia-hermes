@@ -5,7 +5,7 @@
 > aesthetic, que sea algo bien perfecto, una muy buena modelo que sí sea la viral."*
 >
 > Este doc define **cómo se ve** cada pieza. El qué se dice vive en
-> `ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md`.
+> `historial/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md`.
 
 ---
 
@@ -146,6 +146,6 @@ devolver `AccessDenied`** — ver `references/modelos/lucia/biblioteca-20260808/
 
 ---
 
-Relacionado: `ONIA_MODELOS_RAIZ.md` (índice) · `ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md`
+Relacionado: `ONIA_MODELOS_RAIZ.md` (índice) · `historial/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md`
 (qué se dice) · `references/benchmarks/anora-creators-20260806/ANALISIS.md` (la cuenta que sí
 convierte) · `ONIA_MODELOS_RECETA_VISUAL_20260806.md` (bloques de identidad).

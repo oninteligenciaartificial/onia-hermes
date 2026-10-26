@@ -44,8 +44,8 @@ Ocho prompts de contenido y el lead magnet descansaban sobre esto:
 > *"el circuito comentario→DM está vivo desde el 18-ago, workflow n8n `gWrVHU8OxI9yugc4`,
 > 4 eventos reales de Meta"*
 
-Esa frase está copiada literal en `ONIA_CICLO_COMENTARIO_DM_20260815.md`,
-`ONIA_POSTIZ_COMENTARIOS_DM_20260817.md`, `ONIA_RECORRIDO_24_7_20260820.md` y en una ficha de
+Esa frase está copiada literal en `historial/ONIA_CICLO_COMENTARIO_DM_20260815.md`,
+`historial/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md`, `historial/ONIA_RECORRIDO_24_7_20260820.md` y en una ficha de
 `references/video-intake/analisis/`. **Nadie la volvió a contar en 9 días.** Contada hoy:
 
 | Lo que decían los docs | Lo que hay en la instancia (2026-08-27) |

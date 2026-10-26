@@ -89,7 +89,7 @@ costos y pagos variables aprobados.
 
 La recuperacion del capital Sergio/ONIA y de aportes operativos Arthur se
 calcula con la politica canonica de
-`ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`. El 40% Fondo Onia
+`historial/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`. El 40% Fondo Onia
 no es dinero libre: primero cubre herramientas, caja chica y reserva minima; solo
 el excedente se usa para recuperar capital.
 

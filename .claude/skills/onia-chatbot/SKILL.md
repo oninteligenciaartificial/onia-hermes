@@ -27,12 +27,15 @@ lo extiende para este carril.
 | **Candado bot-humano** (takeover + desarme) | motor: `takeoverTurn` (arma al contestar un humano) + `conversation_status_changed=resolved` → `clearHumanTakeover` (resolver = devolver al bot) |
 
 **Fuentes de verdad — leer ANTES de construir, no después:**
-`ONIA_ESTADO_CHATBOT_Y_VOZ_20260816.md` (qué está encendido hoy) ·
+`ONIA_CHATBOT_LINEA_DE_ENTREGA.md` (qué se entrega) ·
 `ONIA_BOT_MANUAL_OPERACION_20260807.md` (operación) ·
-`ONIA_BOT_CAPA_CONOCIMIENTO_20260806.md` (frontera lógica/hecho) ·
-`ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802.md` (N clientes) ·
-`ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md` (voz, manda sobre cualquier research posterior) ·
-`research/ONIA_AGENTES_DE_LLAMADAS_20260815.md` (costos y regulación).
+`ONIA_BOT_CAPA_CONOCIMIENTO_20260806.md` (frontera lógica/hecho).
+
+**Historia** (fotos con fecha, en `historial/` desde el 26-oct: contexto, no el estado de hoy, que se mide en vivo):
+`historial/ONIA_ESTADO_CHATBOT_Y_VOZ_20260816.md` (lo encendido al 16-ago) ·
+`historial/ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802.md` (N clientes) ·
+`historial/ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md` (voz: es la última decisión de arquitectura y manda sobre el research posterior hasta que exista un doc de voz sin fecha) ·
+`historial/research/ONIA_AGENTES_DE_LLAMADAS_20260815.md` (costos y regulación).
 
 ## Qué cargar según la tarea
 

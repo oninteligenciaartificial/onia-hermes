@@ -118,7 +118,7 @@ Se conservan por lo que tienen adentro, pero **para planificar se usa esta carpe
 
 | Doc viejo | Qué se conserva de él |
 |---|---|
-| `docs/ONIA_CRONOGRAMA_CONTENIDO_20260814.md` | los 3 trabajos por post y el orden de los 8 carruseles |
-| `docs/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` | los 4 pilares, el banco de ganchos y los 6 captions |
-| `docs/ONIA_LUCIA_ARRANQUE_CUENTA_20260808.md` | el orden de sus primeros días |
+| `docs/historial/ONIA_CRONOGRAMA_CONTENIDO_20260814.md` | los 3 trabajos por post y el orden de los 8 carruseles |
+| `docs/historial/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` | los 4 pilares, el banco de ganchos y los 6 captions |
+| `docs/historial/ONIA_LUCIA_ARRANQUE_CUENTA_20260808.md` | el orden de sus primeros días |
 | ~~`docs/ONIA_ESTRUCTURA_DOS_CUENTAS_20260816.md`~~ | 🗑️ **borrado** el 2026-08-16 — se escribió esa misma mañana y quedó absorbido entero acá |

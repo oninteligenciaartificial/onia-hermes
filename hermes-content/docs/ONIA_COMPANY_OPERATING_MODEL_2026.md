@@ -397,7 +397,7 @@ Techos por capital:
 
 La recuperacion de capital y los posibles aportes Arthur a apps/gastos Onia se
 calculan segun
-`hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`.
+`hermes-content/docs/historial/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`.
 
 ## Sergio como dueno
 

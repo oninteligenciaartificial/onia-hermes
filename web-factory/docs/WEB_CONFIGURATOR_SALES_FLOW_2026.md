@@ -89,7 +89,7 @@ web-factory/apps/onia-platform/src/components/web-configurator/
 1. Que las seis estructuras y seis direcciones visuales sean comprensibles para
    clientes reales, y que los ejemplos ficticios no se confundan con trabajos publicados.
 2. Que el paquete recomendado sea Web Profesional y que los precios publicados
-   sigan coincidiendo con `ONIA_PRICING_2026.md`.
+   sigan coincidiendo con `hermes-content/docs/historial/ONIA_PRICING_2026.md`.
 3. Que los mensajes que llegan por WhatsApp permitan calificar rápido el rubro,
    nombre del negocio y objetivo.
 4. Que el tiempo de respuesta humano sea compatible con el volumen de pedidos.

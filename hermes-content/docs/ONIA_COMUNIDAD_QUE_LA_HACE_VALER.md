@@ -108,7 +108,7 @@ sale.
 ### Qué se le responde a quien comenta
 
 Un mensaje corto con el link. No el contenido: el link. El texto listo para pegar vive en
-`cola/PARA-PUBLICAR-DM-STACK.md` y el mismo molde sirve para cualquier palabra.
+`historial/cola/marca-personal-sep/PARA-PUBLICAR-DM-STACK.md` y el mismo molde sirve para cualquier palabra.
 
 ## Y los videos, guardados
 

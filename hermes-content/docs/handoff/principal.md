@@ -1,5 +1,7 @@
 # Handoff — sesión Principal
 
+> ⚠️ **26-oct-2026:** desde la decisión de Sergio Urcullo de ese día, planifica el Hermes de la PC y el del VPS solo avisa; la cola única son los issues `orquesta`. Lo de abajo que diga que el Hermes del VPS planifica es anterior. Mapa vigente: `hermes-content/docs/ONIA_HARNESS.md`; reglas: `AGENTS.md` §1.
+
 Escrito el 20-oct-2026, 17:15 La Paz (21:15 UTC), por la Principal `local_549192e7` («Principal · ONIA»), cuando
 Sergio Urcullo dijo «cambiamos de sesión todo». Reemplaza a `madre-*.md` (ya no hay madre: regla del 19-oct).
 

@@ -14,7 +14,7 @@ Archivos canonicos:
 
 - Endpoint interno: `web-factory/apps/site/src/app/api/onia-center/briefings/daily/route.ts`
 - Workflow n8n importable: `hermes-content/deploy/n8n/workflows/onia-center-daily-briefing.json`
-- Routing de modelos: `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
+- Routing de modelos: `hermes-content/docs/historial/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
 
 Endpoint:
 

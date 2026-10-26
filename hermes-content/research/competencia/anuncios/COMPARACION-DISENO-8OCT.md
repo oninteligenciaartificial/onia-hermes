@@ -9,7 +9,7 @@
 | Fuente | Qué | Límite |
 |---|---|---|
 | 22 anuncios de la competencia (capturados por la madre desde la PC el 1-oct) | Doctocliq (5 videos, el más viejo 78 d), CitaPro (3), Agenda en Día/AgendaClínica (4), NativeCode (2), Calendico, Dentalink, Ultrapack, Medizona, Eholo, Dt.Dental. Se vieron **todos los fotogramas** en hojas de contacto: `_hojas/*.jpg` | Son fotos del 1-oct: no se sabe cuáles siguen vivos hoy |
-| Biblioteca de Anuncios en vivo | **No abre desde la nube** (HTTP 403 de Facebook, medido el 8-oct; no se rodea) | La madre captura más desde la PC con `PEDIDO-CAPTURAS.md` |
+| Biblioteca de Anuncios en vivo | **No abre desde la nube** (HTTP 403 de Facebook, medido el 8-oct; no se rodea) | La madre captura más desde la PC con `hermes-content/docs/historial/research/competencia/PEDIDO-CAPTURAS.md` |
 | Sitios de referencia de diseño (celular, 8-oct) | Jane, Weave, AgendaPro, SimplyBook, Fresha → `_hojas/referentes-heroes-celular-8oct.jpg`. Doctolib: Cloudflare no deja pasar | Son webs, no anuncios: sirven para nivel de diseño, no para rendimiento |
 
 ## Qué hacen los que sobreviven (y lo que D1 v4 NO hacía)

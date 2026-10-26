@@ -1,5 +1,7 @@
 # Handoff — carril orquesta (stack v3)
 
+> ⚠️ **26-oct-2026:** desde la decisión de Sergio Urcullo de ese día, planifica el Hermes de la PC y el del VPS solo avisa; la cola única son los issues `orquesta`. Lo de abajo que diga que el Hermes del VPS planifica es anterior. Mapa vigente: `hermes-content/docs/ONIA_HARNESS.md`; reglas: `AGENTS.md` §1.
+
 Escrito el 19-oct-2026 por la sesión «Orquestación de agentes y modelos LLM», por «cambio de sesión» de Sergio Urcullo.
 
 ## 1. Objetivo

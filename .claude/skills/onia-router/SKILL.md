@@ -23,8 +23,10 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 > **HyperFrames vuelve a vivir en el repo** (`hyperframes`, `-core`, `-cli`, `-animation`,
 > `-creative`, `-keyframes`, `-registry`, `media-use`, `motion-graphics`, `talking-head-recut`,
 > `embedded-captions`, `general-video`, `slideshow`, `remotion-to-hyperframes` y las plantillas
-> de video) y **esa copia es la que manda**: en Claude Code una skill del proyecto gana sobre una
-> global con el mismo nombre. **No** volvieron los 6 agentes de `_retirados/` (retirados el
+> de video). ⚠️ Corregido el 26-oct: acá decía que esa copia manda porque una skill del proyecto
+> gana sobre una global con el mismo nombre, y es al revés. En Claude Code gana la PERSONAL
+> (`~/.claude/skills`): se midió con la descripción cargada de `hyperframes`. Hasta archivar las
+> personales que difieren (`ONIA_HARNESS.md` §8), un arreglo en la copia del repo no llega a la PC. **No** volvieron los 6 agentes de `_retirados/` (retirados el
 > 18-ago). Detalle: `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
 
 ## Cómo usar
@@ -46,16 +48,22 @@ Hermes y `scripts/orquesta/`, 19-oct) ni ejecutar Git fuera del encargo recibido
 `verification-before-completion` · `code-review` · `security-review` ·
 `dispatching-parallel-agents` · `using-git-worktrees` · memoria vía `claude-mem`.
 
-## Apartados por área de la empresa (20-oct-2026)
+## Las 4 áreas de Onia (26-oct-2026)
 
-Sergio Urcullo, 20-oct: *«quiero que armes los apartados de skills y agentes para cada apartado de la empresa»*.
-Una fila por área: lo primero que se carga va primero. Los trabajadores de la orquesta leen lo suyo en
-`scripts/orquesta/carriles.json` (`leer`); esta tabla es para las sesiones. Cuándo usar cada agente:
-`.claude/agents/README.md`. Instalado el 20-oct (marcado *nuevo*): `agent-browser` (CLI, navegador sin pantalla),
-MCP `exa` (búsqueda web), plugin `claude-security`, skills `code-review-spec` (revisa el diff contra el issue y
-las reglas del repo; renombrada de `code-review` de mattpocock para no pisar el comando de ECC),
-`diagnosing-bugs`, `next-dev-loop`, `prisma-cli`, `diagram-design`. Lo *nuevo* vive solo en la PC: una sesión o un
-trabajador de la nube no lo tiene.
+Sergio Urcullo, 26-oct: Onia se ordena en **4 áreas**. Una fila por área; lo primero que se carga va primero. Los
+carriles de la orquesta (`scripts/orquesta/carriles.json`) **no se renombran** (tienen labels y tests): se mapean a
+un área. Sus trabajadores leen lo suyo en `leer`; esta tabla es para las sesiones. Cuándo usar cada agente:
+`.claude/agents/README.md`. Lo marcado *PC* (`agent-browser`, MCP `exa`, plugin `claude-security`, `code-review-spec`,
+`diagnosing-bugs`, `next-dev-loop`, `prisma-cli`, `diagram-design`) vive solo en la PC: una sesión o un trabajador de
+la nube no lo tiene. Lo viejo de cada área está en `hermes-content/docs/historial/` (skills sueltas en
+`historial/skills/`): se consulta como historia, no se usa como regla.
+
+| Área | Carriles de la orquesta | Skills (en orden) | Agentes | Docs fuente | No usar |
+|---|---|---|---|---|---|
+| **Marca personal** (contenidos, guiones, carruseles, videos y edición de Sergio Urcullo) | `marca` · `video` | `diseno-contenido-onia` · `edicion-referentes` (todo video nuevo) · `hyperframes` (entrada de video) · `editor-videos` · `ver-videos` · `embedded-captions` · `motion-doctrine` · `talking-head-recut` · `sacar-prompt` · `copywriting` · `humanizer` · `higgsfield-generate` (con la regla de gasto) · `aprender-de-todo` (referencias). Skills-doc: `hermes-content/skills/guiones-diarios-onia.md`, `marca-personal-sergio.md`, `carruseles-onia.md`, `historias-onia.md`, `video-lab-higgsfield.md` | `onia-creative-radar` | `handoff/marca-personal.md` · `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` · `ONIA_MOTOR_SEMANAL_CONTENIDO.md` · `ONIA_MAPA_DE_TEMAS.md` · `HIGGSFIELD_VIDEO_SYSTEM.md` · `SERIE_CLAUDE_CODE.md` · regla de gasto de `CLAUDE.md` §Higgsfield | La marca de la web de Onia (es otra) · «usted» (acá es vos) · publicar sin su OK con captura · Remotion (jubilado) · copia personal de HyperFrames o `ver-videos` con el mismo nombre (le gana a la del repo) |
+| **Workshops y comunidad** (talleres, comunidad, imán del taller) | `comunidad` | Cuartitos de la orquesta (`scripts/orquesta/cuartitos/`): `community-marketing` · `lead-magnets` · `onboarding` · `copywriting` · `humanizer`; `diseno-contenido-onia` para las piezas. Todavía no hay una skill propia del área | `general-purpose` | `TALLER_31_OCT.md` (fuente única del taller) · `handoff/comunidad.md` · `comunidad/ESTADO_COMUNIDAD.md` · `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md` · `ONIA_COMUNIDAD_CONTENIDO.md` · `ONIA_COMUNIDAD_BIBLIOTECA.md` | Precios o promesas que no salgan de sus fuentes · material para vendedores · cobrar sin el OK de Sergio Urcullo |
+| **Onia Platform** (el producto y sus packs por rubro, el chatbot add-on, ventas y pauta del producto, propuestas, web de venta, SIAT del producto) | `plataforma` | Las 6 `onia-*` de su repo (obligatorias) · `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia` (SIAT del producto) · `onia-ventas-pauta` · `onia-propuestas` (generador, nunca HTML a mano) · `onia-web-factory` (web de venta) · `impeccable` si hay UI · `next-dev-loop` *PC* · `prisma-cli` *PC* · `diagnosing-bugs` *PC* · `test-driven-development` · `verification-before-completion` · `code-review-spec` *PC* · `ad-creative` · `competitor-profiling` | `code-reviewer` antes de cada PR · `security-reviewer` si toca auth, input, SQL o pagos · `typescript-reviewer` · `database-reviewer` · `onia-core-guardian` · `e2e-runner` · `onia-crm-prospeccion` · `onia-creative-radar` (piezas de pauta) | `ONIA_CATALOGO_DE_VENTA.md` · `ONIA_CLIENTE_IDEAL.md` · `ONIA_ADQUISICION_Y_PAUTA.md` · precios en `subscription-plans.ts` y `pricing.ts` · `ONIA_PLAN_1.0_Y_CAJA.md` · `ONIA_V1_ALCANCE.md` · `ONIA_FACTURACION_ESTADO_REAL.md` · `ONIA_ADDONS.md` · `handoff/codex-continuar-1.0.md` · `handoff/mercado-y-pauta.md` · skill `onia-deploy` para publicar | Skills genéricas de backend o DB cuando una `onia-*` cubre el tema · Playwright MCP · agentes `market-*` · material para vendedores · pack `referentes` (es de marca personal) · docs de precios o pauta con fecha (están en `historial/`) |
+| **Otros** (infra, VPS, Hermes, orquesta, investigación, fiscal propio, Lucía, clientes de web-factory, Bolivian Electric) | `investigacion` | `onia-infra` · `onia-hermes-jarvis` · `orca` · `panel-onia` · `n8n-*` · `docker-patterns` · `deployment-patterns` · `aprender-de-todo` · `deep-research` · `exa-search` con el MCP `exa` *PC* · `competitor-profiling` · `onia-contabilidad-bolivia` (fiscal propio) · `higgsfield-soul-id` (Lucía) · `web-factory-design-research` y `web-factory-intake-assets` (clientes de web) · `diagram-design` *PC* | `security-reviewer` · `general-purpose` · `Explore` · `loop-operator` · `harness-optimizer` | `ONIA_HARNESS.md` (mapa vigente) · `ONIA_ESTRATEGIA_DE_EMPRESA.md` · `AI_MODEL_ROUTING_2026.md` · `handoff/hermes-local.md` · `handoff/hermes-jarvis.md` · `handoff/orquesta.md` · `scripts/orquesta/README.md` · `LUCIA_COMO_SE_USA.md` · `ONIA_FECHAS_CRITICAS_PLAN.md` · `research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` | `onia-sesion-madre` (historia) · secretos dentro de un nodo de n8n · el token de Max en Hermes · el kanban de Hermes, Orca Orchestration o `hermes-content/docs/cola/` como cola · scrapers nuevos (Crawl4AI del VPS ya resuelve) |
 
 **Cómo se instala una skill sin romper nada (medido el 20-oct):**
 - `npx skills add <repo> -g` guarda la copia en `~/.agents/skills`, que en esta PC es un enlace a
@@ -66,16 +74,6 @@ trabajador de la nube no lo tiene.
 - Repos gigantes (`vercel/next.js`): no clonar; bajar solo la carpeta con `gh api repos/<o>/<r>/contents/<ruta>`.
 - Cambiar el registro de un plugin (`claude plugin configure`, archivos de estado) lo frena el control de permisos:
   queda para Sergio Urcullo, con el comando exacto.
-
-| Área | Skills (en orden) | Agentes | Docs fuente | No usar |
-|---|---|---|---|---|
-| **Plataforma** (`onia-platform`) | Las 6 `onia-*` de su repo (obligatorias) · `onia-core` · `next-dev-loop` *nuevo* (Next 16 corriendo + `agent-browser`) · `prisma-cli` *nuevo* (Prisma 7) · `diagnosing-bugs` *nuevo* · `test-driven-development` · `verification-before-completion` · `code-review-spec` *nuevo* · `impeccable` si hay UI | `code-reviewer` antes de cada PR · `security-reviewer` si toca auth, input, SQL o pagos · `typescript-reviewer` · `database-reviewer` · `onia-core-guardian` · `e2e-runner` · `claude-security` a pedido | `ONIA_CATALOGO_DE_VENTA.md` · precios en `subscription-plans.ts` y `pricing.ts` · skill `onia-deploy` para publicar | Skills genéricas de backend o DB cuando una `onia-*` cubre el tema · Playwright MCP (gasta más que `agent-browser`) |
-| **Marca personal** | `diseno-contenido-onia` · `edicion-referentes` · `aprender-de-todo` (referencias) · `copywriting` · `humanizer` · `sacar-prompt` · `higgsfield-generate` (con la regla de gasto) | `onia-creative-radar` | `handoff/marca-personal.md` · `hermes-content/skills/guiones-diarios-onia.md`, `marca-personal-sergio.md`, `carruseles-onia.md` | La marca de la web de Onia (es otra) · «usted» (acá es vos) · publicar sin su OK con captura |
-| **Comunidad y talleres** | Cuartitos `community-marketing` · `lead-magnets` · `onboarding` · `copywriting` · `humanizer` | `general-purpose` | `comunidad/ESTADO_COMUNIDAD.md` · `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md` · `ONIA_COMUNIDAD_CONTENIDO.md` | Precios o promesas que no salgan de sus fuentes · material para vendedores |
-| **Video** | `hyperframes` (entrada) · `edicion-referentes` · `editor-videos` · `ver-videos` · `embedded-captions` · `motion-doctrine` · `talking-head-recut` | `onia-creative-radar` | `HIGGSFIELD_VIDEO_SYSTEM.md` · regla de gasto de `CLAUDE.md` §Higgsfield | Remotion (jubilado) · copia global de HyperFrames o de `ver-videos` (gana la del repo) · PySceneDetect salvo que falte precisión |
-| **Investigación** | `aprender-de-todo` (toda referencia) · `deep-research` · `exa-search` con el MCP `exa` *nuevo* · `competitor-profiling` · `ver-videos` · `sacar-prompt` · `agent-browser` *nuevo* para mirar webs | `general-purpose` · `Explore` | `research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` · `references/video-intake/COBERTURA-APRENDIZAJE.md` | Scrapers nuevos (Crawl4AI del VPS ya resuelve) · Playwright MCP · browser-use · `morluto/rea` |
-| **Ventas y pauta** | `onia-ventas-pauta` · `onia-propuestas` (generador, nunca HTML a mano) · `diseno-contenido-onia` (piezas) · `copywriting` · `ad-creative` · `competitor-profiling` · `diagram-design` *nuevo* (diagramas de propuesta) | `onia-crm-prospeccion` · `onia-creative-radar` | `ONIA_CLIENTE_IDEAL.md` · `ONIA_ADQUISICION_Y_PAUTA.md` · `ONIA_CATALOGO_DE_VENTA.md` · `handoff/mercado-y-pauta.md` | Agentes `market-*` · material para vendedores · pack `referentes` (es de marca personal) · docs de pauta de agosto con fecha |
-| **Infra y Hermes** | `onia-infra` · `onia-hermes-jarvis` · `n8n-*` · `docker-patterns` · `deployment-patterns` · `orca` · `diagram-design` *nuevo* (arquitectura) | `security-reviewer` · `loop-operator` · `harness-optimizer` | `scripts/orquesta/README.md` · `handoff/hermes-jarvis.md` · `handoff/orquesta.md` · `research/harness-orquestacion-autonomia.md` | `onia-sesion-madre` como regla (es historia) · secretos dentro de un nodo de n8n · el token de Max en Hermes · el kanban de Hermes para ejecutar |
 
 ## Mapa carril → stack + subagente
 
@@ -99,7 +97,7 @@ trabajador de la nube no lo tiene.
 | **comercial/CRM** | `deep-research` (prospección con señal) | `onia-crm-prospeccion` | `onia-propuestas` |
 | **fiscal / contable (propio + features ERP)** | `deep-research` (validar RND/DS vigentes) | — | `onia-contabilidad-bolivia` |
 | **competencia por dentro** (cómo funcionan los programas rivales) | Leer primero `hermes-content/research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` (1-oct: Dentalink, Doctocliq, TuDoc, AgendaPro, Citalo). Método que funcionó: centros de ayuda públicos + capturas Playwright; YouTube y Zendesk privado NO abren desde la nube (videos desde la PC); cuentas de prueba solo desde la PC (piden código al WhatsApp de Sergio Urcullo) | — | — |
-| **orquesta** (repartir trabajo autónomo en las 5 áreas: plataforma, marca, comunidad, video, investigación) | Pedir con un issue `orquesta` + `carril:<área>` y un «hecho cuando»; el programa fijo `scripts/orquesta/orquesta.mjs` elige modelo por tabla, corre en worktree y verifica. Desde el 19-oct **orquestan Hermes (planifica) y este programa (reparte)**: GitHub Actions corre marca, comunidad e investigación con el token de Max; la PC, video y plataforma. Método y por qué: `scripts/orquesta/README.md` y `hermes-content/docs/research/harness-orquestacion-autonomia.md` (v3). Trampa medida: el control de permisos bloquea a una sesión lanzar trabajadores autónomos («Create Unsafe Agents»); la pasada la corren Actions o la tarea programada de Windows, no una sesión | — | — |
+| **orquesta** (repartir trabajo autónomo en los 5 carriles: plataforma, marca, comunidad, video, investigación; cada uno cae en un área de la tabla de arriba) | Pedir con un issue `orquesta` + `carril:<área>` y un «hecho cuando»; el programa fijo `scripts/orquesta/orquesta.mjs` elige modelo por tabla, corre en worktree y verifica. Desde el 19-oct **orquestan Hermes (planifica) y este programa (reparte)**: GitHub Actions corre marca, comunidad e investigación con el token de Max; la PC, video y plataforma. Método y por qué: `scripts/orquesta/README.md` y `hermes-content/docs/research/harness-orquestacion-autonomia.md` (v3). Trampa medida: el control de permisos bloquea a una sesión lanzar trabajadores autónomos («Create Unsafe Agents»); la pasada la corren Actions o la tarea programada de Windows, no una sesión | — | — |
 | **extracción web** (alta por URL · prospección) | **NO instalar scrapers nuevos** (ScrapeGraphAI evaluado y descartado). Crawl4AI del VPS + LiteLLM ya resuelven: `scripts/alta-por-extraccion.py`. Doc: `hermes-content/docs/platform/ONIA_EXTRACCION_WEB_DECISION.md` | `onia-crm-prospeccion` | — |
 
 ## Reglas duras que aplican SIEMPRE (de CLAUDE.md)
@@ -132,15 +130,14 @@ trabajador de la nube no lo tiene.
 - **Bolivia:** todo desarrollo acomodado a Bolivia con contaduría boliviana específica y vigente;
   validar con research (fuente citada) antes de codear temas de Bolivia.
 
-## Skills del repo (42 en `.claude/skills/` + 30 en `.agents/skills/`)
+## Skills del repo (65 en `.claude/skills/` + 30 en `.agents/skills/`, contadas el 26-oct)
 - **Aprendizaje transversal (2026-10-09):** `aprender-de-todo` — ficha por dimensión,
   destino canónico y prueba de aplicación.
 - **Índice y operación:** `onia-router` (este índice) · `onia-continuidad` (arranque y rumbo de
   sesión) · `onia-infra` (VPS, Docker, n8n por SSH) · `onia-hermes-jarvis` (Hermes por Telegram:
   resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
   `equipo-de-agentes` (el método: Codex, verificadores Haiku; corregido el 19-oct: orquestan Hermes y `scripts/orquesta/`) ·
-  `onia-sesion-madre` (HISTORIA desde el 19-oct: ya no hay madre; queda por los canales medidos entre
-  sesiones) · `orca` (tablero LOCAL de agentes en la PC: qué ve y qué no, ajustes a
+  `onia-sesion-madre` (historia desde el 19-oct: `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`) · `orca` (tablero LOCAL de agentes en la PC: qué ve y qué no, ajustes a
   corregir; no ve la nube ni es la madre; 2026-10-16) · `panel-onia` (el Panel ONIA, mod de la app
   de Claude: dónde vive, cómo se publica un cambio, de dónde lee cada sección; 2026-10-20).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
@@ -149,7 +146,7 @@ trabajador de la nube no lo tiene.
   `ver-videos` · `sacar-prompt` · `higgsfield-generate` · `higgsfield-soul-id` ·
   `motion-doctrine` con sus rutas `cut-the-curve` `oversized-cursor` `seam-craft`
   `captions-overlay` (upstream HeyGen que no está en la copia global).
-- **HyperFrames (restaurado 2026-10-02, gana sobre la copia global):** `hyperframes` (entrada
+- **HyperFrames (restaurado 2026-10-02; en Claude Code la copia personal le gana mientras exista, ver arriba):** `hyperframes` (entrada
   obligatoria de todo video) · `hyperframes-core` · `-cli` · `-animation` · `-creative` ·
   `-keyframes` · `-registry` · `media-use` · `motion-graphics` · `talking-head-recut` ·
   `embedded-captions` · `general-video` · `slideshow` · `remotion-to-hyperframes` · plantillas

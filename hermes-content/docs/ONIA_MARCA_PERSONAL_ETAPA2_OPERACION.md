@@ -2,7 +2,7 @@
 
 > Qué tiene que estar listo de NUESTRO lado antes del día 1 del acuerdo con Samuel, y el
 > registro semanal de KPIs. Acuerdo: `ONIA_MARCA_PERSONAL_ETAPA2_ACUERDO.md`. Análisis:
-> `ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md`. Lo trabaja el loop de la sesión de estrategia.
+> `historial/ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md`. Lo trabaja el loop de la sesión de estrategia.
 
 ## Backlog (prioridad de arriba a abajo)
 

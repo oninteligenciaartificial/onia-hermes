@@ -9,10 +9,10 @@
 > **B) Servicio para vender** — cliente real pidiendo: (1) formulario web / WhatsApp → mandar un
 > video automático, (2) Instagram comentario → DM → chatbot de seguimiento.
 >
-> Fuentes propias verificadas: `ONIA_POSTIZ_COMENTARIOS_DM_20260817.md` (Postiz no hace DM ni
-> responde comentarios, en ninguna red) · `ONIA_CICLO_COMENTARIO_DM_20260815.md` §4 (el bloqueo es
+> Fuentes propias verificadas: `historial/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md` (Postiz no hace DM ni
+> responde comentarios, en ninguna red) · `historial/ONIA_CICLO_COMENTARIO_DM_20260815.md` §4 (el bloqueo es
 > S6, permiso de mensajería de Meta; ahí está el guion exacto del DM) ·
-> `ONIA_CRONOGRAMA_CONTENIDO_20260814.md` §0 (las 2 palabras clave) ·
+> `historial/ONIA_CRONOGRAMA_CONTENIDO_20260814.md` §0 (las 2 palabras clave) ·
 > `hermes-content/contenido/ONIAHQ.md` (los 7 posts programados) · Chatwoot y n8n corriendo en el VPS.
 
 ---
@@ -46,7 +46,7 @@ Estado verificado en el repo hoy:
 | 7 posts programados en Instagram | ✅ Programados (`ONIAHQ.md`) |
 | Cada uno cierra pidiendo comentar una palabra | ✅ **SISTEMA** (diagnóstico de 20 min) o **LISTA** (PDF de una página) |
 | Comentario automático en nuestro propio post | ✅ Ya lo publica Postiz en los 7 |
-| **Responder al que comenta, por DM** | ❌ **A mano.** `ONIA_CICLO_COMENTARIO_DM_20260815.md` §4 |
+| **Responder al que comenta, por DM** | ❌ **A mano.** `historial/ONIA_CICLO_COMENTARIO_DM_20260815.md` §4 |
 | El guion exacto del DM | ✅ Ya escrito, listo para pegar |
 | Dónde se anota el lead | ✅ Definido (Notion + `onia_center.leads` con `?src=`) |
 

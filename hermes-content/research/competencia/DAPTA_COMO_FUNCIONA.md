@@ -11,7 +11,7 @@ marca dónde no coinciden.
 
 **2-oct-2026:** se completó la app por dentro (las pantallas que el 1-oct solo se vieron por el menú, el
 borrador «Julia», facturación, academia, anuncios e Instagram; detalle en `dapta/app/RECORRIDO-2026-10-02.md`)
-y se pasaron acá los datos verificados de `DAPTA_TEARDOWN.md`, la lectura sin cuenta del mismo día, que queda
+y se pasaron acá los datos verificados de `hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md`, la lectura sin cuenta del mismo día, que queda
 como foto. **Desde el 2-oct este es el único archivo de Dapta.** Lo que Onia hace con todo esto está en
 `docs/ONIA_NIVEL_REFERENTES_BRECHA.md`.
 
@@ -148,7 +148,7 @@ lado del resultado.
 `[inf]` El circuito que venden: anuncio Click-to-WhatsApp → el agente conversa → la IA decide si la
 conversación fue «exitosa» → avisa a Meta para optimizar la pauta y mueve el contacto en el CRM.
 
-Lo que dicen los docs (leídos sin cuenta el 2-oct; antes en `DAPTA_TEARDOWN.md` §4):
+Lo que dicen los docs (leídos sin cuenta el 2-oct; antes en `hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md` §4):
 
 - **El prompt manda.** El asistente de 3 pasos (propósito, contexto de la empresa, prueba) solo arma el prompt
   inicial: después «the prompt becomes the source of truth». Cambiar el propósito, el idioma o el nombre no
@@ -174,7 +174,7 @@ Lo que dicen los docs (leídos sin cuenta el 2-oct; antes en `DAPTA_TEARDOWN.md`
 ### 2.7 WhatsApp: conexión, requisitos, coexistencia y quién le paga a Meta
 
 En la cuenta Free no hay número conectado (cap. 61). Esto sale de los docs y de las capturas del producto que
-Dapta publica en ellos, leídos el 2-oct (antes en `DAPTA_TEARDOWN.md` §3; docs
+Dapta publica en ellos, leídos el 2-oct (antes en `hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md` §3; docs
 `connect-your-agent-with-whatsapp`, `prepare-your-meta-account`, `whatsapp-billing-and-meta-charges`,
 `legacy-line-billing`, `inbox`).
 
@@ -314,7 +314,7 @@ Fuentes: dapta.ai/pricing (1-oct) `[V]`; app, `/billing/plans` (cap. 23-25) `[V]
 
 ### 4.4 Salud y cumplimiento (2-oct)
 
-Fuentes: blog y sitemaps de dapta.ai y trust.dapta.ai, leídos sin cuenta el 2-oct (antes en `DAPTA_TEARDOWN.md`
+Fuentes: blog y sitemaps de dapta.ai y trust.dapta.ai, leídos sin cuenta el 2-oct (antes en `hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md`
 §6); la lección de clínicas de la academia (cap. 38, metadatos de YouTube con yt-dlp).
 
 - **No tiene vertical de salud.** No hay página de industria de salud (las que hay: inmigración, lemon law,
@@ -429,7 +429,7 @@ de 20 cuentas.
 
 ### 5.6 La web de venta, leída sin cuenta el 2-oct
 
-Fuente: dapta.ai (ES y EN) con Playwright y Chromium, mirando cada captura (antes en `DAPTA_TEARDOWN.md` §2;
+Fuente: dapta.ai (ES y EN) con Playwright y Chromium, mirando cada captura (antes en `hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md` §2;
 las capturas quedaron en un scratchpad temporal y no están en el repo).
 
 - **Titular:** el H1 es «Crea tu primer agente de ventas IA en 2 minutos» y promete el tiempo de **armar** el
@@ -592,7 +592,7 @@ Sergio Urcullo. Están ordenadas por impacto sobre esfuerzo, salvo 6.5, que espe
 |---|---|---|
 | app.dapta.ai (cuenta Free, espacio «OnIA»), 1-oct | §2, §3.1, §3.2 (modelos), §5.4 | `dapta/app/01..51-*.jpg` (no existe la 26) |
 | app.dapta.ai, 2-oct (Chrome de Sergio Urcullo, pestaña propia, sin efectos) | §2.5, §2.6, §3.3, §3.4, §5.4 | `dapta/app/52..70-*.jpg` y `dapta/app/RECORRIDO-2026-10-02.md` |
-| Lectura sin cuenta del 2-oct: dapta.ai ES y EN (Playwright), blog y sitemaps, trust.dapta.ai, Trustpilot y docs.dapta.ai (`connect-your-agent-with-whatsapp`, `prepare-your-meta-account`, `whatsapp-billing-and-meta-charges`, `legacy-line-billing`, `inbox`, `text-agent-settings-overview`, `schedule-appointments-with-dapta-calendars`, `dapta-agent-vs-meta-business-agent`) | §2.6, §2.7, §4.3, §4.4, §5.6 | `DAPTA_TEARDOWN.md` §8 (lista de URLs; capturas en un scratchpad temporal, no en el repo) |
+| Lectura sin cuenta del 2-oct: dapta.ai ES y EN (Playwright), blog y sitemaps, trust.dapta.ai, Trustpilot y docs.dapta.ai (`connect-your-agent-with-whatsapp`, `prepare-your-meta-account`, `whatsapp-billing-and-meta-charges`, `legacy-line-billing`, `inbox`, `text-agent-settings-overview`, `schedule-appointments-with-dapta-calendars`, `dapta-agent-vs-meta-business-agent`) | §2.6, §2.7, §4.3, §4.4, §5.6 | `hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md` §8 (lista de URLs; capturas en un scratchpad temporal, no en el repo) |
 | docs.dapta.ai, 2-oct: `account`, `plans-and-pricing`, `billing-and-invoices`, `cancel-your-subscription` | §3.3, §3.4 | - |
 | Biblioteca de Anuncios de Meta, 2-oct (vista por página, solo lectura) · luma.com/6c2cbtpz, /cmtyi67c, /jzgz5ez6 (`start_at` y `guest_count` del HTML) | §5.1, §5.3 | cap. 67, 68; RECORRIDO §5 |
 | instagram.com/dapta.ai e instagram.com/nicolasimagine, 2-oct (solo lectura) | §5.2 | cap. 69, 70 |

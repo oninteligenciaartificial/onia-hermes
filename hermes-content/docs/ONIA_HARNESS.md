@@ -1,211 +1,295 @@
-# Harness de Onia
+# Harness de ONIA
 
-> **Fuente de verdad del harness:** qué lo compone, dónde corre cada loop y quién es dueño de cada frente. Doc vivo,
-> sin fecha en el nombre: se EDITA. Pedido de Sergio Urcullo del 10-oct (A5 en `cola/loop/madre.md`): *«investigar qué
-> es un harness y cómo lo tenemos hecho, loops, subagentes y que toquemos todos los frentes»*.
-> Salió del workflow `wf_da25d090-4e5`: teoría con fuentes, 2 inventarios, frentes, arquitecto y crítico. El crítico
-> verificó contra los archivos y corrigió el diseño (§8).
+> **Fuente de verdad del harness.** Dice qué archivo configura a cada agente, dónde vive y cómo pasa un encargo de
+> un agente a otro. Es un documento vivo y se edita en el lugar.
 >
-> **Qué va en cada doc:**
-> - `ONIA_EQUIPO_DE_AGENTES.md`: el plan del equipo (roles, modelos, ciclo de una tarea). Leer su §Crítica.
-> - `ONIA_EQUIPOS_POR_SESION.md`: el equipo de cada sesión. Lo escribe A1 y **todavía no existe**.
-> - `cola/loop/madre.md`: el libro único de puntos (qué está abierto, quién lo tiene, con qué prueba).
-> - Este doc: el mapa. La tabla de loops de §3 reemplaza a la §F de madre.md.
-> - Evidencia de hoy: `research/2026-10-10-auditoria-equipo-de-agentes.md`. La auditoría A4
->   (`research/2026-10-10-auditoria-madre-v3.md`) todavía no existe; cuando entre se enlaza acá.
+> Se rehízo el 26-oct-2026 con las dos decisiones de Sergio Urcullo de ese día:
+> - manda un AGENTS.md nuevo y compacto;
+> - planifica el Hermes de la PC y el del VPS solo avisa.
+>
+> La versión del 10-oct, de la época de la madre y los loops, está en `historial/ONIA_HARNESS_20261010.md`.
+> La evidencia de todo esto está en `research/2026-10-26-auditoria-hermes-local.md`.
 
-## 1. Qué es un harness
+## 1. Reglas de diseño
 
-1. Agente = modelo + harness. El harness es todo lo que no es el modelo: el que trae la herramienta y el que el equipo arma para su propio código ([Fowler](https://martinfowler.com/articles/harness-engineering.html)).
-2. Es lo que deja al modelo trabajar como agente: prompts, herramientas y manejo del contexto ([Anthropic, harness para agentes largos](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
-3. Cada pieza da por hecho algo que el modelo no hace solo. Cuando el modelo mejora, eso deja de ser cierto, así que cada pieza se vuelve a probar. Con Opus 4.6 se pudo sacar la división en sprints, pero el evaluador aparte siguió valiendo lo que cuesta ([Anthropic, diseño de harness](https://www.anthropic.com/engineering/harness-design-long-running-apps)).
-4. CLAUDE.md es contexto y el modelo puede ignorarlo; un hook se ejecuta siempre. Lo que no puede fallar va en un hook ([hooks](https://code.claude.com/docs/en/hooks-guide), [buenas prácticas](https://code.claude.com/docs/en/best-practices)).
-5. CLAUDE.md debe quedar por debajo de 200 líneas, y de MEMORY.md solo se cargan las primeras 200 líneas o 25 KB ([memoria](https://code.claude.com/docs/en/memory)).
-6. El agente sobrevalora su propio trabajo. Un evaluador escéptico aparte es más fácil de afinar que un generador que se critica a sí mismo ([diseño de harness](https://www.anthropic.com/engineering/harness-design-long-running-apps)).
-7. Varios agentes rinden en tareas que se pueden hacer en paralelo, pero gastan unas 15 veces los tokens de un chat. Con código muy entrelazado no conviene ([Anthropic, sistema multiagente](https://www.anthropic.com/engineering/multi-agent-research-system)).
-8. `/loop` vive dentro de la sesión y vence a los 7 días. Las rutinas de la nube corren como mínimo cada 1 hora ([tareas programadas](https://code.claude.com/docs/en/scheduled-tasks)).
+- Todo lo que configura a un agente vive en el repo y entra por PR, salvo los secretos. La carpeta de cada agente
+  (su *home*) recibe una copia o un puntero a esa fuente. Nadie la edita a mano, y el agente tampoco.
+- Los secretos viven solo en el home del agente o en la bóveda. Nunca en el repo.
+- Cada tema tiene una sola fuente:
 
-## 2. Cómo está hecho el de Onia (10-oct)
+  | Qué | Dónde |
+  |---|---|
+  | Reglas | `AGENTS.md` |
+  | Método | `.claude/skills/` |
+  | Estado | `hermes-content/docs/handoff/` |
+  | Encargos | los issues `orquesta` |
 
-Abreviaturas: G = `C:/Users/PC/.claude` · WT = este worktree. Las cifras se contaron en los archivos el 10-oct.
+## 2. Qué carga cada agente al arrancar
 
-| Capa | Qué hay | Qué anda | Qué falla (caso real) |
-|---|---|---|---|
-| **Instrucciones** | <ul><li>G/CLAUDE.md: 97 líneas</li><li>CLAUDE.md del repo: **631 líneas, 27 reglas**</li><li>AGENTS.md: 286 líneas</li><li>G/rules: 94 archivos (`zh` repite los 11 de `common`)</li></ul> | Las reglas que traen su caso real se cumplen: el canario, "verificar es mirar". | <ul><li>Mide 3 veces lo recomendado.</li><li>**Sesiones con texto viejo:** este subagente y el arquitecto recibieron la versión de "Qué se publica" anterior al 9-oct. En disco, `CLAUDE.md:486` dice lo contrario.</li><li>El checkout primario está atrasado respecto de `origin/main`.</li></ul> |
-| **Skills** | <ul><li>45 en `.claude/skills`</li><li>30 en `.agents/skills` (copia para Codex)</li><li>110 en G</li><li>9 plugins</li></ul> | `onia-router` y las skills de cada carril. | <ul><li>Las dos copias no coinciden.</li><li>La paridad entre nube y PC está frenada (C5).</li><li>Más de 150 opciones: si un humano no sabe cuál usar, el agente tampoco.</li></ul> |
-| **Agentes** | <ul><li>3 de proyecto</li><li>43 en G</li><li>`loop-tres-roles.js`</li><li>workflows con roles</li></ul> | Workflows con roles separados (A2 y A6 cerrados con prueba). | <ul><li>El único agente Haiku es `doc-updater`.</li><li>Haiku hace el 0,5 % de los tokens.</li><li>Con 5-8 agentes a la vez se perdieron vueltas de loop.</li></ul> |
-| **Codex** | <ul><li>`scripts/codex-tarea.sh` (62 líneas, 58 corridas)</li><li>Codex cloud</li></ul> | Contratos cerrados; `revisar` sirve como revisor de la otra familia de modelos. | <ul><li>La cabecera dice "código = astra" (líneas 19-20), pero los tres valores por defecto son `gpt-6.1-sol` (45, 51, 57).</li><li>El sandbox no tiene git ni tests.</li><li>En la nube no se elige el modelo: se pidió Astra y corrió `gpt-5.6-sol`.</li><li>Va al 56 % del tope semanal.</li></ul> |
-| **Hooks** | <ul><li>Repo: SessionStart con `nube-ssh-vps.mjs`, Stop con `git-autosync.js` (270 líneas)</li><li>G: config-protection, accumulator, format-typecheck</li></ul> | El autosync tiene guarda de main y de MERGE_HEAD. | <ul><li>El Stop publica estado a medias (23-ago).</li><li>Termina siempre con `process.exit(0)`: sus errores no se ven.</li><li>Ninguna regla crítica es un hook: todo es consultivo.</li></ul> |
-| **Permisos** | <ul><li>G: `defaultMode auto`, `skipDangerousModePermissionPrompt true`, sin listas allow/deny</li><li>Codex: `approval_policy never` + `danger-full-access`</li></ul> | El clasificador frena merges sin revisión. | <ul><li>La aprobación no pasa de una sesión a otra: Plataforma pasó 20 h respondiendo "espero".</li><li>El secreto del MCP de n8n está en claro en `~/.codex/config.toml`.</li><li>El MCP de Higgsfield está cargado, aunque la regla dice "solo CLI".</li></ul> |
-| **Memoria y estado** | <ul><li>MEMORY.md: 125 líneas + 201 notas</li><li>handoffs por carril</li><li>**6 libros:** `madre.md`, `TABLERO.md` (3-sep), `EQUIPO.md` (2-sep), `loops.md` (19-sep), `plataforma-v1.md` (8.472 líneas), `chatbot.md` (13.164 líneas)</li></ul> | El índice queda por debajo de 200 líneas. | <ul><li>12 `codex-tareas` no tienen fila en ningún libro.</li><li>A6 se prometió y se olvidó.</li><li>Datos viejos se leen como presentes.</li><li>`handoff/chatbot.md`: último commit el 4-sep.</li></ul> |
-| **Loops** | Ver §3. | Los latidos de la nube siguen con la PC apagada. | <ul><li>Los crons de la madre mueren con ella.</li><li>Ventas no tiene latido.</li><li>La capa VPS/casa no está en ningún libro de octubre.</li></ul> |
-| **Canales** | <ul><li>Madre a nube: `SendMessage`</li><li>Madre lee la nube: `get_run_log`</li><li>Telegram desde el VPS</li></ul> | Madre a nube por nombre (medido el 1-oct). | <ul><li>La nube no puede escribirle a la madre.</li><li>Los subagentes no tienen `get_run_log`.</li><li>Hay un peer `observer-sessions-a2` sin explicar.</li></ul> |
-| **Verificación** | <ul><li>CI de onia-platform: lint, tipos, vitest y build en 21 min</li><li>suite local de unos 9,9k tests</li><li>Playwright</li><li>Codex `revisar`</li></ul> | CI verde en `32c7e0e8`; /login mirado. | <ul><li>El CI corre dos veces por cambio y no tiene `concurrency`. Los minutos podrían acabarse en unos 6 días (inferencia).</li><li>master quedó con una migración sin aplicar.</li></ul> |
-| **Costo** | <ul><li>`get_usage`: 1.503 M tokens en 48 h (Opus 58 %, Sonnet 41,5 %, Haiku 0,5 %)</li><li>`wham/usage` de Codex</li></ul> | Freno de Codex al 80 %. | <ul><li>No se mide el costo por punto cerrado.</li><li>No se cuentan los minutos de Actions ni las corridas headless del VPS.</li></ul> |
+| Agente | Carga | No carga |
+|---|---|---|
+| Claude Code | `CLAUDE.md` del repo (y los de carpetas superiores y subcarpetas); `~/.claude/CLAUDE.md` y `~/.claude/rules/`; su memoria (`MEMORY.md`, 200 líneas o 25 KB); skills de `.claude/skills` y `~/.claude/skills` (con el mismo nombre gana la personal); agentes de `.claude/agents/`, `~/.claude/agents/` y plugins (con el mismo nombre gana el del repo). `AGENTS.md` solo en la PC, porque `~/.claude/settings.json` fija `instructionFiles: claude-md-and-agents-md` | `AGENTS.md` en la nube: con `CLAUDE.md` presente, por defecto carga solo `CLAUDE.md`, y la nube no lee `~/.claude/` |
+| Codex | `~/.codex/AGENTS.md` (o `AGENTS.override.md`, que lo reemplaza) y los `AGENTS.md` desde la raíz del repo hasta el cwd, uno por carpeta (prevalece el más cercano; tope de 32 KiB para los del repo); `~/.codex/config.toml`; skills de `.agents/skills` (del cwd a la raíz), `~/.agents/skills`, `~/.codex/skills` (ubicación obsoleta), las de sistema y las de plugins. En el carril plataforma el repo es `onia-platform`, que tiene su propio `AGENTS.md`: ahí las reglas duras de ONIA le llegan por el global | `CLAUDE.md`; los `AGENTS.md` de subcarpetas por debajo del cwd. Las skills de `.claude/skills` las recibe por ruta en el contrato |
+| Hermes de la PC | `SOUL.md` de su home; **un solo** tipo de archivo de proyecto (`AGENTS.md`, de la raíz git al cwd); su memoria; skills de su home y de `skills.external_dirs`. Al tocar una subcarpeta suma su `AGENTS.md`, o su `CLAUDE.md` si no hay | `CLAUDE.md` de la raíz, porque `AGENTS.md` lo tapa; `~/.claude/**` como contexto o skills, que lo rechaza a propósito. Leer y escribir ahí con sus herramientas sí puede: eso lo frenan la regla, el `deny` y `HERMES_WRITE_SAFE_ROOT` |
+| Hermes del VPS | `/root/.hermes/SOUL.md`, `config.yaml` y `skills/<nombre>/SKILL.md` | Lo que `aplicar` no copió (un `.md` suelto en `skills/` no se carga) |
+| Trabajador de la orquesta | Lo de su motor, en un worktree limpio, más el prompt de `orquesta.mjs` («no hagas commit, push ni merge»). Claude, con `scripts/orquesta/trabajador.settings.json`; Codex, con `-s workspace-write` | — |
 
-## 3. Loops
+## 3. Fuente en el repo y dónde se usa
 
-**PC apagada** dice si el loop sigue corriendo cuando la PC de Sergio Urcullo está apagada.
-
-| Loop | Dónde | Cada cuánto | Qué hace | PC apagada | Dueño | Verificado 10-oct |
-|---|---|---|---|---|---|---|
-| Ronda `708dccce` | madre, CronCreate | :07 :27 :47 | Haiku revisa el libro, las colas, los PRs y Codex, y empuja a las sesiones paradas | No | madre | Sí |
-| Parte `dbec7299` | madre, CronCreate | 07:53 | Lo publicado ayer, qué necesita de Sergio Urcullo, PC y Codex | No | madre | Sí |
-| Cierre `915aadba` | madre, CronCreate | 21:53 | Libro, handoff, billetera y commit | No | madre | Sí |
-| Lote de contenido `3f6ca99f` | madre, CronCreate | lunes 08:13 | Guiones de la semana | No | madre | Sí |
-| Chequeo de publicación `19d6a061` | madre, CronCreate | una vez (10-oct) | /login y /checkout de `32c7e0e8` | No | madre | Corrió 85 min tarde |
-| Latido de Plataforma | servidor, RemoteTrigger | :17 cada hora | Le da un turno sobre su cola | Sí | Plataforma | Activo |
-| Latido de Marca (+2 one-shots) | servidor, RemoteTrigger | :27 cada hora | Igual que el anterior | Sí | Marca | Activo; ListAgents la ve "pending" |
-| Latido de Lucía | servidor, RemoteTrigger | :47 cada hora | Igual que el anterior | Sí | Lucía | Activo |
-| Latido de Hermes-Jarvis | servidor, RemoteTrigger | :57 cada hora | Igual, pero su cola tiene 0 tareas abiertas y 19 cerradas | Sí | Hermes | Activo, sin trabajo |
-| Ventas | su propio ScheduleWakeup | ? | Su cola | Solo si se programó | Ventas | **No verificable** |
-| Guardián `claude-guardia.sh` | VPS, cron | cada 10 min | Autocura contenedores y avisa por Telegram | Sí | VPS | **No** (credencial de hace 36 días) |
-| `onia-loop.sh` (7 casos: `onia-cola`, `chatbot-cola`, `web-venta`, `marca-personal`, `canario-visual`, `docs-auditoria`, `kpis-semanal`) | VPS / nodo-casa, cron | `chatbot-cola` cada hora; el resto ? | `onia-cola` mergea `claude/*` a main; `web-venta` es dueño de onia.com.bo; `chatbot-cola` lleva el chatbot | Sí, si corre en el VPS | VPS | **No** |
-| Unos 20 vigías (`vigia-ci`, `vigia-disco`, `vigia-aprobaciones`, `vigia-loops-remotos`, `vigia-comprobantes`, `vigia-credito-ia`…) | VPS, cron | `aprobaciones` cada 2 min; `credito-ia` cada 15 min | Avisan a Telegram | Sí | VPS | **No** (la cuenta de 20 es del 27-sep) |
-| n8n | VPS | barridos cada hora | Bot y barridos del embudo (44 workflows activos el 20-ago) | Sí | sin dueño | **No** |
-| Publicación de onia-platform | VPS (probable) | cada ~3 h | Publica master | Sí | ? | **No** (no está en `.github/workflows`) |
-| Codex cloud | nube de OpenAI | cuando lo lanza la madre | Tareas cerradas | Sí, una vez lanzadas | madre | Parcial |
-| CI | GitHub Actions | en cada push y cada PR | Gate | Sí | Plataforma | Sí |
-
-Además hay 14 triggers deshabilitados en el listado de RemoteTrigger que habría que limpiar.
-
-## 4. Frentes y dueños
-
-Etapa vigente: la 1 (de 0 a 5 clientes). Se congela todo lo que no sea Onia Platform y el chatbot. El GOAL del 8-oct reactivó marca personal, asesorías y pauta (`handoff/madre-local.md:197-210`).
-
-🔴 = frente vivo sin dueño o sin loop.
-
-| # | Frente | Dueño hoy | Loop hoy | Dueño propuesto |
+| Qué | Fuente en el repo | Dónde se usa | Cómo llega | Estado al 26-oct |
 |---|---|---|---|---|
-| 1 | 1.0 Plataforma (15 puntos) | Plataforma; la madre integra | :17 + ronda | igual |
-| 2 | Cobro y QR del BCP | Plataforma el código; Sergio Urcullo el trámite | :17 | 🔴 el trámite no tiene recordatorio → reloj "BCP" en el parte |
-| 3 | Respaldos (punto 4) | Plataforma | :17 | igual; el bucket R2 está en C7 |
-| 4 | SIAT (vence el 4-nov) | Plataforma con capturas; el portal solo lo abre Sergio Urcullo | 🔴 ninguno | la madre lleva el reloj |
-| 5 | Chatbot (motor :3020, n8n, Chatwoot) | Plataforma solo para #140 y K1 | 🔴 el motor y n8n, salvo que `chatbot-cola` esté vivo | Plataforma los PRs; Review/QA la salud semanal; la madre la infra. **Primero el inventario (cambio 2).** |
-| 6 | Demo y capturas C1-C7 | Plataforma (lunes 12-oct) | :17 | igual |
-| 7 | Pauta Meta (16-oct, go/no-go 13-oct) | Ventas, parada desde el 9-oct | 🔴 sin latido | Ventas con latido (cambio 4) |
-| 8 | Leads (7; el más viejo, de hace unos 50 días) | Ventas prepara, Sergio Urcullo envía | 🔴 ninguno | Ventas |
-| 9 | Marca personal | Marca | :27 | igual. Revisar si el `marca-personal` del VPS sigue vivo: serían dos escritores |
-| 10 | Asesorías y cal.com | Marca las historias | 🔴 nadie sigue las reservas | la madre lee la agenda en el parte |
-| 11 | Web onia.com.bo (la puerta del 16-oct) | 🔴 nadie en la nube; `web-venta` en el VPS sin verificar | 🔴 | Review/QA, solo si `web-venta` está muerto |
-| 12 | Fiscal y legal (NIT el 13-oct según memoria, homologación el 30-oct, términos #124) | Sergio Urcullo y Leslie Mercado Moreno | 🔴 ninguno | la madre lleva los relojes |
-| 13 | Infra y costo | 🔴 sin dueño único: Plataforma, Hermes y la madre tienen la llave del VPS, y `onia-cola` puede mergear solo | guardián (sin verificar) | la madre, dueña única de la infra |
-| 14 | Competencia | Ventas | ninguno (aceptable) | igual |
-| 15 | Harness | madre | ronda | madre, en el "lunes del harness" |
-| 16 | Add-ons del 8-oct | sin tarea | ninguno | congelados detrás de la 1.0 (correcto) |
-| 17 | Lucía (token de IG vence el 13-18 oct) | Lucía | :47 | **se propone congelarla** (estrategia §10: "otro producto entero"). Lo decide Sergio Urcullo |
-| 18 | Hermes-Jarvis | Hermes, con la cola vacía | :57 (solo gasto) | pasa a Review/QA |
-| 19 | Líneas congeladas desde el 5-sep | nadie | ninguno | quedan así |
+| Reglas compartidas | `AGENTS.md` | Los tres agentes | Se lee del cwd. Claude Code, solo en la PC (§2) | Nuevo, en PR |
+| Reglas de Claude y sus casos | `CLAUDE.md` | Claude | Se lee del cwd | Vivo |
+| Skills de ONIA | `.claude/skills/<nombre>/SKILL.md` | Los tres agentes | Claude: nativo. Hermes de la PC: `external_dirs` → `E:/onia-wt/hermes-base/.claude/skills`. Codex: por ruta en el contrato | Hermes ve 0 de 66 |
+| Subagentes de Claude | `.claude/agents/` | Claude | Nativo | Vivo |
+| Hermes de la PC: quién es | `hermes-content/deploy/hermes-pc/SOUL.md` | `%LOCALAPPDATA%\hermes\SOUL.md` | `Copy-Item`, con Hermes cerrado | Hoy usa el de fábrica |
+| Hermes de la PC: config | `hermes-content/deploy/hermes-pc/config.onia.yaml`, con su prueba `probar-deny.py` | `%LOCALAPPDATA%\hermes\config.yaml` | Esas claves, con Hermes cerrado | Hoy corre con `--yolo` y sin `deny` |
+| Hermes del VPS | `hermes-content/deploy/hermes-agent/SOUL.md` y `hermes-content/skills/` | `/root/.hermes` | Workflow `hermes-jarvis` → `aplicar` | El SOUL es viejo: habla de loops y del tablero archivado |
+| Codex global | `hermes-content/deploy/codex/AGENTS.global.md` | `~/.codex/AGENTS.md` | `Copy-Item` | Hoy tiene el texto de agencia de las nueve líneas de negocio |
+| Reparto | `scripts/orquesta/` y `carriles.json` | GitHub Actions y la PC | Git | Vivo |
+| Carga de tareas desde la PC | `scripts/orquesta/cargar-issue.mjs` | Hermes de la PC | Lo corre Hermes; `gh issue create` le queda bloqueado | Nuevo, en PR |
+| Skills del Hermes del VPS | `hermes-content/skills/*.md` (`planificar-orquesta`, `agenda-calendario`…) | Solo el VPS | `aplicar` las copia a `skills/<nombre>/SKILL.md` | El Hermes de la PC no las ve, y no las necesita |
+| Estado de cada carril | `hermes-content/docs/handoff/<carril>.md` | Todos | Git | Vivo |
 
-## 5. Brechas (por impacto en la etapa 1)
+## 4. Lo que vive solo en cada home
 
-1. **La aprobación se traba en cada sesión.** Un "sí" escrito en CLAUDE.md no vale como el "sí" de Sergio Urcullo dentro de una sesión de la nube. Resultado: 20 h paradas y 18 PRs esperando.
-2. **El camino a producción pasa por la laptop.**
-   - La nube no puede empujar ramas y deja bundles.
-   - Codex no prueba.
-   - Con la PC apagada no se mergea nada.
-   - Cada PR con migración deja master sin poder publicarse.
-3. **Los puntos se pierden.**
-   - Hay 6 libros, más un tablero SQLite en el VPS.
-   - Ninguna alarma salta por fecha: 13-oct, 13-18 oct, 16-oct, 30-oct, 4-nov.
-4. **Frentes 🔴 sin dueño:** SIAT, leads, asesorías, web, fiscal, infra y el latido de Ventas. Parciales: el BCP y la operación del chatbot.
-5. **Hay una capa oculta.** Los 7 casos de `onia-loop.sh` y los unos 20 vigías del VPS gastan cuota y avisan a Telegram, pero ningún libro de octubre dice si viven.
-6. **La cuota no tiene presupuesto.**
-   - Una sola suscripción paga a la madre, 5 sesiones, el guardián y quizás el VPS.
-   - Opus hace el 58 % y Haiku el 0,5 %.
-7. **Con la PC apagada se puede prometer 2 de 5:** los latidos y el CI. No hay integración, ni revisión de la otra familia, ni libro.
-8. **Las instrucciones están infladas y algunas sesiones reciben texto viejo.**
-9. **Permisos y secretos:** Codex con `danger-full-access`, el secreto de n8n en claro y el MCP de Higgsfield cargado.
+**Hermes de la PC** (`%LOCALAPPDATA%\hermes`):
+- `.env` y `auth.json`: las llaves.
+- `memories/`: con aprobación.
+- Sesiones, logs y `cron/`.
+- `skills/` de fábrica. `skills/onia/` sale de ahí: lo útil pasa al repo.
 
-## 6. Diseño objetivo
+`C:\Users\PC\.hermes` lo crea Orca, y Hermes no lo lee mientras `HERMES_HOME` no apunte ahí.
 
-- **Una madre, un libro.** `cola/loop/madre.md` es el único libro.
-  - Cada pedido entra con `id · dueño · modelo · estado · prueba · vence`.
-  - La sección "Relojes" guarda las fechas de §5.3.
-  - Los demás libros llevan en la cabecera "HISTORIA: el libro vivo es `cola/loop/madre.md`", después del cambio 2.
-  - No se crea `ENTRADA.md`.
-- **Verificador sin LLM:** se extiende `scripts/verificar_cola.js`. Falla si encuentra:
-  - un `[x]` sin SHA, URL o captura;
-  - una línea abierta sin dueño;
-  - una línea con más de 24 h sin moverse;
-  - un reloj que vence en 72 h o menos.
+**Codex** (`~/.codex`):
+- `auth.json`, `secrets/` y el historial.
+- `config.toml`, con `model = "gpt-6.1-sol"`, `approval_policy = "on-request"`, `approvals_reviewer = "user"`,
+  `sandbox_mode = "workspace-write"` y `[windows] sandbox = "elevated"`, más sus plugins. Las dos claves de permisos
+  cambiaron el 25-oct (antes eran `never` y `danger-full-access`; según la auditoría, las cambió Hermes). Se mantiene,
+  pero solo cambia las sesiones interactivas lanzadas sin `-s`/`-a`: `codex exec` no pide aprobación nunca, y la
+  orquesta y `codex-tarea.sh` ya fijan `-s workspace-write`, así que no los afecta. Lo que difiere entre ellos es el
+  sandbox de Windows: la orquesta hereda `elevated` y `codex-tarea.sh` fuerza `unelevated`, que aísla menos la red.
 
-  Lo corren la ronda (PC) y un vigía del VPS.
-- **Loops:**
-  - Ronda, parte y cierre de la madre, que se recrean cada lunes antes de que venzan.
-  - 4 latidos más el de Ventas.
-  - Hermes pasa a ser Review/QA: los miércoles mira onia.com.bo a 390 y 1440 px, la salud del chatbot y la lista de herramientas de Meta, todo en solo lectura.
-  - El vigía diario de relojes manda **un** resumen al día por Telegram.
-- **Aprobación:**
-  - Clase A, sin preguntar: lo que pasa los gates (regla del 9-oct).
-  - Clase B, con su sí: gasto, terceros, SIAT, actos legales, cara o voz, credenciales, instalaciones, CLAUDE.md o la configuración.
-  - El sí vale solo escrito en la sesión que actúa. La línea fija de cada carril vive en `handoff/ARRANQUE-SESIONES.md`, y Sergio Urcullo la pega al reabrir.
-  - El `ok <id>` de Telegram solo dispara scripts del VPS que no usan LLM.
-  - Un carril nunca espera: anota el bloqueo y sigue con lo siguiente.
-- **Costo:**
-  - Una línea diaria por modelo en §E de madre.md.
-  - Tokens por punto cerrado con prueba.
-  - Frenos: Codex al 80 % no lanza más. Con vueltas perdidas se pausa Lucía, después Review/QA, y después se baja la cantidad de agentes.
-  - Hasta 10 agentes Claude a la vez, hasta pasar una semana sin vueltas perdidas.
-- **Lo que NO se usa:**
-  - rutinas de menos de 1 h;
-  - sesiones que abre una rutina;
-  - elegir el modelo en Codex cloud;
-  - subagentes que lean transcripts de la nube;
-  - Telegram como aprobación para un LLM;
-  - protección de rama (da 403 porque el repo es privado).
+**Claude** (`~/.claude`):
+- Las credenciales y `settings.json`.
+- `CLAUDE.md` global y `rules/`. Hermes reescribió seis reglas el 25-oct; falta decidir si se mantienen o se
+  revierten.
+- Las skills personales.
 
-## 7. Cambios priorizados
+**VPS** (`/root/.hermes`):
+- `.env`.
+- El token de Issues, en `/root/.config/onia/gh-issues-token`.
 
-| # | Qué | Quién lo hace | ¿Sí de Sergio Urcullo? | Hecho cuando |
+## 5. Cómo pasa un encargo
+
+1. Sergio Urcullo pide algo. Puede hacerlo de dos formas:
+   - en la TUI del Hermes de la PC, abierta a mano en PowerShell desde `E:/onia-wt/hermes-base`, sin `--yolo`;
+   - dictándoselo al Hermes del VPS por Telegram.
+2. Hermes arma el contrato (`AGENTS.md` §4) y lo carga:
+   - el de la PC, con `node scripts/orquesta/cargar-issue.mjs` (primero con `--dry`, para mostrárselo);
+   - el del VPS, con `scripts/loops/orquesta-hermes.sh`.
+
+   El de la PC pone siempre `orquesta`, `carril:<área>`, `origen:hermes` y `necesita-ok`. El del VPS hace lo mismo,
+   salvo `nube` con `check: urls`, que hoy carga sin `necesita-ok`; eso se corrige en el PR del paso 5 de §7.
+3. Sergio Urcullo lo suelta sacándole `necesita-ok`, incluso desde el celular. El workflow no escucha cuando se saca
+   un label:
+   - una tarea de la nube arranca en la próxima pasada de Actions (cada 3 h, de 8 a 23) o al comentar el issue;
+   - una de la PC arranca en la próxima pasada de la tarea programada (cada 3 h, de 8 a 23, con la PC prendida).
+
+   El comentario le llega al trabajador como indicación.
+4. `scripts/orquesta/orquesta.mjs` lo toma:
+   - marca, comunidad e investigación corren en la nube (GitHub Actions);
+   - plataforma y video corren en la PC (tarea programada).
+
+   Crea un worktree limpio (en la PC, `E:/onia-orquesta/<carril>-<n>`; en Actions, bajo `runner.temp`) y corre al
+   trabajador del carril con el modelo de `carriles.json`: Codex en plataforma, Claude en el resto.
+5. Revisa otro modelo, con contexto limpio. Si pasa, deja un PR y un comentario con el recibo. Si falla, reintenta
+   una vez; a la segunda falla seguida le pone el label `bloqueada`, con el motivo.
+6. Con `ok: sergio`, el issue queda en `espera-ok`, con capturas, hasta que él conteste.
+7. El Hermes de la PC lee el issue y el PR y compara el recibo con el «hecho cuando». Escribe el handoff en
+   `E:/onia-wt/hermes-base`, y lo commitea la sesión principal de Claude. Antes de actualizar `hermes-base` a
+   `origin/main`, ese handoff tiene que estar commiteado. El del VPS cuenta el avance en el resumen de las 06:30 y
+   en el cierre de las 21:30.
+8. Mergea Sergio Urcullo o la sesión principal de Claude Code, siempre por PR revisado. La publicación sigue
+   `AGENTS.md` §3 y §6.
+
+Fuera de la cola quedan solo dos cosas:
+- El trabajo directo de Sergio Urcullo con Claude Code (la 1.0 y la integración). Desde ahí, Claude puede lanzar
+  un Codex cerrado con `scripts/codex-tarea.sh`.
+- Los subagentes de Hermes, que solo leen y verifican.
+
+Nada más es una vía de despacho: ni Orca Orchestration, ni `.hermes/plans`, ni `.hermes/tasks`, ni los goals.
+
+## 6. Quién dispara qué
+
+| Disparo | Qué corre |
+|---|---|
+| Sergio Urcullo en la TUI de Hermes | Planificar, cargar issues y verificar entregas |
+| Sergio Urcullo por Telegram | Hermes del VPS: resumen, cierre, calendario, dictar una tarea |
+| Etiquetar o comentar un issue, y cada 3 h de 8 a 23 (La Paz) | La orquesta en Actions |
+| Tarea programada «ONIA Orquesta», cada 3 h de 8 a 23 con la PC prendida. El 26-oct estaba en estado Listo, pero corre desde el checkout principal sucio (§7, paso 0) | La orquesta en la PC |
+| Sergio Urcullo en Claude Code | Trabajo directo e integración por PR |
+| Workflow `hermes-jarvis` (`diagnostico`, `aplicar`, `revertir`) | Cambios en el VPS |
+
+## 7. Lo que falta para que esto sea cierto
+
+Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
+
+0. **Antes del merge: limpiar el checkout principal.**
+   - ✅ El 26-oct sus 116 cambios se copiaron a la rama `rescate/checkout-principal-20261026` (pusheada) y se
+     verificaron archivo por archivo.
+   - Falta que él corra `E:\onia-wt\limpiar-checkout-principal.ps1`: la revisión de seguridad no dejó borrar desde
+     la sesión.
+   - También hay que reinstalar la tarea programada con el comando de `scripts/orquesta/README.md` §«Correr».
+
+   Si no, la tarea corre desde ese checkout, su `git pull` falla y, con el `&` actual, sigue sobre el código viejo
+   sin dejar el error en el log.
+1. Mergear el PR. Lleva:
+   - `AGENTS.md`;
+   - este mapa;
+   - el SOUL, la config y el instalador de Hermes de la PC;
+   - el cargador de issues;
+   - el `AGENTS.global.md` de Codex.
+2. a 4. **Un solo comando, con Hermes cerrado y desde una copia del repo con el PR mergeado:**
+   `powershell -ExecutionPolicy Bypass -File hermes-content\deploy\hermes-pc\aplicar.ps1 -EscrituraSegura -Codex`.
+   El script hace, en orden:
+   - el respaldo en `%LOCALAPPDATA%\hermes\backups\pre-orden-<fecha>`;
+   - el worktree `E:/onia-wt/hermes-base`, en `origin/main`;
+   - la comprobación de que el `AGENTS.md` sea el nuevo;
+   - la mezcla de `config.onia.yaml` con el escritor de Hermes, sin borrar claves;
+   - la copia del SOUL;
+   - el archivo de `skills/onia` en el respaldo;
+   - la carpeta `pedidos`;
+   - `probar-deny.py --vivo`;
+   - con `-EscrituraSegura`, la variable `HERMES_WRITE_SAFE_ROOT`;
+   - con `-Codex`, el `AGENTS.md` global de Codex.
+
+   Se deshace con `revertir.ps1`. Sobre una copia, el 26-oct, dio 18 claves cambiadas y 0 fallas, y la vuelta atrás
+   quedó idéntica byte a byte. Cambia el modelo por defecto de `gpt-6-astra-900k` a `gpt-6.1-sol` y la zona horaria
+   de Caracas a La Paz.
+
+   Prueba de hecho:
+   - `/context` muestra `AGENTS.md`;
+   - `git -C . push` sale bloqueado sin preguntar;
+   - `--dry` del cargador muestra `necesita-ok`;
+   - `probar-deny.py --vivo`, corrido con el python de Hermes (el comando está en la cabecera del script), da
+     «mismo approvals.deny» y 0 fallas. Hoy falla a propósito, porque el `config.yaml` vivo no tiene deny. En modo
+     repo, sin `--vivo`, hoy da 0 fallas: 173 comandos que tienen que bloquearse y 41 lecturas que tienen que pasar.
+     Se vuelve a correr en cada actualización de Hermes.
+5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. **Hoy `aplicar` no puede hacerlo**: su
+   control previo falla si el SOUL no trae `## Planificar la orquesta` (`aplicar.sh:309-314`), y además crea ese
+   trabajo y no tiene un paso para pausarlo. Hace falta cambiar `aplicar.sh` y su prueba
+   (`hermes-jarvis-aplicar.test.mjs`) en un PR propio, junto con `hermes-content/skills/planificar-orquesta.md`, que
+   todavía dice «vos planificás». Después lo despacha él.
+6. Orca: no lanzar Hermes desde ahí y no activar Orchestration. Cerrar la corrida `run_66e1d03c2397`.
+7. Pasar a issues lo vigente de `.hermes/plans` y `.hermes/tasks`, y archivar el resto.
+8. ✅ Reglas globales de Claude (26-oct):
+   - Se mantienen las seis que tocó Hermes, porque son mejores que las de antes: sacan los modelos viejos y el 80 %
+     genérico y suman el contrato de Codex sin Git.
+   - Se archivaron en `~/.claude/rules-archivo/20261026` tres perfiles token-eficiente y el README.
+   - Las reglas web ahora se cargan solo con archivos de interfaz.
+9. Limpiar worktrees y disco:
+   - ✅ El 26-oct se rescató a ramas `rescate/*` el trabajo de 13 worktrees, verificado y pusheado.
+   - ✅ Las 11 ramas que solo existían en la PC están en `E:/respaldo-ramas-solo-locales-20261026.bundle`.
+   - ✅ Se borraron 178 ramas locales ya mergeadas; nombres y commits en `E:/respaldo-ramas-mergeadas-20261026.txt`.
+   - Falta que él corra `E:\onia-wt\limpiar-worktrees.ps1`. Saca los worktrees viejos y mueve a
+     `E:\archivo-worktrees-20261026` las 41 carpetas huérfanas (unos 22 GB) y el clon suelto de Orca.
+
+## 8. Qué se queda, qué sale y qué falta
+
+Pedido de Sergio Urcullo del 26-oct. Lo que figura en «Sale» va a `historial/` o se apaga: no se borra nada que no
+se pueda recuperar. La evidencia está en las secciones 3, 4 y 6 de la auditoría.
+
+### Se queda
+
+| Qué | Por qué |
+|---|---|
+| `AGENTS.md` nuevo y `CLAUDE.md` con sus casos | Reglas compartidas y su historia, cada cosa en su lugar |
+| `ONIA_ESTRATEGIA_DE_EMPRESA`, `ONIA_CATALOGO_DE_VENTA`, `ONIA_CLIENTE_IDEAL`, `ONIA_ADQUISICION_Y_PAUTA`, `AI_MODEL_ROUTING_2026` | Son las fuentes únicas del negocio y de los modelos |
+| Los handoffs de siete campos | Son lo que deja retomar el trabajo |
+| Issues `orquesta`, `scripts/orquesta/`, `carriles.json` y el revisor distinto del autor | Es la cola única y el reparte sin un LLM que coordine |
+| El Hermes del VPS para Telegram, y el workflow `hermes-jarvis` | Los avisos funcionan, también con la PC apagada |
+| Skills que sirven: `onia-router`, `onia-core`, `onia-propuestas`, `onia-contabilidad-bolivia`, `onia-infra`, `panel-onia`, `aprender-de-todo`, `orca`, y del VPS `planificar-orquesta` y `agenda-calendario` | Son concretas y están al día. `planificar-orquesta` necesita el cambio del paso 5 de §7 |
+| `equipo-de-agentes` | Reescrita en este PR sin la madre; lo de esa época pasó a `historial/` |
+| `scripts/orquesta/cargar-issue.mjs` | Nuevo en este PR: las barandas del VPS portadas a la PC |
+| Claude Code como sesión principal, Codex con contratos cerrados y Orca como tablero | Cada uno tiene un solo papel |
+| El cambio de Codex del 25-oct (`on-request`, `workspace-write`) | Hace más segura la sesión interactiva. No toca `codex exec`: la orquesta y `codex-tarea.sh` fijan su sandbox por CLI (§4) |
+
+### Sale
+
+| Qué | Adónde |
+|---|---|
+| El `AGENTS.md` de `main`, la reescritura de Hermes en el checkout principal y el encabezado de marca personal | Los reemplaza el nuevo. El PR #226 se cierra y su tabla de 184 reglas queda como insumo |
+| Las colas paralelas: Orca Orchestration (`run_66e1d03c2397`), `.hermes/plans`, `.hermes/tasks` y los goals usados como cola | Lo vigente pasa a issues; lo demás, a archivo |
+| La revisión de cada 3 h del Hermes del VPS | Se pausa con `aplicar`, sin borrarla |
+| Lanzar Hermes con `--yolo`, desde Orca o desde el checkout principal | Desde ahora: TUI a mano en `E:/onia-wt/hermes-base` |
+| `skills/onia/` de Hermes (`onia-operar-harness`, `onia-relevo-sesion`) | Lo útil va a las skills del repo; el resto, a `backups/` |
+| `onia-sesion-madre` y 25 de los 40 `.md` de `hermes-content/skills/` (sin tocar desde junio o julio) | ✅ **Hecho el 26-oct:** `onia-sesion-madre` y 23 `.md` en `historial/skills/`. Quedan 6 porque algo los lee: `guiones-diarios-onia` y `marca-personal-sergio` (`carriles.json`), `radar-creativo-onia` (workflow n8n), `audio-elevenlabs` (script del VPS) y las dos fiscales que cita `onia-contabilidad-bolivia`. Entraron 4 que solo tenían el revert del 2-oct |
+| `ONIA_EQUIPO_DE_AGENTES.md`, los dos `ORCHESTRATOR.md`, `PROJECTS_ORCHESTRATION.md`, `HERMES_OS_CONTROL_CENTER_2026.md`, `HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md` y `CODEX_SKILL_ROUTING.md` (en la raíz) | `historial/` con `git mv`. El harness del 10-oct ya está ahí. ✅ **Hecho el 26-oct:** `ONIA_EQUIPO_DE_AGENTES`, `HERMES_OS_CONTROL_CENTER_2026` y `HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026`. **Pendientes**, porque los nombra código: los dos `ORCHESTRATOR.md` (`scripts/n8n-fix-assignments.js`, `docs-hygiene.test.mjs` y respaldos de n8n), `PROJECTS_ORCHESTRATION.md` (seed SQL y `operating-source.ts` de ONIA Center) y `CODEX_SKILL_ROUTING.md` (lista de la raíz de `docs-hygiene.mjs`) |
+| El resto de los docs viejos de `hermes-content/docs/` (época madre, loops, ONIA Center, vendedores, precios y pauta de agosto, Lucía de agosto) | ✅ **Hecho el 26-oct:** 130 a `historial/` con `git mv`. 43 quedan en su lugar hasta sacar su nombre de un script, test, seed, `.ts` o `hermes-content/deploy/`. **Segunda pasada, el mismo día:** 286 archivos más (la cola fechada de septiembre, 36 handoffs cerrados, research fechada, `out/`, `docs/superpowers/` y el README viejo de la raíz), con sus referencias en los docs vigentes. Lo que nombra código, aunque sea en un comentario, quedó en su lugar |
+| `~/.codex/AGENTS.md`, con el texto de agencia de las nueve líneas de negocio | Lo reemplaza `AGENTS.global.md` |
+| De `~/.claude/rules`: 3 de los 4 perfiles token-eficiente y el README cargado como si fuera regla | ✅ **Hecho el 26-oct:** `~/.claude/rules-archivo/20261026` |
+| Las 15 skills personales de `~/.claude/skills` que pisan a las del repo con otro contenido | ✅ **Hecho el 26-oct:** `~/.claude/skills-archivadas-20261026`. Eran de septiembre y las del repo, del 2 y el 10-oct |
+| El SOUL del VPS que habla de loops y del tablero archivado | Lo reemplaza uno nuevo |
+| Las 41 carpetas huérfanas de worktrees (13,3 GiB) y las 196 ramas locales ya mergeadas | Las carpetas se mueven a `E:/archivo-worktrees-20261026/`. Las ramas se borran con `git branch -d`, que se niega si alguna no está mergeada |
+
+### Falta
+
+| Qué | Para qué |
+|---|---|
+| El worktree base `E:/onia-wt/hermes-base` | Que Hermes lea un repo limpio y no el `main` sucio |
+| El cambio de `aplicar.sh` y el SOUL nuevo del VPS (§7, paso 5) | Que el del VPS deje de planificar solo y lo sepa |
+| `HERMES_WRITE_SAFE_ROOT` puesta en Windows | `approvals.deny` frena comandos pero no `write_file`, y así fue el incidente del 25-oct |
+| Descripciones de skills que digan cuándo usarlas en los primeros 57 caracteres | El índice de Hermes corta a los 60 |
+| Una prueba que falle si `.agents/skills` se aparta de `.claude/skills` (ignorando CR), o borrar las copias. Ojo: `media-use` la usa `editor-videos` | Que Codex no lea otra versión |
+| Una barrera dura sobre `main` | GitHub la cobra en repos privados: el 26-oct la API respondió «Upgrade to GitHub Pro». Mientras tanto, la barrera es local: el `deny` de Hermes y Codex sin Git. El `deny` no resuelve alias ni variables (`$g='git'; & $g push` pasa), así que no es un sandbox |
+| **Una cuenta de GitHub aparte para Hermes, con un token que solo lea el código y escriba issues** | Es la única barrera dura. El `deny` frena errores del modelo, no a un modelo inyectado: un script propio (`node x.js`, `bash x.sh`) corre sin preguntar y adentro puede hacer `git push` con las credenciales de Sergio Urcullo. Además, la orquesta le cree todo lo que firma su cuenta |
+| Que el cargador rechace las definiciones de referencia de Markdown (`[x]: …` al principio de una línea) | GitHub las esconde igual que el HTML: el trabajador las lee y Sergio Urcullo no las ve |
+| Medir si los hijos de Hermes reciben `AGENTS.md` y heredan `approvals.deny` | 21 de 30 prompts de sistema medidos no traían `AGENTS.md` |
+| Qué shell usa la terminal de Hermes en la PC | Decide si `cmd /c git push` se le escapa al `deny` |
+| Que la prueba de higiene de docs falle con un doc fechado en la raíz sin aviso | Que no vuelva a acumularse historia leída como si fuera vigente |
+
+## 9. Las 4 áreas
+
+Sergio Urcullo, 26-oct: Onia se ordena en 4 áreas. Los carriles de la orquesta no se renombran (tienen labels y
+tests): cada uno cae en un área. Skills en orden, agentes y «no usar» de cada área: `onia-router` §«Las 4 áreas de
+Onia». Lo viejo de cada área está en `historial/`.
+
+| Área | Carriles | Skill de entrada | Handoff | Docs fuente |
 |---|---|---|---|---|
-| 1 | Línea fija de aprobación en Plataforma, Marca, Ventas y Hermes, guardada en `ARRANQUE-SESIONES.md` (une C1-C3) | la madre redacta; Sergio Urcullo la escribe | **Sí, es su acción** (unos 5 min) | el siguiente latido de Plataforma termina en merge o publicación, no en "espero" (`get_run_log`) |
-| 2 | **Inventario en vivo de la capa VPS/casa:** `crontab -l` en el VPS y en casa, los 7 casos de `onia-loop.sh`, los vigías, `onia-cola`, el tablero SQLite, la credencial del guardián, n8n y cuántos mensajes de Telegram llegan por día. Se vuelca acá en §3. **Va antes que el 3 y el 4.** | la madre por SSH, solo lectura; Haiku arma la tabla | No para leer. **Sí** para pausar lo que él usa. | cada línea de cron con la salida del comando; vivo o muerto con la fecha de su último log; la lista de pausas en C |
-| 3 | Libro único, "Relojes" y verificador (§6); las 12 `codex-tareas` con su fila; la §F de madre.md apunta a §3 de este doc | la madre con Sonnet; Codex Sol escribe el verificador **y la madre lo prueba** (el sandbox no tiene git ni tests) | No | el verificador sale ≠0 ante un `[x]` sin prueba y lista los relojes a 72 h |
-| 4 | Dueños de §4 en madre.md; latido de Ventas a las :37; Hermes pasa a Review/QA | la madre (RemoteTrigger y mensajes) | No. **Sí** para congelar Lucía. | `RemoteTrigger list` muestra a Ventas; la cola de Hermes tiene 3 o más tareas; un `get_run_log` de Ventas muestra una tarea tomada |
-| 5 | Guarda de migraciones: `deploy/onia-platform/publicar.sh` aborta si falta en `_prisma_migrations` de producción alguna migración de `prisma/migrations`. Los PRs con migración solo los mergea la madre. | Codex Astra escribe, Sonnet revisa, la madre despliega | No (infra revisada, regla del 9-oct) | en seco, con una migración ficticia sin aplicar, aborta con mensaje |
-| 6 | CI: `concurrency: {group: ci-${{ github.ref }}, cancel-in-progress: true}` y medir los minutos | Plataforma o Codex Sol | No para `concurrency`. **Sí** para C6 (retirar la suite local) y para el scope `user` | un segundo push cancela la corrida anterior; se conocen los minutos del mes |
-| 7 | Billetera diaria y costo por punto; `--disable multi_agent` y `meta.json` en `codex-tarea.sh`; corregir la cabecera astra/sol | la madre + Codex Sol | No | 3 días seguidos con línea en §E |
-| 8 | Vigía de relojes en el VPS: **se suma a los vigías que ya existen** (mismo patrón, `onia-tg.sh`), con un resumen por día | Codex Sol escribe, Sonnet revisa, la madre despliega | No, si el VPS ya tiene el clon de onia-hermes. **Sí**, si necesita un token de GitHub. | un reloj de prueba a mañana manda 1 resumen y no más de 1 por día |
-| 9 | CLAUDE.md a 250 líneas o menos (el dominio pasa a skills); quitar `rules/zh`; `pull --ff-only` del primario; relevo de la madre después de editar CLAUDE.md | la madre + Sonnet | **Sí** | `wc -l` da 250 o menos sin perder reglas; el primario coincide con `origin/main` |
-| 10 | Permisos y secretos: el secreto de n8n fuera de `config.toml`; Codex interactivo en `workspace-write` + `on-request`; apagar el MCP de Higgsfield y claude-mem; autorizar o quitar los 5 MCP pendientes | la madre prepara; Sergio Urcullo aplica | **Sí** | `grep` del secreto da 0; la lista de MCP queda sin caídos |
+| Marca personal | `marca`, `video` | `diseno-contenido-onia` (piezas) · `hyperframes` (video) | `handoff/marca-personal.md` | `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` · `ONIA_MOTOR_SEMANAL_CONTENIDO.md` · `HIGGSFIELD_VIDEO_SYSTEM.md` |
+| Workshops y comunidad | `comunidad` | cuartito `community-marketing` (no hay skill propia todavía) | `handoff/comunidad.md` | `TALLER_31_OCT.md` · `comunidad/ESTADO_COMUNIDAD.md` · `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md` |
+| Onia Platform | `plataforma` | las `onia-*` de `onia-platform` · `onia-ventas-pauta` (venta y pauta) | `handoff/codex-continuar-1.0.md` · `handoff/mercado-y-pauta.md` | `ONIA_CATALOGO_DE_VENTA.md` · `ONIA_CLIENTE_IDEAL.md` · `ONIA_ADQUISICION_Y_PAUTA.md` · precios en `subscription-plans.ts` y `pricing.ts` |
+| Otros (infra, Hermes, orquesta, investigación, fiscal propio, Lucía, clientes web, Bolivian Electric) | `investigacion` | `onia-infra` · `onia-hermes-jarvis` · `aprender-de-todo` | `handoff/hermes-local.md` · `handoff/orquesta.md` · `handoff/hermes-jarvis.md` | Este documento · `ONIA_ESTRATEGIA_DE_EMPRESA.md` · `AI_MODEL_ROUTING_2026.md` |
 
-## 8. Crítica de este diseño (10-oct, verificada en archivos)
+## 10. Fuentes
 
-**Afirmaciones del inventario.** Se revisaron 10 y 7 resultaron ciertas:
-- CLAUDE.md tiene 631 líneas y 27 reglas.
-- `codex-tarea.sh` tiene 62 líneas y la contradicción astra/sol.
-- G/rules tiene 94 archivos, `zh` 11 y `common` 11.
-- Los hooks del repo son SessionStart y Stop.
-- G/settings tiene `auto`, `skip…: true`, `sonnet` y `high`.
-- Hay 45 skills y 30 copias para Codex; 43 agentes, con `doc-updater` como único Haiku.
-- `git-autosync.js` tiene 270 líneas y termina con `exit(0)`.
+Revisadas el 26-oct-2026. Hermes es el código instalado en `C:/Users/PC/AppData/Local/hermes/hermes-agent/`
+(v0.22.2); las rutas de esa fila son relativas a esa carpeta.
 
-Las otras 3 eran falsas o viejas:
-- MEMORY.md tiene **125** líneas, no 99.
-- madre.md hoy tiene 27 abiertas y 5 cerradas (A2 y A6 se cerraron).
-- `handoff/chatbot.md` tuvo su último commit el 4-sep, no el 28-ago.
+| Sistema | Fuente primaria | Qué sostiene |
+|---|---|---|
+| Hermes | `hermes_constants.py:50-57,111-118` | La home en Windows es `%LOCALAPPDATA%\hermes`, salvo `HERMES_HOME` |
+| Hermes | `agent/prompt_builder.py:1721-1758,1855-1869`; `agent/subdirectory_hints.py:242-277` | Un solo tipo de archivo de proyecto, `AGENTS.md` de la raíz git al cwd; `~/.claude` no entra como contexto |
+| Hermes | `agent/skill_utils.py:320-346,490-496,822`; `website/docs/user-guide/features/skills.md:424-425,668-697` | Skills de la home y de `external_dirs`, que es escribible; `write_approval`; el índice corta a 60 caracteres |
+| Hermes | `tools/approval_floors.py:23-42`; `tools/approval_detection.py:1386-1427`; `tools/approval.py:1137-1148` | Cómo compara `approvals.deny`; una ruta de Windows con `\` no se recorta; el deny corre antes de `--yolo` |
+| Hermes | `hermes_cli/config_defaults.py:1679`; `tools/approval_context.py:234-239,253` | El modo por defecto es `smart`; los hijos leen el deny de la misma config |
+| Hermes | `agent/file_safety.py:222-228,297-319`; `tools/skill_manager_tool.py:406` | `HERMES_WRITE_SAFE_ROOT` cubre `write_file`, `patch`, `delete_file` y `move_file`, no `skill_manage` |
+| Hermes | `tools/delegate_tool.py:279`; `tools/delegate_tool_progress.py:190-209` | Un hijo trae `AGENTS.md` solo si el padre resolvió su directorio |
+| Claude Code | https://code.claude.com/docs/en/memory y `~/.claude/settings.json:10-12` | Qué `CLAUDE.md` y reglas carga; `AGENTS.md` solo con `instructionFiles: claude-md-and-agents-md` (la PC) |
+| Claude Code | https://code.claude.com/docs/en/skills y https://code.claude.com/docs/en/sub-agents | Precedencia de skills (gana la personal) y de agentes (gana el del repo); `--add-dir` |
+| Claude Code | https://code.claude.com/docs/en/hooks y https://code.claude.com/docs/en/cloud-environments | `Stop` es por turno del agente principal y `SubagentStop` es aparte; qué de `~/.claude` no llega a la nube |
+| Codex | https://developers.openai.com/codex/guides/agents-md y https://developers.openai.com/codex/skills | Carga de `AGENTS.md` (global, raíz → cwd, 32 KiB) y carpetas de skills |
+| Codex | https://developers.openai.com/codex/config-reference; `codex-rs/exec/src/lib.rs:589-592` (github.com/openai/codex) | Valores válidos de permisos; `codex exec` fuerza `approval = never` |
+| Codex | `~/.codex/config.toml:1,22-24,194-195` y `config.toml.bak:22,24` | La config viva y la anterior al 25-oct |
+| Orca | https://www.onorca.dev/docs/agents/supported; `resources/app.asar` y `out/shared/tui-agent-permissions.js:16-41` de la v1.4.240 | Lanza a los agentes sin permisos y a Hermes con `--yolo`; versión instalada |
+| Orca | https://www.onorca.dev/docs/telemetry y https://www.onorca.dev/docs/remote-servers; `Get-NetTCPConnection` del 26-oct | Telemetría encendida; puerto 6768 en `0.0.0.0` |
+| GitHub | `gh api .../branches/main/protection` (403 el 26-oct); https://docs.github.com/en/get-started/learning-about-github/githubs-plans | Sin protección de ramas en un repo privado del plan gratis |
+| GitHub | https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows; https://cli.github.com/manual/gh_issue_edit | `types: [labeled]` no escucha cuando se saca un label; `-R` es opción del grupo |
+| Teoría | https://martinfowler.com/articles/harness-engineering.html (Birgitta Böckeler, 2-abr-2026; el harness del 10-oct lo atribuía a Fowler) | Agente = modelo + harness; guías y sensores; un problema que se repite se arregla en el harness |
+| Teoría | https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents (Justin Young, 26-nov-2025) | Archivo de progreso, una tarea por sesión probada de punta a punta, árbol listo para mergear: el handoff más una lista verificable |
 
-**Dependencias que no existen o que la crítica de `ONIA_EQUIPO_DE_AGENTES.md` marcó falsas:**
-- El diseño ya evitaba las falsas: rutinas de 20 min, que la madre abra sesiones, que la nube le escriba a la madre, elegir modelo en Codex cloud, Haiku con `get_run_log`, Telegram como aprobación, protección de rama y 30-35 agentes.
-- Quedaban 4 problemas, ya corregidos arriba:
-  1. **El latido de Ventas** depende de un id. `onia-sesion-madre/SKILL.md:71` lo da (`session_0143C5fMXVs8eWEf7uBpC9SF`), pero `equipo-de-agentes/SKILL.md:43` dice que la API no lo muestra. Primero se prueba un RemoteTrigger de un solo disparo. Si falla, Sergio Urcullo reabre Ventas desde la web.
-  2. **Web y chatbot no estaban "sin dueño" en el papel.** `onia-loop.sh` tiene `web-venta` (dueño de onia.com.bo) y `chatbot-cola`. Asignarlos a Review/QA sin el inventario podría crear dos dueños.
-  3. **`TABLERO.md` documenta el tablero SQLite** que lee `vigia-aprobaciones.sh` cada 2 min. Marcarlo como historia sin el inventario dejaría un libro vivo escondido. Por eso el cambio 2 va antes del 3.
-  4. **El "vigía del libro" no se escribe de cero:** ya hay unos 20 vigías. Se suma uno y se mide el ruido de Telegram antes (regla del CLAUDE.md §4: no saturar el canal).
-
-**¿Abre una línea de negocio nueva?** No.
-- Marca, asesorías y pauta vienen del GOAL del 8-oct de Sergio Urcullo.
-- Lucía se propone congelar.
-- Review/QA es una reasignación de Hermes, no un producto.
-
-**No verificado:**
-- el crontab de octubre del VPS y de casa;
-- si `onia-cola` y `web-venta` están vivos;
-- la credencial del guardián;
-- n8n;
-- si `gh` desde la nube puede mergear;
-- los minutos de Actions;
-- el id de Ventas;
-- `observer-sessions-a2`;
-- si Hermes tiene navegador para las capturas a 390 y 1440 px.
+**Sin fuente, se trata como supuesto:** que Codex aplique «salvo que este sea más restrictivo» de `AGENTS.global.md`
+(es un pedido al modelo, nada lo hace cumplir); que el cambio de `~/.codex/config.toml` del 25-oct lo hizo Hermes
+(solo cuadran la fecha y los valores); que `C:\Users\PC\.hermes` lo crea Orca; el precio de GitHub Pro (solo el FAQ
+de 2020); y que los hijos de Hermes heredan el deny, que sale del código pero no se midió en vivo.

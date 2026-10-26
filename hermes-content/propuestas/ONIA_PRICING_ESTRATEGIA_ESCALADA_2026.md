@@ -223,7 +223,7 @@ Cruzando SMN (Bs 3.300), sensibilidad al precio y los benchmarks, la banda donde
 
 ### 7. Alertas para no equivocar el número
 
-- `[VERIFICAR]` **Tipo de cambio en los docs internos:** `ONIA_DEPLOYMENT_OFFLINE_HA_PRICING_2026.md` usa **6,96** en una sección y **9,83** en otra; el oficial real jul-2026 es **~10,90**. Corregir antes de citar equivalentes USD (afecta costo de infra cloud y cualquier precio anclado en USD).
+- `[VERIFICAR]` **Tipo de cambio en los docs internos:** `hermes-content/docs/historial/ONIA_DEPLOYMENT_OFFLINE_HA_PRICING_2026.md` usa **6,96** en una sección y **9,83** en otra; el oficial real jul-2026 es **~10,90**. Corregir antes de citar equivalentes USD (afecta costo de infra cloud y cualquier precio anclado en USD).
 - `[VERIFICAR]` **Precios de competidores SIAT (Emizor/NWC/Signature) y ERP (Softland/SAP B1):** no son públicos; para usar el argumento de precio en ventas hay que conseguir una cotización real (mystery shopping).
 - `[VERIFICAR]` **facturacion-facil.com.bo** (USD 199–1.499): parece producto mexicano (CFDI/USD) reempaquetado; **no usarlo como benchmark boliviano** sin confirmar.
 - **Riesgo de inflación:** con 15–20% anual, un precio de lanzamiento en Bs se erosiona; incluir **cláusula de ajuste anual** en el contrato del recurrente desde el día uno.

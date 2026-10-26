@@ -45,7 +45,7 @@ verde sobre fondo verde · degradados, sombras, contornos o glow.
 | **`ONIA_MARCA_ESTRATEGIA_20260727.md`** | ✅ **VIGENTE** | **Color del logo (§4-bis), el cuadrado, el juego ON·IA, el tile.** Es el que implementa el código |
 | `ONIA_BRAND_IDENTITY_2026.md` | ⚠️ vigente **salvo color y logo** | Tipografía, retícula, tono. Se declara «canónico» pero su paleta es anterior al 27-jul y **no** tiene `#00D26A` ni `#12100E` |
 | `ONIA_LOGO_SPEC_20260726.md` | 🔴 histórico | La recreación provisional del logo recibido, con el verde viejo `#3EA639` |
-| `ONIA_BRAND_2026.md` | 🔴 histórico | Ya estaba marcado SUPERSEDED el 25-jul |
+| `hermes-content/docs/historial/web-factory/ONIA_BRAND_2026.md` | 🔴 histórico | Ya estaba marcado SUPERSEDED el 25-jul |
 
 **Si dos se contradicen sobre color o logo, gana `ONIA_MARCA_ESTRATEGIA_20260727.md`** — es
 el posterior y es el único que coincide con lo que hay dentro de los SVG.

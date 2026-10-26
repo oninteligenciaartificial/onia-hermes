@@ -129,31 +129,31 @@ Use these global Codex skills when applicable:
 
 Use these Hermes local skills for project operations:
 
-- `orquestador-creativo-ia`: visual content, AI models, image/video prompts,
+- `orquestador-creativo-ia` (historia: `hermes-content/docs/historial/skills/orquestador-creativo-ia.md`): visual content, AI models, image/video prompts,
   ads, reels, TikToks, Shorts, UGC, ecommerce, campaign production and
   identity-safe creative execution.
 - `video-lab-higgsfield`: video jobs, Higgsfield, reels, approvals.
-- `videos-virales-higgsfield`: viral short-form planning, virality checks and Higgsfield MCP usage.
+- `videos-virales-higgsfield` (historia: `hermes-content/docs/historial/skills/videos-virales-higgsfield.md`): viral short-form planning, virality checks and Higgsfield MCP usage.
 - `ugc-empresas-higgsfield`: UGC ads and company/client video briefs.
 - `audio-elevenlabs`: voiceover, TTS, dubbing, sound effects and voice safety.
 - `marca-personal-sergio`: Sergio's personal brand content.
-- `historias-sergio`: Sergio story sequences.
-- `instagram-publicacion`: Instagram publishing through `ig-publish`.
-- `descripciones-sociales-onia`: Instagram captions/descriptions, TikTok
+- `historias-sergio` (historia: `hermes-content/docs/historial/skills/historias-sergio.md`): Sergio story sequences.
+- `instagram-publicacion` (historia: `hermes-content/docs/historial/skills/instagram-publicacion.md`): Instagram publishing through `ig-publish`.
+- `descripciones-sociales-onia` (historia: `hermes-content/docs/historial/skills/descripciones-sociales-onia.md`): Instagram captions/descriptions, TikTok
   descriptions, YouTube Shorts metadata and LinkedIn copy.
-- `flujo-completo-carrusel`: carousel generation and publication.
+- `flujo-completo-carrusel` (historia: `hermes-content/docs/historial/skills/flujo-completo-carrusel.md`): carousel generation and publication.
 - `carruseles-onia`: Onia carousel briefs.
-- `referencias-pinterest`: style/reference extraction.
+- `referencias-pinterest` (historia: `hermes-content/docs/historial/skills/referencias-pinterest.md`): style/reference extraction.
 - `seguridad-credenciales`: tokens, secrets, env vars.
-- `operaciones-dashboard`: dashboard and gateway status.
-- `centro-comando-telegram`: Telegram as the main Hermes/ONIA command center,
+- `operaciones-dashboard` (historia: `hermes-content/docs/historial/skills/operaciones-dashboard.md`): dashboard and gateway status.
+- `centro-comando-telegram` (historia: `hermes-content/docs/historial/skills/centro-comando-telegram.md`): Telegram as the main Hermes/ONIA command center,
   general routing, n8n command center, project commands and approvals.
-- `n8n-automatizaciones-onia`: scheduling and longer automations.
-- `orquestacion-proyectos-onia`: route Onia work across DentalGest, Gestios,
+- `n8n-automatizaciones-onia` (historia: `hermes-content/docs/historial/skills/n8n-automatizaciones-onia.md`): scheduling and longer automations.
+- `orquestacion-proyectos-onia` (historia: `hermes-content/docs/historial/skills/orquestacion-proyectos-onia.md`): route Onia work across DentalGest, Gestios,
   Web Onia, client websites, Higgsfield marketing, CRM and outreach.
 - `radar-creativo-onia`: current creative research, creator references,
   workflows, prompts, trends and strategy before content production.
-- `consultoria-onia`: consulting, audits, implementations, installations,
+- `consultoria-onia` (historia: `hermes-content/docs/historial/skills/consultoria-onia.md`): consulting, audits, implementations, installations,
   Sergio-led advisory, operational setup and client process design.
 
 ## Video Lab Command Router

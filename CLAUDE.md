@@ -50,7 +50,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   le pide nada más. Relevar no es cerrar a medias: el objetivo no cambia de dueño ni de definición de «hecho».
   El aviso del 80 % lo arma el Panel ONIA (en construcción el 20-oct); mientras no esté, se mira el indicador de
   contexto de la app.
-- **Orquestan Hermes y el programa fijo, no una sesión** (Sergio Urcullo, 19-oct-2026; ver «Quién orquesta»,
+- **Planifica el Hermes de la PC y reparte el programa fijo, no una sesión** (Sergio Urcullo, 19 y 26-oct-2026; ver «Quién orquesta»,
   abajo). La sesión principal es donde él trabaja conmigo; sus subagentes y los carriles independientes sí
   trabajan en paralelo. Codex ejecuta encargos cerrados.
 - Cada subagente: worktree con **ruta explícita** y gates en su propio árbol.
@@ -102,7 +102,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   no demuestra aprendizaje aplicado: hace falta una tarea que la use.
 - **Al tocar el producto (`onia-platform`) son OBLIGATORIAS sus skills propias**
   (`onia-frontend/backend/db/seguridad/deploy/verificacion` en su `.claude/skills/`) —
-  solo se autolistan en sesiones abiertas DENTRO de ese repo.
+  se autolistan en sesiones abiertas DENTRO de ese repo, o si se suma su carpeta con `--add-dir` o `/add-dir`
+  (trae su `.claude/skills` y su `.claude/agents`; la orquesta ya pasa `--add-dir` con `dirs_extra`). Corregido el
+  26-oct: antes decía «solo dentro de ese repo» (code.claude.com/docs/en/skills).
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
 - **Autoconocimiento: cada sesión se entrena a sí misma.** Sergio Urcullo, 2026-10-01: *«tienen que
@@ -187,14 +189,22 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > Sergio Urcullo, 19-oct-2026, al resolver las contradicciones entre CLAUDE.md, AGENTS.md y las memorias:
 > Hermes planifica y el programa fijo reparte; la sesión principal es donde él trabaja conmigo.
 
-- **Hermes planifica** (VPS, por Telegram): arma las tareas y las carga como issues `orquesta` + `carril:<área>`.
+- **Planifica el Hermes de la PC; el del VPS avisa** (Sergio Urcullo, 26-oct-2026, al auditar Hermes local: en seis
+  días la revisión de cada 3 h del VPS cargó una tarea, mientras el de la PC armaba una cola paralela con sus planes,
+  sus goals y las 32 tareas de Orca). El de la PC convierte sus pedidos en issues `orquesta` + `carril:<área>`,
+  verifica y escribe el handoff, sin tocar código ni Git. El del VPS queda en Telegram (resumen, cierre, calendario,
+  avisos) y carga una tarea solo si él se la dicta. El de la PC carga solo con `scripts/orquesta/cargar-issue.mjs`
+  (siempre `origen:hermes` + `necesita-ok`, tope 10 por día); el del VPS, con las barandas de
+  `scripts/loops/orquesta-hermes.sh`. **Una sola cola**: Orca Orchestration, `.hermes/plans` y los goals no son cola. Tabla de actores: `AGENTS.md` §1.
+  Pendiente: pausar la revisión de cada 3 h del VPS (`aplicar`) y mover a Hermes de la PC a un worktree limpio
+  (`handoff/hermes-local.md`). Antes decía «Hermes planifica (VPS, por Telegram)».
 - **El programa fijo reparte** (`scripts/orquesta/orquesta.mjs`, sin LLM que coordine): toma cada issue, corre al
   trabajador del carril con su modelo, lo hace revisar con contexto limpio y deja PR + comentario. Corre en
   **GitHub Actions** lo que no usa logins (marca, comunidad, investigación) y **en la PC** lo que usa sus sesiones
   o archivos (video, plataforma, Meta, Instagram, Higgsfield). Método: `scripts/orquesta/README.md`.
 - **La sesión principal** es donde Sergio Urcullo trabaja conmigo. **Ya no hay una «madre» que ordene a otras
-  sesiones por mensaje** (la regla del 1-oct, «Sesión MADRE local + carriles en la nube», queda como historia; los
-  canales medidos siguen en la skill `onia-sesion-madre`). Lo que una sesión necesita de otra trabajando en
+  sesiones por mensaje** (la regla del 1-oct, «Sesión MADRE local + carriles en la nube», queda como historia, igual
+  que la skill `onia-sesion-madre` (historia: `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`)). Lo que una sesión necesita de otra trabajando en
   paralelo se le puede seguir mandando por mensaje, pero el trabajo de fondo se pide por issue a la orquesta.
 - El handoff (`hermes-content/docs/handoff/<carril>.md`) sigue siendo cómo una sesión NUEVA retoma.
 - **El portal del SIAT no lo abre ninguna sesión.** Lo abre solo Sergio Urcullo a mano; la sesión le pide capturas.
@@ -252,7 +262,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   dolores y los planes viejos.
 - **CÓMO se consiguen clientes (canales y su orden, competencia por adquisición, pauta de
   Meta): manda `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md`** (2026-09-30). Reemplaza a
-  las fotos de agosto (`ONIA_PAUTA_COMPETENCIA_20260815.md`, `ONIA_ADS_CAMPANA_1_LISTA_20260813.md`).
+  las fotos de agosto (`hermes-content/docs/historial/ONIA_PAUTA_COMPETENCIA_20260815.md`, `hermes-content/docs/historial/ONIA_ADS_CAMPANA_1_LISTA_20260813.md`).
   Ningún anuncio promete lo que producción no hace hoy: ese doc (§5.4) dice qué se puede
   prometer ya y qué recién con la 1.0 publicada (el Recall de tratamiento a medias).
 - **Un tema = un archivo sin fecha.** Si cambia, se EDITA ese archivo; no se crea uno
@@ -422,7 +432,10 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   libre; dentro de `onia-hermes`, cada carril su carpeta (AVISAR antes de tocar los 4
   archivos raíz de web-factory). **Infra (VPS, n8n, Supabase) = UN dueño a la vez.**
 - Cerrar un carril: rama propia → rebase → commits chicos → gates (`tsc --noEmit`, tests,
-  code-reviewer) → merge. Dueño de archivos por carril: `COORDINATION_MANIFEST.md`.
+  code-reviewer) → merge. Dueño de archivos:
+  - los carriles de la orquesta, en `scripts/orquesta/carriles.json`;
+  - una sesión abierta, en su handoff;
+  - el resto, en `COORDINATION_MANIFEST.md` (`AGENTS.md` §4).
 
 ## Calidad de código (REGLA)
 
@@ -442,8 +455,8 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 ## `main` siempre compila (REGLA DURA)
 
-- `main` avanza por PR revisado; solo la sesión principal (antes «madre») y el integrador lo mueven directo (regla
-  «Git — auto-sync»). Esos dos: **nunca dejar que arrastre WIP parcial**. Si un archivo
+- `main` avanza por PR revisado; solo la sesión principal (antes «madre») lo mueve directo (regla «Git — auto-sync»).
+  El integrador `onia-cola` está apagado desde el 27-sep. Esa sesión: **nunca dejar que arrastre WIP parcial**. Si un archivo
   nuevo importa otro archivo nuevo, van los DOS o ninguno.
 - `main` alimenta el deploy del VPS y el de Vercel: roto, rompe ambos.
 - Ojo con el **casing de imports**: Linux distingue mayúsculas, Windows no.
@@ -472,7 +485,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 
 - Si tocaron un archivo que entra en tu medición, **la medición se rehace**, no se corrige.
 - ⚠️ **Un aviso por Telegram en cada merge NO es la solución**, aunque se pida así: el
-  integrador mergea ~28 commits por día y ese canal ya le llega a Sergio Urcullo con 83
+  integrador mergeaba ~28 commits por día (sep-2026) y ese canal ya le llegaba a Sergio Urcullo con 83
   tareas de a una. **La señal existe y es consultable; lo que faltaba era mirarla.**
   Sumar un notificador a un canal saturado es apagarlo.
 
@@ -486,7 +499,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   directo»*). El hook ya no hace fast-forward de `main`, salvo con permiso: la **sesión principal** (antes «madre») en la PC
   (`ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de SU carpeta, que git ignora, y además
   la marca `onia-autosync-main` en el git-dir de SU checkout: los worktrees de sus subagentes no la tienen) y el
-  **integrador** (`ONIA_LOOP_ID=onia-cola`). Una sesión parada en `main` sin permiso no lo pushea:
+  **integrador** (`ONIA_LOOP_ID=onia-cola`). El integrador está apagado desde el 27-sep, pero
+  `scripts/git-autosync.js` lo sigue aceptando: falta sacar esa excepción con su prueba, en un PR propio. Una sesión
+  parada en `main` sin permiso no lo pushea:
   sus commits van a `claude/autosync-<id de la sesión>` y la sesión queda parada en esa rama, para un PR.
 
   > Medido el 5-oct: desde el 28-sep, **48 de los 78 avances de `main`** entraron por ese
@@ -503,9 +518,12 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   en un "resuelto" que hizo fast-forward a main (2026-08-20, cuando todavía lo hacía; el CI
   lo contuvo). El autosync ya tiene la guarda (se niega con MERGE_HEAD/paths unmerged), pero
   la regla es del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores.
-- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente** (hoy, solo en la sesión principal y
-  el integrador, los únicos que mueven `main` directo; en el resto queda en su rama). El autosync corre
-  cuando un subagente termina su turno, no cuando el trabajo está terminado. El 2026-08-23
+- ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente** (hoy, solo en la sesión principal,
+  la única que mueve `main` directo; en el resto queda en su rama). El autosync corre
+  al final de CADA turno del agente principal (o de cada turno de una sesión `claude` aparte en su worktree), no
+  cuando el trabajo está terminado, y se lleva lo que los subagentes dejaron en el árbol. Que un subagente lanzado
+  con la herramienta Agent termine dispara `SubagentStop`, que el repo no configura (corregido el 26-oct;
+  code.claude.com/docs/en/hooks). No corre si el usuario interrumpe ni con error de API. El 2026-08-23
   se llevó **217 líneas de CSS a `origin/main` antes de que existiera el markup que las
   usa** (`e4e7fa2a`), a mitad de una sesión que todavía tenía dos archivos por escribir.
   No rompió nada **por casualidad**: eran clases CSS sin usar, que no pueden romper un
@@ -515,7 +533,7 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   **La regla:** un subagente que trabaja en varios archivos deja el árbol en un estado que
   **compile solo** cada vez que suelta el turno, o no suelta el turno. Si un archivo nuevo
   importa otro archivo nuevo, van los DOS o ninguno — y eso ahora aplica también a "los dos
-  todavía no están escritos". El orquestador verifica `git log origin/main` al cerrar.
+  todavía no están escritos". La sesión principal verifica `git log origin/main` al cerrar.
 - ⚠️ **Nunca buildear producción con un `.env.local` presente**: Next hornea los
   `NEXT_PUBLIC_*` en el bundle y publica `127.0.0.1`. Buildear en el VPS con `app.env`,
   y verificar el bundle antes del swap.
@@ -672,8 +690,12 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en el repo,
   `.claude/skills/hyperframes*` y `.agents/skills/`, restaurado el 2026-10-02 porque con la
-  copia global los archivos dejaron de editarse como quiere Sergio Urcullo; la del repo gana
-  sobre la global: revisarlo ANTES de codear video).
+  copia global los archivos dejaron de editarse como quiere Sergio Urcullo: revisarlo ANTES
+  de codear video). ⚠️ **Corregido el 26-oct:** acá decía que la del repo gana sobre la global, y es al revés. En
+  Claude Code, con el mismo nombre gana la PERSONAL (`~/.claude/skills`). Se midió en una sesión del repo: la
+  descripción cargada de `hyperframes` era la de la copia personal. Las 15 personales que diferían se
+  archivaron el 26-oct en `~/.claude/skills-archivadas-20261026`, así que hoy en la PC carga la del repo. Si vuelve a
+  aparecer una copia personal con el mismo nombre, le gana otra vez.
 - **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
   Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
   parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si

@@ -119,7 +119,7 @@ Rutas relativas a la raíz de este worktree. Se leyeron los pasajes correspondie
 | 4 · Handoff del carril | `hermes-content/docs/handoff/README.md` y `hermes-content/docs/handoff/marca-personal.md` | Estado, intentos fallidos, dependencias y próximos pasos. La nota del 8-oct marca guiones que la madre está reescribiendo y no se deben tocar. |
 | 5 · Tarea de Codex | `hermes-content/docs/handoff/codex-tareas/B1-bandeja-menos-llamadas.md` | Encargo concreto: pausar sondeo con pestaña oculta. Tiene pruebas esperadas y límites. Se muestra el contrato, no un resultado terminado. |
 
-`hermes-content/docs/handoff/codex-relevo.md` confirma dónde viven los prompts de tareas. No se modifica esa cola.
+`hermes-content/docs/historial/handoff/codex-relevo.md` confirma dónde viven los prompts de tareas. No se modifica esa cola.
 
 **Precisión del título:** «Los 5 archivos que uso antes de programar con IA» funciona como título editorial. El cuerpo aclara: **dos archivos de reglas, una carpeta de skills, un handoff y una tarea**. Son cinco entradas, no cinco archivos obligatorios que lee todo agente en todo proyecto. No presentar CLAUDE.md y AGENTS.md como dos reglas independientes que deban duplicarse.
 

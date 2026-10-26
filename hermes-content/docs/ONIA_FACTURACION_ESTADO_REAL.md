@@ -563,7 +563,7 @@ intermedio, sin apagar la verificación. Lo detalla la tarea B de la investigaci
     el tipo «Licencia».
 - **`integrations/siat/README.md`:** dice 407 tests; hoy son 446 (el crítico los corrió sobre
   `origin/main` 3dd6df18: 446/446). En la línea 94 dice además «Total emisor: 262 tests».
-- **`LEEME-PRIMERO.md`** *(crítico)*: describe este archivo como «qué emite de verdad y qué es mock»;
+- **`historial/LEEME-PRIMERO.md`** *(crítico)*: describe este archivo como «qué emite de verdad y qué es mock»;
   ahora es la decisión, el estado y el plan de facturación.
 - **`ONIA_CATALOGO_DE_VENTA.md` §6.2:**
   - Dice «etapas VI y IX»: IX ya está completa en el conteo local.

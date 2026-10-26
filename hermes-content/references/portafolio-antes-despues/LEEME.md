@@ -20,7 +20,7 @@ Verificado antes de producir nada (`web-factory/data/clients/`, `web-factory/app
   **negocio propio de Onia** (Sergio+Arthur 50/50, `nuvia-store.vercel.app`), no un
   cliente que nos contrató. Fuente: memoria `web-factory-nuvia-architecture`,
   `hermes-content/docs/ONIA_NUVIA_DOMINIO_PROPIO_20260706.md`,
-  `hermes-content/docs/research/ONIA_LLUVIA_IDEAS_SERGIO_ARTHUR_20260801.md` línea 236.
+  `hermes-content/docs/historial/research/ONIA_LLUVIA_IDEAS_SERGIO_ARTHUR_20260801.md` línea 236.
   `dentalgest-landing` y `onia-platform` son, del mismo modo, productos propios de
   Onia, no webs de un cliente externo.
 - `PRICING_RATIONALE_INTERNO.md` §0 lo dice con esas palabras: **"fase sin portafolio"**

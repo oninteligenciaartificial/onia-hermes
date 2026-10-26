@@ -207,7 +207,7 @@ encabezado). Se deja escrita para no perder el esquema si algún día hay equipo
 
 1. `web-factory/apps/site/src/app/vendedores/cotizador-data.ts` líneas 55–57 y 65–67 —
    **el único archivo que un vendedor consulta de verdad**: alimenta `/vendedores/cotizador`.
-2. `hermes-content/docs/ONIA_PRICING_2026.md` líneas 58–60 y 183–189.
+2. `hermes-content/docs/historial/ONIA_PRICING_2026.md` líneas 58–60 y 183–189.
 3. `hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md` §2.
 
 ~~**Comisión de la vendedora: una sola vez, sobre el primer pago neto real cobrado.** Los
@@ -326,7 +326,7 @@ va a oler a agencia.
 
 ### 8.1 🔴 El precio de arranque venció el 2026-07-31
 
-`ONIA_PRICING_2026.md` dice literalmente que la oferta de arranque es *"válida hasta
+`historial/ONIA_PRICING_2026.md` dice literalmente que la oferta de arranque es *"válida hasta
 2026-07-31 o hasta 20 clientes cobrados, lo que ocurra primero"*. Hoy es **2026-08-22**:
 venció hace 22 días y nadie puso el precio siguiente. El cotizador vivo sigue sirviendo
 790 / 1.500 / 2.900. **Estrictamente, hoy no hay un precio de web vigente.**
@@ -415,7 +415,7 @@ No son opinión, están verificados, y o se presupuestan o se cierran:
 - Intake al cliente: `web-factory/INTAKE_CLIENTE.md` · panel `/onia-center/web-factory`
 - Proceso de entrega: `hermes-content/propuestas/PLAYBOOK_CONSTRUCCION_INTERNO.md` (interno)
 - Precio y razonamiento: `web-factory/apps/site/src/app/vendedores/cotizador-data.ts` ·
-  `hermes-content/docs/ONIA_PRICING_2026.md` ·
+  `hermes-content/docs/historial/ONIA_PRICING_2026.md` ·
   `hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md` ·
   `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` (interno)
 - Ventaja interna (confidencial): `hermes-content/propuestas/ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`

@@ -192,7 +192,7 @@ Lo que se reusa, con fuente:
 
 | Insumo | De dónde |
 |---|---|
-| Los 4 dolores y el CTA | `ONIA_KIT_VENTA_POR_RUBRO_20260815.md` §1, **PLACA 2 · COMERCIO MINORISTA** |
+| Los 4 dolores y el CTA | `historial/ONIA_KIT_VENTA_POR_RUBRO_20260815.md` §1, **PLACA 2 · COMERCIO MINORISTA** |
 | El agente que cierra la pieza | **Cobrador** sobre fiados de comercio — `getCollectorFeedComercio` en `onia-platform/lib/onia-core/modules/agents-runtime.ts` |
 | Vocabulario (casero, fiado, Bs) | `onia-platform/lib/onboarding/vocabulario.ts` (`gestios-general`) |
 | Producto, monto y la deuda de 25 días | `onia-platform/lib/comercio/demo-seed.ts` — demo-tenant nuestro |
@@ -284,7 +284,7 @@ comercio real.
 |---|---|---|
 | **reference A** — still 9:16 de la dueña, mismo delantal | `text2image_soul_v2` + `soul_id`. Candidata que **ya existe**: **Mara BO v2** `6c94bbf0-bc71-4fe1-841e-f366bdb00b6e` (boliviana mestiza, 27). Bloque de identidad congelado en `ONIA_MODELOS_RECETA_VISUAL_20260806.md` §2; stills previos en `hermes-content/references/modelos/mara-bo/perfil-20260806/` | ⚠️ **Decide Sergio.** El mostrador de ferretería **no está** en sus escenarios permitidos (*"interiores minimalistas luminosos… nunca exteriores caóticos"*) y el delantal no está en sus 3 atuendos. O se le suman escenario y atuendo a ese doc, o se entrena un Soul propio de la dueña (**25 cr**, permiso explícito) |
 | **reference B** — mostrador de ferretería de barrio en Santa Cruz | **No existe en el repo.** Verificado: no hay ninguna imagen de ferretería/comercio en `hermes-content/references/` | ⚠️ **Hay que conseguirla.** (a) **Sergio** saca 3 fotos de un mostrador real — encuadre genérico y con permiso: si el local se reconoce, insinúa una relación comercial que no existe; (b) generarla (costo aparte + permiso). **Si no se consigue, se corre sin reference B** y queda como ancla de texto: el punto frágil es la cara, no el lugar |
-| Copy de overlays y CTA | `ONIA_KIT_VENTA_POR_RUBRO_20260815.md` §1, PLACA 2 | Listo, ya escrito |
+| Copy de overlays y CTA | `historial/ONIA_KIT_VENTA_POR_RUBRO_20260815.md` §1, PLACA 2 | Listo, ya escrito |
 | Producto, monto, deuda de 25 días, "doña Carmen" | `onia-platform/lib/comercio/demo-seed.ts` | Listo. Es **demo-tenant nuestro**, no un cliente |
 | Voz | Nativa del modelo (`generate_audio` true por defecto en `seedance_2_5`) | Listo. La voz de Lucía **no** se usa acá: es otra persona |
 
@@ -357,7 +357,7 @@ ahí**. Toda generación consume créditos → **permiso explícito de Sergio, c
 ## Qué modelo para cada plantilla, y qué cuesta
 
 Precios en **créditos por segundo**, medidos el 2026-08-14 contra el balance real
-(`HIGGSFIELD_AD_SPEC_RECETA_20260812.md`, sección "Tarifario completo"). El precio es **lineal
+(`historial/HIGGSFIELD_AD_SPEC_RECETA_20260812.md`, sección "Tarifario completo"). El precio es **lineal
 por segundo**. Los modelos sin fila ahí **no tienen precio medido**: preflightear con `get_cost`
 antes de tirar el job.
 

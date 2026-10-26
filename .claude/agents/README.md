@@ -4,7 +4,9 @@ Actualizado: 2026-10-02 (se restauraron `onia-core-guardian` y `onia-creative-ra
 en la limpieza del 29-sep; pedido de Sergio Urcullo).
 
 Este directorio define los subagentes propios de ONIA (invocables con la tool `Agent` /
-`subagent_type`). **Son tres:**
+`subagent_type`). **Son cinco:** los tres de ONIA de esta tabla, más `code-reviewer` y `security-reviewer`,
+que revisan todo PR (`CLAUDE.md` §«Calidad de código»). Área de cada uno (26-oct): `onia-crm-prospeccion` y
+`onia-core-guardian` → Onia Platform; `onia-creative-radar` → Marca personal; los dos revisores → todas.
 
 | Agente | Para qué | Estado |
 |---|---|---|

@@ -52,7 +52,8 @@ respeta las reglas duras. Si existe una skill para la tarea, se usa (no reinvent
 ### Video (carriles H, J)
 `diseno-contenido-onia` (índice), `editor-videos`, `ver-videos`, `sacar-prompt`, `hyperframes`
 (copia del repo, restaurada el 2026-10-02 y por encima de la global; Remotion está jubilado), `banner-design` (carril H) + Higgsfield. Skills-doc:
-video-lab-higgsfield, carruseles-onia, videos-virales-higgsfield, ugc-empresas-higgsfield.
+video-lab-higgsfield, carruseles-onia, ugc-empresas-higgsfield (`videos-virales-higgsfield` es historia:
+`hermes-content/docs/historial/skills/videos-virales-higgsfield.md`).
 
 ### Propuestas / documentos (carril C) → skill `onia-propuestas`
 `article-writing`, `make-pdf`, `slides`, `document-generate`, `brand`/`brandkit`.

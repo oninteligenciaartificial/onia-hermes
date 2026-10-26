@@ -5,7 +5,7 @@
 ## Estado de la infraestructura hoy
 
 - `https://postiz.onia.com.bo/`, `/auth/login` y `/api/` responden **502**; `onia.com.bo` y Chatwoot responden 200. Diagnóstico VPS **sólo lectura** del 27-sep: no hay contenedores ni servicios Docker de Postiz/Temporal/Postgres/Redis, tampoco listeners en 4007/5000/7233. El proyecto Compose `/opt/postiz/postiz-docker-compose` enumera los servicios previstos, pero `compose ps -a` está vacío; los volúmenes siguen presentes. Traefik apunta a un backend inexistente. Aún no se sabe quién/cuándo detuvo o retiró la pila. No hay API key de Postiz ni tokens sociales en el proceso local consultado; eso no demuestra ausencia en el VPS.
-- El 4-sep, restaurar Postiz/Temporal liberó **cinco posts vencidos** sin aprobación nueva; 57 restantes pasaron a borrador según el handoff `handoff/claude-git-status-935f47.md`. **No reiniciar ni recuperar el scheduler a ciegas.** Primero inspeccionar cola y jobs en modo lectura, respaldar, y acordar cómo neutralizar vencidos antes de levantarlo.
+- El 4-sep, restaurar Postiz/Temporal liberó **cinco posts vencidos** sin aprobación nueva; 57 restantes pasaron a borrador según el handoff `historial/handoff/claude-git-status-935f47.md`. **No reiniciar ni recuperar el scheduler a ciegas.** Primero inspeccionar cola y jobs en modo lectura, respaldar, y acordar cómo neutralizar vencidos antes de levantarlo.
 - n8n responde y conserva el flujo de comentario de Instagram → DM, pero no es un publicador general de todas las redes. Postiz programa publicaciones; no es bandeja de comentarios/DM. No confundir conectividad de un servicio con permiso vigente de cada cuenta.
 
 ## Inventario sin credenciales
@@ -47,7 +47,7 @@ flujos de login pueden cambiar.
 ## Orden de puesta en marcha
 
 1. Aprobar arte, caption, destino y hora; el
-   [paquete de carruseles v2](cola/APROBACION-CARRUSELES-SERGIO-2026-09-27.md)
+   [paquete de carruseles v2](historial/cola/marca-personal-sep/APROBACION-CARRUSELES-SERGIO-2026-09-27.md)
    sirve como contrato cerrado del primer lote.
 2. Mientras Postiz esté 502, usar publicación nativa sólo para piezas exactas
    aprobadas. No introducir una automatización paralela improvisada.
@@ -105,6 +105,6 @@ El objetivo histórico de 10–13 publicaciones por día no es evidencia de capa
 
 - `ONIA_MARCA_PERSONAL_ETAPA2_OPERACION.md` — inventario histórico de seis plataformas de Sergio.
 - `ONIA_ARQUITECTURA_CUENTAS_Y_MODELOS.md` — tres integraciones Instagram históricas y plan por identidad; fechas de agosto, no estado actual.
-- `handoff/claude-git-status-935f47.md` — incidente de Postiz/Temporal y posts vencidos.
-- `ONIA_POSTIZ_COMENTARIOS_DM_20260817.md` — separación entre programación y bandeja de mensajes.
+- `historial/handoff/claude-git-status-935f47.md` — incidente de Postiz/Temporal y posts vencidos.
+- `historial/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md` — separación entre programación y bandeja de mensajes.
 - [Postiz, conexión OAuth de canales](https://docs.postiz.com/general/channels/connect) y [API de integraciones](https://docs.postiz.com/public-api/integrations/list) — capacidad técnica actual de la herramienta, no prueba de que nuestras cuentas estén conectadas.

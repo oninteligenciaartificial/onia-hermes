@@ -14,7 +14,7 @@
 
 ### 0.1 La cuenta demo — hoy NO existe en producción
 
-- El 30-sep no había demo dental en producción (`handoff/onia-1.0-nube.md` §2).
+- El 30-sep no había demo dental en producción (`historial/handoff/onia-1.0-nube.md` §2).
 - Se arma con `prisma/seed-demo.ts` + `prisma/seed-demo-datos.ts`: cinco negocios inventados, nombres y
   teléfonos ficticios. **Solo corre contra una base local desechable**: aborta si apunta a producción.
   La levanta Plataforma, con los usuarios para entrar (el seed crea perfiles, no logins).

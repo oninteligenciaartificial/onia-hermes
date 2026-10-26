@@ -147,7 +147,7 @@ Higgsfield y requisitos del dashboard viven en
 La politica canonica para recuperar el capital Sergio/ONIA, registrar aportes
 operativos Arthur a apps/gastos mensuales y calcular el excedente recuperable
 del Fondo Onia vive en
-`hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`.
+`hermes-content/docs/historial/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`.
 
 Reglas:
 

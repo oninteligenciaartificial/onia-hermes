@@ -28,20 +28,20 @@ Si la tarea toca CRM, ventas o vendedores, revisar tambien:
 - `CRM_AND_PROSPECTING.md`
 - `NOTION_VENDOR_CRM_SCHEMA_2026.md`
 - `ONIA_VENDOR_MANUAL_2026.md`
-- `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
-- `ONIA_PRICING_2026.md`
+- `hermes-content/docs/historial/ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
+- `hermes-content/docs/historial/ONIA_PRICING_2026.md`
 
 Si la tarea toca contenido o video, revisar tambien:
 
 - `HIGGSFIELD_VIDEO_SYSTEM.md`
-- `HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md`
+- `hermes-content/docs/historial/HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md`
 - `HIGGSFIELD_CONTENT_USE_CASES.md`
-- `CLIENT_CONTENT_PRODUCTION_SYSTEM.md`
+- `hermes-content/docs/historial/CLIENT_CONTENT_PRODUCTION_SYSTEM.md`
 - `JUNE_2026_VIDEO_PRODUCTION_PLAN.md`
 
 Si la tarea toca Instagram, publicar o assets, revisar tambien:
 
-- `ONIA_INSTAGRAM_PUBLISHING.md`
+- `hermes-content/docs/historial/ONIA_INSTAGRAM_PUBLISHING.md`
 - `HERMES_CONTENT_WORKFLOW.md`
 - `HERMES_OPERATIONS.md`
 - `CROSS_PLATFORM_PUBLISHING.md`

@@ -53,12 +53,12 @@ Mara  · Soul JUBILADO            b8f5c353-…  (pelirroja — NO USAR)
 
 | Qué | Dónde |
 |---|---|
-| Perfil, bio, handle, checklist de alta | `docs/ONIA_MODELOS_PERFILES_ALTA_20260806.md` |
-| Pilares, ganchos, molde de pieza, los 6 captions | `docs/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` |
-| Qué se sube, en qué orden, destacadas, historias, primer video | `docs/ONIA_LUCIA_ARRANQUE_CUENTA_20260808.md` |
-| Los 4 frentes de Lucía y sus gates | `docs/ONIA_LUCIA_FRENTES_ANALISIS_20260806.md` |
+| Perfil, bio, handle, checklist de alta | `docs/historial/ONIA_MODELOS_PERFILES_ALTA_20260806.md` |
+| Pilares, ganchos, molde de pieza, los 6 captions | `docs/historial/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` |
+| Qué se sube, en qué orden, destacadas, historias, primer video | `docs/historial/ONIA_LUCIA_ARRANQUE_CUENTA_20260808.md` |
+| Los 4 frentes de Lucía y sus gates | `docs/historial/ONIA_LUCIA_FRENTES_ANALISIS_20260806.md` |
 | Receta visual: bloques de identidad, atuendos, 4 recetas de prompt | `docs/ONIA_MODELOS_RECETA_VISUAL_20260806.md` |
-| Fichas: chips, costos, precios | `docs/ONIA_MODELOS_IA_FICHAS_20260801.md` |
+| Fichas: chips, costos, precios | `docs/historial/ONIA_MODELOS_IA_FICHAS_20260801.md` |
 | Reglas de identidad y QA | `references/models/AVATAR-CONSISTENCY-SCHEME.md` |
 | Molde de carrusel de 8 slides | `web-factory/docs/CAROUSEL_PATTERN_BANK_2026.md` |
 | Benchmark medido (4 cuentas) | `references/benchmarks/anora-creators-20260806/ANALISIS.md` |

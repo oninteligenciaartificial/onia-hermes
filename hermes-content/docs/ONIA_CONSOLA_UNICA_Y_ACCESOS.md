@@ -158,7 +158,7 @@ entera. Hoy están separados y eso es una virtud, no un desorden.
 
 ### (b) Un panel aparte — ya lo intentaste y está muerto
 
-Existe `hermes-content/docs/HERMES_OS_CONTROL_CENTER_2026.md` (junio) que decidió
+Existe `hermes-content/docs/historial/HERMES_OS_CONTROL_CENTER_2026.md` (junio) que decidió
 exactamente eso: un "Control Tower" en `localhost:3010` y un dashboard en
 `localhost:9119`. **Verificado hoy: no hay nada escuchando en ninguno de los dos
 puertos.** Un panel que hay que mantener y que nadie enciende es trabajo con

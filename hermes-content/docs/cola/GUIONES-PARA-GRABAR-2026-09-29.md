@@ -1,7 +1,7 @@
 # Guiones para grabar — 29 de septiembre de 2026
 
 Solo lo que se dice a cámara. Pantallas, fuentes y material de la comunidad:
-[`PRODUCCION-GUIONES-2026-09-29.md`](PRODUCCION-GUIONES-2026-09-29.md).
+[`PRODUCCION-GUIONES-2026-09-29.md`](../historial/cola/marca-personal-sep/PRODUCCION-GUIONES-2026-09-29.md).
 
 Orden de grabación sugerido: primero el YouTube (horizontal), después los nueve
 verticales de corrido. Frases cortas: si te trabás, repetí solo esa frase.

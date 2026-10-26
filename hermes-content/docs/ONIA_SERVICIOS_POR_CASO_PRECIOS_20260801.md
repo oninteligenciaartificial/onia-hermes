@@ -46,7 +46,7 @@
 
 **RESUELTO 2026-08-01:** manda el canónico ya declarado en CLAUDE.md →
 `PRICING_RATIONALE_INTERNO.md` §0: **lanzamiento 790 / 1.500** (desde 2026-07-03). No era
-una decisión nueva — era aplicar la existente. `KIT_VENTAS_AGENTE_IA_2026.md` quedó
+una decisión nueva — era aplicar la existente. `historial/KIT_VENTAS_AGENTE_IA_2026.md` quedó
 corregido con nota al tope apuntando al canónico.
 
 **Y los precios de la plataforma (320/750/1.500) son PROVISIONALES** — Sergio 2026-08-01:
@@ -200,6 +200,6 @@ vendemos la implementación y la suscripción. No regalamos los JSON.
 ---
 
 Relacionado: `ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md` (catálogo por estado) ·
-`KIT_VENTAS_AGENTE_IA_2026.md` (⚠️ precios viejos, corregir tras decisión §1) ·
+`historial/KIT_VENTAS_AGENTE_IA_2026.md` (⚠️ precios viejos, corregir tras decisión §1) ·
 `PRICING_RATIONALE_INTERNO.md` §0 (lanzamiento vs lista) ·
 `ONIA_ARTHUR_CARRIL_CONTENIDO_Y_PAGO_20260801.md` (los % de Arthur).

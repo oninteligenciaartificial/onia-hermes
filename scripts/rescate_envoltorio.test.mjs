@@ -26,7 +26,8 @@ function armar({ candidatos, umbralS = 7200 }) {
   const dir = mkdtempSync(join(tmpdir(), 'rescate-envoltorio-'));
   const tg = join(dir, 'tg.sh');
   const tgLog = join(dir, 'tg.log');
-  writeFileSync(tg, `#!/bin/sh\nprintf '%s\\n' "$1" >> ${tgLog}\n`);
+  // la ruta va entre comillas: en Windows trae \ y sh se las come (dejaba C:Users...tg.log sueltos en el cwd)
+  writeFileSync(tg, `#!/bin/sh\nprintf '%s\\n' "$1" >> '${tgLog}'\n`);
   chmodSync(tg, 0o755);
 
   const rutas = candidatos.map((c, i) => {

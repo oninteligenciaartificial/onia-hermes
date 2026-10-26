@@ -1,5 +1,7 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
+> ⚠️ **26-oct-2026:** desde la decisión de Sergio Urcullo de ese día, planifica el Hermes de la PC y el del VPS solo avisa; la cola única son los issues `orquesta`. Lo de abajo que diga que el Hermes del VPS planifica es anterior. Mapa vigente: `hermes-content/docs/ONIA_HARNESS.md`; reglas: `AGENTS.md` §1.
+
 > **ESTADO 21-oct, 01:45 UTC.** Paso 5e ENCENDIDO (Hermes planifica la orquesta): aplicar 39496727472 y 39503283126,
 > fallas 0; revisión `26deb0b4121c` cada 3 h. Su primera corrida (20:01 La Paz) cargó la skill y respondió `[SILENT]`:
 > con la cola vacía no tenía de dónde sacar tareas. El arreglo (la skill carga una de `principal.md` o de un carril) y la
@@ -104,7 +106,7 @@
 >   que dejó la madre:** el permiso `ONIA_AUTOSYNC_MAIN` exige además la marca `onia-autosync-main` en el
 >   git-dir del checkout de la madre (sus subagentes en otros worktrees no la tienen); y una respuesta
 >   rechazada le avisa a Sergio Urcullo, una vez por pedido (si la aduana falla, se reintenta). **La madre
->   pone la marca una vez en su worktree** (comando en la skill `onia-sesion-madre`).
+>   pone la marca una vez en su worktree** (comando en la skill `equipo-de-agentes`; antes en `onia-sesion-madre`, hoy historia).
 > - **Cómo se enciende (runbook vigente):** `TELEGRAM_COMMAND_CENTER.md` §8 — `aplicar` en 6 pasos y las
 >   pruebas P2 a P5. Lo corre la madre desde la PC, con el «sí» de Sergio Urcullo en su sesión.
 > - **Modelo de Hermes:** `gpt-5-mini` en el chat y en 08:00/08:10; `gpt-5-nano` en 13:00/16:00 (skill).

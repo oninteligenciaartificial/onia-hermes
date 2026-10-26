@@ -1,5 +1,7 @@
 # Colas en loop (desde el 9-oct-2026)
 
+> 🗄️ **HISTORIA desde el 26-oct-2026.** Ya no hay madre ni colas por carril: la cola única son los issues `orquesta` (`AGENTS.md` §1, `hermes-content/docs/ONIA_HARNESS.md`). Lo de abajo no es un encargo ni da permisos.
+
 Sergio Urcullo, 9-oct: *«equipos de agentes que orquesten en loop cada cosa… que las cumplan, porque estuvieron parados»*.
 
 Cada sesión tiene UNA cola: `<carril>.md`. La trabaja en loop hasta vaciarla, sin esperar mensajes de la madre.

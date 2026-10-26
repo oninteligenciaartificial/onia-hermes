@@ -19,7 +19,7 @@ El tema estaba repartido en cuatro lugares que no se citaban entre sí:
 | Dónde estaba | Qué tenía | Problema |
 |---|---|---|
 | `ONIA_ECOMMERCE_PLAYBOOK_20260806.md` | La **decisión vigente** (§8: el carril es B2B, Nuvia parqueada) y el circuito tramo por tramo | **Fecha en el nombre** ⇒ por la regla de `CLAUDE.md` §2 se lee como historia. Y **cero documentos lo referenciaban** (verificado con `grep` el 2026-09-04): la decisión operativa del tema era un huérfano |
-| `AI_ECOMMERCE_MODEL_SYSTEM_2026.md` | Sistema de modelo IA (Mara Vale) para creativos de e-commerce | Es un doc de **producción de creativos**, no de e-commerce. El nombre hace creer que es la estrategia del canal |
+| `historial/AI_ECOMMERCE_MODEL_SYSTEM_2026.md` | Sistema de modelo IA (Mara Vale) para creativos de e-commerce | Es un doc de **producción de creativos**, no de e-commerce. El nombre hace creer que es la estrategia del canal |
 | `ONIA_CATALOGO_DE_IDEAS.md` §4 y §8.7 | Las cinco ideas de comercio físico con su estado | Una fila por idea, sin el porqué. Índice, no decisión |
 | `historial/ONIA_RESEARCH_AGENTE_IMPORTACION_NUVIA_20260705.md` y `historial/ONIA_RESEARCH_PRODUCTOS_GANADORES_VENTURES_20260705.md` | **El bloqueo duro real** (riel de pago) y el patrón de producto ganador | Están en `historial/` ⇒ no son fuente de verdad, y ahí adentro está el único dato que decide todo el tema |
 
@@ -29,7 +29,7 @@ El tema estaba repartido en cuatro lugares que no se citaban entre sí:
 - `historial/ONIA_ECOMMERCE_PLAYBOOK_20260806.md` = **la investigación y el circuito** que
   originaron la decisión. Se lee para el detalle tramo por tramo; su §8 está transcrita acá
   abajo y **acá manda**.
-- `AI_ECOMMERCE_MODEL_SYSTEM_2026.md` = cómo se producen los creativos si algún día se
+- `historial/AI_ECOMMERCE_MODEL_SYSTEM_2026.md` = cómo se producen los creativos si algún día se
   enciende. No es estrategia de canal.
 - `ONIA_CATALOGO_DE_IDEAS.md` §4 = el índice; apunta acá.
 - Los dos `research` de julio = evidencia citada, no plan.

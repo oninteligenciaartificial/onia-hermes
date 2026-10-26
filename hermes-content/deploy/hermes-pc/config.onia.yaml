@@ -1,0 +1,203 @@
+# Claves que ONIA fija en %LOCALAPPDATA%\hermes\config.yaml (Hermes de la PC, v0.22.2).
+# El resto del archivo lo maneja Hermes. Se aplica con Hermes cerrado y con el respaldo A1 hecho
+# (handoff/hermes-local.md). (P) = la clave sale de la documentación de Hermes y no se probó en vivo.
+# Sin secretos: las llaves viven en .env y auth.json de esa carpeta, nunca acá.
+#
+# approvals.deny se prueba con probar-deny.py (en esta carpeta), que usa la función real de Hermes
+# (tools/approval_floors.py, _match_user_deny_rule) y su parser de YAML; 26-oct: 173 casos a bloquear y 41 lecturas
+# que pasan, 0 fallas. Se corre después de cada cambio acá y de cada actualización de Hermes, desde la raíz del repo:
+#   $py = (Get-Content "$env:LOCALAPPDATA\hermes\installs\*\facts.json" -Raw | ConvertFrom-Json).packages.venv.environment + '\Scripts\python.exe'
+#   & $py -I hermes-content/deploy/hermes-pc/probar-deny.py hermes-content/deploy/hermes-pc/config.onia.yaml
+# Con --vivo al final compara con el config.yaml que usa Hermes y falla si su deny no es este (el 26-oct falla: allá
+# no hay deny). Cómo compara Hermes: sin mayúsculas, el comando entero y cada ejecutable sin su ruta con / (;, &&, |,
+# $(...), bash -c, env, nohup); una ruta de Windows con \ no la recorta (approval_detection.py:1404-1416). Corre en
+# Git Bash, no mira dentro de cmd ni de PowerShell, no resuelve variables ni alias, ni lo que haga un script
+# (node x.js, python -c), y deny no es un sandbox (security.md:182-184). Por eso además:
+# - sin execute_code ni scripts con -e/-c en el allowlist (en modo manual piden aprobación);
+# - HERMES_WRITE_SAFE_ROOT (variable de usuario de Windows, separador ;) limita write_file, patch, delete_file y
+#   move_file a E:\onia-wt\hermes-base\hermes-content\docs\handoff y %LOCALAPPDATA%\hermes (file_safety.py:222-228).
+#   No cubre skill_manage, que escribe directo (skill_manager_tool.py:406): las skills de external_dirs solo las
+#   protege skills.write_approval. Lo de la terminal (Set-Content, etc.) solo lo frenan los permisos del sistema.
+
+model: {default: gpt-6.1-sol}            # Astra solo en una sesión nueva; nunca Claude (falló el 21 y 22-oct)
+
+skills:
+  write_approval: true                   # external_dirs es escribible (skills.md:424-425): sin esto skill_manage escribe ahí sin preguntar
+  external_dirs: ["E:/onia-wt/hermes-base/.claude/skills"]   # la única fuente de skills, desde un worktree limpio
+memory: {write_approval: true}
+auxiliary: {background_review: {enabled: false}}   # origen de 131 de las 194 reescrituras de sus propias skills
+
+approvals:
+  mode: manual                           # pregunta todo. El default es smart: un LLM auxiliar aprueba lo de bajo riesgo
+                                         # (config_defaults.py:1679; manual es solo el respaldo si falta la clave,
+                                         # approval_context.py:253). Ningún modo frena --yolo: con yolo solo quedan
+                                         # los pisos y approvals.deny (approval.py:1137-1148)
+  timeout: 500
+  deny:
+    # git que escribe, publica o borra, también con opciones globales (git -C x push, git -c a=b push). Hermes compara
+    # además el nombre del ejecutable sin su ruta con /, así que "git*" cubre git.exe, C:/.../git.exe y /usr/bin/git.
+    # Una ruta de Windows con \ (sobre todo entre comillas) no la recorta: esa la frena "?:*", más abajo
+    - "git* push*"
+    - "git* commit*"
+    - "git* merge"
+    - "git* merge *"                     # no bloquea git merge-base, que es lectura
+    - "git* pull*"
+    - "git* rebase*"
+    - "git* cherry-pick*"
+    - "git* revert*"
+    - "git* am *"
+    - "git* apply *"
+    - "git* update-ref*"
+    - "git* tag *"
+    - "git* reset*"
+    - "git* checkout*"                   # también checkout -b y checkout -- .
+    - "git* switch*"
+    - "git* restore*"
+    - "git* clean*"
+    - "git* stash*"
+    - "git* rm *"
+    - "git* branch -d*"                  # sin mayúsculas: cubre -D
+    - "git* branch --delete*"
+    - "git* worktree add*"
+    - "git* worktree remove*"
+    - "git* credential*"
+    - "git* send-email*"
+    - "git* *alias.*"                    # git -c alias.p=push p o git config alias.p push saltarían todo lo de arriba
+    # el ejecutable escondido: en una variable o sustitución ($x push, "$x" push, $(which gh) ...), por ruta de Windows
+    # (Hermes le borra las \ y ya no ve el nombre: "C:\...\gh.exe" ...), o pasado a xargs, find -exec o eval
+    - "$*"
+    - "?:*"
+    - "xargs*"
+    - "find* -exec*"
+    - "eval *"
+    # otra shell adentro: Hermes corre en Git Bash y mira dentro de bash -c pero no de cmd ni de PowerShell
+    # (cmd //c, /k, PowerShell posicional, -enc, ('gi'+'t')), así que esas se cierran enteras
+    - "cmd*"
+    - "powershell*"
+    - "pwsh*"
+    # GitHub: cargar issues va solo por scripts/orquesta/cargar-issue.mjs. "gh*" cubre gh.exe, la ruta con / (la de
+    # Windows con \ la frena "?:*") y -R delante del grupo (gh -R x issue edit: -R es del grupo, pero gh lo acepta
+    # ahí); "gh* issue -*" cubre las opciones entre el grupo y la acción
+    # (gh issue -R x edit): para leer, las opciones van después de la acción (gh issue view 1 -R x)
+    - "gh* issue -*"
+    - "gh* issue create*"
+    - "gh* issue new*"
+    - "gh* issue edit*"
+    - "gh* issue comment*"
+    - "gh* issue close*"
+    - "gh* issue reopen*"
+    - "gh* issue delete*"
+    - "gh* issue transfer*"
+    - "gh* issue develop*"
+    - "gh* issue pin*"
+    - "gh* issue unpin*"
+    - "gh* issue lock*"
+    - "gh* issue unlock*"
+    - "gh* pr -*"
+    - "gh* pr create*"
+    - "gh* pr new*"
+    - "gh* pr merge*"
+    - "gh* pr review*"
+    - "gh* pr edit*"
+    - "gh* pr comment*"
+    - "gh* pr ready*"
+    - "gh* pr close*"
+    - "gh* pr reopen*"
+    - "gh* pr revert*"
+    - "gh* pr lock*"
+    - "gh* pr unlock*"
+    - "gh* pr update-branch*"
+    - "gh* pr checkout*"
+    - "gh* co *"                         # alias de gh pr checkout (existe en la PC); cubre gh pr co
+    - "gh* repo -*"
+    - "gh* repo create*"
+    - "gh* repo new*"
+    - "gh* repo edit*"
+    - "gh* repo archive*"
+    - "gh* repo unarchive*"
+    - "gh* repo rename*"
+    - "gh* repo sync*"
+    - "gh* repo deploy-key*"
+    - "gh* repo delete*"
+    - "gh* repo fork*"
+    - "gh* repo autolink*"
+    - "gh* label -*"
+    - "gh* label create*"                # no gh* label*: bloquearía gh label list
+    - "gh* label edit*"
+    - "gh* label delete*"
+    - "gh* label clone*"
+    - "gh* run -*"
+    - "gh* run rerun*"
+    - "gh* run cancel*"
+    - "gh* run delete*"
+    - "gh* auth -*"
+    - "gh* auth status *"                # con -t o --show-token imprime el token; gh auth status solo, pasa
+    - "gh* auth token*"
+    - "gh* auth refresh*"
+    - "gh* auth login*"
+    - "gh* auth logout*"
+    - "gh* auth switch*"
+    - "gh* auth setup-git*"
+    - "gh* cache delete*"
+    - "gh* config set*"
+    - "gh* api*"
+    - "gh* workflow*"
+    - "gh* secret*"
+    - "gh* variable*"
+    - "gh* gist*"
+    - "gh* release*"
+    - "gh* agent*"                       # agent-task y sus alias agent, agents
+    - "gh* codespace*"
+    - "gh* cs *"
+    - "gh* ssh-key*"
+    - "gh* gpg-key*"
+    - "gh* project *"
+    - "gh* copilot*"
+    - "gh* alias*"
+    - "gh* ext*"                         # extension, extensions, ext
+    - "*api.github.com*"
+    # otros agentes, pasadas de la orquesta, tareas programadas y el VPS
+    - "claude*"                          # claude, claude.exe, claude.cmd y por ruta
+    - "codex*"
+    - "*claude-code*"
+    - "*openai*codex*"                   # @openai/codex en npx o por ruta (con / o con barra invertida)
+    - "*npx*claude*"
+    - "*npx*codex*"
+    - "start-process*"
+    - "saps *"
+    - "start *"
+    - "*orquesta.mjs*"
+    - "*codex-tarea*"
+    - "schtasks*"
+    - "*-scheduledtask*"                 # Register, Set, Enable, Start, New...
+    - "ssh*"
+    - "scp*"
+    - "sftp*"
+    - "plink*"
+    - "wsl*"
+    # borrar y gastar
+    - "Remove-Item*"
+    - "rm -rf*"
+    - "del *"
+    - "rd /s*"
+    - "rmdir*"
+    - "higgsfield generate create*"
+command_allowlist: []                    # sin cua:click:background: con GitHub abierto podía soltar o mergear a clics
+
+delegation: {model: gpt-6.1-sol, provider: openai-codex, max_iterations: 120,
+             max_concurrent_children: 2, child_timeout_seconds: 900}   # hijos solo para leer y verificar. Heredan deny por código
+             # (mismo proceso y config: approval_context.py:234-239), sin medir en vivo y salvo con el runtime Codex app-server
+
+compression:
+  threshold: 0.50
+  threshold_tokens: 200000               # gana el menor: compacta a 200k con 272k y con 900k
+  target_ratio: 0.20
+  protect_last_n: 20
+  protect_first_n: 0                     # el objetivo vive en /goal
+  tail_mode: lean
+  idle_compact_after_seconds: 1800
+  proactive_prune_tokens: 48000
+
+checkpoints: {enabled: true}             # (P)
+timezone: America/La_Paz
+display: {tool_progress: new}

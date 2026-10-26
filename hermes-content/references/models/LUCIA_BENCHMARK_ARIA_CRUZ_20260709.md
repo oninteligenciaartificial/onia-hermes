@@ -34,7 +34,7 @@ El "es IA" no es un problema que esconde — es su producto. Ejes:
 
 ## Qué es replicable para Lucia/ONIA (y dónde le GANAMOS)
 - **Torneos/comparativas de modelos:** ya tenemos data REAL propia
-  (`VIDEO_MODEL_STACK_DECISION_2026.md`, `higgsfield-capabilities-map`, shootouts de
+  (`hermes-content/docs/historial/references/VIDEO_MODEL_STACK_DECISION_2026.md`, `higgsfield-capabilities-map`, shootouts de
   Seedance/Kling/Veo/minimax con Lucia). Podemos publicar "Seedance vs Kling vs Veo — probado"
   con autoridad inmediata y material ya generado.
 - **Tutorial de ficha 360°/consistencia:** ya lo hicimos y documentamos

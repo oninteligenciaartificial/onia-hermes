@@ -6,13 +6,13 @@ Uso: sistema para incorporar y administrar colaboradores comerciales que NO
 aportan capital, pagados 100% por resultado, en prueba de 60 dias por fases.
 
 > Fuente de verdad. El acuerdo por colaborador
-> (`ONIA_ACUERDO_COLABORADOR_COMERCIAL_PLANTILLA_2026.md`) y la spec del panel
-> (`ONIA_COLABORADORES_PANEL_SPEC_2026.md`) cuelgan de este documento. Reusa la
+> (`historial/ONIA_ACUERDO_COLABORADOR_COMERCIAL_PLANTILLA_2026.md`) y la spec del panel
+> (`historial/ONIA_COLABORADORES_PANEL_SPEC_2026.md`) cuelgan de este documento. Reusa la
 > mecanica ya probada; no la duplica. Fuentes madre:
 > `ONIA_COMPANY_OPERATING_MODEL_2026.md`, `ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`,
 > `ONIA_VENDOR_MANUAL_2026.md`, `ONIA_PANEL_VENDEDORES_2026.md`,
 > `ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md`,
-> `ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`.
+> `historial/ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`.
 
 ## Veredicto
 
@@ -242,5 +242,5 @@ subir de nivel.
 - `ONIA_VENDOR_MANUAL_2026.md`
 - `ONIA_PANEL_VENDEDORES_2026.md`
 - `ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md`
-- `ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`
-- **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*
+- `historial/ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`
+- **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `historial/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`historial/ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*

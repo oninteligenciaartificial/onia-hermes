@@ -47,7 +47,7 @@ servicios y comercio**, 2 de los rubros que vendemos.
 ✅ **SERVICIOS: arreglado y desplegado el 4-sep** (`3e20395` + `443e3e7`), verificado dos veces
 contra producción con cuenta nueva. El recorrido entero se hace solo: registrarse → cargar un
 servicio → cargar un cliente → agendar con hora → **cobrar** → verlo en Contabilidad.
-Lo que se arregló, y lo que se aprendió, en `handoff/onia-v1-servicios.md`:
+Lo que se arregló, y lo que se aprendió, en `historial/handoff/onia-v1-servicios.md`:
 
 - **Cobrar era imposible:** 422 «Stock insuficiente: disponible 0, solicitado 1». Cobrar una
   declaración de impuestos exigía inventarle stock. Hoy da 201.
@@ -168,7 +168,7 @@ Hoy `maxAsientosExtra()` es el único lugar que dice cuántos asientos vende cad
 API de admin (valida), el panel de admin (input) y la barra de uso del cliente.
 
 **Cuatro decisiones de precio siguen esperando a Sergio Urcullo** y ninguna necesita más
-investigación — la medición está en `handoff/onia-v1-panel-ui.md` §6: la recarga de Bs 190 (sin
+investigación — la medición está en `historial/handoff/onia-v1-panel-ui.md` §6: la recarga de Bs 190 (sin
 ancla: ningún competidor vende recargas), el eje del cargo de Bs 70 (ningún competidor local cobra
 por cabeza), el chatbot a Bs 390 contra Xmart (Bs 177 QR / Bs 296 Meta API), y la **gracia del
 contrato pago, que hoy es de CERO días** sobre un rail de cobro que exige una acción manual cada

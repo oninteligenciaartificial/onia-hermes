@@ -4,7 +4,7 @@ Recurso empaquetado del ciclo comentario→DM de Instagram (`@oniahq`). Se manda
 cuando alguien comenta **SISTEMA** en el reel del checklist de seguridad.
 
 Ciclo completo (guion de la pieza, script de DM, CRM, métricas):
-`hermes-content/docs/ONIA_CICLO_COMENTARIO_DM_20260815.md`.
+`hermes-content/docs/historial/ONIA_CICLO_COMENTARIO_DM_20260815.md`.
 
 **Fuente de los 10 puntos:** video de referencia analizado en
 `hermes-content/references/video-intake/2026-08-09-10-errores-seguridad-apps-ia.md`

@@ -174,7 +174,7 @@ centralizado · y cuánto cuesta cada camino por cliente y por mes.
 
 Detalle: `ONIA_PLANES_REQUISITOS_20260801.md` (**qué da cada plan** — la matriz a gatear) ·
 `ONIA_PLATFORM_ESTRUCTURA_20260730.md` (qué existe) ·
-`ONIA_SELF_SERVICE_ARQUITECTURA_20260731.md` (el cobro) ·
-`ONIA_CORE_Y_MODULOS_ANALISIS_20260731.md` (por qué el core no es todavía la columna) ·
+`../historial/ONIA_SELF_SERVICE_ARQUITECTURA_20260731-20260801.md` (el cobro) ·
+`../historial/ONIA_CORE_Y_MODULOS_ANALISIS_20260731.md` (por qué el core no es todavía la columna) ·
 `ONIA_VALOR_Y_ESCALERA_PLANES_20260731.md` (precio por valor) ·
 `ONIA_PARQUEADO_20260730.md` (todo lo congelado).

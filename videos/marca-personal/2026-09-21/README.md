@@ -30,4 +30,4 @@ si falta la captura real o si ya existe la salida final.
 - `project-status.json` — bloqueo y rutas canónicas.
 
 Fuente de guion:
-`../../../hermes-content/docs/cola/GUIONES-DIA-2026-09-21.md`.
+`../../../hermes-content/docs/historial/cola/marca-personal-sep/GUIONES-DIA-2026-09-21.md`.
