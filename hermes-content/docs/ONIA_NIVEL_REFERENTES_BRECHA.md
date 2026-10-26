@@ -528,4 +528,4 @@ contestarse.
 
 Ver también: `CLAUDE.md` (una sola fuente de verdad) · `ONIA_CATALOGO_DE_VENTA.md` ·
 `research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` · `research/competencia/DAPTA_COMO_FUNCIONA.md` ·
-`research/competencia/SENDYPRO_TEARDOWN.md` · `docs/handoff/chatbot.md` · `ONIA_PRICING_CHATBOT_PROPUESTA.md`.
+`research/competencia/SENDYPRO_TEARDOWN.md` · `docs/handoff/chatbot.md` · `historial/ONIA_PRICING_CHATBOT_PROPUESTA.md`.

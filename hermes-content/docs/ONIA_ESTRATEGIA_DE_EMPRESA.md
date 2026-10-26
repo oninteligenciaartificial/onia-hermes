@@ -88,7 +88,7 @@ fundador, sí.**
 | Espera del más viejo | 21-ago → **15 días** al 2026-09-05 | `contactedAt` NULL en los tres |
 | Commits en un solo día | **25** | `git log` del 2026-09-05 |
 | Worktrees abiertos a la vez | **8** (6 sin declarar dueño) | `COORDINATION_MANIFEST.md` |
-| Documentos en `docs/` | **390** | `LEEME-PRIMERO.md` |
+| Documentos en `docs/` | **390** | `historial/LEEME-PRIMERO.md` |
 | Sociedad registrada | **OniaAgency, SEPREC 5371375010** | `ONIA_LEGAL_BOLIVIA_ESTADO.md` |
 | Entidad que el cliente acepta al registrarse | 🔴 **no existe en SEPREC** | idem, §2 |
 
@@ -208,7 +208,7 @@ implementación y soporte**, pagado con ingreso recurrente, no con capital.
 | 2 | **Cuenta corriente empresa sin abrir.** Trámite al 90%, cartas redactadas, FATCA resuelto | firma | 🔴 esperando a Leslie |
 | 3 | **SIAT en trámite**, emisor fiscal en mock | trámite | 🟡 en curso |
 
-Detalle y normas citadas: `ONIA_LEGAL_BOLIVIA_ESTADO.md` · `ONIA_PUEDO_VENDER_HOY.md`.
+Detalle y normas citadas: `ONIA_LEGAL_BOLIVIA_ESTADO.md` · `historial/ONIA_PUEDO_VENDER_HOY.md`.
 
 **Esas tres SON "ser empresa", literalmente.** Cuestan un día de trabajo, una firma y un
 trámite, y llevan semanas frenadas mientras se construyen features que todavía nadie usa.
@@ -858,7 +858,7 @@ Y hay un error de hecho adentro: **un lead no se quema por escribirle con un pro
 imperfecto; se quema por el silencio.** A la clínica de 4 doctores que hizo 6 preguntas
 concretas no le llegó ni una plantilla automática. El costo de no escribir **ya se pagó**.
 
-Súmese que el repo se contradice a sí mismo: `ONIA_PUEDO_VENDER_HOY.md` (18-ago) dice textual
+Súmese que el repo se contradice a sí mismo: `historial/ONIA_PUEDO_VENDER_HOY.md` (18-ago) dice textual
 **"SÍ se puede vender el sistema"**, y los 3 pedidos de acceso pidieron **el único rubro 🟢**.
 
 **Cómo se cerró:** no la derogó este documento — la cerró Sergio Urcullo, y el objetivo que
@@ -890,6 +890,6 @@ git worktree list | wc -l          # worktrees abiertos: >2 es señal de dispers
 ## 18. Documentos relacionados
 
 **`ONIA_AGENTES_COSTO_API.md`** (la fuente de los márgenes de §8 y del techo de §9) · `ONIA_DEFINICION_DE_TERMINADO.md` (el objetivo vigente) · `ONIA_LEADS_ESPERANDO.md` (las 7
-personas) · `ONIA_PUEDO_VENDER_HOY.md` (qué se puede prometer) · `ONIA_LEGAL_BOLIVIA_ESTADO.md`
+personas) · `historial/ONIA_PUEDO_VENDER_HOY.md` (qué se puede prometer) · `ONIA_LEGAL_BOLIVIA_ESTADO.md`
 (SEPREC, NIT, marca) · `FINANCE_LOG_2026.md` (gasto y capital) · `ONIA_CATALOGO_DE_VENTA.md`
 (qué rubro está 🟢).

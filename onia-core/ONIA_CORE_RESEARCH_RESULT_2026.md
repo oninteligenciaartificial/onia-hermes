@@ -27,7 +27,7 @@ un core comun y adaptadores por negocio:
 - `C:\dev\proyectos\onia-hermes\onia-core\contract.json`
 - `C:\dev\proyectos\onia-hermes\PROJECTS_ORCHESTRATION.md`
 - `C:\dev\proyectos\onia-hermes\CRM_AND_PROSPECTING.md`
-- `C:\dev\proyectos\onia-hermes\hermes-content\docs\ONIA_CONSULTING_SERVICES_2026.md`
+- `C:\dev\proyectos\onia-hermes\hermes-content\docs\historial\ONIA_CONSULTING_SERVICES_2026.md`
 - `C:\dev\proyectos\onia-hermes\hermes-content\references\onia-projects-registry.json`
 - `C:\dev\proyectos\Gestios\docs\ARCHITECTURE.md`
 - `C:\dev\proyectos\Gestios\prisma\schema.prisma`

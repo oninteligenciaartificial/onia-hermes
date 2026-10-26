@@ -851,11 +851,11 @@ Segmentación y Advantage+:
 
 **[repo] onia-hermes, leído el 30-sep-2026**
 - `hermes-content/docs/handoff/meta-ads-prospeccion.md`
-- `hermes-content/docs/ONIA_ADS_CAMPANA_1_LISTA_20260813.md`
-- `hermes-content/docs/ONIA_PLAN_CONTENIDO_Y_ADS_20260820.md`
+- `hermes-content/docs/historial/ONIA_ADS_CAMPANA_1_LISTA_20260813.md`
+- `hermes-content/docs/historial/ONIA_PLAN_CONTENIDO_Y_ADS_20260820.md`
 - `hermes-content/docs/ONIA_CLIENTE_IDEAL.md`
 - `web-factory/docs/ADS_PATTERN_BANK_2026.md`
-- `hermes-content/docs/ONIA_PAUTA_COMPETENCIA_20260815.md`
+- `hermes-content/docs/historial/ONIA_PAUTA_COMPETENCIA_20260815.md`
 - `hermes-content/deploy/vps-ops/bot/chatwoot-adapter.mjs`
 - `COORDINATION_MANIFEST.md`
 - `hermes-content/carousels/out/ads/` (piezas miradas)

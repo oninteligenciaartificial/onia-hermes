@@ -536,7 +536,7 @@ ARQUITECTURA NUEVA (3 subagentes paralelos sin commit + orquestador integra/depl
 3. Chip "N conversaciones atendidas hoy · sin limite, siempre" en /inbox (costo cero).
 4. PRICING DECIDIDO por Sergio: OPCION A — Bs 390 plano todo incluido RATIFICADO
    (cero cambio de codigo; pricing.ts ya lo tiene). Doc con la comparativa verificada:
-   ONIA_PRICING_CHATBOT_PROPUESTA.md (Sendy real 240-560+, Leadsales 1106, Cliengo
+   hermes-content/docs/historial/ONIA_PRICING_CHATBOT_PROPUESTA.md (Sendy real 240-560+, Leadsales 1106, Cliengo
    513/2953, Treble ~4550, ManyChat 775; pitch anti-Sendy en el doc).
 Sesion paralela detectada (carril comercial/CRM, tus 10 bloqueados + 3 leads): sin
 choque de carriles; regla fetch+rebase antes de push absorbio 6 PRs ajenos hoy.

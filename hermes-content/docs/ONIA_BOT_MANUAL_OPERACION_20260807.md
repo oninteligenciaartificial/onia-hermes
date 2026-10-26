@@ -385,7 +385,7 @@ nunca por el chat ni por un documento, y así tiene que seguir.
 
 ---
 
-Relacionados: `ONIA_BOT_GOLIVE_RUNBOOK_20260801.md` (el alta paso a paso y las
+Relacionados: `historial/ONIA_BOT_GOLIVE_RUNBOOK_20260801.md` (el alta paso a paso y las
 trampas de Meta) · `ONIA_BOT_CAPA_CONOCIMIENTO_20260806.md` (diseño de la capa
 editable) · `ONIA_VOZ_WHATSAPP_ARQUITECTURA_20260802.md` (llamadas, aún sin
 construir).

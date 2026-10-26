@@ -106,5 +106,5 @@ El objetivo histórico de 10–13 publicaciones por día no es evidencia de capa
 - `ONIA_MARCA_PERSONAL_ETAPA2_OPERACION.md` — inventario histórico de seis plataformas de Sergio.
 - `ONIA_ARQUITECTURA_CUENTAS_Y_MODELOS.md` — tres integraciones Instagram históricas y plan por identidad; fechas de agosto, no estado actual.
 - `handoff/claude-git-status-935f47.md` — incidente de Postiz/Temporal y posts vencidos.
-- `ONIA_POSTIZ_COMENTARIOS_DM_20260817.md` — separación entre programación y bandeja de mensajes.
+- `historial/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md` — separación entre programación y bandeja de mensajes.
 - [Postiz, conexión OAuth de canales](https://docs.postiz.com/general/channels/connect) y [API de integraciones](https://docs.postiz.com/public-api/integrations/list) — capacidad técnica actual de la herramienta, no prueba de que nuestras cuentas estén conectadas.

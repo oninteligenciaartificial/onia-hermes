@@ -25,7 +25,7 @@ aprobados los guiones o las conclusiones editoriales anteriores.
 
 ## Fuentes útiles, sin heredar el veredicto
 
-- `hermes-content/docs/ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md`: roles históricos
+- `hermes-content/docs/historial/ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md`: roles históricos
   Sergio, @oniahq y Lucía; sus métricas/estados requieren actualización.
 - `hermes-content/references/video-intake/` y `creator-video-references/`:
   archivo de referencias. Se inventariaron 131 fichas fechadas y seis registros

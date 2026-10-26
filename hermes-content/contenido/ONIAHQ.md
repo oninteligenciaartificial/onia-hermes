@@ -70,7 +70,7 @@ post cobra peaje entrena a la gente a scrollear, y el algoritmo lo castiga antes
 
 | Pieza | Tipo | Nota |
 |---|---|---|
-| 6 placas por rubro (dental · comercio · importadora · estética · veterinaria · servicios) | 🎯 venta | texto listo en `docs/ONIA_KIT_VENTA_POR_RUBRO_20260815.md` |
+| 6 placas por rubro (dental · comercio · importadora · estética · veterinaria · servicios) | 🎯 venta | texto listo en `docs/historial/ONIA_KIT_VENTA_POR_RUBRO_20260815.md` |
 
 ### Bloqueado por algo que no es contenido
 
@@ -198,7 +198,7 @@ son comentarios. Ya está en `scripts/postiz_schedule.mjs`, no hay que hacer nad
 
 ⚠️ **Esto NO es responder comentarios de otros.** Postiz no puede, en ninguna red. El detalle
 completo —y qué sí se puede— está en
-[`../docs/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md`](../docs/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md).
+[`../docs/historial/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md`](../docs/historial/ONIA_POSTIZ_COMENTARIOS_DM_20260817.md).
 
 ---
 

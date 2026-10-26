@@ -1,7 +1,7 @@
 # Handoff — sesión de control (madre local en la PC) · 16-oct-2026
 
 > Lo retoma la próxima sesión de control en la PC de Sergio Urcullo. Estado medido, no de memoria.
-> Detalle de cómo funciona todo: `hermes-content/docs/ONIA_SISTEMA_AUTONOMO.md` (si ya se publicó; borrador
+> Detalle de cómo funciona todo: `hermes-content/docs/historial/ONIA_SISTEMA_AUTONOMO.md` (si ya se publicó; borrador
 > en el scratchpad de la sesión 16-oct). Memoria: `harness-codex-archivar-16-oct.md`, `canal-terminal-a-sesiones-nube.md`.
 
 ## 1. Objetivo vigente (Sergio Urcullo, 16-oct)
@@ -38,7 +38,7 @@ La orden completa está en `hermes-content/docs/cola/loop/hermes-jefa.md`.
   del proyecto (app de escritorio o celular) y abrir dominios en ese entorno. Decisión de seguridad de Sergio Urcullo.
 - **Reglas unificadas:** borrador listo en `E:/onia-wt/archivo-20261016/reglas/` (AGENTS.md 12 KB, CLAUDE.md 2 KB, CAMBIOS.md y REVISION.md). La revisión adversarial encontró 4 P0 a corregir ANTES de mostrar: Higgsfield/Meta Ads por conector sin cotizar, faltan «datos de producción y precios» en lo que pasa por Sergio Urcullo, `hermes-jefa.md` no puede aflojar aprobaciones, y faltan las reglas de seguridad de código. Antes decía: workflow `wf_66f856e3-001` escribió en el scratchpad `reglas/AGENTS.md`, `CLAUDE.md`,
   `CAMBIOS.md` y un revisor adversarial. Falta mostrárselo a Sergio Urcullo y publicar con su OK.
-- **Documento de cómo funciona todo:** borrador `ONIA_SISTEMA_AUTONOMO.md` en el scratchpad (257 líneas, sección 9
+- **Documento de cómo funciona todo:** borrador `hermes-content/docs/historial/ONIA_SISTEMA_AUTONOMO.md` en el scratchpad (257 líneas, sección 9
   corregida). Falta publicarlo en `hermes-content/docs/`.
 - **Ficha de los 2 posts de Instagram** (DedkCc6olmo y DecFE1oDNd3): un agente los está viendo desde la PC.
 - **PRs de la jefa listos para revisión:** auditoría, ventas, marca/workshops (#213), competencia (#209); #215
@@ -46,7 +46,7 @@ La orden completa está en `hermes-content/docs/cola/loop/hermes-jefa.md`.
 
 ## 4. Archivos tocados hoy
 `hermes-content/docs/cola/loop/hermes-jefa.md`, `scripts/hermes/{jefa,panel}.sh`, `.claude/skills/orca/SKILL.md`,
-`.claude/skills/onia-router/SKILL.md`, `.claude/skills/onia-sesion-madre/SKILL.md`, `.gitignore`; prompts de las
+`.claude/skills/onia-router/SKILL.md`, `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`, `.gitignore`; prompts de las
 rutinas de Plataforma y QA (RemoteTrigger); memoria local (`integrador-mergea-ramas-claude.md`, etc.).
 
 ## 5. Intentos fallidos y su causa
@@ -67,6 +67,6 @@ rutinas de Plataforma y QA (RemoteTrigger); memoria local (`integrador-mergea-ra
 
 ## 7. Próximos pasos
 1. Leer la respuesta de Sergio Urcullo a los puntos de §6 y actuar.
-2. Mostrar las reglas unificadas y publicarlas; publicar `ONIA_SISTEMA_AUTONOMO.md`.
+2. Mostrar las reglas unificadas y publicarlas; publicar `hermes-content/docs/historial/ONIA_SISTEMA_AUTONOMO.md`.
 3. Verificar con `scripts/hermes/panel.sh` y `RemoteTrigger get_run_log cse_011cQSargj5qz516CNpPQEko` que la jefa
    avanza; prueba con la PC apagada esta noche y revisión del resumen de las 06:30.

@@ -131,7 +131,7 @@ marketing de las tres cuentas escrito como fuente de verdad.
 - `docs/ONIA_ARQUITECTURA_CUENTAS_Y_MODELOS.md` — 1 modelo, 3 personas, destino del tráfico,
   §7 Facebook, §8 receta para publicar recursos.
 - `docs/ONIA_SISTEMA_MARKETING_LUCIA_ONIA.md` — la escalera + §10 moldes con cronómetro.
-- `docs/ONIA_AUDITORIA_LUCIA_Y_PLAN_DIARIO.md` — la cuenta medida por API + §7 música de IG.
+- `docs/historial/ONIA_AUDITORIA_LUCIA_Y_PLAN_DIARIO.md` — la cuenta medida por API + §7 música de IG.
 - `docs/handoffs/` — este sistema (README con el formato + este archivo).
 - `CLAUDE.md` línea 97 — editada para apuntar al handoff.
 

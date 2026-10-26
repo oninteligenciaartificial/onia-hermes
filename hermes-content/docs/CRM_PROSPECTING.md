@@ -23,7 +23,7 @@ Ayudar a Onia a encontrar prospectos, calificarlos, preparar mensajes y mantener
 `ad_active_status='ACTIVE'`) devuelve negocios que **están pagando pauta hoy** — presupuesto
 existente, medición existente, dolor existente. Es la mejor señal disponible y es gratis.
 
-Lista viva: `ONIA_PROSPECTOS_ADLIBRARY_20260806.md` (26 prospectos bolivianos calificados:
+Lista viva: `historial/ONIA_PROSPECTOS_ADLIBRARY_20260806.md` (26 prospectos bolivianos calificados:
 inmobiliarias, clínicas dentales, veterinarias y salud). Repetir la búsqueda por rubro; el
 rubro gimnasios NO sirve por esta vía (se llena de infoproductos extranjeros).
 
@@ -164,7 +164,7 @@ Reglas:
 - `Crea presentación para: <empresa>`
 - `Propuesta ONIA: <empresa> | <datos del cliente>`
 
-Skill: `hermes-content/skills/genera-propuesta.md`
+Skill: `hermes-content/docs/historial/skills/genera-propuesta.md`
 Script: `node scripts/genera-propuesta.js --empresa="X" --industria="Y" --necesidad="Z"`
 Output: `hermes-content/propuestas/propuesta-<slug>.html`
 
@@ -176,7 +176,7 @@ Para refinar: re-ejecutar con `--productos="id1,id2"` y/o `--notas="feedback del
 - `Transcripción llamada: [texto]`
 - Adjuntar .txt con transcript
 
-Skill: `hermes-content/skills/analiza-llamada.md`
+Skill: `hermes-content/docs/historial/skills/analiza-llamada.md`
 Script: `node scripts/analiza-transcripcion.js <archivo.txt>`
 Requiere: `ANTHROPIC_API_KEY`
 Flujo completo: audio Telegram → Whisper → Claude Haiku extracción → genera-propuesta → HTML + resumen + próximos pasos

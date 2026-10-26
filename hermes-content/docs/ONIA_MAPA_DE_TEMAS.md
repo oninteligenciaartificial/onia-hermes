@@ -9,7 +9,7 @@ ejecutadas. El backlog antiguo de abajo conserva su fecha y no confirma estados 
 
 **Cuatro trabajos públicos:** Sergio construye confianza; las recetas enseñan;
 ONIA muestra cómo resuelve un problema de negocio; Platform demuestra el producto.
-El [plan de tres frentes](ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md) ya distingue Sergio,
+El [plan de tres frentes](historial/ONIA_PLAN_DE_CONTENIDO_3_FRENTES.md) ya distingue Sergio,
 `@oniahq` y Lucía. Se conservan esos roles: recetas de Sergio y educación de Lucía
 (personaje IA identificado), casos propios de ONIA narrados por Sergio y demos
 de Platform en `@oniahq`. No hace falta otra cuenta de enseñanza o agencia.

@@ -27,7 +27,7 @@ con la marca ONIA, y publica vía `ig-publish` en el VPS.
      → `AGENT_KINDS`). **Captador** está gateado por `addon.inmobiliaria` y no se
      vende en los seis rubros. Sin agente, la placa dice lo que hay.
 
-   Origen y las 6 placas aplicadas: [`../docs/ONIA_KIT_VENTA_POR_RUBRO_20260815.md`](../docs/ONIA_KIT_VENTA_POR_RUBRO_20260815.md).
+   Origen y las 6 placas aplicadas: [`../docs/historial/ONIA_KIT_VENTA_POR_RUBRO_20260815.md`](../docs/historial/ONIA_KIT_VENTA_POR_RUBRO_20260815.md).
 5. **Gate anti-plantilla — cada slide debe demostrar algo distinto.** Un carrusel
    no es una colección de afiches con el mismo fondo. Para pauta, la secuencia debe
    incluir contexto humano y producto real, y cada interior debe usar una evidencia
@@ -173,7 +173,7 @@ IG_BUSINESS_ACCOUNT_ID_SERGIO / META_LONG_LIVED_TOKEN_SERGIO    (pendiente: setu
 ```
 
 Agregar esas vars a `/root/.hermes/.env` cuando la cuenta conecte su IG Business
-a una página de Facebook (mismo flujo que ONIA en `ONIA_INSTAGRAM_PUBLISHING.md`).
+a una página de Facebook (mismo flujo que ONIA en `hermes-content/docs/historial/ONIA_INSTAGRAM_PUBLISHING.md`).
 Hasta entonces, `--publish` solo funciona para `--account onia`; para las demás,
 genera/renderiza y publica manual.
 

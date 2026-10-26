@@ -62,8 +62,8 @@ At minimum include: account, personality, topic, objective, audience, offer,
 format, duration, hook, script, CTA, scenes, visual style, audio style, caption,
 publish window, approval state and reuse notes.
 
-Also create a platform copy package using
-`hermes-content/skills/descripciones-sociales-onia.md`:
+Also create a platform copy package (the old captions skill is historia:
+`hermes-content/docs/historial/skills/descripciones-sociales-onia.md`):
 
 - `instagram_caption`
 - `tiktok_description`

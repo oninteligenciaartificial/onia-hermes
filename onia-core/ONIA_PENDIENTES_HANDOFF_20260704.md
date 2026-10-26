@@ -26,7 +26,7 @@ push multi-sesion: add solo tus archivos -> commit -> pull --rebase
   alias arthur, rol arthur (internal_restricted), org onia. Login 200 + token.
   Stray arthur@onia.com.bo borrado. (Password temporal en chat -> B-bis #11.)
 - **Plan prospeccion Semana 1**:
-  `hermes-content/docs/ONIA_PLAN_PROSPECCION_SEMANA1_2026.md` (35 por segmento).
+  `hermes-content/docs/historial/ONIA_PLAN_PROSPECCION_SEMANA1_2026.md` (35 por segmento).
 
 ## A. COMPLETADO POR SUBAGENTES (2026-07-05) — verificado
 
@@ -146,7 +146,7 @@ prompt inline) — via MCP n8n, validar con execute_workflow. (2) Crear crons
 prospeccion 09:00 (skill prospeccion-onia; solo borradores, no contacta) y
 propuestas 12:00 (skill genera-propuesta). (3) Tras el fix A4 deployado,
 verificar que el briefing ya no apila tareas. Tabla horaria canonica:
-hermes-content/docs/ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md.
+hermes-content/docs/historial/ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md.
 ```
 
 ### C11. n8n restos de limpieza

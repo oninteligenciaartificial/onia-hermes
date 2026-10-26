@@ -106,7 +106,7 @@
 >   que dejó la madre:** el permiso `ONIA_AUTOSYNC_MAIN` exige además la marca `onia-autosync-main` en el
 >   git-dir del checkout de la madre (sus subagentes en otros worktrees no la tienen); y una respuesta
 >   rechazada le avisa a Sergio Urcullo, una vez por pedido (si la aduana falla, se reintenta). **La madre
->   pone la marca una vez en su worktree** (comando en la skill `onia-sesion-madre`).
+>   pone la marca una vez en su worktree** (comando en la skill `equipo-de-agentes`; antes en `onia-sesion-madre`, hoy historia).
 > - **Cómo se enciende (runbook vigente):** `TELEGRAM_COMMAND_CENTER.md` §8 — `aplicar` en 6 pasos y las
 >   pruebas P2 a P5. Lo corre la madre desde la PC, con el «sí» de Sergio Urcullo en su sesión.
 > - **Modelo de Hermes:** `gpt-5-mini` en el chat y en 08:00/08:10; `gpt-5-nano` en 13:00/16:00 (skill).

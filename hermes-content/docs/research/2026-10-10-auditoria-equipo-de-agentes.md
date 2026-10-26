@@ -2,7 +2,7 @@
 
 > Salida cruda de los 5 auditores del workflow `wf_c1e648f2-5d2` (madre `202a717e`), pedido de Sergio Urcullo del 10-oct:
 > equipo de agentes que no para, nube con la PC apagada, Codex a fondo, modelos por tarea. El plan sale de acá:
-> `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md`. Esto es evidencia, no fuente de verdad.
+> `hermes-content/docs/historial/ONIA_EQUIPO_DE_AGENTES.md`. Esto es evidencia, no fuente de verdad.
 
 ## audit:infra
 
@@ -563,7 +563,7 @@ Memory notes read:
 - `codex cloud list` shows only 2 tasks ever, both 8-oct:
   - Platform: "Add acceptance record for new accounts", READY, +164/-9 across 6 files.
   - Hermes: a git probe with no diff.
-- Environment IDs and the model caveat come from `.claude/skills/onia-sesion-madre/SKILL.md:220-226,287`:
+- Environment IDs and the model caveat come from `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md:220-226,287`:
   - Platform `6abad6a0aae081919f0b315818becb21`, Hermes `6abad782eba0819196ca234dc3abc327`.
   - The cloud model is not selectable; Astra was requested and `gpt-5.6-sol` ran.
   - Hermes is about 6 GB and its task took about 20 min.
@@ -632,6 +632,6 @@ Memory notes read:
 - `C:/Users/PC/.codex/sessions/2026/10/{08,09}/` (rate-limit and token records)
 - `C:/dev/proyectos/onia-hermes/.claude/worktrees/onia-madre-v2-pr-review-2d85bb/scripts/codex-tarea.sh`
 - `C:/dev/proyectos/onia-hermes/.claude/worktrees/onia-madre-v2-pr-review-2d85bb/hermes-content/docs/AI_MODEL_ROUTING_2026.md`
-- `C:/dev/proyectos/onia-hermes/.claude/worktrees/onia-madre-v2-pr-review-2d85bb/.claude/skills/onia-sesion-madre/SKILL.md` (lines 215-310)
+- `C:/dev/proyectos/onia-hermes/.claude/worktrees/onia-madre-v2-pr-review-2d85bb/hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md` (lines 215-310)
 - `C:/dev/proyectos/onia-hermes/.claude/worktrees/onia-madre-v2-pr-review-2d85bb/.claude/skills/equipo-de-agentes/SKILL.md` (lines 70-92)
 

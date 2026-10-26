@@ -281,6 +281,6 @@ memoria entre vueltas: en cada vuelta relee la pila completa.
 - `gh pr view` / `gh pr list` de onia-platform.
 - `~/.codex/madre-tareas/20261010-*`.
 - Salidas de las suites en `…/d5e87d2e…/tasks/b*.output`.
-- `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md` (crítica), `hermes-content/docs/ONIA_HARNESS.md`,
+- `hermes-content/docs/historial/ONIA_EQUIPO_DE_AGENTES.md` (crítica), `hermes-content/docs/ONIA_HARNESS.md`,
   `hermes-content/docs/cola/loop/madre.md`, `scripts/git-autosync.js` y `scripts/codex-tarea.sh`.
 - PoolPaged y disco medidos a las 17:47 UTC.

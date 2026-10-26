@@ -1,6 +1,6 @@
 # Receta visual de las modelos — resultado del lote de calibración
 
-> 2026-08-06. Ejecución del paso 1 de `ONIA_MODELOS_PLAN_AUTOMATIZADO_20260806.md` §5.
+> 2026-08-06. Ejecución del paso 1 de `historial/ONIA_MODELOS_PLAN_AUTOMATIZADO_20260806.md` §5.
 > 30 imágenes generadas en 3 rondas (**~3,6 créditos de 2.994**), revisadas una por una.
 > Esto NO es un plan: es la **receta reproducible** que produce piezas limpias de Lucía y
 > Mara. Al cambiar una regla, se edita acá.
@@ -110,9 +110,9 @@ cambiarle la cara es rehacer todo.
 
 ---
 
-Relacionado: `ONIA_MODELOS_PLAN_AUTOMATIZADO_20260806.md` (el plan que esto ejecuta) ·
-`ONIA_MODELOS_IA_FICHAS_20260801.md` (fichas, precios, chips) ·
-`ONIA_EJERCITO_INFLUENCERS_IA_PLAN_20260806.md` (el ejército) ·
+Relacionado: `historial/ONIA_MODELOS_PLAN_AUTOMATIZADO_20260806.md` (el plan que esto ejecuta) ·
+`historial/ONIA_MODELOS_IA_FICHAS_20260801.md` (fichas, precios, chips) ·
+`historial/ONIA_EJERCITO_INFLUENCERS_IA_PLAN_20260806.md` (el ejército) ·
 `HIGGSFIELD_FULL_CAPABILITIES_MAP.md` (qué modelo usar para qué).
 
 

@@ -11,7 +11,8 @@ los formatos que ya funcionan. Salida accionable, no ideas vagas.
 ## Flujo (obligatorio, en orden)
 
 ### 1. Radar antes de escribir
-Aplicar `radar-creativo-onia` + `tendencias-ia-redes`: revisar tendencias
+Aplicar `radar-creativo-onia` + `aprender-de-todo` (`tendencias-ia-redes` es historia:
+`hermes-content/docs/historial/skills/tendencias-ia-redes.md`): revisar tendencias
 actuales de IA, automatizacion, negocios y formato viral (SearXNG local; Tavily
 si hay key). Extraer principios, no copiar identidad de creadores. Si una fuente
 no responde, decirlo y usar el pilar de contenido evergreen.
@@ -38,7 +39,7 @@ Gancho (0-3s):
 Desarrollo (bullets o beats):
 Cierre + CTA:
 Texto en pantalla:
-Prompt visual / escenas:  (herramienta segun orquestador-creativo-ia)
+Prompt visual / escenas:  (herramienta segun diseno-contenido-onia)
 Voz/tono:  (ONIA: claro, directo, sin humo, sin guru)
 Duracion / formato objetivo:
 ```
@@ -59,7 +60,7 @@ Aprobacion necesaria: (nada se publica sin OK de Sergio)
 - `Guiones Hoy carrusel` — los 3 como carruseles.
 - `Un guion` — solo el mejor guion del dia + cierre.
 
-## Reglas duras (de orquestador-creativo-ia y radar)
+## Reglas duras (de CLAUDE.md y radar)
 - No inventar testimonios, metricas, resultados, precios ni claims. Antes/despues
   sin numeros falsos.
 - Inspiracion estructural de referencias; nunca copiar voz, frases, musica o
@@ -70,11 +71,12 @@ Aprobacion necesaria: (nada se publica sin OK de Sergio)
 - El guion propone y prepara; producir solo si Sergio dice "genera/produce".
 
 ## Encadena con
-- Produccion: `orquestador-creativo-ia`, `flujo-completo-carrusel`,
-  `video-lab-higgsfield`.
-- Publicacion (con aprobacion): `instagram-publicacion`,
-  `descripciones-sociales-onia`.
-- Orquestacion diaria: ver `ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md`.
+- Produccion: `diseno-contenido-onia`, `carruseles-onia`, `video-lab-higgsfield`.
+- Publicacion (con OK de Sergio Urcullo y captura): Buffer por `ig-reel.mjs`; copy con `copywriting` + `humanizer`.
+- Orquestacion: issues `orquesta` + `carril:marca` (`scripts/orquesta/`).
+- Historia (no usar como regla): `orquestador-creativo-ia`, `flujo-completo-carrusel`, `instagram-publicacion` y
+  `descripciones-sociales-onia` en `hermes-content/docs/historial/skills/`; la orquestacion de julio en
+  `hermes-content/docs/historial/ONIA_CONTENT_FACTORY_ORCHESTRATION_2026.md`.
 - Automatizacion: workflow `onia-guiones-diarios.json`. AUTONOMO, nada local:
   cron -> LLM gestionado (credencial n8n) con este prompt inline -> Telegram para
   aprobar. No depende de ONIA Center ni de SearXNG local.

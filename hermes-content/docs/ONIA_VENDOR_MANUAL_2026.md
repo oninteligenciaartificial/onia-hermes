@@ -9,7 +9,7 @@ Ultima actualizacion: 2026-06-18
 > Las tablas de abajo son de junio y **no son fuente**. Los precios de la plataforma se LEEN de
 > `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons);
 > la versión vendible, con las funciones al lado, está en
-> **`ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`**.
+> **`historial/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`**.
 >
 > Lo que hay que saber antes de abrir la boca con un cliente:
 > - Los planes son **Básico Bs 320 · Profesional Bs 750 · Completo Bs 1.500 · Empresa Bs 2.900**

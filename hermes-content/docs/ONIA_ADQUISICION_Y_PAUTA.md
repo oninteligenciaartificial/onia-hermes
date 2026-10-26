@@ -20,7 +20,7 @@
 > ⛔ **No es fuente de precios.** Los planes se leen de `onia-platform/lib/subscription-plans.ts`
 > (`DEFAULT_PLAN_AMOUNTS`), los add-ons de `lib/pricing.ts`.
 >
-> **Reemplaza como vigente** a `ONIA_PAUTA_COMPETENCIA_20260815.md` y `ONIA_ADS_CAMPANA_1_LISTA_20260813.md`,
+> **Reemplaza como vigente** a `historial/ONIA_PAUTA_COMPETENCIA_20260815.md` y `historial/ONIA_ADS_CAMPANA_1_LISTA_20260813.md`,
 > que quedan como fotos de agosto. **Medido el 2026-09-30** (Biblioteca de Anuncios de Meta, código de
 > `onia-platform` en `master` `c3b9206` y en la 1.0 sin publicar `wip/v1-integracion-20260928`, fuentes
 > públicas). Las cuatro investigaciones completas, con cada fuente, están en `research/*_20260930.md` (§9).

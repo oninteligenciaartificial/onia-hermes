@@ -10,7 +10,8 @@ propuesta comercial a un cliente (web, tienda, sistema, automatización).
 - `hermes-content/propuestas/PLAYBOOK_CONSTRUCCION_INTERNO.md`
 - `hermes-content/propuestas/ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`
 - `hermes-content/propuestas/BCP_PASARELA_CREDENCIALES_INTERNO.md`
-- `hermes-content/docs/ONIA_PRICING_2026.md`
+- Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons).
+  `ONIA_PRICING_2026.md` ya no es fuente (historia: `hermes-content/docs/historial/ONIA_PRICING_2026.md`).
 
 ## Regla base
 
@@ -155,4 +156,5 @@ onia-empresarial
 1. Generar/actualizar con el generador.
 2. Verificar con `generar-propuestas.test.js`.
 3. Adjuntar el PDF + mensaje breve (disculpa demora si aplica, qué es, CTA suave).
-4. Registrar la oportunidad en el CRM de prospección (ver [crm-prospeccion-onia]).
+4. Registrar la oportunidad en el CRM de prospección (skill `onia-ventas-pauta`; la vieja `crm-prospeccion-onia`
+   es historia: `hermes-content/docs/historial/skills/crm-prospeccion-onia.md`).

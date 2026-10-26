@@ -20,10 +20,10 @@ principios de produccion. NO copiar identidad, voz, frases exactas, gestos,
 musica, branding, claims ni edicion reconocible.
 
 ## Referencias canonicas del repo
-Skills `carruseles-onia.md`, `historias-onia.md`, `radar-creativo-onia.md`,
-`tendencias-ia-redes.md`, `video-lab-higgsfield.md`, `videos-virales-higgsfield.md`,
-`ugc-empresas-higgsfield.md`; docs `HIGGSFIELD_*`, `HERMES_VIDEO_LAB.md`,
-`JUNE_2026_VIDEO_PRODUCTION_PLAN.md`. Briefs/jobs en `.hermes/video-lab/`.
+Skills `aprender-de-todo`, `carruseles-onia.md`, `historias-onia.md`, `radar-creativo-onia.md`,
+`video-lab-higgsfield.md`, `ugc-empresas-higgsfield.md`; docs `HIGGSFIELD_VIDEO_SYSTEM.md` y `VIDEO_LAB.md`.
+Briefs/jobs en `.hermes/video-lab/`. Historia, no usar como regla: `tendencias-ia-redes.md` y
+`videos-virales-higgsfield.md` en `hermes-content/docs/historial/skills/`.
 
 ## Reglas duras
 - No publicar contenido ni subir video con cara ni nada client-facing sin

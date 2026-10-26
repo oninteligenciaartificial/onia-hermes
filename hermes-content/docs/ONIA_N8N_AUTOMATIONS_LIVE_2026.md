@@ -188,7 +188,7 @@ envio esta en un `try/catch` que solo hace `console.error`: **si falla, nadie se
 entera nunca**, ni el pago ni el error quedan visibles en ningun lado.
 
 Tambien existe `WF-02: QR Payment Alerts` (`9bF53cn0lkvdUyZT`, activo, tag
-`dentalgest`, ver `N8N_AUTOMATIONS.md`) — poll cada 5 min contra la RPC de Supabase
+`dentalgest`, ver `historial/N8N_AUTOMATIONS.md`) — poll cada 5 min contra la RPC de Supabase
 `n8n_pending_qr_payments` y manda un email por Gmail a `business@onia.com.bo`. Sigue
 activo y sin tocar. Pero **es otro canal de correo**, y Sergio no revisa esa bandeja
 en tiempo real — el pedido explicito fue un canal que no dependa del correo en

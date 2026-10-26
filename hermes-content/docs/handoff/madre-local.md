@@ -73,7 +73,7 @@ días abierta y su conversación costó ~777 M de tokens. **La madre nueva arran
 
 > Sos la sesión MADRE de Onia, en la PC de Sergio Urcullo, y la ÚNICA madre. Invocá `onia-router`, `equipo-de-agentes`,
 > `onia-sesion-madre` y `aprender-de-todo`. Leé `hermes-content/docs/handoff/madre-local.md` (§ TERMINAR TODO y HANDOFF
-> 10-oct) y `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md` (el plan del equipo, si ya está; si no, la auditoría en
+> 10-oct) y `hermes-content/docs/historial/ONIA_EQUIPO_DE_AGENTES.md` (el plan del equipo, si ya está; si no, la auditoría en
 > `hermes-content/docs/research/2026-10-10-auditoria-equipo-de-agentes.md`).
 > Tu objetivo NO es construir más: es **terminar y publicar**, en el orden de § TERMINAR TODO. Delegá todo lo largo
 > (Codex, subagentes, sesiones de la nube); vos orquestás, hacés lo de la PC y corrés los gates.
@@ -94,7 +94,7 @@ Etapa 1 (0→5 clientes, salida Bs 3.750/mes); hay 0 clientes. Detalle de cada p
 sin aplicarla antes (backup → migración → publicar → GET anónimo 401 → mirar /login). Se le avisó a Plataforma. Cada PR
 con migración deja master no publicable hasta aplicarla: el que la mergea la aplica antes de cualquier otro merge.
 
-**Plan del equipo de agentes:** `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md` (plan + crítica). Leer la crítica primero:
+**Plan del equipo de agentes:** `hermes-content/docs/historial/ONIA_EQUIPO_DE_AGENTES.md` (plan + crítica). Leer la crítica primero:
 4 afirmaciones del plan son falsas (rutinas cada 10-20 min, la madre abre sesiones completas, la nube le escribe a la madre,
 Codex cloud elige modelo). Lo que sí: CI reemplaza la suite local de la madre como gate; una sola fila de tareas;
 `--disable multi_agent` en Codex; ~6 tareas Sol por día hasta el reinicio del 14-oct; ≤10 agentes Claude a la vez la
@@ -134,7 +134,7 @@ cuenta de WhatsApp Business (números, plantillas, webhooks, envíos de prueba).
 
 **Equipo de agentes** (pedido de Sergio Urcullo del 10-oct: que la nube no pare con la PC apagada, una sola madre, muchos
 agentes por punto, Codex a fondo): auditoría hecha (`research/2026-10-10-auditoria-equipo-de-agentes.md`). El plan final va
-a `hermes-content/docs/ONIA_EQUIPO_DE_AGENTES.md`. Datos clave medidos:
+a `hermes-content/docs/historial/ONIA_EQUIPO_DE_AGENTES.md`. Datos clave medidos:
 - Codex: Sol 6.1 (diario), Astra 6 (riesgo), **Luna 6 (mecánico, 0 usos)**. Cuota 56 % de la ventana de 7 días, que se
   reinicia el 13-oct a las 23:57 de La Paz. 2 reinicios disponibles y 0 aplicables hoy: verificar antes de quemar.
   Astra se comió el 85 %: usar Sol por defecto y Luna para lo mecánico.
@@ -397,7 +397,7 @@ Techo para conseguir clientes: **Bs 1.400** (Meta 750). Solo dental hasta tener 
 | **Codex** | CLI `0.139` viejo: `gpt-6-*` falla y se usa `-m gpt-5.5`. | Preguntar si se actualiza el CLI (`npm i -g @openai/codex`, pide OK). Cola: `docs/handoff/codex-relevo.md`. |
 
 ## 4. Archivos de la madre
-`.claude/skills/onia-sesion-madre/SKILL.md` (tokens y delegación a Codex) · `.claude/skills/ver-videos/SKILL.md` (regla
+`hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md` (tokens y delegación a Codex) · `.claude/skills/ver-videos/SKILL.md` (regla
 mensaje/tema/edición) · `AGENTS.md` (skills para Codex) · `docs/handoff/codex-relevo.md` · este archivo.
 
 ## 5. Intentos fallidos (y su causa)

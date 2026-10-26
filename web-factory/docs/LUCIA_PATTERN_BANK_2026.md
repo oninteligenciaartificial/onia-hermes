@@ -22,7 +22,7 @@
 | Hueco competitivo | **ninguna** cuenta combina persona IA propia + venta de UN software B2B a PyMEs | Lo más cercano es The Clueless, pero le vende a Santander y Audi |
 
 Fuente: `references/benchmarks/anora-creators-20260806/ANALISIS.md` (medido con la API pública
-de IG el 2026-08-07) · `docs/ONIA_LUCIA_BENCHMARK_QUE_VENDE_20260817.md`.
+de IG el 2026-08-07) · `docs/historial/ONIA_LUCIA_BENCHMARK_QUE_VENDE_20260817.md`.
 
 ## 2. El molde de una pieza (3 partes, siempre)
 
@@ -288,9 +288,9 @@ Y de paso resuelve el bug del `video_extension` sin una tanda aparte.
 ---
 
 **Fuentes:** `references/benchmarks/anora-creators-20260806/ANALISIS.md` ·
-`docs/ONIA_LUCIA_BENCHMARK_QUE_VENDE_20260817.md` ·
+`docs/historial/ONIA_LUCIA_BENCHMARK_QUE_VENDE_20260817.md` ·
 `references/modelos/lucia/prueba-lipsync-20260815/LEEME.md` (el tarifario medido) ·
-`docs/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` (los 4 pilares).
+`docs/historial/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md` (los 4 pilares).
 
 Relacionado: **`LUCIA_BANCO_DE_PRUEBAS_2026.md`** — la rúbrica de 9 criterios con la que se
 decide si un modelo sirve, los prompts listos para pegar, y las reglas del workflow oficial de

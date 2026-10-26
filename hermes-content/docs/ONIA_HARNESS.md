@@ -132,19 +132,38 @@ Nada más es una vía de despacho: ni Orca Orchestration, ni `.hermes/plans`, ni
 
 Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
 
-0. **Antes del merge, con su OK:** pasar a ramas el trabajo sin commitear del checkout principal
-   (`C:/dev/proyectos/onia-hermes`, 51 cambios, paso B2 de la auditoría) y dejarlo en `main` limpio. Hay que
-   reinstalar además la tarea programada con el comando de `scripts/orquesta/README.md` §«Correr». Si no:
-   - la tarea corre la pasada de la PC desde ese checkout;
-   - su `git pull` falla por esos cambios;
-   - con el `&` actual sigue igual sobre el código viejo y el error no llega al log.
-1. Mergear el PR. Lleva `AGENTS.md`, este mapa, el SOUL y la config de Hermes de la PC, el cargador de issues y el
-   `AGENTS.global.md` de Codex.
-2. Crear el worktree base `E:/onia-wt/hermes-base`. Hermes se lanza desde ahí, nunca desde el checkout principal.
-3. Con Hermes cerrado y el respaldo hecho:
-   - aplicar `config.onia.yaml`;
-   - copiar el SOUL;
-   - crear la variable de usuario `HERMES_WRITE_SAFE_ROOT` (va con su OK, porque es una variable del sistema).
+0. **Antes del merge: limpiar el checkout principal.**
+   - ✅ El 26-oct sus 116 cambios se copiaron a la rama `rescate/checkout-principal-20261026` (pusheada) y se
+     verificaron archivo por archivo.
+   - Falta que él corra `E:\onia-wt\limpiar-checkout-principal.ps1`: la revisión de seguridad no dejó borrar desde
+     la sesión.
+   - También hay que reinstalar la tarea programada con el comando de `scripts/orquesta/README.md` §«Correr».
+
+   Si no, la tarea corre desde ese checkout, su `git pull` falla y, con el `&` actual, sigue sobre el código viejo
+   sin dejar el error en el log.
+1. Mergear el PR. Lleva:
+   - `AGENTS.md`;
+   - este mapa;
+   - el SOUL, la config y el instalador de Hermes de la PC;
+   - el cargador de issues;
+   - el `AGENTS.global.md` de Codex.
+2. a 4. **Un solo comando, con Hermes cerrado y desde una copia del repo con el PR mergeado:**
+   `powershell -ExecutionPolicy Bypass -File hermes-content\deploy\hermes-pc\aplicar.ps1 -EscrituraSegura -Codex`.
+   El script hace, en orden:
+   - el respaldo en `%LOCALAPPDATA%\hermes\backups\pre-orden-<fecha>`;
+   - el worktree `E:/onia-wt/hermes-base`, en `origin/main`;
+   - la comprobación de que el `AGENTS.md` sea el nuevo;
+   - la mezcla de `config.onia.yaml` con el escritor de Hermes, sin borrar claves;
+   - la copia del SOUL;
+   - el archivo de `skills/onia` en el respaldo;
+   - la carpeta `pedidos`;
+   - `probar-deny.py --vivo`;
+   - con `-EscrituraSegura`, la variable `HERMES_WRITE_SAFE_ROOT`;
+   - con `-Codex`, el `AGENTS.md` global de Codex.
+
+   Se deshace con `revertir.ps1`. Sobre una copia, el 26-oct, dio 18 claves cambiadas y 0 fallas, y la vuelta atrás
+   quedó idéntica byte a byte. Cambia el modelo por defecto de `gpt-6-astra-900k` a `gpt-6.1-sol` y la zona horaria
+   de Caracas a La Paz.
 
    Prueba de hecho:
    - `/context` muestra `AGENTS.md`;
@@ -154,7 +173,6 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
      «mismo approvals.deny» y 0 fallas. Hoy falla a propósito, porque el `config.yaml` vivo no tiene deny. En modo
      repo, sin `--vivo`, hoy da 0 fallas: 173 comandos que tienen que bloquearse y 41 lecturas que tienen que pasar.
      Se vuelve a correr en cada actualización de Hermes.
-4. Copiar `AGENTS.global.md` a `~/.codex/AGENTS.md`.
 5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. **Hoy `aplicar` no puede hacerlo**: su
    control previo falla si el SOUL no trae `## Planificar la orquesta` (`aplicar.sh:309-314`), y además crea ese
    trabajo y no tiene un paso para pausarlo. Hace falta cambiar `aplicar.sh` y su prueba
@@ -162,7 +180,17 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
    todavía dice «vos planificás». Después lo despacha él.
 6. Orca: no lanzar Hermes desde ahí y no activar Orchestration. Cerrar la corrida `run_66e1d03c2397`.
 7. Pasar a issues lo vigente de `.hermes/plans` y `.hermes/tasks`, y archivar el resto.
-8. Decidir si se mantienen o se revierten las seis reglas globales de Claude que tocó Hermes.
+8. ✅ Reglas globales de Claude (26-oct):
+   - Se mantienen las seis que tocó Hermes, porque son mejores que las de antes: sacan los modelos viejos y el 80 %
+     genérico y suman el contrato de Codex sin Git.
+   - Se archivaron en `~/.claude/rules-archivo/20261026` tres perfiles token-eficiente y el README.
+   - Las reglas web ahora se cargan solo con archivos de interfaz.
+9. Limpiar worktrees y disco:
+   - ✅ El 26-oct se rescató a ramas `rescate/*` el trabajo de 13 worktrees, verificado y pusheado.
+   - ✅ Las 11 ramas que solo existían en la PC están en `E:/respaldo-ramas-solo-locales-20261026.bundle`.
+   - ✅ Se borraron 178 ramas locales ya mergeadas; nombres y commits en `E:/respaldo-ramas-mergeadas-20261026.txt`.
+   - Falta que él corra `E:\onia-wt\limpiar-worktrees.ps1`. Saca los worktrees viejos y mueve a
+     `E:\archivo-worktrees-20261026` las 41 carpetas huérfanas (unos 22 GB) y el clon suelto de Orca.
 
 ## 8. Qué se queda, qué sale y qué falta
 
@@ -193,11 +221,12 @@ se pueda recuperar. La evidencia está en las secciones 3, 4 y 6 de la auditorí
 | La revisión de cada 3 h del Hermes del VPS | Se pausa con `aplicar`, sin borrarla |
 | Lanzar Hermes con `--yolo`, desde Orca o desde el checkout principal | Desde ahora: TUI a mano en `E:/onia-wt/hermes-base` |
 | `skills/onia/` de Hermes (`onia-operar-harness`, `onia-relevo-sesion`) | Lo útil va a las skills del repo; el resto, a `backups/` |
-| `onia-sesion-madre` y 25 de los 40 `.md` de `hermes-content/skills/` (sin tocar desde junio o julio) | `historial/` |
-| `ONIA_EQUIPO_DE_AGENTES.md`, los dos `ORCHESTRATOR.md`, `PROJECTS_ORCHESTRATION.md`, `HERMES_OS_CONTROL_CENTER_2026.md`, `HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md` y `CODEX_SKILL_ROUTING.md` (en la raíz) | `historial/` con `git mv`. El harness del 10-oct ya está ahí |
+| `onia-sesion-madre` y 25 de los 40 `.md` de `hermes-content/skills/` (sin tocar desde junio o julio) | ✅ **Hecho el 26-oct:** `onia-sesion-madre` y 23 `.md` en `historial/skills/`. Quedan 6 porque algo los lee: `guiones-diarios-onia` y `marca-personal-sergio` (`carriles.json`), `radar-creativo-onia` (workflow n8n), `audio-elevenlabs` (script del VPS) y las dos fiscales que cita `onia-contabilidad-bolivia`. Entraron 4 que solo tenían el revert del 2-oct |
+| `ONIA_EQUIPO_DE_AGENTES.md`, los dos `ORCHESTRATOR.md`, `PROJECTS_ORCHESTRATION.md`, `HERMES_OS_CONTROL_CENTER_2026.md`, `HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md` y `CODEX_SKILL_ROUTING.md` (en la raíz) | `historial/` con `git mv`. El harness del 10-oct ya está ahí. ✅ **Hecho el 26-oct:** `ONIA_EQUIPO_DE_AGENTES`, `HERMES_OS_CONTROL_CENTER_2026` y `HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026`. **Pendientes**, porque los nombra código: los dos `ORCHESTRATOR.md` (`scripts/n8n-fix-assignments.js`, `docs-hygiene.test.mjs` y respaldos de n8n), `PROJECTS_ORCHESTRATION.md` (seed SQL y `operating-source.ts` de ONIA Center) y `CODEX_SKILL_ROUTING.md` (lista de la raíz de `docs-hygiene.mjs`) |
+| El resto de los docs viejos de `hermes-content/docs/` (época madre, loops, ONIA Center, vendedores, precios y pauta de agosto, Lucía de agosto) | ✅ **Hecho el 26-oct:** 130 a `historial/` con `git mv`. 43 quedan en su lugar hasta sacar su nombre de un script, test, seed, `.ts` o `hermes-content/deploy/` |
 | `~/.codex/AGENTS.md`, con el texto de agencia de las nueve líneas de negocio | Lo reemplaza `AGENTS.global.md` |
-| De `~/.claude/rules`: 3 de los 4 perfiles token-eficiente y el README cargado como si fuera regla | `~/.claude/rules-archivo/` |
-| Las 15 skills personales de `~/.claude/skills` que pisan a las del repo con otro contenido | Archivadas, después de elegir la versión buena |
+| De `~/.claude/rules`: 3 de los 4 perfiles token-eficiente y el README cargado como si fuera regla | ✅ **Hecho el 26-oct:** `~/.claude/rules-archivo/20261026` |
+| Las 15 skills personales de `~/.claude/skills` que pisan a las del repo con otro contenido | ✅ **Hecho el 26-oct:** `~/.claude/skills-archivadas-20261026`. Eran de septiembre y las del repo, del 2 y el 10-oct |
 | El SOUL del VPS que habla de loops y del tablero archivado | Lo reemplaza uno nuevo |
 | Las 41 carpetas huérfanas de worktrees (13,3 GiB) y las 196 ramas locales ya mergeadas | Las carpetas se mueven a `E:/archivo-worktrees-20261026/`. Las ramas se borran con `git branch -d`, que se niega si alguna no está mergeada |
 
@@ -216,3 +245,16 @@ se pueda recuperar. La evidencia está en las secciones 3, 4 y 6 de la auditorí
 | Medir si los hijos de Hermes reciben `AGENTS.md` y heredan `approvals.deny` | 21 de 30 prompts de sistema medidos no traían `AGENTS.md` |
 | Qué shell usa la terminal de Hermes en la PC | Decide si `cmd /c git push` se le escapa al `deny` |
 | Que la prueba de higiene de docs falle con un doc fechado en la raíz sin aviso | Que no vuelva a acumularse historia leída como si fuera vigente |
+
+## 9. Las 4 áreas
+
+Sergio Urcullo, 26-oct: Onia se ordena en 4 áreas. Los carriles de la orquesta no se renombran (tienen labels y
+tests): cada uno cae en un área. Skills en orden, agentes y «no usar» de cada área: `onia-router` §«Las 4 áreas de
+Onia». Lo viejo de cada área está en `historial/`.
+
+| Área | Carriles | Skill de entrada | Handoff | Docs fuente |
+|---|---|---|---|---|
+| Marca personal | `marca`, `video` | `diseno-contenido-onia` (piezas) · `hyperframes` (video) | `handoff/marca-personal.md` | `ONIA_ESTRUCTURA_PUBLICACION_DIARIA.md` · `ONIA_MOTOR_SEMANAL_CONTENIDO.md` · `HIGGSFIELD_VIDEO_SYSTEM.md` |
+| Workshops y comunidad | `comunidad` | cuartito `community-marketing` (no hay skill propia todavía) | `handoff/comunidad.md` | `TALLER_31_OCT.md` · `comunidad/ESTADO_COMUNIDAD.md` · `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md` |
+| Onia Platform | `plataforma` | las `onia-*` de `onia-platform` · `onia-ventas-pauta` (venta y pauta) | `handoff/codex-continuar-1.0.md` · `handoff/mercado-y-pauta.md` | `ONIA_CATALOGO_DE_VENTA.md` · `ONIA_CLIENTE_IDEAL.md` · `ONIA_ADQUISICION_Y_PAUTA.md` · precios en `subscription-plans.ts` y `pricing.ts` |
+| Otros (infra, Hermes, orquesta, investigación, fiscal propio, Lucía, clientes web, Bolivian Electric) | `investigacion` | `onia-infra` · `onia-hermes-jarvis` · `aprender-de-todo` | `handoff/hermes-local.md` · `handoff/orquesta.md` · `handoff/hermes-jarvis.md` | Este documento · `ONIA_ESTRATEGIA_DE_EMPRESA.md` · `AI_MODEL_ROUTING_2026.md` |

@@ -321,7 +321,7 @@ Básico 300 / 2 / 200; Profesional 1.500 / 5 / 800; Completo y Empresa ilimitado
    coincidencias*). El grep era cierto y la conclusión falsa — `OniaCommerceWarehouse` ya
    existía con el stock indexado por depósito. **Varios depósitos + traspaso interno están
    VIVOS en producción desde el 2026-08-25**; lo que no existe es la **sucursal FISCAL ante el
-   SIN**. Detalle en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.2.
+   SIN**. Detalle en `historial/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md` §4.2.
 
    **Empresa se vende por sus depósitos, nunca por sucursales ante Impuestos.** Mientras tanto sirve
    como ancla visible (§4.2.3) — mostrarlo hace que Bs 1.500 se lea barato — pero

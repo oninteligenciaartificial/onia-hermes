@@ -42,6 +42,13 @@ acá: si cambia, cambia allá. Lo que importa para delegar:
     `bash scripts/codex-tarea.sh <tarea.md> <carpeta> [modelo] [esfuerzo]`, en background y desde el worktree del
     encargo. `resume` toma el directorio actual: hacer `cd` antes. `revisar <carpeta> <rama-base>` pide la revisión
     previa al merge.
+- Codex en la nube (`codex cloud exec --env <id>`, entornos y límites medidos el 8-oct): historia en
+  `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md` §«Delegar código a Codex». Los ids se verifican
+  en vivo antes de usarlos.
+- Permiso de mover `main` (solo la sesión principal): `ONIA_AUTOSYNC_MAIN=1` en el `.claude/settings.local.json` de
+  su carpeta y, una vez por checkout, la marca
+  `New-Item -ItemType File "$(git rev-parse --absolute-git-dir)/onia-autosync-main"` (bash: `touch`). Sin la marca
+  el Stop dice «permiso de main ignorado» y pushea la rama: no se pierde nada.
 - Codex en su worktree propio, con ruta corta. Si hay que traer `main`, lo hace quien lo lanzó. Si el merge deja
   conflictos en código, queda abierto y Codex resuelve los marcadores; los de docs, ver la trampa del `--union`.
 - `node_modules` de onia-platform: junction a una instalación comprobada. La ruta que se usaba el 8-oct

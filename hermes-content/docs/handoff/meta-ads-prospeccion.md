@@ -197,7 +197,7 @@ Sin eso no se puede medir ninguna campaña.
 
 La campaña vieja está archivada: se recrea, no se reactiva. El copy y las creatividades ya
 existen y costaron cero: `hermes-content/carousels/out/ads/ad-a2-v1-no-volvieron/slide-01.png`
-y `ad-a2-v2-cuaderno/slide-01.png`, con los textos en `ONIA_ADS_CAMPANA_1_LISTA_20260813.md`.
+y `ad-a2-v2-cuaderno/slide-01.png`, con los textos en `hermes-content/docs/historial/ONIA_ADS_CAMPANA_1_LISTA_20260813.md`.
 ⚠️ Ese doc tiene **precios y estados viejos**: se usan sus textos de anuncio, no sus cifras.
 Acotar el público a Santa Cruz + 25 km antes de activar.
 
@@ -231,4 +231,4 @@ EOF
 
 Relacionado: `ONIA_CLIENTE_IDEAL.md` (a quién le vendemos) · `ONIA_LEADS_ESPERANDO.md` (los
 cinco, con sus mensajes textuales) · `ONIA_ESTRATEGIA_DE_EMPRESA.md` (la etapa vigente) ·
-`ONIA_ADS_CAMPANA_1_LISTA_20260813.md` (copy de los anuncios; cifras vencidas).
+`hermes-content/docs/historial/ONIA_ADS_CAMPANA_1_LISTA_20260813.md` (copy de los anuncios; cifras vencidas).

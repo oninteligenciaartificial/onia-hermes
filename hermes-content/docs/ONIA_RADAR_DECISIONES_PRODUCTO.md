@@ -2676,7 +2676,7 @@ Elements en la misma bolsa.
 
 - `ONIA_MODELOS_RAIZ.md` — **sin fecha, así que manda por la regla de `CLAUDE.md`** — rotula
   `452d8375…` como *"Element (PRIMER PLANO)"* y `902eeebb…` como *"Element (photoshoot)"*.
-- `ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe lo inverso y con motivo: `nano_banana_2 +
+- `historial/ONIA_MODELOS_PERFILES_ALTA_20260806.md` prescribe lo inverso y con motivo: `nano_banana_2 +
   <<<902eeebb…>>>` **para primer plano**, porque es el ancla que resolvió el *"se ve muy IA"*
   después de 11 avatares malos.
 

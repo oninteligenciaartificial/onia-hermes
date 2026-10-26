@@ -78,7 +78,7 @@ Notas de diseno:
 ## Conexion al Contador Pack (futuro)
 
 Mismo patron que el email intake de DentalGest
-(`hermes-content/docs/DENTALGEST_EMAIL_INTAKE_CONNECTOR_2026.md`): en v2, la
+(`hermes-content/docs/historial/DENTALGEST_EMAIL_INTAKE_CONNECTOR_2026.md`): en v2, la
 rama "hay novedades" agrega un `POST /api/onia-core/intake` por novedad
 (canal tipo `norma_fiscal`, dedupe del lado del endpoint), que crea un
 WorkItem con responsable en el producto del contador. Asi la norma deja de ser

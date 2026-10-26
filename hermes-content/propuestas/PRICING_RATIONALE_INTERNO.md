@@ -53,7 +53,7 @@ nuevos desde 2026-07-03.
 
 ## 1. De dónde salieron los precios v1
 
-Los precios iniciales de los 3 decks salieron de `ONIA_PRICING_2026.md`
+Los precios iniciales de los 3 decks salieron de `hermes-content/docs/historial/ONIA_PRICING_2026.md`
 (Landing 1,490 / Web Pro 2,900 / Web Pro IA 5,900 / Conector 900 / Flujo n8n 1,800).
 Encima apliqué los anclajes que dio Sergio: Landing Bs 2,000, Web Pro Bs 4,500.
 

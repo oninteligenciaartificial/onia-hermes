@@ -890,7 +890,7 @@ es Python: un segundo runtime junto al bot de Node.
 ---
 
 Relacionados: `ONIA_BOT_MANUAL_OPERACION_20260807.md` (cómo opera el bot de
-texto hoy) · `ONIA_BOT_GOLIVE_RUNBOOK_20260801.md` (identificadores reales de
+texto hoy) · `historial/ONIA_BOT_GOLIVE_RUNBOOK_20260801.md` (identificadores reales de
 Meta y las trampas del alta) · `ONIA_CATALOGO_TIPOS_CHATBOT_20260731.md`
 (paquetes) · `ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802.md`.
 

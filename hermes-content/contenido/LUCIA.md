@@ -10,7 +10,7 @@
 
 | | |
 |---|---|
-| Correo | ✅ **decidido 2026-08-17: Gmail propio.** El alias `lucia@onia.com.bo` recibe pero NO es identidad separada, y eso es lo que Meta necesita. Un Gmail lo es, cuesta cero y se delega a Arthur. La dirección del dominio se puede sumar después sin rehacer la cuenta. Contexto: [`../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md`](../docs/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md) |
+| Correo | ✅ **decidido 2026-08-17: Gmail propio.** El alias `lucia@onia.com.bo` recibe pero NO es identidad separada, y eso es lo que Meta necesita. Un Gmail lo es, cuesta cero y se delega a Arthur. La dirección del dominio se puede sumar después sin rehacer la cuenta. Contexto: [`../docs/historial/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md`](../docs/historial/ONIA_CORREO_SEGUNDA_IDENTIDAD_20260816.md) |
 | Cuenta de Instagram | ✅ **existe desde el 2026-08-20**: `@lucia.antelo.oficial` (IG id `28357585133845376`, tipo Creador), conectada a Postiz (`cmt1sv4eh001alq9cl3y6q7es`) y a la app de Meta con `messages`+`comments` suscritos y mensajería verificada. 0 posts, 0 seguidores |
 | Voz | ✅ Marcela `86V9x9hrQds83qf7zaGn` (ElevenLabs), cargada en el VPS |
 | Identidad visual | ✅ ancla, paleta hex, vestuario y molde de 11 bloques cerrados |
@@ -43,7 +43,7 @@ más de 1 de cada 10 piezas de marca de terceros, y esa lleva etiqueta de colabo
 
 ## 3. Sus 4 pilares
 
-Del sistema de contenido (`docs/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md`), que sale de medir
+Del sistema de contenido (`docs/historial/ONIA_LUCIA_SISTEMA_CONTENIDO_20260807.md`), que sale de medir
 3 cuentas reales de influencers IA — no de intuición:
 
 | Pilar | % | Qué es | ¿Collab con ONIA? |

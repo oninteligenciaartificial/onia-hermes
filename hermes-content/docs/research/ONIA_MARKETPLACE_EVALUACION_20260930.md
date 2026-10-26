@@ -468,4 +468,4 @@ tabla. La idea queda guardada con fecha y no compite con los 5 primeros clientes
 - R9 `hermes-content/docs/historial/ONIA_PRICING_SEGUNDA_REVISION_20260808.md`
 - R10 `hermes-content/docs/historial/ONIA_MODULO_INMOBILIARIO_SPEC_20260808.md` · `…ALCANCE_20260806.md`
 - R11 `hermes-content/docs/ONIA_ECOMMERCE_Y_DROPSHIPPING.md`
-- R12 `hermes-content/docs/ONIA_DENTALGEST_ESTRUCTURA_ULTIMA_MILLA_2026.md`
+- R12 `hermes-content/docs/historial/ONIA_DENTALGEST_ESTRUCTURA_ULTIMA_MILLA_2026.md`

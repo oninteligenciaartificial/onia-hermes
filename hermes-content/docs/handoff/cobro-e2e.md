@@ -33,7 +33,7 @@
 > 5. SIAT por donde el código permita sin el trámite.
 >
 > Reglas de la sesión nueva: UN objetivo, canario «Sergio Urcullo» estricto, modelos según
-> `ONIA_MODELOS_CLAUDE_Y_CUOTA.md`, reportes CORTOS (máx 5 líneas de estado — el exceso de
+> `hermes-content/docs/historial/ONIA_MODELOS_CLAUDE_Y_CUOTA.md`, reportes CORTOS (máx 5 líneas de estado — el exceso de
 > datos lo pierde, lo dijo él).
 
 > **Parte 2 (10-sep tarde), pedido nuevo de Sergio Urcullo:** *"orquestá tus loops… dame una

@@ -305,7 +305,7 @@ Lo que quedó **fuera a propósito** en la v1, con el motivo:
 - `demo.duracionFrase` vs `duracionMinutos`: hay que decidir el valor real (hoy 15-20
   en el guion, 45 en Cal.com). **Pendiente de Sergio.**
 - URL de política de privacidad de Onia: la app de Meta la exige para publicarse y hoy
-  no existe (`ONIA_BOT_GOLIVE_RUNBOOK_20260801.md` → Pendientes conocidos). Cuando
+  no existe (`historial/ONIA_BOT_GOLIVE_RUNBOOK_20260801.md` → Pendientes conocidos). Cuando
   exista, entra como `empresa.politicaPrivacidad` y como FAQ.
 - El mapeo `salud → salud_veterinaria` y `comercio → construccion_ferreteria` es
   aproximado: el core no tiene un pack "salud general" ni uno "comercio minorista".

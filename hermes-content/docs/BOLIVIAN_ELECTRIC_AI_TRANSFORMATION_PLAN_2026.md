@@ -69,10 +69,10 @@ Fuentes publicas:
 
 Fuentes internas Onia:
 
-- `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md`
-- **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*
+- `hermes-content/docs/historial/ONIA_CONSULTING_SERVICES_2026.md`
+- **Precios: `onia-platform/lib/subscription-plans.ts` (planes) y `onia-platform/lib/pricing.ts` (add-ons)** — la fuente. Transcritos junto a sus funciones en `historial/ONIA_QUE_SE_VENDE_Y_A_QUE_PRECIO.md`. *(`historial/ONIA_PRICING_2026.md` quedó degradado el 2026-08-27: es historia de junio, no fuente.)*
 - `PROJECTS_ORCHESTRATION.md`
-- `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
+- `historial/ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
 - `hermes-content/references/onia-projects-registry.json`
 - `hermes-content/docs/PERSONAL_BRAND_SERGIO.md`
 

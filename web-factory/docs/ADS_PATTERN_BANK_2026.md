@@ -127,5 +127,5 @@ igual va a parecer "lista": el error recién aparece al crear el creative. Vincu
 ---
 
 Relacionado: `CAROUSEL_PATTERN_BANK_2026.md` (cómo se arma la pieza) ·
-`ONIA_EJERCITO_INFLUENCERS_IA_PLAN_20260806.md` (quién la publica) ·
+`hermes-content/docs/historial/ONIA_EJERCITO_INFLUENCERS_IA_PLAN_20260806.md` (quién la publica) ·
 `ONIA_KIT_VENTA_DENTAL_20260727.md` (los guiones ya escritos) · memoria `meta-ads-engine`.

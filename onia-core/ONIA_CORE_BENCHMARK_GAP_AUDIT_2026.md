@@ -55,7 +55,7 @@ Fuentes locales Onia:
 - `onia-core/adapters/ganadero-os.json`
 - `PROJECTS_ORCHESTRATION.md`
 - `CRM_AND_PROSPECTING.md`
-- `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md`
+- `hermes-content/docs/historial/ONIA_CONSULTING_SERVICES_2026.md`
 - `hermes-content/references/onia-projects-registry.json`
 - `C:\dev\proyectos\Gestios\prisma\schema.prisma`
 - `C:\dev\proyectos\DentaGest\dental-saas\prisma\schema.prisma`

@@ -102,3 +102,13 @@ hermes-content/carousels/out/*/assets/
 
 # yt-dlp: el .info.json puede llevar cookies de sesion (ver-videos/fetch-video.mjs)
 *.info.json
+
+# Planes, tareas y goals privados de Hermes de la PC: no son cola ni fuente (AGENTS.md §1, 26-oct).
+.hermes/plans/
+.hermes/tasks/
+
+# Material de formación enviado por Sergio Urcullo: originales locales, no publicar ni sincronizar.
+hermes-content/references/formacion/anunciante-supremo/originales/
+
+# Vista operativa local de la auditoría de Hermes: datos de sesión y capturas.
+hermes-content/research/harness-hermes-20261024/panel-ejecucion/

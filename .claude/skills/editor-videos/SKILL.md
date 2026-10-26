@@ -771,5 +771,5 @@ Points · Real Experience · Usage Scenarios · Call to Action.
 
 **Molde "anuncio sin cara", 7 beats en 33 s** — el hilo de color y el carrier element se definen
 ANTES de escribir un solo prompt. Ya desarrollado para Onia en
-`hermes-content/docs/ONIA_GUION_ANUNCIO_SIN_CARA_20260820.md`. El gancho es MOVIMIENTO, no
+`hermes-content/docs/historial/ONIA_GUION_ANUNCIO_SIN_CARA_20260820.md`. El gancho es MOVIMIENTO, no
 información: plano parcial, contrapicado, objeto cruzando el cuadro en whip con motion blur.

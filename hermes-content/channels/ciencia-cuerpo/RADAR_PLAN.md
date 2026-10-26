@@ -22,7 +22,7 @@ worker vivirá en `pipeline/radar/`.
 
 ## Reúso (regla de no duplicar)
 
-- **Patrón de skill:** `hermes-content/skills/tendencias-ia-redes.md` — jerarquía
+- **Patrón de skill:** `hermes-content/docs/historial/skills/tendencias-ia-redes.md` — jerarquía
   de fuentes (Nivel 1/2/3), reglas de verificación, "no rellenar con
   especulación". Se porta el criterio, no se edita esa skill (es de otro
   dominio: IA/negocios).

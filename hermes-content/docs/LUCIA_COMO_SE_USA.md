@@ -1,6 +1,6 @@
 # Lucía: cómo se usa (para la madre)
 
-> Una página para operar. Personaje y reglas finas: `references/modelos/lucia/LUCIA.md` (§0 manda). Higgsfield: `docs/HIGGSFIELD_VIDEO_SYSTEM.md`. Plan: `docs/cola/lucia-diario/PLAN.md`. Medido en el repo el 10-oct-2026; lo que no pude verificar (VPS, saldo) lo digo. No existía un doc equivalente: `ONIA_LUCIA_USO_PRACTICO_Y_FUNCIONES.md` (23-ago) trata de funciones, no de operar.
+> Una página para operar. Personaje y reglas finas: `references/modelos/lucia/LUCIA.md` (§0 manda). Higgsfield: `docs/HIGGSFIELD_VIDEO_SYSTEM.md`. Plan: `docs/cola/lucia-diario/PLAN.md`. Medido en el repo el 10-oct-2026; lo que no pude verificar (VPS, saldo) lo digo. No existía un doc equivalente: `historial/ONIA_LUCIA_USO_PRACTICO_Y_FUNCIONES.md` (23-ago) trata de funciones, no de operar.
 
 ## 1. Qué es y para qué (Sergio Urcullo, 10-oct)
 - **Laboratorio de Higgsfield:** cada pieza prueba un método (identidad, motor, clip, QA). Lo aprendido se anota en este doc, `HIGGSFIELD_VIDEO_SYSTEM.md` o la skill, en el mismo commit.

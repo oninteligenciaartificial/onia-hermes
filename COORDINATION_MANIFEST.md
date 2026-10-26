@@ -4,8 +4,9 @@
 
 > **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,
 > no inventario vivo ni permiso para reactivar sesiones. La madre Claude local
-> sustituye a «Control» como orquestadora. Método: `equipo-de-agentes` y
-> `onia-sesion-madre`; consultar `ListAgents` antes de usar nombres/IDs.
+> sustituye a «Control» como orquestadora. Método: `equipo-de-agentes`
+> (`onia-sesion-madre` es historia: `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`);
+> consultar `ListAgents` antes de usar nombres/IDs.
 > No usar los triggers de septiembre como canal ordinario.
 > Encargo local 9-oct: auditoría documental y `aprender-de-todo`; frentes separados
 > de cobertura y reglas del equipo. Sin Git ni código de producto.
@@ -488,7 +489,7 @@ la memoria ya decía que no lo era. Esa lectura ahorró una investigación enter
 
 Reemplazó al split Session A / Session B de abajo (histórico, se conserva por
 referencia). Fuente única de asignación de trabajo y prompts de arranque:
-`hermes-content/docs/ONIA_PROXIMA_SESION_PLAN_20260705.md`, sección
+`hermes-content/docs/historial/ONIA_PROXIMA_SESION_PLAN_20260705.md`, sección
 "Ejecución en paralelo — sesiones y carriles".
 
 7 carriles, dueño por carpeta/repo; una sesión por carril, no chocar:
@@ -565,7 +566,7 @@ Canonical files:
 - `README.md`
 - `HERMES_OPERATIONS.md`
 - `HERMES_CONTENT_WORKFLOW.md`
-- `ONIA_INSTAGRAM_PUBLISHING.md`
+- `hermes-content/docs/historial/ONIA_INSTAGRAM_PUBLISHING.md`
 - `STYLE_REFERENCE_SYSTEM.md`
 - `REFERENCES_INBOX.md`
 - `scripts/ig_publisher.py`
@@ -590,7 +591,7 @@ Canonical files:
 - `HERMES_VIDEO_LAB.md`
 - `HERMES_TELEGRAM_COMMAND_CENTER.md`
 - `HERMES_EXECUTION_PROTOCOL.md`
-- `hermes-content/docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
+- `hermes-content/docs/historial/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `HERMES_DAILY_CRONS.md`
 - `HERMES_WEEKLY_OPERATING_SYSTEM.md`
 - `.github/workflows/onia-hygiene-daily.yml`
@@ -598,23 +599,23 @@ Canonical files:
 - `HIGGSFIELD_FULL_CAPABILITIES_MAP.md`
 - `ELEVENLABS_AUDIO_SYSTEM.md`
 - `JUNE_2026_VIDEO_PRODUCTION_PLAN.md`
-- `DUAL_ACCOUNT_DAILY_VIDEO_CRON.md`
-- `CLIENT_CONTENT_PRODUCTION_SYSTEM.md`
-- `HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md`
+- `hermes-content/docs/historial/DUAL_ACCOUNT_DAILY_VIDEO_CRON.md`
+- `hermes-content/docs/historial/CLIENT_CONTENT_PRODUCTION_SYSTEM.md`
+- `hermes-content/docs/historial/HIGGSFIELD_CLIENT_SALES_PLAYBOOK.md`
 - `HIGGSFIELD_CONTENT_USE_CASES.md`
 - `CROSS_PLATFORM_PUBLISHING.md`
-- `ONIA_PRICING_2026.md`
+- `hermes-content/docs/historial/ONIA_PRICING_2026.md`
 - `ONIA_VENDOR_MANUAL_2026.md`
 - `output/pdf/ONIA_VENDOR_MANUAL_2026.pdf`
-- `ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
+- `hermes-content/docs/historial/ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
 - `hermes-content/docs/ONIA_ACUERDO_ARTHUR_FUENTES_60_DIAS_2026.md`
 - `hermes-content/propuestas/acuerdo-colaborador-onia-nuvia.html`
 - `hermes-content/propuestas/acuerdo-colaborador-onia-nuvia.pdf`
-- `ONIA_LEADS_PRIORITY_2026.md`
-- `ONIA_BEST_MARKET_OPPORTUNITY_2026.md`
+- `hermes-content/docs/historial/ONIA_LEADS_PRIORITY_2026.md`
+- `hermes-content/docs/historial/ONIA_BEST_MARKET_OPPORTUNITY_2026.md`
 - `ONIA_PROJECTS_VENDOR_DECK_2026.html`
 - `NOTION_VENDOR_CRM_SCHEMA_2026.md`
-- `PROJECT_PRICE_UPDATE_PROMPTS_2026.md`
+- `hermes-content/docs/historial/PROJECT_PRICE_UPDATE_PROMPTS_2026.md`
 - `SALES_VENDOR_PRICING_DECK_2026.html`
 - `PROJECTS_ORCHESTRATION.md`
 - `ONIA_SALES_SPRINT.md`
@@ -632,7 +633,7 @@ Canonical files:
 - `hermes-content/docs/STORY_REFERENCES.md`
 - `hermes-content/docs/STYLE_REFERENCES.md`
 - `hermes-content/docs/EXECUTION_PROTOCOL.md`
-- `hermes-content/docs/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
+- `hermes-content/docs/historial/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `hermes-content/docs/DAILY_CRONS.md`
 - `hermes-content/docs/WEEKLY_OPERATING_SYSTEM.md`
 - `hermes-content/docs/N8N_CANONICAL.md`
@@ -640,39 +641,39 @@ Canonical files:
 - `hermes-content/docs/HIGGSFIELD_VIDEO_SYSTEM.md`
 - `hermes-content/docs/HIGGSFIELD_CONTENT_USE_CASES.md`
 - `hermes-content/docs/CROSS_PLATFORM_PUBLISHING.md`
-- `hermes-content/docs/ONIA_PRICING_2026.md`
+- `hermes-content/docs/historial/ONIA_PRICING_2026.md`
 - `hermes-content/docs/ONIA_VENDOR_MANUAL_2026.md`
 - `hermes-content/docs/ONIA_VENDOR_MANUAL_2026.pdf`
-- `hermes-content/docs/ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
-- `hermes-content/docs/ONIA_LEADS_PRIORITY_2026.md`
+- `hermes-content/docs/historial/ONIA_VENDOR_SALES_PLAYBOOK_2026.md`
+- `hermes-content/docs/historial/ONIA_LEADS_PRIORITY_2026.md`
 - `hermes-content/docs/ONIA_PROJECTS_VENDOR_DECK_2026.html`
 - `hermes-content/docs/NOTION_VENDOR_CRM_SCHEMA_2026.md`
-- `hermes-content/docs/PROJECT_PRICE_UPDATE_PROMPTS_2026.md`
+- `hermes-content/docs/historial/PROJECT_PRICE_UPDATE_PROMPTS_2026.md`
 - `hermes-content/docs/SALES_VENDOR_PRICING_DECK_2026.html`
 - `hermes-content/docs/ELEVENLABS_AUDIO_SYSTEM.md`
 - `hermes-content/docs/VIRAL_VIDEO_PLAYBOOK.md`
 - `hermes-content/docs/UGC_CLIENT_VIDEO_PLAYBOOK.md`
-- `hermes-content/docs/CREATIVE_RADAR.md`
-- `hermes-content/docs/ONIA_CREATOR_VIDEO_STRATEGY_2026.md`
-- `hermes-content/docs/ONIA_ANIMATED_VIDEO_WORKFLOW.md`
-- `hermes-content/docs/ONIA_CONSULTING_SERVICES_2026.md`
+- `hermes-content/docs/historial/CREATIVE_RADAR.md`
+- `hermes-content/docs/historial/ONIA_CREATOR_VIDEO_STRATEGY_2026.md`
+- `hermes-content/docs/historial/ONIA_ANIMATED_VIDEO_WORKFLOW.md`
+- `hermes-content/docs/historial/ONIA_CONSULTING_SERVICES_2026.md`
 - `hermes-content/docs/ONIA_SYSTEM_PORTFOLIO_ARCHITECTURE_2026.md`
 - `hermes-content/docs/ONIA_VERTICAL_SERVICE_MATRIX_2026.md`
 - `hermes-content/docs/ONIA_VERTICAL_SERVICE_AUDIT_2026.md`
 - `hermes-content/docs/ONIA_INITIAL_CORE_BLUEPRINT_2026.md`
-- `hermes-content/docs/ONIA_SERGIO_BOLIVIAN_LONG_TERM_INCOME_STRATEGY_2026.md`
+- `hermes-content/docs/historial/ONIA_SERGIO_BOLIVIAN_LONG_TERM_INCOME_STRATEGY_2026.md`
 - `hermes-content/docs/ONIA_HERMES_COLLABORATOR_ACCESS_MODEL_2026.md`
-- `hermes-content/docs/ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`
+- `hermes-content/docs/historial/ONIA_HERMES_COLLABORATOR_SETUP_RUNBOOK_2026.md`
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_AI_TRANSFORMATION_PLAN_2026.md`
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_TUESDAY_AUDIT_QUESTIONS_2026.md`
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_FIRST_BIG_PROJECT_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_PHASE1_LOW_TICKET_AI_OPERATIONS_OFFER_2026.md`
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_PRIORITY_PROPOSAL_EXECUTIVE_TEAM_2026.md`
 - `hermes-content/docs/BOLIVIAN_ELECTRIC_OWNER_STRATEGIC_PROPOSAL_2026.md`
-- `hermes-content/docs/ONIA_GIT_CHANGE_GROUPING_20260623.md`
-- `hermes-content/docs/ONIA_CIERRE_DIA_20260623.md`
-- `hermes-content/docs/ONIA_CENTER_INTEGRATION_READINESS_20260623.md`
-- `hermes-content/docs/ONIA_CENTER_MONTHLY_AGENTS_CALENDAR_20260623.md`
+- `hermes-content/docs/historial/ONIA_GIT_CHANGE_GROUPING_20260623.md`
+- `hermes-content/docs/historial/ONIA_CIERRE_DIA_20260623.md`
+- `hermes-content/docs/historial/ONIA_CENTER_INTEGRATION_READINESS_20260623.md`
+- `hermes-content/docs/historial/ONIA_CENTER_MONTHLY_AGENTS_CALENDAR_20260623.md`
 - `hermes-content/docs/ONIA_CENTER_AUTH_RLS_ACTIVATION_20260623.md`
 - `hermes-content/docs/ONIA_VENDOR_ACCESS_AND_CALENDAR_RUNBOOK_2026.md`
 - `hermes-content/propuestas/bolivian-electric-transformacion-ia-2026.html`
@@ -681,30 +682,30 @@ Canonical files:
 - `hermes-content/docs/assets/meta-whatsapp-access/`
 - `hermes-content/docs/SERGIO_FACE_VOICE_ASSET_GUIDE.md`
 - `hermes-content/docs/SERGIO_ONIA_CONTENT_PRODUCTION_KIT_2026.md`
-- `hermes-content/docs/AI_ECOMMERCE_MODEL_SYSTEM_2026.md`
+- `hermes-content/docs/historial/AI_ECOMMERCE_MODEL_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_OPEN_SOURCE_AI_VIDEO_LAB_2026.md`
 - `hermes-content/docs/ONIA_SELF_HOSTED_AI_TOOLS_2026.md`
 - `hermes-content/docs/ONIA_SELF_HOSTED_STACK_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DIFY_ASSISTANT_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md`
-- `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
+- `hermes-content/docs/historial/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DAILY_N8N_BRIEFING_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md`
 - `hermes-content/docs/ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`
-- `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
-- `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
+- `hermes-content/docs/historial/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
+- `hermes-content/docs/historial/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
 - `hermes-content/docs/ONIA_INTERNAL_CAPITAL_ALLOCATION_2026.md`
-- `hermes-content/docs/ONIA_PROPUESTA_USO_CAPITAL_FAMILIAR_15000_2026.md`
-- `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.md`
+- `hermes-content/docs/historial/ONIA_PROPUESTA_USO_CAPITAL_FAMILIAR_15000_2026.md`
+- `hermes-content/docs/historial/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.md`
 - `hermes-content/docs/ONIA_PROPUESTA_GASTOS_LOCAL_FIRST_15000_2026.pdf`
 - `hermes-content/docs/SERGIO_STRICT_CALENDAR_AND_ALFREDHQ_2026.md`
 - `hermes-content/docs/ONIA_NUVIA_ACCOUNTING_MODEL_2026.md`
-- `hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`
-- `hermes-content/docs/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`
+- `hermes-content/docs/historial/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`
+- `hermes-content/docs/historial/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
 - `hermes-content/docs/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`
-- `hermes-content/docs/HERMES_OS_CONTROL_CENTER_2026.md`
+- `hermes-content/docs/historial/HERMES_OS_CONTROL_CENTER_2026.md`
 - `hermes-content/docs/ONIA_PANEL_VENDEDORES_2026.md`
 - `hermes-content/deploy/selfhosted/`
 - `hermes-content/deploy/n8n/workflows/onia-center-daily-briefing.json`
@@ -775,9 +776,9 @@ Canonical files:
 - `scripts/comfyui_video_audit.js`
 - `scripts/comfyui_wan_readiness.js`
 - `hermes-content/docs/MARA_POND_VIDEO_LAB_DASHBOARD_2026.html`
-- `hermes-content/docs/MARA_ISDIN_WAN_UGC_WORKFLOW_20260617.md`
-- `hermes-content/docs/WAN_HIGGSFIELD_UGC_PROMPT_RESEARCH_20260618.md`
-- `hermes-content/docs/MARA_VIDEO_GENERATION_WORKFLOW_2026.md`
+- `hermes-content/docs/historial/MARA_ISDIN_WAN_UGC_WORKFLOW_20260617.md`
+- `hermes-content/docs/historial/WAN_HIGGSFIELD_UGC_PROMPT_RESEARCH_20260618.md`
+- `hermes-content/docs/historial/MARA_VIDEO_GENERATION_WORKFLOW_2026.md`
 - `hermes-content/references/ai-ecommerce-model/mara-pond-video-lab-config-20260616.json`
 - `hermes-content/references/ai-ecommerce-model/mara-isdin-wan-ugc-config-20260617.json`
 - `hermes-content/references/ai-ecommerce-model/wan-higgsfield-ugc-prompt-kit-20260618.json`
@@ -814,27 +815,27 @@ Canonical files:
 - `hermes-content/references/sergio-approved-media/talking-video-lock/README.md`
 - `hermes-content/references/sergio-approved-media/talking-video-lock/higgsfield-source-video-photoshoot-prompt.txt`
 - `hermes-content/references/sergio-approved-media/talking-video-lock/kling-source-video-animation-prompt.txt`
-- `hermes-content/skills/instagram-publicacion.md`
-- `hermes-content/skills/descripciones-sociales-onia.md`
+- `hermes-content/docs/historial/skills/instagram-publicacion.md`
+- `hermes-content/docs/historial/skills/descripciones-sociales-onia.md`
 - `hermes-content/skills/carruseles-onia.md`
-- `hermes-content/skills/flujo-completo-carrusel.md`
-- `hermes-content/skills/referencias-pinterest.md`
+- `hermes-content/docs/historial/skills/flujo-completo-carrusel.md`
+- `hermes-content/docs/historial/skills/referencias-pinterest.md`
 - `hermes-content/skills/seguridad-credenciales.md`
-- `hermes-content/skills/operaciones-dashboard.md`
-- `hermes-content/skills/orquestador-creativo-ia.md`
+- `hermes-content/docs/historial/skills/operaciones-dashboard.md`
+- `hermes-content/docs/historial/skills/orquestador-creativo-ia.md`
 - `hermes-content/skills/video-lab-higgsfield.md`
-- `hermes-content/skills/centro-comando-telegram.md`
-- `hermes-content/skills/videos-virales-higgsfield.md`
+- `hermes-content/docs/historial/skills/centro-comando-telegram.md`
+- `hermes-content/docs/historial/skills/videos-virales-higgsfield.md`
 - `hermes-content/skills/ugc-empresas-higgsfield.md`
 - `hermes-content/skills/audio-elevenlabs.md`
-- `hermes-content/skills/inteligencia-reuniones-onia.md`
+- `hermes-content/docs/historial/skills/inteligencia-reuniones-onia.md`
 - `hermes-content/skills/marca-personal-sergio.md`
-- `hermes-content/skills/historias-sergio.md`
-- `hermes-content/skills/crons-diarios-hermes.md`
-- `hermes-content/skills/sistema-semanal-hermes.md`
-- `hermes-content/skills/orquestacion-proyectos-onia.md`
+- `hermes-content/docs/historial/skills/historias-sergio.md`
+- `hermes-content/docs/historial/skills/crons-diarios-hermes.md`
+- `hermes-content/docs/historial/skills/sistema-semanal-hermes.md`
+- `hermes-content/docs/historial/skills/orquestacion-proyectos-onia.md`
 - `hermes-content/skills/radar-creativo-onia.md`
-- `hermes-content/skills/consultoria-onia.md`
+- `hermes-content/docs/historial/skills/consultoria-onia.md`
 
 Do not create alternate files named:
 - `instagram-publish-v2.md`
@@ -855,7 +856,7 @@ The other session should own:
 
 Canonical files already visible for Session B:
 - `AI_YOUTUBE_CHANNELS_MASTER_PLAN_2026.md`
-- `AI_TRENDS_RADAR_CONTENT_SYSTEM_2026.md`
+- `hermes-content/docs/historial/AI_TRENDS_RADAR_CONTENT_SYSTEM_2026.md`
 - `FUTBOL_LAB_IA_CHANNEL_SYSTEM_2026.md`
 - `FUTBOL_LAB_IA_BRAND_IDENTITY_2026.md`
 - `AI_YOUTUBE_DOCUMENTATION_INDEX_2026.md`
@@ -890,8 +891,8 @@ Canonical files already visible for Session B:
 - `scripts/onia_project_hygiene.mjs`
 - External DentalGest repo:
   `C:\dev\Proyectos\dental-saas\supabase\migrations\20260605_n8n_postgrest_schema_cache_fix.sql`
-- `hermes-content/skills/plan-semanal-onia.md`
-- `hermes-content/skills/prospeccion-onia.md`
+- `hermes-content/docs/historial/skills/plan-semanal-onia.md`
+- `hermes-content/docs/historial/skills/prospeccion-onia.md`
 - `hermes-content/skills/recordatorios-fiscales-bolivia.md`
 - `hermes-content/references/impuestos-bolivia.template.json`
 - `hermes-content/references/n8n-plan-semanal-onia.md`
@@ -904,11 +905,11 @@ Recommended new files for Session B:
 - `N8N_AUTOMATION_PLAN.md`
 - `CRM_AND_PROSPECTING.md`
 - `TAX_REMINDERS_BOLIVIA.md`
-- `hermes-content/docs/N8N_AUTOMATIONS.md`
+- `hermes-content/docs/historial/N8N_AUTOMATIONS.md`
 - `hermes-content/docs/CRM_PROSPECTING.md`
 - `hermes-content/docs/TAX_REMINDERS.md`
-- `hermes-content/skills/n8n-automatizaciones-onia.md`
-- `hermes-content/skills/crm-prospeccion-onia.md`
+- `hermes-content/docs/historial/skills/n8n-automatizaciones-onia.md`
+- `hermes-content/docs/historial/skills/crm-prospeccion-onia.md`
 - `hermes-content/skills/impuestos-bolivia-operaciones.md`
 
 Session B should not edit publishing scripts unless coordinating first.
@@ -923,7 +924,7 @@ Session B should not edit publishing scripts unless coordinating first.
 - Nuvia app code lives in `web-factory/apps/site` (routes `src/app/nuvia/**`, same
   Next.js app as onia-center/vendedores). Deploys as its OWN Vercel project
   `nuvia-store` (domain `nuvia-store.vercel.app`), same repo/commit as the
-  `onia-center` project — see `hermes-content/docs/ONIA_NUVIA_DOMINIO_PROPIO_20260706.md`.
+  `onia-center` project — see `hermes-content/docs/historial/ONIA_NUVIA_DOMINIO_PROPIO_20260706.md`.
 - Global Web Factory design stack lives in `C:\Users\PC\.codex\design-stack\DESIGN_STACK.md`; project usage notes live in `web-factory/DESIGN_STACK.md`.
 - Use Spanish names for Hermes skills.
 - Use English uppercase names for repo-level operational docs.

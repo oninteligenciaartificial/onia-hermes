@@ -362,7 +362,7 @@ declarativo y configurable por rubro.
   se mantienen — lo deja explicito como decision de Sergio, distinta de la
   adopcion de la columna vertebral organizacional (work_items/roles/etc.) que
   si puede arrancar ya, sin chocar con ninguna de las dos opciones.
-- `ONIA_PROXIMA_SESION_PLAN_20260705.md` y `ONIA_SESION_KICKOFFS_20260705.md`
+- `hermes-content/docs/historial/ONIA_PROXIMA_SESION_PLAN_20260705.md` y `hermes-content/docs/historial/ONIA_SESION_KICKOFFS_20260705.md`
   actualizados: item R1-GESTIOS-CORE refleja la aprobacion; kickoff del carril
   E reescrito con rutas absolutas (mismo bug de rutas relativas cross-repo que
   se encontro y corrigio en el kickoff de DentaGest) y la decision fiscal/

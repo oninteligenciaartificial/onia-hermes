@@ -36,7 +36,7 @@ VSL; curso 20+ ventas antes del VIP. Nada se anuncia antes de existir.
 | Doc | Qué tiene |
 |---|---|
 | `ONIA_MARCA_PERSONAL_ETAPA2_ACUERDO.md` | los términos completos con Samuel (fuente de verdad del trato) |
-| `ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md` | cómo se negoció (historia, rondas, agujeros) |
+| `historial/ONIA_MARCA_PERSONAL_ETAPA2_EVALUACION.md` | cómo se negoció (historia, rondas, agujeros) |
 | `ONIA_MARCA_PERSONAL_ETAPA2_OPERACION.md` | backlog operativo, checklist de cuentas, tablero KPIs, runbook crudos→clips |
 | `ONIA_MARCA_PERSONAL_ETAPA2_CONTRATO.md` | contrato de firma (PDF: `Acuerdo_Etapa2_Version_Firma.pdf`) |
 | `ONIA_MARCA_PERSONAL_PLAN_MENSUAL.md` | mes completo: ritmo semanal comunidad, 6 carruseles, 4 series de video |

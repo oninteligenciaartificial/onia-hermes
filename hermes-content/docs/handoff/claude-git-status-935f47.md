@@ -686,8 +686,8 @@ Onia.
 3. **Los gates NO corren desde la raíz de `onia-hermes`**: `npx tsc` cae en un paquete señuelo
    (*"This is not the tsc command you are looking for"*). Corren desde `web-factory/`.
 4. **Arreglar el precio donde el cliente lo ve y dejar vivo el doc que manda a cobrarlo.**
-   `ONIA_PLAN_DESARROLLO_Y_VENTA.md` tenía abierto *"Gatear lo que el add-on de inventario
-   cobra"*, es doc sin fecha (= fuente de verdad) y está referenciado desde `LEEME-PRIMERO.md`.
+   `hermes-content/docs/historial/ONIA_PLAN_DESARROLLO_Y_VENTA.md` tenía abierto *"Gatear lo que el add-on de inventario
+   cobra"*, es doc sin fecha (= fuente de verdad) y está referenciado desde `hermes-content/docs/historial/LEEME-PRIMERO.md`.
 5. **Sacar una fila de una grilla de 2 columnas** y no mirar la página: quedó la última fila con
    un solo ítem y la línea cortada a mitad de ancho.
 6. **El disco llegó al 100%** (2,7 GB) y `git worktree add` empezó a fallar con *No space left*.

@@ -32,7 +32,7 @@ Fuentes revisadas:
 
 - `CRM_AND_PROSPECTING.md`
 - `hermes-content/docs/CRM_PROSPECTING.md`
-- `hermes-content/skills/crm-prospeccion-onia.md`
+- `hermes-content/docs/historial/skills/crm-prospeccion-onia.md`
 - `NOTION_VENDOR_CRM_SCHEMA_2026.md`
 - Notion: `CRM & Contactos`
 - n8n: busqueda de workflows WhatsApp/Chatwoot/CRM Onia
@@ -540,6 +540,6 @@ Nota: la documentacion de coexistencia de Meta debe verificarse en el flujo real
 
 Se documento el aprendizaje de acceso, verificacion Meta, mapeo S.R.L. -> `Empresa privada`, decision de numero unico, Chatwoot Cloud dedicado, n8n dedicado y reglas de handoff humano en:
 
-- [BOLIVIAN_ELECTRIC_META_WHATSAPP_CASE_20260627.md](./BOLIVIAN_ELECTRIC_META_WHATSAPP_CASE_20260627.md)
+- [BOLIVIAN_ELECTRIC_META_WHATSAPP_CASE_20260627.md](./historial/BOLIVIAN_ELECTRIC_META_WHATSAPP_CASE_20260627.md)
 
 Usar ese caso como referencia operativa para clientes bolivianos con marca comercial distinta del nombre legal, numero actual en WhatsApp Business App y necesidad de preservar propiedad del portfolio en Meta.
