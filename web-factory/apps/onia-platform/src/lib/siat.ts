@@ -8,9 +8,9 @@
  * dicen cosas distintas sobre la misma ley y ninguna se entera. Vive acá; las
  * dos páginas lo LEEN.
  *
- * REGLA DE LA CASA respetada a rajatabla: el SIN ofrece un Portal Web
- * GRATUITO y se dice primero y de frente — el pitch es "no tengas que tipear",
- * jamás "estás obligado a comprarme".
+ * REGLA DE LA CASA: el SIN ofrece un Portal Web gratuito y se dice primero.
+ * Hasta que el emisor de Onia esté autorizado, ingresar cada factura en ese
+ * portal sigue siendo un paso manual.
  *
  * Fechas y RND verificadas contra fuentes oficiales el 2026-08-06 (PDF de la
  * RND 102500000036 + nota de prensa del SIN por la RND 102600000007).
@@ -33,7 +33,7 @@ export const SIAT_TITULAR =
 
 /** La bajada: qué dice la norma, con su número de RND. */
 export const SIAT_BAJADA =
-  "La RND 102600000007 del SIN fijó el 30 de septiembre de 2026 como último día de transición para los grupos 9° al 12° de contribuyentes — el universo de micro y pequeñas empresas. Desde el 1 de octubre, esos negocios emiten únicamente por su modalidad de facturación en línea asignada.";
+  "La RND 102600000007 del SIN fijó el 30 de septiembre de 2026 como último día de transición para los grupos 9° al 12° de contribuyentes. Desde el 1 de octubre, los alcanzados emiten únicamente por su modalidad de facturación en línea asignada. Confirmá tu grupo y modalidad con tu NIT en el SIN.";
 
 export interface SiatBloque {
   titulo: string;
@@ -49,17 +49,17 @@ export const SIAT_BLOQUES: readonly SiatBloque[] = [
   {
     titulo: "Lo primero que tenés que saber: podés cumplir GRATIS.",
     texto:
-      "El SIN ofrece el Portal Web en Línea, gratuito, donde cualquier contribuyente emite sus facturas tipeándolas una por una en la página de Impuestos. Si tu negocio emite pocas facturas, esa opción cumple la norma y no cuesta nada. Cualquiera que te diga \"estás obligado por ley a comprar un sistema\" te está mintiendo — y con nosotros esa frase no existe.",
+      "El SIN ofrece el Portal Web en Línea, gratuito, previa habilitación de esa modalidad. Allí ingresás los datos de cada factura en la página de Impuestos. Si tu negocio emite pocas facturas, esa opción cumple la norma y no cuesta nada. No estás obligado por ley a comprar un sistema privado.",
   },
   {
-    titulo: "Lo que un sistema resuelve no es la obligación: es el re-tipeo.",
+    titulo: "Lo que Onia resuelve hoy: orden en tus ventas y compras.",
     texto:
-      "El costo real del portal gratuito es tu tiempo: cada venta se tipea dos veces — una en tu cuaderno o caja, otra en el portal. Con un sistema de gestión conectado, la factura sale de la MISMA venta que ya registraste al cobrar, y tu registro de compras y ventas (RCV), el IVA y el calendario de vencimientos se arman solos. Ese es el trabajo que Onia hace — el cumplimiento ya era tuyo gratis.",
+      "Onia registra tus ventas y compras, prepara un resumen de IVA e IT y te muestra el calendario de vencimientos para que revises los números con tu contador. La factura fiscal todavía se emite aparte: mientras nuestro emisor no tenga autorización del SIN, ingresás los datos de cada factura en el Portal Web gratuito. El registro exportable de Onia es un insumo para tu contador; no es el RCV oficial del SIAT.",
   },
   {
     titulo: "Dónde está Onia en este camino (dicho de frente)",
     texto:
-      "Nuestro sistema está registrado ante el SIN como proveedor de facturación y ya corre contra el ambiente de pruebas oficial: emisión individual y masiva, anulaciones, reversiones y operación sin internet. Falta que el SIN autorice el sistema. Mientras la homologación concluye, Onia registra y ordena cada venta, arma tu contabilidad, y emitís por el portal gratuito — sin re-tipear tus números, porque el sistema te los da listos.",
+      "Nuestro sistema está registrado ante el SIN como proveedor de facturación y sigue en pruebas de homologación. La emisión individual, la anulación y la reversión completaron sus casos; la emisión masiva y los paquetes de contingencia siguen en pruebas. Falta que el SIN autorice el sistema. Hasta entonces, Onia ordena tus ventas y compras, y la factura con valor fiscal la emitís ingresando sus datos en el Portal Web gratuito del SIN.",
   },
 ] as const;
 
@@ -78,28 +78,17 @@ export const SIAT_BLOQUES: readonly SiatBloque[] = [
  * verificable que tenemos. Vigilado por `(sitio)/promesa-fiscal.test.ts`, que
  * exige las dos en este texto y en toda página que afirme el registro.
  *
- * ⚠️ **El logro se escribe como una ACTIVIDAD que corre, nunca como una etapa
- * COMPLETA** (2026-09-19). Hasta hoy los tres textos decían *"ya completó las
- * pruebas técnicas de la Fase 1"* y *"quedan las etapas formales"*, y las dos
- * mitades afirmaban más de lo que nadie midió: **quien cuenta la Fase 1 es el
- * SIN**, y la última lectura de su Listado de Etapas —2026-08-27, en
- * `hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md` §4— dio **0 % general,
- * ninguna etapa cerrada al 100 %** (1.424 de 5.732). Ese mismo doc registra que
- * creer "Fase 1 completa" leyendo nuestro `fase1-state.json` local **ya fue un
- * error una vez**, y que después del 13-sep el marcador del portal sigue sin
- * cotejarse. Y lo que falta no es formal: §9 lo encabeza con *«Autorización del
- * sistema (INICIADO → AUTORIZADO)»*, que es la decisión entera, no un sello.
- *
- * Lo que sí está medido —y es lo que ahora dice el texto— es que el emisor
- * **emite, anula y revierte contra el ambiente de pruebas oficial**. Es la
- * misma disciplina que el resto del sitio: se afirma lo que corre, no lo que
- * un tercero todavía no declaró.
+ * El portal SIAT, leído el 2026-09-27, marca 80 % general: emisión individual,
+ * anulación y reversión cerraron sus casos; paquetes y emisión masiva siguen
+ * parciales. El avance del runner local no sustituye el marcador del SIN ni su
+ * autorización. Ningún copy puede convertir pruebas parciales en emisión fiscal
+ * disponible o en ausencia de ingreso manual al Portal Web.
  *
  * Se escribe en minúscula y sin punto final a propósito: entra como cláusula
  * dentro de una oración más larga, no como párrafo suelto.
  */
 export const SIAT_ESTADO_ONIA =
-  "nuestro emisor de facturación está registrado ante el SIN y ya corre contra el ambiente de pruebas oficial; falta que el SIN autorice el sistema, así que hasta que la homologación concluya emitís por el portal gratuito del SIN, con tus ventas ya cargadas y sin re-tipear";
+  "nuestro emisor de facturación está registrado ante el SIN y sigue en pruebas de homologación; falta que el SIN autorice el sistema, así que hasta que concluya el trámite emitís por el portal gratuito del SIN, ingresando allí los datos de cada factura";
 
 export interface SiatFaq {
   q: string;
@@ -113,7 +102,7 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
   },
   {
     q: "¿Puedo cumplir gratis?",
-    a: "Sí. El SIN ofrece el Portal Web en Línea gratuito, donde emitís factura por factura tipeando los datos a mano. Cumple la norma al 100%. Lo que un sistema como Onia agrega no es el cumplimiento: es no re-tipear — la factura sale sola de tu venta, con tu caja y tu contabilidad conectadas.",
+    a: "Sí. Si tenés habilitada la modalidad Portal Web en Línea, podés emitir gratis ingresando los datos de cada factura. Onia todavía no reemplaza ese paso: te ayuda a ordenar ventas, compras y cifras para revisarlas con tu contador.",
   },
   {
     q: "¿Qué pasa con mi facturación desde el 1 de octubre de 2026?",
@@ -125,13 +114,13 @@ export const SIAT_FAQ: readonly SiatFaq[] = [
   },
   {
     q: "¿Y Onia ya puede emitir facturas en línea?",
-    a: "Estamos en trámite: nuestro sistema está registrado ante el SIN como proveedor y ya emite, anula y revierte contra el ambiente de pruebas del SIN, incluida la operación sin internet. Falta que el SIN autorice el sistema. Mientras tanto, con Onia tu venta queda registrada y lista, y emitís por el portal gratuito del SIN — te avisamos apenas la homologación concluya.",
+    a: "Todavía no emite facturas con valor fiscal. El sistema está registrado ante el SIN y sigue en pruebas de homologación: emisión individual, anulación y reversión completaron sus casos; emisión masiva y paquetes de contingencia siguen en pruebas. Mientras falta la autorización, emitís cada factura en el Portal Web del SIN con los datos que ese portal solicita.",
   },
 ] as const;
 
 /** Las fuentes y el descargo. Nunca se publica el contenido sin esto. */
 export const SIAT_FUENTES =
-  "Fuentes: RND 102100000011 (Sistema de Facturación), RND 102500000036 y nota de prensa oficial del SIN sobre la RND 102600000007. Verificado el 6 de agosto de 2026. Esto es información general, no asesoría tributaria — tu caso concreto confirmalo con tu contador o en tu Oficina Virtual.";
+  "Fuentes: RND 102100000011 (Sistema de Facturación), RND 102500000036 y nota de prensa oficial del SIN sobre la RND 102600000007. Plazo y modalidades verificados el 27 de septiembre de 2026; estado de homologación consultado en SIAT ese día. Esto es información general, no asesoría tributaria: confirmá tu caso con tu contador o en tu Oficina Virtual.";
 
 /* ---------------------------------------------------------------------- */
 /* LA GUÍA de una página — "cómo me habilito"                              */
@@ -269,13 +258,9 @@ export const SIAT_GUIA_FRENA: readonly string[] = [
   "Llegar al paso 6 sin los catálogos sincronizados. La prueba no valida, volvés al paso 5 y ya con la fecha encima.",
 ];
 
-/**
- * La ÚNICA línea comercial de la guía, y va al final, después de haber sido
- * útil. Vende el re-tipeo, jamás el cumplimiento — el cumplimiento ya lo tenía
- * gratis quien está leyendo.
- */
+/** Cierre de la guía: el portal sigue siendo manual hasta que ONIA sea autorizada. */
 export const SIAT_GUIA_CIERRE =
-  "El portal del SIN es gratis y cumple. Lo que cuesta es tipear cada venta dos veces: una al cobrar y otra en el portal. Si querés que la factura salga de la venta que ya registraste, eso es exactamente lo que hacemos.";
+  "El portal del SIN es gratuito. Mientras nuestro emisor siga en homologación, cada factura fiscal se emite allí ingresando los datos requeridos. Podés usar Onia hoy para ordenar ventas, compras y cifras; la emisión fiscal integrada sigue pendiente de autorización.";
 
 export interface SiatEnlace {
   label: string;

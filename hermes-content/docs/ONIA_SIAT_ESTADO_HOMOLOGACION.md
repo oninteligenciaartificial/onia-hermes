@@ -1,5 +1,13 @@
 # SIAT — estado de la homologación del sistema
 
+> **Lectura directa del portal, 2026-09-27:** sistema **EN PRUEBAS**, **80 % general**,
+> **37 días restantes**. Ocho etapas están al 100 %; **VI 150/560** e **IX 60/160**.
+> Faltan **410 + 100 = 510 casos**, por lo que **la Fase 1 NO está completa**. El
+> checkpoint del VPS que decía 5.732/5.732 sumó respuestas SOAP bajo claves `pv0/pv1`,
+> pero no distinguió las 32 filas de VI ni las 12 de IX. El portal es el árbitro.
+> La matriz exacta y el plan de conciliación están en §4 y en el
+> [README del runner](../integrations/siat/README.md).
+
 > ⚡ **ACTUALIZACIÓN 2026-09-13 (sesión de control):** el **Punto de Venta 1 YA EXISTE** —
 > creado por SOAP `registroPuntoVenta` (tipo 5 · CAJEROS, `transaccion:true`, verificado con
 > `consultaPuntoVenta`; CUIS del PdV 1: `35B2967A`). El runner corre la matriz completa
@@ -19,10 +27,10 @@
 ## 1. Qué está pasando, en una línea
 
 El sistema **Onia Platform v1.00** está registrado ante el SIN como **Proveedor**, en
-estado **INICIADO**, con **24,8% de la Fase 1** hecho (última lectura del portal,
-2026-08-27) y un límite de pruebas que vence el **04/11/2026**. El NIT no bloquea nada:
-está limpio. **Desde el 2026-09-03 los tres documentos sector emiten, anulan y revierten
-contra el piloto** (§7); lo que sigue trabado es el **Punto de Venta 1**, que lo crea Sergio.
+estado **EN PRUEBAS**, con **80 % de la Fase 1** en el portal el 2026-09-27 y límite
+de pruebas el **04/11/2026**. El Punto de Venta 1 ya existe; quedan los casos de
+paquetes (VI) y emisión masiva (IX), que el runner antiguo contabilizó por operación
+en lugar de por condición exigida por el SIN.
 
 ---
 
@@ -41,7 +49,7 @@ contra el piloto** (§7); lo que sigue trabado es el **Punto de Venta 1**, que l
 | Documentos sector | 1 (compra-venta) · 17 (hospitales/clínicas) · 24 (nota crédito-débito) |
 | Fecha de solicitud | 06/08/2026 16:20 |
 | **Fecha límite de pruebas** | **04/11/2026** (Art. 18.III) |
-| Estado | **INICIADO** |
+| Estado (portal 2026-09-27) | **EN PRUEBAS** |
 
 **Portales** (son tres distintos, y confundirlos cuesta tiempo):
 
@@ -78,6 +86,55 @@ Verificado **mirando** la Oficina Virtual el 2026-08-27, no por grep ni por memo
 ---
 
 ## 4. Fase 1 — el marcador real del SIN
+
+**Lectura del 2026-09-27** en «Listado de Etapas» y «Listado de Pruebas»:
+
+| Etapa | Requiere | Correctos | Faltan |
+|---|---:|---:|---:|
+| I, II, III, IV, V, VII, VIII, XI | 5.012 | 5.012 | 0 |
+| VI · paquetes | 560 | 150 | **410** |
+| IX · masiva | 160 | 60 | **100** |
+| **Total** | **5.732** | **5.222** | **510** |
+
+El 80 % general del portal es su marcador de etapas (8 de 10 completas); no es
+el cociente 5.222/5.732. El desglose de VI contiene **32 filas**: dos sectores
+(1 y 17) × siete motivos × dos recepciones de 10 (`cantidadFacturas=500` en
+PdV 1; `<500` en PdV 0), más cuatro validaciones de 70 (sector × PdV). Solo
+están completos la recepción `<500` de motivo 1, sector 1, PdV 0 (10) y las
+validaciones de sector 1, ambos PdV (70+70). IX contiene **12 filas**: dos sectores
+× dos PdV × recepción `=1000` (10), recepción `<1000` (10) y validación (20).
+Solo están completos `<1000` en sector 1, ambos PdV (10+10), y sus dos
+validaciones (20+20). Los demás casos están en cero.
+
+**Volumen pendiente estimado si el portal no cambia:** 270 recepciones de
+paquetes (140 lotes de 500 y 130 lotes de 2: **70.260 XML**), 60 recepciones
+masivas (40 lotes de 1.000 y 20 lotes de 2: **40.040 XML**), 270 registros de
+evento y 180 validaciones. Son **110.300 XML y al menos 780 solicitudes SOAP**;
+reintentos y renovaciones CUFD se suman. No lanzar la corrida completa como
+primera prueba. El motivo 5/6/7 requiere CAFC del piloto; sin uno válido sus
+filas quedan bloqueadas, no se suple con el certificado de firma.
+
+**Secuencia antes de tocar el piloto:** releer las filas del portal, actualizar
+[`portal-fase1-20260927.json`](../integrations/siat/portal-fase1-20260927.json)
+con esa lectura, conciliar una
+copia del checkpoint con `--portal-snapshot` (hace respaldo y no usa SOAP) y
+verificar que VIII 690/690 del estado separado no se reemita. Tras aprobar el
+tráfico real, iniciar solo `VI.recepcion-ds1-motivo2-pv0-menor500` con
+`--etapa VI --case recepcion-ds1-motivo2-pv0-menor500 --count 1`: **un evento,
+un paquete de dos XML** (más CUFD si venció), sin CAFC. Cotejar esa fila en el portal antes de
+seguir. No pedir Fase 2 hasta ver 100 % en el portal. Comandos y guardas en
+[README del runner](../integrations/siat/README.md).
+Una invocación del runner sin `--etapa` ahora aborta sin SOAP; el antiguo
+`run-fase1-pdv1.sh` y `run-fase1-volumen.sh` están retirados: abortan antes de
+leer credenciales, sin repetir etapas que ya completó el portal. La revisión
+independiente también corrigió el índice de recibos al retomar validaciones
+parciales y el contador global legado que podía inflar un snapshot en cero.
+El porcentaje por casos del informe local no es el porcentaje general del portal.
+La revision cruzada corrigio tambien el multiplicador de `--count` al filtrar
+una sola fila de validacion: meta 1 ya no puede disparar 7/2 solicitudes.
+`--count` sigue siendo una meta acumulada, no un cupo adicional; ver README.
+
+**La siguiente tabla es historia del 27-ago, preservada para explicar la diferencia:**
 
 Leído del "Listado de Etapas" del portal el 2026-08-27. **No coincide con lo que decían
 nuestras notas** (`fase1-state.json` local y la memoria hablaban de "1.968 operaciones OK,
@@ -186,6 +243,11 @@ VIII; falta solo cotejar el marcador en el portal (login de Sergio Urcullo).
 ---
 
 ## 7. El runner, corregido
+
+> **Nota 2026-09-27:** la cronología de esta sección explica arreglos anteriores.
+> La matriz VI/IX, la conciliación obligatoria y el primer caso controlado están
+> documentados en §4; el Punto de Venta 1 ya existe. Las cifras y bloqueos
+> antiguos de abajo no describen el estado actual del portal.
 
 `hermes-content/integrations/siat/src/fase1-runner.mjs`
 
@@ -451,8 +513,9 @@ ni se consultan.
 | **04/11/2026** | Límite de pruebas del sistema 9473 |
 
 La autorización llega **después** del rush. Lo que se vende para el 1-oct es lo que la
-landing ya dice y es cierto: *"emitís por el portal gratuito — sin re-tipear, porque el
-sistema te los da listos"*. Eso **no depende de la autorización**.
+landing debe explicar: los datos quedan organizados en ONIA, pero la emisión
+en el Portal Web del SIN sigue siendo manual. La promesa histórica de evitar
+el re-tipeo era incorrecta. El portal gratuito **no depende de nuestra autorización**.
 
 Prohibido vender "por ley tenés que comprarnos": el Portal Web en Línea del SIN es
 gratuito y se refuta con un Google.
@@ -471,12 +534,11 @@ gratuito y se refuta con un Google.
 
 ## 11. Lo que falta verificar
 
-- ~~Que exista el Punto de Venta 1~~ → **RESUELTO: no existe.** El SIN devuelve
-  `933 · EL PUNTO DE VENTA ES INEXISTENTE O INVALIDO`. Hay que **crearlo** — bloquea la
-  mitad de la matriz.
-- **El desglose de las etapas VI y IX.** Sus totales (560, 160) se dividen limpio por 2
-  puntos de venta, pero no abrimos su "Listado de Pruebas". Están marcadas `[VERIFICAR]`
-  en `STAGE_PLAN`. El contador del portal es el árbitro.
+- ~~Crear el Punto de Venta 1~~ → **RESUELTO el 13-sep**: creado por SOAP y
+  verificado con `consultaPuntoVenta`.
+- ~~Abrir el desglose de VI e IX~~ → **RESUELTO el 27-sep**: 32 y 12 filas
+  leídas una por una; ver §4. Falta ejecutar los casos pendientes y cotejarlos
+  en el portal.
 - **Si se puede reducir la solicitud a una sola modalidad** conservando los casos ya
   enviados, o si hay que registrar un sistema nuevo y re-correr. Es la pregunta al SIN.
 - **Los 3 botones de la columna Opciones** del Seguimiento, y el menú `≡ ▾` de "Datos de

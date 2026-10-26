@@ -134,9 +134,8 @@ function sinInterpolaciones(jsx: string): string {
 }
 
 /**
- * Los titulares de un archivo: los `<h1>`/`<h2>`/`<h3>` y los `nombre:` de los
- * arrays de contenido, que la portada renderiza COMO titular de tarjeta
- * (`<h3>{c.nombre}</h3>`). Sin las dos formas el gate ve media página.
+ * Los titulares de un archivo: los `<h1>`/`<h2>`/`<h3>` y los `titulo:` de las
+ * tres tareas, que la portada renderiza como titular de tarjeta.
  */
 function titularesDe(fuente: string): string[] {
   const sinComentarios = fuente
@@ -149,7 +148,7 @@ function titularesDe(fuente: string): string[] {
   )) {
     out.push(sinInterpolaciones(m[2]).replace(/<[^>]+>/g, ""));
   }
-  for (const m of sinComentarios.matchAll(/\bnombre:\s*"([^"\\]{8,140})"/g)) {
+  for (const m of sinComentarios.matchAll(/\b(?:nombre|titulo):\s*"([^"\\]{8,140})"/g)) {
     out.push(m[1]);
   }
 
@@ -175,12 +174,11 @@ const LARGO_DE_TITULAR = 12;
 describe("la portada no le dice dos veces lo mismo al lead", () => {
   const grafo = grafoDeLaPortada();
 
-  it("el grafo de la portada sale del disco y trae sus secciones compuestas", () => {
-    // Caso ancla: sin esto, un grafo vacío o recortado deja el gate mudo y
-    // firmando verde. `noche.tsx` es el sujeto que originó el defecto.
+  it("el grafo de la portada sale del disco y trae sus componentes", () => {
+    // La portada corta ya no monta noche.tsx; sí compone el panel desde ui.tsx.
     expect(grafo.has("page.tsx")).toBe(true);
-    expect(grafo.has("noche.tsx")).toBe(true);
-    expect(grafo.size).toBeGreaterThan(2);
+    expect(grafo.has("ui.tsx")).toBe(true);
+    expect(grafo.size).toBeGreaterThan(1);
   });
 
   it("ninguna oración de contenido aparece en dos archivos de la portada", () => {
@@ -204,11 +202,10 @@ describe("la portada no le dice dos veces lo mismo al lead", () => {
     // titulares —una etiqueta renombrada, un `<Titulo>` propio— deja el gate
     // mudo firmando verde, que es el modo en que este archivo ya falló.
     const titulares = [...grafo.values()].flatMap(titularesDe);
-    expect(titulares.length).toBeGreaterThan(8);
-    // Las DOS formas tienen que estar vivas: el `<h2>` de una sección y el
-    // `nombre:` de una tarjeta. Si una se cae, el gate ve media página.
+    expect(titulares.length).toBeGreaterThanOrEqual(8);
+    // Las dos formas tienen que estar vivas: h2 de sección y titulo de tarea.
     expect(titulares).toContain("Todo el negocio, en una pantalla.");
-    expect(titulares).toContain("Los mensajes no se pierden");
+    expect(titulares).toContain("Ves cómo va el día.");
   });
 
   it("ningún titular repite a otro, ni siquiera dentro del mismo archivo", () => {

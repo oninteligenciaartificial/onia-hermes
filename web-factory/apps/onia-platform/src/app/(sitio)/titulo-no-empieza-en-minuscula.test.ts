@@ -95,7 +95,8 @@ describe("un título de venta no arranca en minúscula", () => {
 
   it("la home tiene títulos para medir", () => {
     // Sin esto, el verde de abajo sobre cero títulos sería falla abierta.
-    expect(titulos.length).toBeGreaterThanOrEqual(8);
+    // La portada 1.0 tiene un h1 y un h2 por cada uno de los otros bloques.
+    expect(titulos.length).toBe(5);
   });
 
   it("cada h1/h2 de la home empieza con mayúscula", () => {

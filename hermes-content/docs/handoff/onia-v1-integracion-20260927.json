@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 2,
+  "recordedAt": "2026-09-28T21:38:13.251419+00:00",
+  "base": "02a4eef8550503ba8676468953eab97efc0c786e",
+  "branch": "codex/v1-integracion-20260927",
+  "state": "uncommitted-local-candidate",
+  "initialIntegrationRecord": {
+    "base": "d0757d4dba38112873b6988f7b0e37e589bef283",
+    "files": [
+      {
+        "source": "onia-hermes-v1-home-corta",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/hero.test.ts",
+        "sha256": "c5fe71e0a9bf6d5dffd053615686de8bcab763770ec97ddfcb002dc009cf560b"
+      },
+      {
+        "source": "onia-hermes-v1-home-corta",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/no-decir-dos-veces-lo-mismo.test.ts",
+        "sha256": "32b3c61d0cdcd95e31f7bc9e734fcb7efd6882fcb700ef5fd6a5121de9477a08"
+      },
+      {
+        "source": "onia-hermes-v1-home-corta",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/page.tsx",
+        "sha256": "d393e337e50478bfbc5d058135fea760a4b069f824bd21b33c2b7c0f6642e7d7"
+      },
+      {
+        "source": "onia-hermes-v1-home-corta",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/portada.module.css",
+        "sha256": "239eac587fa07ce614332153cc85eedb27710aa9e8d29618d33b23966e3c35e2"
+      },
+      {
+        "source": "onia-hermes-v1-home-corta",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/salario-minimo.test.ts",
+        "sha256": "12943e268d142f3ad7c06c424ac20440caba3637b2d69317472125f5038e07f1"
+      },
+      {
+        "source": "onia-hermes-v1-home-corta",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/titulo-no-empieza-en-minuscula.test.ts",
+        "sha256": "0476f16ba85dde8fc367af22722f66e4ae5f8497f17b9ac464af4cf73d6f1f30"
+      },
+      {
+        "source": "onia-hermes-v1-captacion-promesas",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/facturacion/page.tsx",
+        "sha256": "7c825ca4c0c8a7edd171ffaf6870be8cca2d72b98f2ce6ca98b801183787c6e1"
+      },
+      {
+        "source": "onia-hermes-v1-captacion-promesas",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/logro-fiscal-no-se-declara-completo.test.ts",
+        "sha256": "efa1648f37a09b745b4bb49a6d6dd7f077cde8505686fdb37cd43e1628ef6798"
+      },
+      {
+        "source": "onia-hermes-v1-captacion-promesas",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/promesa-fiscal.test.ts",
+        "sha256": "21db7682dfc90653e58e6f8d8cd5d5aeb6a61e621df457dffe696fe4647e7cf6"
+      },
+      {
+        "source": "onia-hermes-v1-captacion-promesas",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/rubros/page.tsx",
+        "sha256": "54da76e5211addd65d5e18bd762e44eed10b3fb93cf0d16b2d67fa97d6a5896d"
+      },
+      {
+        "source": "onia-hermes-v1-captacion-promesas",
+        "path": "web-factory/apps/onia-platform/src/app/v1/modulos/dental/page.tsx",
+        "sha256": "ef5b2e263f18a00c85db486241f063a2be70e05c12851038d312a48c34724cf2"
+      },
+      {
+        "source": "onia-hermes-v1-captacion-promesas",
+        "path": "web-factory/apps/onia-platform/src/lib/siat.ts",
+        "sha256": "56ed1afc420677ccbcfdd6b3e1cbc03d3d8b57c2fa70ec7ddc700425848bb6b2"
+      },
+      {
+        "source": "onia-hermes-v1-captacion-promesas",
+        "path": "web-factory/apps/onia-platform/src/app/(sitio)/promesa-retipeo-fiscal.test.ts",
+        "sha256": "31ba06ae36ad4c7fa1f093d45d2bb00e1fcf80493d363555cd4efa317f7e126e"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md",
+        "sha256": "4b8729d946023596d489aebf52dc5e331050e57b55382a2f2d0b2b1a46a02d10"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/docs/cola/plataforma-v1.md",
+        "sha256": "ca3d5bc5f12866b35bc332f73f3be6af98c9300e9ab37ef7e32c1c569882c9cf"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/integrations/siat/README.md",
+        "sha256": "76f7143811c582b9f404bec9ddb8f38e223a7042ccfd371166db252fbbf19a5a"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/integrations/siat/run-fase1-pdv1.sh",
+        "sha256": "15acf1d162d5bfa9239724d316b691d4dac055d927bfb15b81c21a5d7310065b"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/integrations/siat/run-fase1-volumen.sh",
+        "sha256": "15f00e1dadc8fa0fdb52970f4431458b8cc7da5e855d2dfe851a5c0c6c8e03a2"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/integrations/siat/src/fase1-runner.mjs",
+        "sha256": "52ef95092cb7c59fabdc3d833c7c91b95928db19f18aadce0a15c59ffdbf1073"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/integrations/siat/test/fase1-runner.test.mjs",
+        "sha256": "5dcd1686f07dc9f377ce2d6ce157c28c177cdb691b0641dcb466bdcad332e7cb"
+      },
+      {
+        "source": "onia-hermes-siat-codex",
+        "path": "hermes-content/integrations/siat/portal-fase1-20260927.json",
+        "sha256": "7fa7c4caf3f0b49299e75bdd80dfd8101bd546f059a943f9d4b110f4b67fa562"
+      }
+    ]
+  },
+  "additionalImports": [],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "3a75745a633e423805ff442e1c34338d23f1265137d5649daa495ed802f6a9ba",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "COORDINATION_MANIFEST.md",
+      "sha256": "da218e2f2925da9042817b9dd4e940d59462d581ac9016c2f8bb285e77513a07",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/deploy/vps-ops/backup-storage.sh",
+      "sha256": "315bd1397d9fd5ec89c1ad946ee28153989f961952b9094c418dfeb1aa26e700",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/deploy/vps-ops/backup-storage.test.sh",
+      "sha256": "0af5cf77d0f834b043a249bb101559834ee081d38a84558fbe6a0246a5271257",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/ONIA_SIAT_ESTADO_HOMOLOGACION.md",
+      "sha256": "4b8729d946023596d489aebf52dc5e331050e57b55382a2f2d0b2b1a46a02d10",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "hermes-content/docs/cola/plataforma-v1.md",
+      "sha256": "ca3d5bc5f12866b35bc332f73f3be6af98c9300e9ab37ef7e32c1c569882c9cf",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "hermes-content/docs/cola/tandas-v1.json",
+      "sha256": "60e94338f1b419c1fddeb512d83913d44f68ef30cae884d2b63c497d6a21a98f",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/handoff/hermes-cal-nube-20260928.md",
+      "sha256": "c97e14de5e51795eb8c9cd1be0607274ab652e27b337e2f9da49d3bd5493a229",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/handoff/homelab-orquestacion-20260927.md",
+      "sha256": "beae77dca9c5b13eaa2f169b0664c8cca721a95a816281bdf4c0c6ebfa0c279e",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/handoff/infra-cerebro-loops.md",
+      "sha256": "ff51a43b7a8fd1a75f23d87d6440d90554ba2a7806e9942a7daef5ab4aa4b542",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/handoff/onia-v1-validacion-integrada-20260927.md",
+      "sha256": "8d760fcea00326dc89002d87c2b72df04f288ac647232c24d9965b75e11d72f7",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/handoff/revision-calendario-20260928.json",
+      "sha256": "8a07ff8e17aa56a32d1e1efff52a7b39457fd832a7951b3de6d21b3aeb9ccc32",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/handoff/revision-hermes-20260927.json",
+      "sha256": "a2552aa864fe24cce573e353c490c1ebe2f061f5470fec10f055777e7cfb2fa1",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/docs/handoff/revision-orquestacion-20260927.json",
+      "sha256": "5fdc1544d63c945ca9915dd3fcd2b4d3542c99cfa491e6aa78d10689c961f307",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/integrations/siat/README.md",
+      "sha256": "76f7143811c582b9f404bec9ddb8f38e223a7042ccfd371166db252fbbf19a5a",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "hermes-content/integrations/siat/portal-fase1-20260927.json",
+      "sha256": "7fa7c4caf3f0b49299e75bdd80dfd8101bd546f059a943f9d4b110f4b67fa562",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "hermes-content/integrations/siat/run-fase1-pdv1.sh",
+      "sha256": "15acf1d162d5bfa9239724d316b691d4dac055d927bfb15b81c21a5d7310065b",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "hermes-content/integrations/siat/run-fase1-volumen.sh",
+      "sha256": "6243d8a3384a67f1d77a3a0ff5760e93b1de9fae9c69cd82643160643b13ed64",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": false
+    },
+    {
+      "path": "hermes-content/integrations/siat/src/fase1-runner.mjs",
+      "sha256": "52ef95092cb7c59fabdc3d833c7c91b95928db19f18aadce0a15c59ffdbf1073",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "hermes-content/integrations/siat/test/fase1-runner.test.mjs",
+      "sha256": "37ea360504cb46e2be11d7df445bd9b127f7a8722d6eb8c561ca5f0ee5944c85",
+      "source": "onia-hermes-siat-codex",
+      "matchesEarlierRecordedImport": false
+    },
+    {
+      "path": "hermes-content/skills/agenda-calendario.md",
+      "sha256": "e5d066294e45c2bb6433ef583db15e1f57a7f2b28f86fe807e4d3c0c1833428e",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "hermes-content/skills/brief-diario-onia.md",
+      "sha256": "ffa03528b12bb9d6d54af9aca26faf939fee37d76d05369eac983d64bf6f9d1a",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "scripts/hermes_command_calendar.test.py",
+      "sha256": "88621c2b9506eed80709b6f25327bab61498bbed9857a74748380d2b658d0f30",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "scripts/hermes_command_center.py",
+      "sha256": "b6e1929de86f6d6e34019872d15adbfe0926078cb3d33eab569bd8129a715023",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "scripts/loops/README.md",
+      "sha256": "520c1c69c139be6c46d470cb680285d409dea9b6bb39c67c2f67e25d58870982",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "scripts/loops/revision-tanda.schema.json",
+      "sha256": "9eef10337159641ace45af78203eba8c896580d71942a35caa1cff099a25f1fe",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "scripts/loops/tandas-v1.mjs",
+      "sha256": "6e569da01b14a4501d2acbe5089749eeb948eb2b397018984bd1b1ed2ad6f37c",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "scripts/loops/tandas-v1.test.mjs",
+      "sha256": "b93362c73367aa8614f62471be3f38711f442a65543ccdaf10effb8a562ed989",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/cierre.test.ts",
+      "sha256": "4eb78e65956e1b75358246c5ff444e3f635fae3de2bd4ffa934c3f151a6a29b7",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/facturacion/page.tsx",
+      "sha256": "7c825ca4c0c8a7edd171ffaf6870be8cca2d72b98f2ce6ca98b801183787c6e1",
+      "source": "onia-hermes-v1-captacion-promesas",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/hero.test.ts",
+      "sha256": "1461d606caf975d39f7e7745e1313eb9d8468b2a3ffcecccfb895206c61a62d5",
+      "source": "onia-hermes-v1-home-corta",
+      "matchesEarlierRecordedImport": false
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/logro-fiscal-no-se-declara-completo.test.ts",
+      "sha256": "efa1648f37a09b745b4bb49a6d6dd7f077cde8505686fdb37cd43e1628ef6798",
+      "source": "onia-hermes-v1-captacion-promesas",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/no-decir-dos-veces-lo-mismo.test.ts",
+      "sha256": "32b3c61d0cdcd95e31f7bc9e734fcb7efd6882fcb700ef5fd6a5121de9477a08",
+      "source": "onia-hermes-v1-home-corta",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/page.tsx",
+      "sha256": "d393e337e50478bfbc5d058135fea760a4b069f824bd21b33c2b7c0f6642e7d7",
+      "source": "onia-hermes-v1-home-corta",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/portada.module.css",
+      "sha256": "239eac587fa07ce614332153cc85eedb27710aa9e8d29618d33b23966e3c35e2",
+      "source": "onia-hermes-v1-home-corta",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/promesa-fiscal.test.ts",
+      "sha256": "21db7682dfc90653e58e6f8d8cd5d5aeb6a61e621df457dffe696fe4647e7cf6",
+      "source": "onia-hermes-v1-captacion-promesas",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/promesa-retipeo-fiscal.test.ts",
+      "sha256": "31ba06ae36ad4c7fa1f093d45d2bb00e1fcf80493d363555cd4efa317f7e126e",
+      "source": "onia-hermes-v1-captacion-promesas",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/rubros/page.tsx",
+      "sha256": "54da76e5211addd65d5e18bd762e44eed10b3fb93cf0d16b2d67fa97d6a5896d",
+      "source": "onia-hermes-v1-captacion-promesas",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/salario-minimo.test.ts",
+      "sha256": "12943e268d142f3ad7c06c424ac20440caba3637b2d69317472125f5038e07f1",
+      "source": "onia-hermes-v1-home-corta",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/seccion-citada-no-se-tipea.test.ts",
+      "sha256": "59ffdd95eeec56f0dee999fd12dddb378c3e4640561188086de40f44b297a330",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/(sitio)/titulo-no-empieza-en-minuscula.test.ts",
+      "sha256": "0476f16ba85dde8fc367af22722f66e4ae5f8497f17b9ac464af4cf73d6f1f30",
+      "source": "onia-hermes-v1-home-corta",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/capacidad-en-la-enumeracion.test.ts",
+      "sha256": "0fdc931afb6f193eaec0370bfd072051081ba378480e971842c2513a95ae7fee",
+      "source": "integrator-or-final-review",
+      "matchesEarlierRecordedImport": null
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/app/v1/modulos/dental/page.tsx",
+      "sha256": "ef5b2e263f18a00c85db486241f063a2be70e05c12851038d312a48c34724cf2",
+      "source": "onia-hermes-v1-captacion-promesas",
+      "matchesEarlierRecordedImport": true
+    },
+    {
+      "path": "web-factory/apps/onia-platform/src/lib/siat.ts",
+      "sha256": "56ed1afc420677ccbcfdd6b3e1cbc03d3d8b57c2fa70ec7ddc700425848bb6b2",
+      "source": "onia-hermes-v1-captacion-promesas",
+      "matchesEarlierRecordedImport": true
+    }
+  ],
+  "notes": [
+    "The initial record is retained as historical provenance; it is not the final file inventory.",
+    "Source names identify the initial authoring lane, not a claim that its current worktree has identical bytes.",
+    "Final SHA256 values describe current integration bytes, including integrator fixes and documentation.",
+    "This manifest excludes itself to avoid a recursive hash; ignored QA artifacts are referenced by the reports.",
+    "No commit, push, deploy, production migration or official SIAT request is implied."
+  ]
+}

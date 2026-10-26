@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-28T21:26:38.633Z",
+  "base": "02a4eef8550503ba8676468953eab97efc0c786e",
+  "model": "gpt-5.5",
+  "effort": "medium",
+  "candidateSnapshotSha256": "098f04960ec25694482e6302922e9fbd8f0e8b2c87faaa99bba064246a6f48e5",
+  "bundleSha256": "14ea59e75adf94726e219cbcf9b90132aefc55e0243b3eaaf76f8375a022c98b",
+  "reviewOutputSha256": "8b5615fea84918eabeb4d9ca4a06758816a4cebc6cbc21efc171253e5b46e984",
+  "files": [
+    {
+      "path": "scripts/hermes_command_center.py",
+      "sha256": "b6e1929de86f6d6e34019872d15adbfe0926078cb3d33eab569bd8129a715023",
+      "bytes": 49153
+    },
+    {
+      "path": "scripts/hermes_command_calendar.test.py",
+      "sha256": "88621c2b9506eed80709b6f25327bab61498bbed9857a74748380d2b658d0f30",
+      "bytes": 5263
+    },
+    {
+      "path": "scripts/hermes_command_dentalgest.test.js",
+      "sha256": "700b5284091173b1563b2537073343b4373aa28be99c142cd9db510dde9ede51",
+      "bytes": 9452
+    },
+    {
+      "path": "hermes-content/skills/agenda-calendario.md",
+      "sha256": "e5d066294e45c2bb6433ef583db15e1f57a7f2b28f86fe807e4d3c0c1833428e",
+      "bytes": 5597
+    },
+    {
+      "path": "hermes-content/skills/brief-diario-onia.md",
+      "sha256": "ffa03528b12bb9d6d54af9aca26faf939fee37d76d05369eac983d64bf6f9d1a",
+      "bytes": 4480
+    }
+  ],
+  "review": {
+    "candidateSnapshotSha256": "098f04960ec25694482e6302922e9fbd8f0e8b2c87faaa99bba064246a6f48e5",
+    "bundleSha256": "14ea59e75adf94726e219cbcf9b90132aefc55e0243b3eaaf76f8375a022c98b",
+    "result": "no_findings",
+    "summary": "No concrete P0/P1/P2 bugs found in the included delta. The changed router paths fail closed for unverified calendar state, preserve ok=true/action/telegram_reply/calendar_verified=false, and avoid fixed-time availability claims in the reviewed calendar replies.",
+    "findings": [],
+    "limits": [
+      "Reviewed only the provided delta and the five included current source files/log summaries; no tools, commands, network, edits, models, or tests were run.",
+      "Live Telegram, provider behavior, wrapper script behavior, deployment state, cron state, and any files outside the included sources were not independently verified.",
+      "A failed or absent calendar reader remains unknown by scope; no reader/OAuth bridge was reviewed as being introduced."
+    ]
+  },
+  "validation": {
+    "calendarRegression": "9/9 PASS; original fixed-window claims and unbalanced priorities failed before the changes",
+    "dentalgestRegression": "10/10 PASS",
+    "pythonCompile": "2/2 PASS",
+    "diffCheck": "PASS; only CRLF normalization warnings",
+    "commands": [
+      "python scripts/hermes_command_calendar.test.py",
+      "node scripts/hermes_command_dentalgest.test.js"
+    ],
+    "evidence": [
+      {
+        "path": "C:\\dev\\proyectos\\.verif-tmp\\hermes-calendar-20260928\\red.log",
+        "sha256": "ef626e9fdc2b7b4385c833272bf46feec87d1a8ea9375bf7f6642a9064bb614b",
+        "bytes": 14881,
+        "summary": "\r\n----------------------------------------------------------------------\r\nRan 8 tests in 0.038s\r\n\r\nFAILED (failures=12)\r\n"
+      },
+      {
+        "path": "C:\\dev\\proyectos\\.verif-tmp\\hermes-calendar-20260928\\preferences-red.log",
+        "sha256": "1e9334746904a3633d655c22f3247154f25af4f565a5f7f1bc1897d7a06deb19",
+        "bytes": 6024,
+        "summary": "\r\n----------------------------------------------------------------------\r\nRan 9 tests in 0.242s\r\n\r\nFAILED (failures=3)\r\n"
+      },
+      {
+        "path": "C:\\dev\\proyectos\\.verif-tmp\\hermes-calendar-20260928\\green.log",
+        "sha256": "ac69fb935161d3fe187b7ee7c7c14e994a38eee1f1ff944a92582efd01ad4d2c",
+        "bytes": 1449,
+        "summary": "\r\n----------------------------------------------------------------------\r\nRan 9 tests in 0.231s\r\n\r\nOK\r\n"
+      },
+      {
+        "path": "C:\\dev\\proyectos\\.verif-tmp\\hermes-calendar-20260928\\dentalgest-regression.log",
+        "sha256": "1cad9db9b73cdd0083176b2f31aca7cf64ef80bd8cde4645bfd1c93461bf3626",
+        "bytes": 613,
+        "summary": "  ok - /tarea <texto>: POST al intake y confirma titulo → responsable\r\n  ok - /tarea con intake devolviendo 422 responde amable\r\n  ok - la ayuda lista /dentalgest y /tarea\r\n\r\n10 tests passed\r\n"
+      },
+      {
+        "path": "C:\\dev\\proyectos\\.verif-tmp\\hermes-calendar-20260928\\pycompile.log",
+        "sha256": "ed714ecbf1e76d3a1496605912bda2983d75a4f36b13f0e47a2964532e89400e",
+        "bytes": 56,
+        "summary": "py_compile: 2 archivos OK; bytecode fuera del producto\r\n"
+      },
+      {
+        "path": "C:\\dev\\proyectos\\.verif-tmp\\hermes-calendar-20260928\\diffcheck.log",
+        "sha256": "4dca8d6ff6f227b06e55b6cba0f1457cb37cf9eed92d82ef7abab51993f5b89e",
+        "bytes": 398,
+        "summary": "warning: in the working copy of 'hermes-content/skills/agenda-calendario.md', CRLF will be replaced by LF the next time Git touches it\r\nwarning: in the working copy of 'hermes-content/skills/brief-diario-onia.md', CRLF will be replaced by LF the next time Git touches it\r\nwarning: in the working copy of 'scripts/hermes_command_center.py', CRLF will be replaced by LF the next time Git touches it\r\n"
+      }
+    ]
+  },
+  "integrationReview": {
+    "sourceHashesVerified": 5,
+    "evidenceHashesVerified": 6,
+    "callerContract": "ok=true and CLI exit 0 mean the query was handled; calendar_verified=false and the reply explicitly deny verified availability.",
+    "userPreference": "Platform, clientes y marca personal, with no invented time slots.",
+    "preservedDesign": "Historical Cal business rules remain linked to ONIA_CALCOM_SELF_HOST_RUNBOOK_2026.md.",
+    "outstanding": [
+      "No Calendar reader introduced",
+      "No live cron prompts, VPS service or n8n workflows changed",
+      "No live Telegram delivery test"
+    ]
+  },
+  "releaseApproved": false
+}

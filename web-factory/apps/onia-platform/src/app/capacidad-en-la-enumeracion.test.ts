@@ -113,6 +113,12 @@ const ACOTADAS: ReadonlyArray<{
  */
 const EXENTOS: ReadonlyArray<{ archivo: string; fragmento: string; motivo: string }> = [
   {
+    archivo: join("app", "(sitio)", "rubros", "page.tsx"),
+    fragmento: "Clientes, agenda, servicios y cobros.",
+    motivo:
+      "es la descripción de la tarjeta Servicios, bajo su propio h3; ese rubro sí incluye agenda, no es una promesa para todos los rubros",
+  },
+  {
     archivo: join("lib", "proof.ts"),
     fragmento: "Su página oficial no menciona agenda, ficha, recordatorios, caja ni permisos",
     motivo:
