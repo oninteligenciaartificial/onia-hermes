@@ -4,7 +4,7 @@ const { connectSsh, exec } = require('./lib/ssh');
 const fs = require('fs');
 const path = require('path');
 
-const scriptPath = path.resolve(__dirname, '../hermes-scripts/mara-voice-merge.js');
+const scriptPath = path.resolve(__dirname, './mara-voice-merge.js');
 const script = fs.readFileSync(scriptPath, 'utf8');
 const b64 = Buffer.from(script).toString('base64');
 
