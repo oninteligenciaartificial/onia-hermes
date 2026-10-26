@@ -84,7 +84,11 @@ Cuando tiene que parar, empieza su entrega con `BLOQUEADO:` y el motivo.
 - Antes de editar, desplegar, tocar secretos o cambiar infraestructura: un plan breve. No se despliega sin
   validación local.
 - No se tocan archivos ni servicios de otra sesión sin coordinar. La infra (VPS, n8n, Supabase) tiene un solo dueño
-  a la vez. Quién es dueño de qué carpeta lo dice `COORDINATION_MANIFEST.md`; se lee la sección del carril.
+  a la vez. Quién es dueño de qué carpeta:
+  - los carriles de la orquesta, en `scripts/orquesta/carriles.json` (repo y salida de cada uno);
+  - una sesión abierta, en su handoff;
+  - el resto, en `COORDINATION_MANIFEST.md` (solo la sección de la carpeta). Su encabezado sobre quién orquesta es
+    anterior a este archivo.
 - Se termina lo autorizado: hacerlo, comprobarlo y dejar su estado, o anotar el bloqueo concreto. Un bloqueo no
   frena otro frente que también esté autorizado.
 - Un encargo delegado lleva:
@@ -97,7 +101,12 @@ Cuando tiene que parar, empieza su entrega con `BLOQUEADO:` y el motivo.
   - la entrega: PR más un recibo con los comandos y su salida;
   - un revisor distinto del autor.
 
-  Formato del issue: `scripts/orquesta/README.md` §«Cómo se pide una tarea».
+  El issue no lleva todo eso como cabecera. Según `scripts/orquesta/README.md`:
+  - la cabecera solo admite `carril`, `nivel`, `donde`, `check`, `salida`, `base`, `ok` y `motor`;
+  - el modelo sale de `nivel`;
+  - el worktree y la rama los pone la orquesta.
+
+  Lo demás va en el texto. Hermes de la PC sigue la sección «Cómo carga Hermes de la PC».
 - Una sola vía de despacho por tarea. El mismo carril va en secuencia; carriles distintos van en paralelo. Para
   editar hacen falta worktree y rama propios; una revisión de solo lectura no los necesita.
 - Ante un tope de gasto o de cupo se baja el consumo, no se sube el techo.
@@ -126,8 +135,9 @@ Cuando tiene que parar, empieza su entrega con `BLOQUEADO:` y el motivo.
 
 ## 6. Git y publicación
 
-- `main` avanza por PR revisado y siempre compila. La única excepción es la sesión principal de Claude con su marca
-  (`CLAUDE.md` §«Git — auto-sync»). Si un archivo nuevo importa otro nuevo, van los dos o ninguno. Un merge con
+- `main` avanza por PR revisado y siempre compila. La excepción es la sesión principal de Claude con su marca
+  (`CLAUDE.md` §«Git — auto-sync»). El hook nombra también al integrador `onia-cola`, que está apagado desde el
+  27-sep. Si un archivo nuevo importa otro nuevo, van los dos o ninguno. Un merge con
   conflictos no se deja abierto.
 - Commits convencionales (`feat:`, `fix:`, `docs:`, `chore:`) que explican el porqué.
 - Nunca se suben `.env`, claves, `node_modules` ni dumps privados. Un secreto expuesto se rota.
@@ -138,8 +148,9 @@ Cuando tiene que parar, empieza su entrega con `BLOQUEADO:` y el motivo.
   cambio en pantalla, docs, migraciones con backup y rollback, e infraestructura revisada. Lo visible espera su OK
   (§3). Detalle en `CLAUDE.md` §«Qué se publica sin preguntar».
 - Codex despachado entrega a quien lo lanzó. Si ve una opción mejor, escribe «PARA QUIEN ME LANZÓ: …» con la
-  alternativa y el porqué. Para continuar la 1.0: `hermes-content/docs/handoff/codex-continuar-1.0.md` («EMPEZÁ
-  ACÁ»).
+  alternativa y el porqué.
+- Trabajo de la 1.0: se pide como issue `carril:plataforma`. `hermes-content/docs/handoff/codex-continuar-1.0.md`
+  es contexto del 29-sep: su cola, sus órdenes de merge y sus reglas de Git ya no valen.
 
 ## 7. Trato, negocio y contenido
 

@@ -86,9 +86,14 @@
    - el de la PC, con `node scripts/orquesta/cargar-issue.mjs` (primero con `--dry`, para mostrárselo);
    - el del VPS, con `scripts/loops/orquesta-hermes.sh`.
 
-   El issue lleva `orquesta`, `carril:<área>`, `origen:hermes` y `necesita-ok`.
+   El de la PC pone siempre `orquesta`, `carril:<área>`, `origen:hermes` y `necesita-ok`. El del VPS hace lo mismo,
+   salvo `nube` con `check: urls`, que hoy carga sin `necesita-ok`; eso se corrige en el PR del paso 5 de §7.
 3. Sergio Urcullo lo suelta sacándole `necesita-ok`, incluso desde el celular. El workflow no escucha cuando se saca
-   un label, así que arranca en la próxima pasada (hasta 3 h) o antes, si comenta el issue.
+   un label:
+   - una tarea de la nube arranca en la próxima pasada de Actions (cada 3 h, de 8 a 23) o al comentar el issue;
+   - una de la PC arranca en la próxima pasada de la tarea programada (cada 3 h, de 8 a 23, con la PC prendida).
+
+   El comentario le llega al trabajador como indicación.
 4. `scripts/orquesta/orquesta.mjs` lo toma:
    - marca, comunidad e investigación corren en la nube (GitHub Actions);
    - plataforma y video corren en la PC (tarea programada).
@@ -119,7 +124,7 @@ Nada más es una vía de despacho: ni Orca Orchestration, ni `.hermes/plans`, ni
 | Sergio Urcullo en la TUI de Hermes | Planificar, cargar issues y verificar entregas |
 | Sergio Urcullo por Telegram | Hermes del VPS: resumen, cierre, calendario, dictar una tarea |
 | Etiquetar o comentar un issue, y cada 3 h de 8 a 23 (La Paz) | La orquesta en Actions |
-| Tarea programada «ONIA Orquesta», cada 3 h de 8 a 23 con la PC prendida (medida el 26-oct: estado Listo) | La orquesta en la PC |
+| Tarea programada «ONIA Orquesta», cada 3 h de 8 a 23 con la PC prendida. El 26-oct estaba en estado Listo, pero corre desde el checkout principal sucio (§7, paso 0) | La orquesta en la PC |
 | Sergio Urcullo en Claude Code | Trabajo directo e integración por PR |
 | Workflow `hermes-jarvis` (`diagnostico`, `aplicar`, `revertir`) | Cambios en el VPS |
 
@@ -127,6 +132,12 @@ Nada más es una vía de despacho: ni Orca Orchestration, ni `.hermes/plans`, ni
 
 Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
 
+0. **Antes del merge, con su OK:** pasar a ramas el trabajo sin commitear del checkout principal
+   (`C:/dev/proyectos/onia-hermes`, 51 cambios, paso B2 de la auditoría) y dejarlo en `main` limpio. Hay que
+   reinstalar además la tarea programada con el comando de `scripts/orquesta/README.md` §«Correr». Si no:
+   - la tarea corre la pasada de la PC desde ese checkout;
+   - su `git pull` falla por esos cambios;
+   - con el `&` actual sigue igual sobre el código viejo y el error no llega al log.
 1. Mergear el PR. Lleva `AGENTS.md`, este mapa, el SOUL y la config de Hermes de la PC, el cargador de issues y el
    `AGENTS.global.md` de Codex.
 2. Crear el worktree base `E:/onia-wt/hermes-base`. Hermes se lanza desde ahí, nunca desde el checkout principal.
@@ -139,8 +150,10 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
    - `/context` muestra `AGENTS.md`;
    - `git -C . push` sale bloqueado sin preguntar;
    - `--dry` del cargador muestra `necesita-ok`;
-   - `python -I hermes-content/deploy/hermes-pc/probar-deny.py hermes-content/deploy/hermes-pc/config.onia.yaml` da
-     0 fallas. Se vuelve a correr en cada actualización de Hermes.
+   - `probar-deny.py --vivo`, corrido con el python de Hermes (el comando está en la cabecera del script), da
+     «mismo approvals.deny» y 0 fallas. Hoy falla a propósito, porque el `config.yaml` vivo no tiene deny. En modo
+     repo, sin `--vivo`, hoy da 0 fallas: 173 comandos que tienen que bloquearse y 41 lecturas que tienen que pasar.
+     Se vuelve a correr en cada actualización de Hermes.
 4. Copiar `AGENTS.global.md` a `~/.codex/AGENTS.md`.
 5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. **Hoy `aplicar` no puede hacerlo**: su
    control previo falla si el SOUL no trae `## Planificar la orquesta` (`aplicar.sh:309-314`), y además crea ese
@@ -198,7 +211,8 @@ se pueda recuperar. La evidencia está en las secciones 3, 4 y 6 de la auditorí
 | Descripciones de skills que digan cuándo usarlas en los primeros 57 caracteres | El índice de Hermes corta a los 60 |
 | Una prueba que falle si `.agents/skills` se aparta de `.claude/skills` (ignorando CR), o borrar las copias. Ojo: `media-use` la usa `editor-videos` | Que Codex no lea otra versión |
 | Una barrera dura sobre `main` | GitHub la cobra en repos privados: el 26-oct la API respondió «Upgrade to GitHub Pro». Mientras tanto, la barrera es local: el `deny` de Hermes y Codex sin Git. El `deny` no resuelve alias ni variables (`$g='git'; & $g push` pasa), así que no es un sandbox |
-| Una cuenta de GitHub aparte para Hermes | Hoy carga issues con el token de Sergio Urcullo y la orquesta le cree todo |
+| **Una cuenta de GitHub aparte para Hermes, con un token que solo lea el código y escriba issues** | Es la única barrera dura. El `deny` frena errores del modelo, no a un modelo inyectado: un script propio (`node x.js`, `bash x.sh`) corre sin preguntar y adentro puede hacer `git push` con las credenciales de Sergio Urcullo. Además, la orquesta le cree todo lo que firma su cuenta |
+| Que el cargador rechace las definiciones de referencia de Markdown (`[x]: …` al principio de una línea) | GitHub las esconde igual que el HTML: el trabajador las lee y Sergio Urcullo no las ve |
 | Medir si los hijos de Hermes reciben `AGENTS.md` y heredan `approvals.deny` | 21 de 30 prompts de sistema medidos no traían `AGENTS.md` |
 | Qué shell usa la terminal de Hermes en la PC | Decide si `cmd /c git push` se le escapa al `deny` |
 | Que la prueba de higiene de docs falle con un doc fechado en la raíz sin aviso | Que no vuelva a acumularse historia leída como si fuera vigente |

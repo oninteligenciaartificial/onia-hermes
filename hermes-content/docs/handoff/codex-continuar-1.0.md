@@ -1,5 +1,7 @@
 # Handoff — la 1.0 de Onia (Codex → Claude, 28/29-sep)
 
+> 🗄️ **Contexto del 29-sep, no reglas (26-oct-2026).** Su cola, sus órdenes de merge y sus reglas de Git ya no valen: el trabajo de la 1.0 se pide como issue `carril:plataforma` y Codex no hace Git (`AGENTS.md` §1 y §6).
+
 > ## 🧭 EMPEZÁ ACÁ (Claude, 30-sep-2026 madrugada) — cierre del día; los bloques de abajo son historia
 >
 > **1. Objetivo.** Publicar la 1.0 usable y vendible (5 rubros) con el OK de Sergio Urcullo, y seguir

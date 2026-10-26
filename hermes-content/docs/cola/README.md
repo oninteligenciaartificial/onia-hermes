@@ -1,5 +1,7 @@
 # Las colas — un carril, un objetivo, una pantalla que lo prueba
 
+> 🗄️ **HISTORIA desde el 26-oct-2026.** Ya no hay madre ni colas por carril: la cola única son los issues `orquesta` (`AGENTS.md` §1, `hermes-content/docs/ONIA_HARNESS.md`). Lo de abajo no es un encargo ni da permisos.
+
 > **Por qué existe esta carpeta.** El 2026-08-31 se midió: **349 commits repartidos en 5 ramas
 > y ninguno en `main`**. El trabajo estaba hecho y no llegaba a ningún lado. La sensación de
 > "no avanzamos" no venía de los loops ni de las sesiones: venía de que nada converge.

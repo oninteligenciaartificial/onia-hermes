@@ -1,5 +1,7 @@
 # Textos de arranque: qué se le pega a cada sesión nueva
 
+> 🗄️ **HISTORIA desde el 26-oct-2026.** Ya no hay madre ni colas por carril: la cola única son los issues `orquesta` (`AGENTS.md` §1, `hermes-content/docs/ONIA_HARNESS.md`). Lo de abajo no es un encargo ni da permisos.
+
 Un bloque por sesión: se copia entero como primer mensaje. Cada sesión retoma desde su handoff y el resumen que dejó la
 anterior, sin releer conversaciones viejas (el 95 % de los tokens se iba en releer). Escrito el 5-oct, en el relevo
 de madres.

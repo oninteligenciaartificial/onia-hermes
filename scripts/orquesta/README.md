@@ -122,11 +122,21 @@ gh workflow run orquesta.yml -R oninteligenciaartificial/onia-hermes   # una pas
 ```
 
 Sin `--donde`, la PC es `pc` y Actions es `nube` (`GITHUB_ACTIONS`). Automático en la PC (Windows,
-cada 3 h de 8 a 23 con la PC prendida):
+cada 3 h de 8 a 23 con la PC prendida). Primero trae `main`; si el pull falla, esa pasada no corre y el motivo queda
+en `pasadas.log`:
 
 ```powershell
-schtasks /Create /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 180 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && set ORQUESTA_TELEGRAM=1 && node scripts\orquesta\orquesta.mjs --donde pc >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
+schtasks /Create /F /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 180 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && (git pull --ff-only -q origin main && set ORQUESTA_TELEGRAM=1&& node scripts\orquesta\orquesta.mjs --donde pc) >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
 ```
+
+`=1&&` va pegado a propósito: con un espacio antes de `&&`, cmd guarda «1 » (medido) y `orquesta.mjs`, que pide
+`=== '1'`, no manda el resumen a Telegram.
+
+**La tarea instalada hoy hay que reinstalarla** (medido el 26-oct con `schtasks /Query /TN "ONIA Orquesta" /V /FO LIST`).
+Corre `… && git pull --ff-only -q origin main & set ORQUESTA_TELEGRAM=1 && node …`: con `&`, si el pull falla (el
+checkout principal con cambios sin commitear) la orquesta corre igual sobre código viejo y el error no llega al log;
+y el espacio antes de `&&` la deja sin Telegram. La reinstala Sergio Urcullo pegando el comando de arriba en una
+PowerShell (`/F` reemplaza la tarea existente).
 
 La nube corre sola: al etiquetar o comentar un issue de la orquesta y cada 3 h de 8 a 23 (La Paz).
 Necesita el secreto `CLAUDE_CODE_OAUTH_TOKEN` (lo crea Sergio Urcullo con `claude setup-token`).
@@ -141,14 +151,14 @@ cuenta de Sergio Urcullo, que está en `autores`) y su `check: cmd …` corre co
 port en Node de `--crear` de `scripts/loops/orquesta-hermes.sh` (el del VPS, que no corre en Windows).
 
 ```powershell
-Get-Content -Encoding UTF8 pedido.txt | node scripts/orquesta/cargar-issue.mjs --titulo "Comparar precios de Dapta y Lety"
-Get-Content -Encoding UTF8 pedido.txt | node scripts/orquesta/cargar-issue.mjs --titulo "Comparar precios de Dapta y Lety" --dry
-node scripts/orquesta/cargar-issue.mjs --archivo pedido.txt --titulo "Comparar precios de Dapta y Lety"   # lo más seguro
+node scripts/orquesta/cargar-issue.mjs --archivo pedido.txt --titulo "Comparar precios de Dapta y Lety" --dry   # primero, para mostrárselo
+node scripts/orquesta/cargar-issue.mjs --archivo pedido.txt --titulo "Comparar precios de Dapta y Lety"
 ```
 
-Medido el 26-oct en Windows PowerShell 5.1: sin `-Encoding UTF8`, `Get-Content` lee el archivo como ANSI y llega
-«acciÃ³n» (el script lo rechaza); y con el `$OutputEncoding` de fábrica (ASCII, sin el perfil) las tildes llegan como
-«?», y eso no se puede detectar. `--archivo` lee el UTF-8 directo y evita las dos.
+El pedido entra **solo por `--archivo`**, en UTF-8 (con o sin BOM); la entrada estándar no se lee (sale 64). Medido el
+26-oct en Windows PowerShell 5.1: `Get-Content pedido.txt | node …` lee el archivo como ANSI y llega «acciÃ³n», y con el
+`$OutputEncoding` de fábrica (ASCII) cada tilde llega como «?», que no se puede detectar: la tarea se cargaba
+desfigurada con salida 0. Un archivo que no está en UTF-8 trae U+FFFD y se rechaza.
 
 `pedido.txt`: sin `--titulo`, la primera línea es el título (con o sin `titulo:` delante, como el formato del VPS).
 Después, la cabecera y el texto:
@@ -169,11 +179,16 @@ obligatorios; `check` obligatorio y solo `urls`, `cmd npm run test:<x>`, `cmd np
 sin un caracter de shell, sin opciones, sin `..` ni unidad (`C:`); `salida` solo en `hermes-content/docs/` (`docs/` en
 plataforma); `base` un nombre de rama; `ok: sergio`; `motor` claude|codex; nada de `modelo:` ni campos desconocidos;
 título de una línea y hasta 120 caracteres; texto de hasta 4000 con `Hecho cuando:`; sin caracteres invisibles, de
-control ni letras de otros alfabetos. Siempre pone `orquesta`, `carril:<x>`, `origen:hermes` y `necesita-ok`
-(`necesita-ok: no` se acepta y no cambia nada). Tope: 10 issues `origen:hermes` por día de La Paz, contados en GitHub
-(entran las del VPS); si no puede contar, no crea. Rechaza la misma tarea (título, carril y texto) de las últimas 24 h.
-Llama a `gh` sin shell, con argumentos en array y el cuerpo por `--body-file`; si el issue quedara sin `necesita-ok`,
-lo cierra. `--dry` muestra título, labels y cuerpo sin llamar a `gh` (no mira el tope).
+control ni letras de otros alfabetos; sin HTML ni comentarios `<!-- -->` en título ni texto (un `<` pegado a una
+letra, `/`, `!` o `?`), porque GitHub los esconde y el trabajador los lee. Siempre pone `orquesta`, `carril:<x>`,
+`origen:hermes` y `necesita-ok` (`necesita-ok: no` se acepta y no cambia nada). Tope: 10 issues `origen:hermes` por
+día de La Paz, contados en GitHub (entran las del VPS); si no puede contar, no crea. Rechaza la misma tarea (título,
+carril y texto) de las últimas 24 h. Una carga a la vez: contar, crear y confirmar los labels van dentro de un
+candado (`%TEMP%\onia-cargar-issue.lock`, creado en exclusiva); con otra carga en curso (candado de menos de 2 min)
+sale 75 sin hacer nada, y uno más viejo se toma (la carga que lo tenía murió). Llama a `gh` sin shell, con argumentos
+en array y el cuerpo por `--body-file`; si el issue quedara sin `necesita-ok`, lo cierra. `--dry` muestra título,
+labels y cuerpo sin llamar a `gh` (no mira el tope ni toma el candado).
 
-Salidas: 0 cargada · 64 uso (el pedido como argumento, por ejemplo) · 65 pedido inválido · 75 tope o repetida ·
-1 `gh` falló o no se sabe si se cargó (lo dice). Pruebas: `node --test scripts/orquesta/cargar-issue.test.mjs`.
+Salidas: 0 cargada · 64 uso (sin `--archivo` o el pedido como argumento, por ejemplo) · 65 pedido inválido · 75 tope,
+repetida u otra carga en curso · 1 `gh` falló o no se sabe si se cargó (lo dice). Pruebas:
+`node --test scripts/orquesta/cargar-issue.test.mjs`.

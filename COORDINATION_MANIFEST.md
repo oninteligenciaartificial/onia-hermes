@@ -1,5 +1,7 @@
 # Hermes Coordination Manifest
 
+> ⚠️ **26-oct-2026:** quién orquesta lo dice `AGENTS.md` §1 (planifica el Hermes de la PC, reparte `scripts/orquesta/`); lo de abajo sobre la madre es historia. Este archivo sigue valiendo solo para la propiedad de carpetas.
+
 > **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,
 > no inventario vivo ni permiso para reactivar sesiones. La madre Claude local
 > sustituye a «Control» como orquestadora. Método: `equipo-de-agentes` y

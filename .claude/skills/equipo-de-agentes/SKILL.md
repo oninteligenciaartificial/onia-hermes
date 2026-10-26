@@ -31,8 +31,13 @@ acá: si cambia, cambia allá. Lo que importa para delegar:
   `hermes-content/docs/AI_MODEL_ROUTING_2026.md`.
 - Una sola vía por tarea. Hay dos:
   - **La orquesta**, por defecto. Issue con el formato de `scripts/orquesta/README.md` §«Cómo se pide una tarea».
-    Si lo carga Hermes, siempre con `origen:hermes` y `necesita-ok`; Sergio Urcullo lo suelta sacando el label. Lo
-    visible lleva `ok: sergio`.
+    El modelo sale de `nivel`; el worktree y la rama los pone la orquesta. Lo visible lleva `ok: sergio`.
+    - Hermes de la PC carga solo con `scripts/orquesta/cargar-issue.mjs`, siempre con `origen:hermes` y
+      `necesita-ok` (README §«Cómo carga Hermes de la PC»).
+    - El del VPS deja sin `necesita-ok` lo de `nube` con `check: urls`, hasta el cambio del paso 5 de
+      `ONIA_HARNESS.md` §7.
+
+    Sergio Urcullo suelta la tarea sacándole el label.
   - **Codex lanzado desde la sesión principal**, para la 1.0 y la integración:
     `bash scripts/codex-tarea.sh <tarea.md> <carpeta> [modelo] [esfuerzo]`, en background y desde el worktree del
     encargo. `resume` toma el directorio actual: hacer `cd` antes. `revisar <carpeta> <rama-base>` pide la revisión
@@ -70,7 +75,8 @@ acá: si cambia, cambia allá. Lo que importa para delegar:
 ## 4. Concurrencia
 
 - Los cupos son los de `scripts/orquesta/carriles.json`: `paralelo: 3` (tareas a la vez por pasada, la más vieja de
-  cada carril) y `minutos_max: 40` por tarea. Hermes carga como máximo 10 issues por día.
+  cada carril) y `minutos_max: 40` por tarea. Cada Hermes carga como máximo 10 issues por día: el de la PC
+  cuenta también los del VPS (en GitHub); el del VPS cuenta solo los suyos.
 - El mismo carril o los mismos archivos van en secuencia; carriles distintos, en paralelo. Para editar hacen falta
   worktree y rama propios.
 - Sin cupo (Max, Codex o tokens) se baja el consumo, no se sube el techo. La orquesta suelta la tarea sin gastar el

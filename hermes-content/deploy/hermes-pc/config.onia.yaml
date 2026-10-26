@@ -3,11 +3,15 @@
 # (handoff/hermes-local.md). (P) = la clave sale de la documentación de Hermes y no se probó en vivo.
 # Sin secretos: las llaves viven en .env y auth.json de esa carpeta, nunca acá.
 #
-# approvals.deny se probó el 26-oct contra la lógica real de Hermes con probar-deny.py (en esta carpeta; 0 fallas).
-# Se vuelve a correr después de cada actualización de Hermes. Cómo compara (_deny_command_variants + fnmatch, de
-# tools/approval_detection.py y approval_floors.py): el glob se compara sin mayúsculas contra el comando entero
-# y contra cada ejecutable que aparezca (;, &&, $(...), bash -c). NO resuelve variables ni alias
-# ($g='git'; & $g push pasa), y deny no es un sandbox (security.md:182-184). Por eso además:
+# approvals.deny se prueba con probar-deny.py (en esta carpeta), que usa la función real de Hermes
+# (tools/approval_floors.py, _match_user_deny_rule) y su parser de YAML; 26-oct: 173 casos a bloquear y 41 lecturas
+# que pasan, 0 fallas. Se corre después de cada cambio acá y de cada actualización de Hermes, desde la raíz del repo:
+#   $py = (Get-Content "$env:LOCALAPPDATA\hermes\installs\*\facts.json" -Raw | ConvertFrom-Json).packages.venv.environment + '\Scripts\python.exe'
+#   & $py -I hermes-content/deploy/hermes-pc/probar-deny.py hermes-content/deploy/hermes-pc/config.onia.yaml
+# Con --vivo al final compara con el config.yaml que usa Hermes y falla si su deny no es este (el 26-oct falla: allá
+# no hay deny). Cómo compara Hermes: sin mayúsculas, el comando entero y cada ejecutable sin su ruta (;, &&, |,
+# $(...), bash -c, env, nohup). Corre en Git Bash, no mira dentro de cmd ni de PowerShell, no resuelve variables ni
+# alias, ni lo que haga un script (node x.js, python -c), y deny no es un sandbox (security.md:182-184). Por eso además:
 # - sin execute_code ni scripts con -e/-c en el allowlist (en modo manual piden aprobación);
 # - HERMES_WRITE_SAFE_ROOT (variable de usuario de Windows, separador ;) limita write_file y patch a
 #   E:\onia-wt\hermes-base\hermes-content\docs\handoff y %LOCALAPPDATA%\hermes. Lo de la terminal
@@ -25,7 +29,8 @@ approvals:
   mode: manual                           # (P) es el default (approval.py:253); se fija para que --yolo no quede implícito
   timeout: 500
   deny:
-    # git que escribe, también con opciones globales (git -C x push, git -c a=b push) y con git.exe por ruta
+    # git que escribe, publica o borra, también con opciones globales (git -C x push, git -c a=b push). Hermes compara
+    # además el nombre del ejecutable sin su ruta, así que "git*" cubre git.exe y "C:\...\git.exe"
     - "git* push*"
     - "git* commit*"
     - "git* merge"
@@ -35,58 +40,129 @@ approvals:
     - "git* cherry-pick*"
     - "git* revert*"
     - "git* am *"
+    - "git* apply *"
     - "git* update-ref*"
     - "git* tag *"
     - "git* reset*"
-    - "git* checkout -- *"
+    - "git* checkout*"                   # también checkout -b y checkout -- .
+    - "git* switch*"
     - "git* restore*"
     - "git* clean*"
     - "git* stash*"
-    - "git* branch -d*"
-    - "git* branch -D*"
+    - "git* rm *"
+    - "git* branch -d*"                  # sin mayúsculas: cubre -D
+    - "git* branch --delete*"
+    - "git* worktree add*"
+    - "git* worktree remove*"
     - "git* credential*"
-    - "*git.exe* push*"
-    - "*git.exe* commit*"
-    - "powershell* -c*git*"              # git dentro de otra shell: deny no mira adentro de las comillas
-    - "pwsh* -c*git*"
-    - "cmd* /c*git*"
-    # GitHub: cargar issues va solo por scripts/orquesta/cargar-issue.mjs; nada de aprobar, soltar, mergear ni despachar
-    - "gh issue create*"
-    - "gh issue edit*"
-    - "gh issue comment*"
-    - "gh issue close*"
-    - "gh issue reopen*"
-    - "gh issue delete*"
-    - "gh issue transfer*"
-    - "gh pr merge*"
-    - "gh pr review*"
-    - "gh pr edit*"
-    - "gh pr create*"
-    - "gh pr comment*"
-    - "gh pr ready*"
-    - "gh pr close*"
-    - "gh label create*"                 # no gh label*: bloquearía gh label list
-    - "gh label edit*"
-    - "gh label delete*"
-    - "gh label clone*"
-    - "gh api*"
-    - "gh workflow*"
-    - "gh run rerun*"
-    - "gh run cancel*"
-    - "gh secret*"
-    - "gh variable*"
-    - "gh auth token*"                   # no gh auth*: bloquearía gh auth status
-    - "gh auth refresh*"
-    - "gh alias*"
-    - "gh extension*"
+    - "git* send-email*"
+    - "git* *alias.*"                    # git -c alias.p=push p o git config alias.p push saltarían todo lo de arriba
+    # el ejecutable escondido: en una variable o sustitución ($x push, "$x" push, $(which gh) ...), por ruta de Windows
+    # (Hermes le borra las \ y ya no ve el nombre: "C:\...\gh.exe" ...), o pasado a xargs, find -exec o eval
+    - "$*"
+    - "?:*"
+    - "xargs*"
+    - "find* -exec*"
+    - "eval *"
+    # otra shell adentro: Hermes corre en Git Bash y mira dentro de bash -c pero no de cmd ni de PowerShell
+    # (cmd //c, /k, PowerShell posicional, -enc, ('gi'+'t')), así que esas se cierran enteras
+    - "cmd*"
+    - "powershell*"
+    - "pwsh*"
+    # GitHub: cargar issues va solo por scripts/orquesta/cargar-issue.mjs. "gh*" cubre gh.exe, la ruta completa y las
+    # opciones globales delante (gh -R x issue edit); "gh* issue -*" cubre las opciones entre el grupo y la acción
+    # (gh issue -R x edit): para leer, las opciones van después de la acción (gh issue view 1 -R x)
+    - "gh* issue -*"
+    - "gh* issue create*"
+    - "gh* issue new*"
+    - "gh* issue edit*"
+    - "gh* issue comment*"
+    - "gh* issue close*"
+    - "gh* issue reopen*"
+    - "gh* issue delete*"
+    - "gh* issue transfer*"
+    - "gh* issue develop*"
+    - "gh* issue pin*"
+    - "gh* issue unpin*"
+    - "gh* issue lock*"
+    - "gh* issue unlock*"
+    - "gh* pr -*"
+    - "gh* pr create*"
+    - "gh* pr new*"
+    - "gh* pr merge*"
+    - "gh* pr review*"
+    - "gh* pr edit*"
+    - "gh* pr comment*"
+    - "gh* pr ready*"
+    - "gh* pr close*"
+    - "gh* pr reopen*"
+    - "gh* pr revert*"
+    - "gh* pr lock*"
+    - "gh* pr unlock*"
+    - "gh* pr update-branch*"
+    - "gh* pr checkout*"
+    - "gh* co *"                         # alias de gh pr checkout (existe en la PC); cubre gh pr co
+    - "gh* repo -*"
+    - "gh* repo create*"
+    - "gh* repo new*"
+    - "gh* repo edit*"
+    - "gh* repo archive*"
+    - "gh* repo unarchive*"
+    - "gh* repo rename*"
+    - "gh* repo sync*"
+    - "gh* repo deploy-key*"
+    - "gh* repo delete*"
+    - "gh* repo fork*"
+    - "gh* repo autolink*"
+    - "gh* label -*"
+    - "gh* label create*"                # no gh* label*: bloquearía gh label list
+    - "gh* label edit*"
+    - "gh* label delete*"
+    - "gh* label clone*"
+    - "gh* run -*"
+    - "gh* run rerun*"
+    - "gh* run cancel*"
+    - "gh* run delete*"
+    - "gh* auth -*"
+    - "gh* auth status *"                # con -t o --show-token imprime el token; gh auth status solo, pasa
+    - "gh* auth token*"
+    - "gh* auth refresh*"
+    - "gh* auth login*"
+    - "gh* auth logout*"
+    - "gh* auth switch*"
+    - "gh* auth setup-git*"
+    - "gh* cache delete*"
+    - "gh* config set*"
+    - "gh* api*"
+    - "gh* workflow*"
+    - "gh* secret*"
+    - "gh* variable*"
+    - "gh* gist*"
+    - "gh* release*"
+    - "gh* agent*"                       # agent-task y sus alias agent, agents
+    - "gh* codespace*"
+    - "gh* cs *"
+    - "gh* ssh-key*"
+    - "gh* gpg-key*"
+    - "gh* project *"
+    - "gh* copilot*"
+    - "gh* alias*"
+    - "gh* ext*"                         # extension, extensions, ext
     - "*api.github.com*"
-    # otros agentes, pasadas de la orquesta y el VPS
-    - "claude *"
-    - "codex *"
+    # otros agentes, pasadas de la orquesta, tareas programadas y el VPS
+    - "claude*"                          # claude, claude.exe, claude.cmd y por ruta
+    - "codex*"
+    - "*claude-code*"
+    - "*openai*codex*"                   # @openai/codex en npx o por ruta (con / o con barra invertida)
+    - "*npx*claude*"
+    - "*npx*codex*"
+    - "start-process*"
+    - "saps *"
+    - "start *"
     - "*orquesta.mjs*"
     - "*codex-tarea*"
     - "schtasks*"
-    - "start-scheduledtask*"
+    - "*-scheduledtask*"                 # Register, Set, Enable, Start, New...
     - "ssh*"
     - "scp*"
     - "sftp*"

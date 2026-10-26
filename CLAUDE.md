@@ -680,8 +680,11 @@ Detalle operativo: skills `carruseles-onia` y `ugc-empresas-higgsfield`.
 - Cómo se ve un video, se transcribe, se corta, se subtitula y se rinde →
   **skills `ver-videos` y `editor-videos`** (HyperFrames vive en el repo,
   `.claude/skills/hyperframes*` y `.agents/skills/`, restaurado el 2026-10-02 porque con la
-  copia global los archivos dejaron de editarse como quiere Sergio Urcullo; la del repo gana
-  sobre la global: revisarlo ANTES de codear video).
+  copia global los archivos dejaron de editarse como quiere Sergio Urcullo: revisarlo ANTES
+  de codear video). ⚠️ **Corregido el 26-oct:** acá decía que la del repo gana sobre la global, y es al revés. En
+  Claude Code, con el mismo nombre gana la PERSONAL (`~/.claude/skills`). Se midió en una sesión del repo: la
+  descripción cargada de `hyperframes` era la de la copia personal. Hasta archivar las personales que difieren
+  (`ONIA_HARNESS.md` §8), un arreglo en la copia del repo no tiene efecto en la PC.
 - **Sacar el PROMPT de una imagen o un video de referencia → skill `sacar-prompt`.**
   Distingue **recuperar** (está en pantalla: se lee) de **reconstruir** (se escribe uno
   parecido, y se dice que lo es). Regla de entrada: **si el video habla es UGC, si

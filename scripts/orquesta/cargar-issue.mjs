@@ -9,18 +9,20 @@
 // validaciones, salvo a propósito: `necesita-ok` va SIEMPRE, los carriles salen de carriles.json y el tope y
 // las repetidas se cuentan en GitHub (no en un registro local).
 //
-// Uso (el pedido entra SOLO por la entrada estándar o por --archivo, nunca como argumento):
-//   Get-Content pedido.txt | node scripts/orquesta/cargar-issue.mjs --titulo "Título"
+// Uso (el pedido entra SOLO por --archivo, en UTF-8; nunca como argumento ni por la entrada estándar):
 //   node scripts/orquesta/cargar-issue.mjs --archivo pedido.txt [--titulo "Título"] [--dry]
+// La entrada estándar no se lee: en Windows PowerShell 5.1 la tubería cambia cada tilde por «?» (con el
+// $OutputEncoding de fábrica) y eso no se puede detectar; la tarea se cargaba desfigurada con salida 0.
 // Sin --titulo, la primera línea del pedido es el título («titulo:» delante es opcional). Formato completo:
 // scripts/orquesta/README.md §«Cómo carga Hermes de la PC (26-oct)».
 //
-// Salidas: 0 cargada (o --dry) · 64 uso · 65 pedido inválido · 75 tope del día o repetida · 1 gh falló o no se sabe.
+// Salidas: 0 cargada (o --dry) · 64 uso · 65 pedido inválido · 75 tope del día, repetida u otra carga en curso
+// · 1 gh falló o no se sabe.
 import { execFile } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const CONF = JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8'));
@@ -31,10 +33,12 @@ const PERMITIDOS = ['carril', 'nivel', 'donde', 'check', 'necesita-ok', 'motor',
 const OBLIGATORIOS = ['carril', 'nivel', 'donde', 'check'];
 const ORDEN = ['nivel', 'check', 'motor', 'donde', 'salida', 'base', 'ok']; // cabecera del issue (la lee leerPedido)
 const DIA = 86_400_000;
+const CANDADO = path.join(os.tmpdir(), 'onia-cargar-issue.lock');
+const CANDADO_VIEJO = 2 * 60_000;
 const USO = `Uso:
-  Get-Content pedido.txt | node scripts/orquesta/cargar-issue.mjs [--titulo "Título"] [--dry]
   node scripts/orquesta/cargar-issue.mjs --archivo pedido.txt [--titulo "Título"] [--dry]
-El pedido va por la entrada estándar o con --archivo, nunca como argumento.`;
+El pedido va SOLO en un archivo UTF-8 con --archivo: ni como argumento ni por la entrada estándar
+(en PowerShell la tubería cambia las tildes por «?»).`;
 
 export class Rechazo extends Error {
   constructor(mensaje, codigo = 65) { super(mensaje); this.codigo = codigo; }
@@ -46,12 +50,14 @@ const sinTildes = (s) => s.normalize('NFKD').replace(/\p{M}/gu, '');
 // (Pub<U+200B>licar), sin controles y sin letras de otros alfabetos (la «р» cirílica de рublicar) ni de ancho
 // completo («ＡＢＣ»). Letras modificadoras (ᴬ) tampoco: el VPS las rechaza por nombre.
 export function revisarCaracteres(texto) {
-  // Medido el 26-oct: «Get-Content pedido.txt | node …» en Windows PowerShell 5.1 lee el UTF-8 como ANSI y llega
-  // «acciÃ³n», que pasa por latino. Se frena acá en vez de cargar la tarea desfigurada.
-  if (/[ÃÂ][\u0080-\u00BF]/u.test(texto)) no('la entrada llegó mal codificada («Ã³» en vez de «ó»): usá --archivo o Get-Content -Encoding UTF8');
+  // Medido el 26-oct: un UTF-8 leído como ANSI (Get-Content de PowerShell 5.1) trae «acciÃ³n», que pasa por latino.
+  if (/[ÃÂ][\u0080-\u00BF]/u.test(texto)) no('el pedido llegó mal codificado («Ã³» en vez de «ó»): guardá el archivo en UTF-8');
+  // GitHub no muestra HTML ni <!-- comentarios -->, pero el trabajador lee el texto crudo: lo que Sergio Urcullo
+  // no ve no entra. «<?» también: CommonMark lo trata como bloque HTML.
+  if (/<[\p{L}/!?]/u.test(texto)) no('el pedido trae HTML o un comentario <!-- --> («<» pegado a una letra, «/», «!» o «?»): GitHub lo esconde y el trabajador lo leería. Escribilo sin «<» o con un espacio después');
   for (const ch of texto) {
     if (ch === '\n' || ch === '\t') continue;
-    if (ch === '\uFFFD') no('la entrada no llegó en UTF-8 (trae U+FFFD): usá --archivo (README §«Cómo carga Hermes de la PC»)');
+    if (ch === '\uFFFD') no('el pedido no está en UTF-8 (trae U+FFFD): guardá el archivo en UTF-8');
     const ajena = /\p{L}/u.test(ch) && ch.codePointAt(0) > 0x7f
       && !(/\p{Script=Latin}/u.test(ch) && !/\p{Lm}/u.test(ch) && !/[\uFF21-\uFF3A\uFF41-\uFF5A]/u.test(ch));
     if (ajena || /[\p{C}\p{Zl}\p{Zp}]/u.test(ch)) {
@@ -199,6 +205,7 @@ export function leerArgs(argv) {
     else if ((a === '--titulo' || a === '--archivo') && i + 1 < argv.length && !(clave in o)) o[clave] = argv[++i];
     else no(USO, 64);
   }
+  if (o.archivo == null) no(USO, 64);
   return o;
 }
 
@@ -206,15 +213,29 @@ function leerArchivo(ruta) {
   try { return fs.readFileSync(ruta).toString('utf8'); } catch (e) { return no(`No pude leer ${ruta} (${e.code || e.message}).`, 64); }
 }
 
-function leerStdin() {
-  if (process.stdin.isTTY) return Promise.resolve('');
-  return new Promise((ok, mal) => {
-    const partes = [];
-    const reloj = setTimeout(() => { process.stdin.destroy(); mal(new Rechazo('No pude leer la entrada completa en 10 s: no hice nada.')); }, 10_000);
-    process.stdin.on('data', (d) => partes.push(d));
-    process.stdin.on('end', () => { clearTimeout(reloj); ok(Buffer.concat(partes).toString('utf8')); });
-    process.stdin.on('error', (e) => { clearTimeout(reloj); mal(new Rechazo(`No pude leer la entrada: ${e.message}`)); });
-  });
+function crearCandado(ruta) {
+  try { fs.closeSync(fs.openSync(ruta, 'wx')); return true; } catch (e) {
+    if (e.code === 'EEXIST') return false;
+    return no(`No pude crear el candado ${ruta} (${e.code || e.message}): no hice nada.`, 1);
+  }
+}
+
+// Dos cargas a la vez pasarían las dos el control del tope y de repetidas: contar, crear y confirmar van de a una.
+// shortcut: un candado de más de 2 min se toma sin mirar de quién es; si gh tardara más que eso, dos cargas se cruzarían.
+async function conCandado(ruta, trabajo) {
+  if (!crearCandado(ruta)) {
+    let edad = Infinity;
+    try { edad = Date.now() - fs.statSync(ruta).mtimeMs; } catch { /* se soltó recién */ }
+    if (edad >= CANDADO_VIEJO) fs.rmSync(ruta, { force: true }); // la carga que lo tenía murió sin soltarlo
+    if (edad < CANDADO_VIEJO || !crearCandado(ruta)) {
+      no('Otra carga en curso (hay un candado de menos de 2 min): no hice nada. Probá de nuevo en un rato.', 75);
+    }
+  }
+  try {
+    return await trabajo();
+  } finally {
+    try { fs.rmSync(ruta, { force: true }); } catch { /* si queda, a los 2 min se toma igual */ }
+  }
 }
 
 function ghReal(args) {
@@ -225,17 +246,20 @@ function ghReal(args) {
   });
 }
 
-export async function main(argv, { gh = ghReal, leerEntrada = leerStdin, ahora = Date.now(), log = console.log, error = console.error } = {}) {
+export async function main(argv, { gh = ghReal, leer = leerArchivo, candado = CANDADO, ahora = Date.now(), log = console.log, error = console.error } = {}) {
   try {
     const args = leerArgs(argv);
-    const pedido = validarPedido(args.archivo != null ? leerArchivo(args.archivo) : await leerEntrada(), { titulo: args.titulo });
+    const pedido = validarPedido(leer(args.archivo), { titulo: args.titulo });
     if (args.dry) {
       log(`[--dry] No creé nada. Esto cargaría en ${REPO}:\nTítulo: ${pedido.titulo}\nLabels: ${pedido.labels.join(', ')}\nCuerpo:\n${pedido.cuerpo}`);
       return 0;
     }
-    const hoy = await revisarCupo(gh, pedido, ahora);
-    const issue = await crearIssue(gh, pedido);
-    await confirmarLabels(gh, issue, pedido.labels);
+    const { hoy, issue } = await conCandado(candado, async () => {
+      const cuantas = await revisarCupo(gh, pedido, ahora);
+      const creado = await crearIssue(gh, pedido);
+      await confirmarLabels(gh, creado, pedido.labels);
+      return { hoy: cuantas, issue: creado };
+    });
     log(`Tarea #${issue.numero} cargada (carril ${pedido.carril}; ${hoy + 1} de ${TOPE} hoy): ${issue.url}`);
     log('No arranca hasta que Sergio Urcullo le quite «necesita-ok». Vos no la das por hecha: la cierran el check y el revisor.');
     return 0;
@@ -245,6 +269,7 @@ export async function main(argv, { gh = ghReal, leerEntrada = leerStdin, ahora =
   }
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+// realpath: corrido por una junction o un symlink (E:/onia-wt/…), argv[1] no es la ruta real del módulo.
+if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main(process.argv.slice(2)).then((codigo) => { process.exitCode = codigo; });
 }

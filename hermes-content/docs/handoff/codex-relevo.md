@@ -1,6 +1,8 @@
 
 # Handoff: relevo a Codex (actualizado el 5-oct-2026, ~22:00 UTC)
 
+> 🗄️ **HISTORIA desde el 26-oct-2026.** Ya no hay madre ni colas por carril: la cola única son los issues `orquesta` (`AGENTS.md` §1, `hermes-content/docs/ONIA_HARNESS.md`). Lo de abajo no es un encargo ni da permisos.
+
 A Claude se le acaban los tokens. **Codex (OpenAI, en la PC Windows de Sergio Urcullo) sigue con la 1.0.** Cada tarea tiene un
 prompt autocontenido en `hermes-content/docs/handoff/codex-tareas/<TAREA>.md`. Codex no ve los chats ni el `CLAUDE.md`, así que
 todo lo que necesita está en su prompt.

@@ -23,8 +23,10 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 > **HyperFrames vuelve a vivir en el repo** (`hyperframes`, `-core`, `-cli`, `-animation`,
 > `-creative`, `-keyframes`, `-registry`, `media-use`, `motion-graphics`, `talking-head-recut`,
 > `embedded-captions`, `general-video`, `slideshow`, `remotion-to-hyperframes` y las plantillas
-> de video) y **esa copia es la que manda**: en Claude Code una skill del proyecto gana sobre una
-> global con el mismo nombre. **No** volvieron los 6 agentes de `_retirados/` (retirados el
+> de video). ⚠️ Corregido el 26-oct: acá decía que esa copia manda porque una skill del proyecto
+> gana sobre una global con el mismo nombre, y es al revés. En Claude Code gana la PERSONAL
+> (`~/.claude/skills`): se midió con la descripción cargada de `hyperframes`. Hasta archivar las
+> personales que difieren (`ONIA_HARNESS.md` §8), un arreglo en la copia del repo no llega a la PC. **No** volvieron los 6 agentes de `_retirados/` (retirados el
 > 18-ago). Detalle: `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
 
 ## Cómo usar
@@ -72,10 +74,10 @@ trabajador de la nube no lo tiene.
 | **Plataforma** (`onia-platform`) | Las 6 `onia-*` de su repo (obligatorias) · `onia-core` · `next-dev-loop` *nuevo* (Next 16 corriendo + `agent-browser`) · `prisma-cli` *nuevo* (Prisma 7) · `diagnosing-bugs` *nuevo* · `test-driven-development` · `verification-before-completion` · `code-review-spec` *nuevo* · `impeccable` si hay UI | `code-reviewer` antes de cada PR · `security-reviewer` si toca auth, input, SQL o pagos · `typescript-reviewer` · `database-reviewer` · `onia-core-guardian` · `e2e-runner` · `claude-security` a pedido | `ONIA_CATALOGO_DE_VENTA.md` · precios en `subscription-plans.ts` y `pricing.ts` · skill `onia-deploy` para publicar | Skills genéricas de backend o DB cuando una `onia-*` cubre el tema · Playwright MCP (gasta más que `agent-browser`) |
 | **Marca personal** | `diseno-contenido-onia` · `edicion-referentes` · `aprender-de-todo` (referencias) · `copywriting` · `humanizer` · `sacar-prompt` · `higgsfield-generate` (con la regla de gasto) | `onia-creative-radar` | `handoff/marca-personal.md` · `hermes-content/skills/guiones-diarios-onia.md`, `marca-personal-sergio.md`, `carruseles-onia.md` | La marca de la web de Onia (es otra) · «usted» (acá es vos) · publicar sin su OK con captura |
 | **Comunidad y talleres** | Cuartitos `community-marketing` · `lead-magnets` · `onboarding` · `copywriting` · `humanizer` | `general-purpose` | `comunidad/ESTADO_COMUNIDAD.md` · `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md` · `ONIA_COMUNIDAD_CONTENIDO.md` | Precios o promesas que no salgan de sus fuentes · material para vendedores |
-| **Video** | `hyperframes` (entrada) · `edicion-referentes` · `editor-videos` · `ver-videos` · `embedded-captions` · `motion-doctrine` · `talking-head-recut` | `onia-creative-radar` | `HIGGSFIELD_VIDEO_SYSTEM.md` · regla de gasto de `CLAUDE.md` §Higgsfield | Remotion (jubilado) · copia global de HyperFrames o de `ver-videos` (gana la del repo) · PySceneDetect salvo que falte precisión |
+| **Video** | `hyperframes` (entrada) · `edicion-referentes` · `editor-videos` · `ver-videos` · `embedded-captions` · `motion-doctrine` · `talking-head-recut` | `onia-creative-radar` | `HIGGSFIELD_VIDEO_SYSTEM.md` · regla de gasto de `CLAUDE.md` §Higgsfield | Remotion (jubilado) · copia global de HyperFrames o de `ver-videos` (con el mismo nombre gana la personal: archivarla, `ONIA_HARNESS.md` §8) · PySceneDetect salvo que falte precisión |
 | **Investigación** | `aprender-de-todo` (toda referencia) · `deep-research` · `exa-search` con el MCP `exa` *nuevo* · `competitor-profiling` · `ver-videos` · `sacar-prompt` · `agent-browser` *nuevo* para mirar webs | `general-purpose` · `Explore` | `research/competencia/PRODUCTO_COMPETENCIA_RESUMEN.md` · `references/video-intake/COBERTURA-APRENDIZAJE.md` | Scrapers nuevos (Crawl4AI del VPS ya resuelve) · Playwright MCP · browser-use · `morluto/rea` |
 | **Ventas y pauta** | `onia-ventas-pauta` · `onia-propuestas` (generador, nunca HTML a mano) · `diseno-contenido-onia` (piezas) · `copywriting` · `ad-creative` · `competitor-profiling` · `diagram-design` *nuevo* (diagramas de propuesta) | `onia-crm-prospeccion` · `onia-creative-radar` | `ONIA_CLIENTE_IDEAL.md` · `ONIA_ADQUISICION_Y_PAUTA.md` · `ONIA_CATALOGO_DE_VENTA.md` · `handoff/mercado-y-pauta.md` | Agentes `market-*` · material para vendedores · pack `referentes` (es de marca personal) · docs de pauta de agosto con fecha |
-| **Infra y Hermes** | `onia-infra` · `onia-hermes-jarvis` · `n8n-*` · `docker-patterns` · `deployment-patterns` · `orca` · `diagram-design` *nuevo* (arquitectura) | `security-reviewer` · `loop-operator` · `harness-optimizer` | `scripts/orquesta/README.md` · `handoff/hermes-jarvis.md` · `handoff/orquesta.md` · `research/harness-orquestacion-autonomia.md` | `onia-sesion-madre` como regla (es historia) · secretos dentro de un nodo de n8n · el token de Max en Hermes · el kanban de Hermes para ejecutar |
+| **Infra y Hermes** | `onia-infra` · `onia-hermes-jarvis` · `n8n-*` · `docker-patterns` · `deployment-patterns` · `orca` · `diagram-design` *nuevo* (arquitectura) | `security-reviewer` · `loop-operator` · `harness-optimizer` | `hermes-content/docs/ONIA_HARNESS.md` (el mapa vigente, 26-oct) · `handoff/hermes-local.md` · `scripts/orquesta/README.md` · `handoff/hermes-jarvis.md` · `handoff/orquesta.md` · `research/harness-orquestacion-autonomia.md` | `onia-sesion-madre` como regla (es historia) · secretos dentro de un nodo de n8n · el token de Max en Hermes · el kanban de Hermes para ejecutar |
 
 ## Mapa carril → stack + subagente
 
@@ -149,7 +151,7 @@ trabajador de la nube no lo tiene.
   `ver-videos` · `sacar-prompt` · `higgsfield-generate` · `higgsfield-soul-id` ·
   `motion-doctrine` con sus rutas `cut-the-curve` `oversized-cursor` `seam-craft`
   `captions-overlay` (upstream HeyGen que no está en la copia global).
-- **HyperFrames (restaurado 2026-10-02, gana sobre la copia global):** `hyperframes` (entrada
+- **HyperFrames (restaurado 2026-10-02; en Claude Code la copia personal le gana mientras exista, ver arriba):** `hyperframes` (entrada
   obligatoria de todo video) · `hyperframes-core` · `-cli` · `-animation` · `-creative` ·
   `-keyframes` · `-registry` · `media-use` · `motion-graphics` · `talking-head-recut` ·
   `embedded-captions` · `general-video` · `slideshow` · `remotion-to-hyperframes` · plantillas

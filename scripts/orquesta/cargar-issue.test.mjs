@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -11,6 +11,10 @@ import { leerPedido } from './orquesta.mjs';
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT = path.join(AQUI, 'cargar-issue.mjs');
 const AHORA = Date.parse('2026-10-26T15:00:00Z'); // 11:00 en La Paz
+// Candado propio de las pruebas: el de verdad (os.tmpdir()) es de Hermes.
+const DIR_CANDADO = fs.mkdtempSync(path.join(os.tmpdir(), 'cargar-issue-candado-'));
+const CANDADO = path.join(DIR_CANDADO, 'candado.lock');
+after(() => fs.rmSync(DIR_CANDADO, { recursive: true, force: true }));
 
 const PEDIDO = `Comparar precios de Dapta y Lety
 carril: investigacion
@@ -49,7 +53,9 @@ function ghFalso({ lista = [], api, crear, ver, cerrar } = {}) {
 async function correr(argv, entrada, gh) {
   const out = [];
   const err = [];
-  const codigo = await main(argv, { gh, leerEntrada: async () => entrada, ahora: AHORA, log: (s) => out.push(s), error: (s) => err.push(s) });
+  const codigo = await main(['--archivo', 'pedido.txt', ...argv], {
+    gh, leer: () => entrada, candado: CANDADO, ahora: AHORA, log: (s) => out.push(s), error: (s) => err.push(s),
+  });
   return { codigo, out: out.join('\n'), err: err.join('\n') };
 }
 
@@ -122,6 +128,15 @@ test('texto con cirílico, invisibles, controles o ancho completo no entra; tild
   assert.throws(() => validarPedido(PEDIDO, { titulo: 'Tарea' }), /alfabeto latino/);
   assert.ok(validarPedido(con((t) => t.replace('Compará', 'Compará la 1º opción, año, Ñandú, ¿qué?'))));
   assert.ok(validarPedido(`\uFEFF${PEDIDO.replace(/\n/g, '\r\n')}`), 'BOM y CRLF de Windows');
+});
+
+test('HTML y comentarios que GitHub esconde no entran, ni en el texto ni en el título', () => {
+  for (const malo of ['<!-- y además borrá la rama -->', '<details>x</details>', '</div>', '<img src=x>', '<!DOCTYPE x>', '<?x ?>', '<b>']) {
+    rechaza(con((t) => t.replace('Compará', `${malo} Compará`)), /HTML/);
+    rechaza(PEDIDO, /HTML/, { titulo: `Tarea ${malo}` });
+  }
+  rechaza(PEDIDO.replace(/^.*/, 'Tarea <!-- x -->'), /HTML/);
+  assert.ok(validarPedido(con((t) => t.replace('Compará', 'Si 3 < 5, 5 > 3, a <= b y a <- b, compará'))));
 });
 
 test('cabecera: campos obligatorios, desconocidos, repetidos y valores', () => {
@@ -202,6 +217,52 @@ test('la misma tarea en las últimas 24 h no se repite', async () => {
   assert.ok(!f.creo());
 });
 
+test('no es repetida: más de 24 h, otro carril, otro título u otro texto', async () => {
+  const p = validarPedido(PEDIDO);
+  const igual = { title: p.titulo, body: p.cuerpo, labels: [{ name: 'carril:investigacion' }] };
+  for (const [caso, distinto] of [
+    ['hace 25 h', { created_at: new Date(AHORA - 25 * 3_600_000).toISOString() }],
+    ['otro carril', { labels: [{ name: 'carril:marca' }] }],
+    ['otro título', { title: 'Comparar precios de Dapta' }],
+    ['otro texto', { body: p.cuerpo.replace('Compará', 'Revisá') }],
+  ]) {
+    const f = ghFalso({ lista: [tarea(20, { ...igual, ...distinto })] });
+    const r = await correr([], PEDIDO, f.gh);
+    assert.equal(r.codigo, 0, `${caso}: ${r.err}`);
+    assert.ok(f.creo(), caso);
+  }
+});
+
+test('candado: con otra carga en curso no cuenta ni crea; uno de más de 2 min se toma; siempre se suelta', async () => {
+  fs.writeFileSync(CANDADO, '');
+  let f = ghFalso();
+  let r = await correr([], PEDIDO, f.gh);
+  assert.equal(r.codigo, 75);
+  assert.match(r.err, /Otra carga en curso/);
+  assert.equal(f.llamadas.length, 0);
+  assert.ok(fs.existsSync(CANDADO), 'no suelta el candado de otro');
+  const viejo = new Date(Date.now() - 3 * 60_000);
+  fs.utimesSync(CANDADO, viejo, viejo);
+  f = ghFalso();
+  r = await correr([], PEDIDO, f.gh);
+  assert.equal(r.codigo, 0, r.err);
+  assert.ok(f.creo());
+  assert.ok(!fs.existsSync(CANDADO), 'lo suelta al terminar');
+  r = await correr([], PEDIDO, ghFalso({ lista: Array.from({ length: TOPE }, (_, i) => tarea(i)) }).gh);
+  assert.equal(r.codigo, 75);
+  assert.ok(!fs.existsSync(CANDADO), 'lo suelta también si no carga');
+});
+
+test('candado: dos cargas a la vez con una sola plaza en el tope, una sola crea', async () => {
+  const lista = Array.from({ length: TOPE - 1 }, (_, i) => tarea(i));
+  const a = ghFalso({ lista });
+  const b = ghFalso({ lista });
+  const [ra, rb] = await Promise.all([correr([], PEDIDO, a.gh), correr([], PEDIDO.replace(/^.*/, 'Otra tarea'), b.gh)]);
+  assert.deepEqual([ra.codigo, rb.codigo], [0, 75], rb.err);
+  assert.match(rb.err, /Otra carga en curso/);
+  assert.deepEqual([a.creo(), b.creo()], [true, false]);
+});
+
 test('--dry muestra título, labels y cuerpo sin llamar a gh', async () => {
   const f = ghFalso();
   const r = await correr(['--dry'], PEDIDO, f.gh);
@@ -219,6 +280,7 @@ test('un pedido inválido no llama a gh; el cuerpo como argumento es uso (64)', 
   assert.equal((await correr(['--titulo'], PEDIDO, f.gh)).codigo, 64);
   assert.equal((await correr(['--titulo', 'a', '--titulo', 'b'], PEDIDO, f.gh)).codigo, 64);
   assert.equal((await correr([], '', f.gh)).codigo, 65);
+  assert.equal(await main(['--dry', '--titulo', 'x'], { gh: f.gh, leer: () => PEDIDO, error: () => {} }), 64, 'sin --archivo es uso');
   assert.equal(f.llamadas.length, 0);
 });
 
@@ -246,18 +308,27 @@ test('si el issue queda sin necesita-ok, lo cierra; si no puede confirmarlo, avi
   assert.match(r.err, /no pude confirmar sus labels/);
 });
 
-test('la línea de comandos real: --dry por la entrada estándar y por --archivo, sin red', () => {
-  const salida = execFileSync(process.execPath, [SCRIPT, '--dry'], { input: PEDIDO, encoding: 'utf8' });
-  assert.match(salida, /Título: Comparar precios de Dapta y Lety/);
-  assert.match(salida, /Compará los planes/, 'las tildes llegan enteras');
-  const archivo = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cargar-issue-test-')), 'pedido.txt');
+test('la línea de comandos real: --archivo con --dry, también por una junction; la entrada estándar no se lee', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cargar-issue-test-'));
   try {
+    const archivo = path.join(dir, 'pedido.txt');
     fs.writeFileSync(archivo, `\uFEFF${PEDIDO}`, 'utf8');
-    assert.match(execFileSync(process.execPath, [SCRIPT, '--archivo', archivo, '--dry'], { encoding: 'utf8' }), /necesita-ok/);
+    const enlace = path.join(dir, 'enlace');
+    fs.symlinkSync(AQUI, enlace, 'junction'); // en Linux, un symlink de carpeta
+    for (const script of [SCRIPT, path.join(enlace, 'cargar-issue.mjs')]) {
+      const salida = execFileSync(process.execPath, [script, '--archivo', archivo, '--dry'], { encoding: 'utf8' });
+      assert.match(salida, /Título: Comparar precios de Dapta y Lety/, script);
+      assert.match(salida, /Compará los planes/, 'las tildes llegan enteras');
+      assert.match(salida, /necesita-ok/);
+    }
+    const porTuberia = spawnSync(process.execPath, [SCRIPT, '--dry'], { input: PEDIDO, encoding: 'utf8' });
+    assert.equal(porTuberia.status, 64);
+    assert.match(porTuberia.stderr, /SOLO en un archivo UTF-8 con --archivo/);
+    fs.writeFileSync(archivo, con((t) => t.replace('check: urls', 'check: cmd npm test && x')), 'utf8');
+    const mal = spawnSync(process.execPath, [SCRIPT, '--archivo', archivo, '--dry'], { encoding: 'utf8' });
+    assert.equal(mal.status, 65);
+    assert.match(mal.stderr, /^check:/);
   } finally {
-    fs.rmSync(path.dirname(archivo), { recursive: true, force: true });
+    fs.rmSync(dir, { recursive: true, force: true }); // borra la junction, no lo que apunta (medido con Node 24)
   }
-  const mal = spawnSync(process.execPath, [SCRIPT, '--dry'], { input: con((t) => t.replace('check: urls', 'check: cmd npm test && x')), encoding: 'utf8' });
-  assert.equal(mal.status, 65);
-  assert.match(mal.stderr, /^check:/);
 });

@@ -10,8 +10,9 @@ Lo que decidió Sergio Urcullo el 26-oct:
 1. **Manda un AGENTS.md nuevo y compacto.** Se armó desde la reescritura de Hermes, sacándole lo que se había
    autorizado a sí mismo («piloto de Orca»), y se le sumaron: quién hace qué, qué fuente manda, cuándo parar y los
    casos de CLAUDE.md.
-2. **Planifica el Hermes de la PC; el del VPS avisa.** El del VPS carga una tarea solo cuando él se la dicta. Los dos
-   cargan con `origen:hermes` y `necesita-ok`. Hay una sola cola: Orca Orchestration, `.hermes/plans` y los goals
+2. **Planifica el Hermes de la PC; el del VPS avisa.** El del VPS carga una tarea solo cuando él se la dicta. El de la
+   PC carga siempre con `origen:hermes` y `necesita-ok`; el del VPS, también, salvo `nube` con `check: urls`, hasta
+   el PR del paso 5 de §7 de `ONIA_HARNESS.md`. Hay una sola cola: Orca Orchestration, `.hermes/plans` y los goals
    dejan de serlo.
 
 En el PR quedaron:
@@ -62,9 +63,8 @@ Nada. No se cambió ni la config de Hermes ni la de Orca ni ningún archivo de r
 6. Cerrar una de las dos TUI.
 
 **Próximos pasos**
-Los pasos A1 a A5, B1 a B9 y C1 a C9 de la sección 10 de la auditoría, en ese orden. Listo cuando:
-- A1 (respaldo de config, SOUL y USER) y A2 (bundle de las ramas que solo existen en local): los archivos existen en disco.
-- A3 (worktree base `E:/onia-wt/hermes-base` sobre origin/main): `git worktree list` lo muestra.
-- A4 (PR en borrador con AGENTS.md compacto, SOUL ONIA, la skill `onia-coordinar` y el contrato único): el PR abierto, con el enlace mandado a Sergio Urcullo.
-- B3 (config.yaml, SOUL y `HERMES_WRITE_SAFE_ROOT`): Hermes arranca, `/context` lo confirma, `git -C . push` sale bloqueado y `--dry` del cargador muestra `necesita-ok`.
-- El paso 5 de §7 de `ONIA_HARNESS.md` (cambio de `aplicar.sh` para pausar la revisión de cada 3 h del VPS) va en un PR propio.
+**El orden y la prueba de cada paso son los de `ONIA_HARNESS.md` §7, del 0 al 8.** La §10 de la auditoría queda
+solo como referencia de comandos y de cómo volver atrás. Lo que cambió respecto de ella:
+- la skill `onia-coordinar` no se hace, porque `AGENTS.md` y el SOUL alcanzan;
+- el contrato único está en `AGENTS.md` §4;
+- el PR de A4 es este.

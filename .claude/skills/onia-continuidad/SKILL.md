@@ -45,9 +45,8 @@ git worktree list
 ls hermes-content/docs/handoff/
 git log -1 --format='%cd' --date=short -- hermes-content/docs/handoff/<mi-carril>.md
 
-# 3. ¿Cuál es la cola de mi carril, y tiene fantasmas?
-cat hermes-content/docs/cola/README.md          # el índice: qué cola es de quién
-node scripts/verificar_cola.js <mi-cola.md>      # exit 1 si un ítem no existe
+# 3. ¿Qué hay en la cola de mi carril? (26-oct: la única cola son los issues `orquesta`; cola/*.md es historia)
+gh issue list -l orquesta -l carril:<mi-carril> --state open
 
 # 4. ¿Qué se movió desde mi último handoff?
 git log --oneline --since="<fecha del handoff>" | head -20
@@ -182,7 +181,7 @@ baja una cuenta servía de algo.
 |---|---|---|
 | `onia-router` | qué skill/agente uso | qué ya sabemos antes de elegir |
 | `hermes-content/docs/handoff/README.md` | plantilla del estado al cerrar | **obliga a leerlo al abrir** |
-| `hermes-content/docs/cola/README.md` | índice de colas por carril | cómo verificar que no tiene fantasmas |
+| `gh issue list -l orquesta` | la cola única (26-oct; `cola/README.md` es historia) | qué está abierto y qué espera OK |
 | `scripts/verificar_cola.js` | la regla de evidencia, mecánica | cuándo correrlo |
 | `CLAUDE.md` §2 | las reglas y su historia | el ritual que las hace pasar |
 

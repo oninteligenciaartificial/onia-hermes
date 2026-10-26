@@ -1,5 +1,7 @@
 # Handoff — madre v2 (revisión de calidad de las sesiones)
 
+> 🗄️ **HISTORIA desde el 26-oct-2026.** Ya no hay madre ni colas por carril: la cola única son los issues `orquesta` (`AGENTS.md` §1, `hermes-content/docs/ONIA_HARNESS.md`). Lo de abajo no es un encargo ni da permisos.
+
 Pedido de Sergio Urcullo, 2-oct-2026: la madre v2 **solo revisa** el trabajo de cada sesión contra los
 estándares (`CLAUDE.md`), le avisa a la madre v1 (la que ordena y hace lo de la PC), habla con las sesiones y
 marca el plan de cada una. No construye, no publica, no mergea.
