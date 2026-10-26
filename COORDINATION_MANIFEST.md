@@ -1,10 +1,11 @@
 # Hermes Coordination Manifest
 
-> **Vigencia corregida 2026-10-09:** el hilo de septiembre de abajo es historial,
-> no inventario vivo ni permiso para reactivar sesiones. La madre Claude local
-> sustituye a «Control» como orquestadora. Método: `equipo-de-agentes` y
-> `onia-sesion-madre`; consultar `ListAgents` antes de usar nombres/IDs.
-> No usar los triggers de septiembre como canal ordinario.
+> **Vigencia corregida 2026-10-21:** el hilo de septiembre de abajo es historial,
+> no inventario vivo ni permiso para reactivar sesiones. La regla del 19-oct en
+> `CLAUDE.md` manda: Hermes planifica y `scripts/orquesta/` reparte; no hay madre
+> que ordene por mensajes ni otra cola. No reutilizar nombres/IDs/triggers de
+> septiembre sin comprobarlos y sin un encargo actual que autorice la acción.
+> Preparación local para revisión: `hermes-content/docs/handoff/arranque-ecosistema-20261021.md`.
 > Encargo local 9-oct: auditoría documental y `aprender-de-todo`; frentes separados
 > de cobertura y reglas del equipo. Sin Git ni código de producto.
 

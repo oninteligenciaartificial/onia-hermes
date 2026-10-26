@@ -1,5 +1,11 @@
 # Execution Protocol
 
+> Vigencia 21-oct-2026: `CLAUDE.md` §«Quién orquesta» (19-oct) supera las referencias
+> históricas a madre/latidos de este documento. Hermes planifica, el programa fijo
+> reparte. El encargo actual puede restringir más: la preparación nocturna es local,
+> sin commit/push/publicación, instalaciones, nuevos loops ni operación productiva.
+> Entrada compacta y límites: `hermes-content/docs/handoff/arranque-ecosistema-20261021.md`.
+
 Hermes must plan before executing production actions.
 
 ## Agent Orchestration

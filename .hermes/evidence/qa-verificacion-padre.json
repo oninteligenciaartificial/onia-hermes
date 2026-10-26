@@ -1,0 +1,55 @@
+{
+  "scope": "Piloto local: ejecución completa de las tres suites Windows y revisión independiente visible en Orca",
+  "original_report": "qa-local-final.json",
+  "independent_report": "revision-independiente.json",
+  "primary_review_stream": "review-native.jsonl",
+  "review_session_id": "20261021_214536_b5e7e3",
+  "review_model": "gpt-6-luna",
+  "native_cli_exit": 0,
+  "node_exit_zero_observed": true,
+  "counts_verified_from_independent_log": {
+    "tests": 54,
+    "pass": 54,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "original_per_suite_verified": [
+    {
+      "tests": 33,
+      "pass": 33,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "tests": 14,
+      "pass": 14,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  ],
+  "all_supported_local_suites_passed": true,
+  "linux_suite_executed": false,
+  "linux_blockers": [
+    "Windows/MSYS no dispone de flock.",
+    "Ubuntu WSL tiene flock/git/bash pero no Node Linux.",
+    "Docker Desktop tiene contexto local pero su engine no está activo; no se inició ni se descargaron imágenes."
+  ],
+  "code_changes_in_qa": [],
+  "global_autonomy_approved": false,
+  "published": false,
+  "retained_terminal": "term_8cb0c1d6-cff6-4f8b-b509-c93529f648cc"
+}

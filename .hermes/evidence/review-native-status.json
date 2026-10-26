@@ -1,0 +1,11 @@
+{
+  "state": "exited",
+  "started_utc": "2026-10-22T01:45:32.183760+00:00",
+  "worktree": "E:\\onia-orquesta\\hermes-ecosistema-20261021",
+  "launcher_pid": 6972,
+  "log": "E:\\onia-orquesta\\hermes-ecosistema-20261021\\.hermes\\evidence\\review-native.jsonl",
+  "scope": "revision_local_qa_no_global_autonomy",
+  "worker_pid": 11856,
+  "exit_code": 0,
+  "ended_utc": "2026-10-22T01:46:08.247164+00:00"
+}

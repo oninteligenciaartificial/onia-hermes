@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "scope": "Revisión independiente de la ejecución local de las tres suites Node indicadas y contraste de sus logs TAP previos. No evalúa todo el código ni las fronteras de seguridad; no aprueba autonomía global, integración, publicación ni producción.",
+  "command": "node --test scripts/orquesta/orquesta.test.mjs scripts/orquesta/verificacion.test.mjs scripts/orquesta/evidencias.test.mjs",
+  "command_exit_code": 0,
+  "counts": {
+    "scripts/orquesta/orquesta.test.mjs": {"tests": 33, "pass": 33, "fail": 0, "cancelled": 0, "skipped": 0, "todo": 0},
+    "scripts/orquesta/verificacion.test.mjs": {"tests": 14, "pass": 14, "fail": 0, "cancelled": 0, "skipped": 0, "todo": 0},
+    "scripts/orquesta/evidencias.test.mjs": {"tests": 7, "pass": 7, "fail": 0, "cancelled": 0, "skipped": 0, "todo": 0},
+    "total": {"tests": 54, "pass": 54, "fail": 0, "cancelled": 0, "skipped": 0, "todo": 0}
+  },
+  "findings": [
+    "Los recuentos de los tres logs TAP indicados en qa-local-final.json coinciden exactamente con sus bloques de resumen TAP.",
+    "La reejecución combinada produjo 54 tests, 54 pass y cero fail/cancelled/skipped/todo; exit code 0.",
+    "Las rutas TEMP, TMP y TMPDIR se dirigieron al scratch autorizado C:/Users/PC/AppData/Local/hermes/cache/scratch."
+  ],
+  "omissions": [
+    {"suite": "scripts/loops/orquesta-hermes.test.mjs", "status": "omitida; no se ejecutó ni se afirma cobertura Linux", "reason": "La evidencia reporta dependencia de flock no disponible en Windows/MSYS. README:144 especifica que Linux no fue ejecutado en este encargo. Hay Ubuntu WSL con flock pero sin Node; conforme al alcance no se instalaron dependencias ni se utilizó el VPS productivo."},
+    "Esta revisión cubre únicamente la ejecución local de las suites existentes, no todo el código ni sus fronteras de seguridad; no implica aprobación de autonomía global, integración, publicación o producción."
+  ],
+  "global_autonomy_approved": false,
+  "log": ".hermes/evidence/revision-independiente.test.log"
+}

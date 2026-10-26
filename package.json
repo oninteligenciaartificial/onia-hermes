@@ -174,7 +174,7 @@
     "test:agenda": "node --test scripts/loops/agenda.test.mjs",
     "test:tandas-v1": "node --test scripts/loops/tandas-v1.test.mjs",
     "test:pedidos": "node --test scripts/loops/pedido-claude.test.mjs scripts/loops/pedido-respuesta.test.mjs scripts/loops/pedido-rama.test.mjs",
-    "test:orquesta-hermes": "node --test scripts/loops/orquesta-hermes.test.mjs scripts/orquesta/orquesta.test.mjs",
+    "test:orquesta-hermes": "node --test scripts/loops/orquesta-hermes.test.mjs scripts/orquesta/orquesta.test.mjs scripts/orquesta/verificacion.test.mjs scripts/orquesta/evidencias.test.mjs",
     "test:jarvis-aplicar": "node --test scripts/loops/hermes-jarvis-aplicar.test.mjs",
     "test:jarvis-diagnostico": "node --test scripts/loops/diagnostico-mudo.test.mjs scripts/loops/diagnostico-orquesta.test.mjs",
     "test:qa-diario-guarda": "node --test scripts/loops/qa-diario-guarda.test.mjs",

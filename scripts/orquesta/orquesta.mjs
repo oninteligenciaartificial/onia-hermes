@@ -16,6 +16,7 @@ import { spawn, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
@@ -102,7 +103,7 @@ export function baseDe(c, pedido) {
 
 // El hilo del issue es la conversación con Sergio Urcullo, y los dos escriben desde la MISMA cuenta.
 // El orquestador firma con una marca invisible que dice cuántos comentarios había visto al empezar:
-// lo que Sergio escribió mientras la tarea trabajaba cuenta como respuesta a esa entrega.
+// Lo escrito durante la corrida sirve como indicación, nunca como aprobación anticipada.
 const MARCA = /^<!-- orquesta(?: vistos:(\d+))? -->\s*/;
 const FIRMAS = /^(✅ Hecho|✅ Aprobada|⛔ No se cerró|👀 Listo para tu OK)/u; // comentarios de antes de la marca
 export const firmar = (vistos, texto) => `<!-- orquesta vistos:${vistos} -->\n${texto}`;
@@ -113,7 +114,10 @@ export function leerHilo(issue, conf = CONF) {
     const m = crudo.match(MARCA);
     const body = crudo.replace(MARCA, '');
     const orq = Boolean(m) || FIRMAS.test(body);
-    return { i, body, orq, autor: x.author?.login, vistos: m?.[1] != null ? Number(m[1]) : i + 1, entrega: orq && /^(✅ Hecho|👀 Listo)/u.test(body) };
+    const evidencia = { id: x.id, url: x.url, autor: x.author?.login, createdAt: x.createdAt, updatedAt: x.updatedAt,
+      commit: crudo.match(/^Commit: ([0-9a-f]{40,64})$/m)?.[1],
+      sha256: createHash('sha256').update(crudo).digest('hex') };
+    return { i, body, orq, evidencia, autor: x.author?.login, vistos: m?.[1] != null ? Number(m[1]) : i + 1, entrega: orq && /^(✅ Hecho|👀 Listo)/u.test(body) };
   });
   // Las indicaciones mandan sobre el pedido: solo valen las del dueño de la cola, como los issues.
   const deSergio = cs.filter((c) => !c.orq && c.body && conf.autores.includes(c.autor));
@@ -126,6 +130,7 @@ export function leerHilo(issue, conf = CONF) {
     fallasSeguidas: fallas.length, // una indicación nueva de Sergio Urcullo vuelve a cero
     motivo: fallas.at(-1)?.body.match(/^Motivo: (.+)$/m)?.[1] ?? null, // reintentar sin el motivo repite el error
     respuesta: ultimoOrq && ultimoSergio && ultimoSergio.i >= ultimoOrq.vistos ? ultimoSergio.body : null,
+    ultimaEntrega, ultimoOrq, ultimoSergio,
   };
 }
 
@@ -140,12 +145,25 @@ export function esOk(texto) {
   return palabras.length > 0 && palabras.every((p) => PALABRAS_OK.has(p));
 }
 
-// Qué hacer con un issue frenado al que Sergio Urcullo le contestó: «ok» lo cierra, cualquier otra cosa lo hace seguir.
+export function evidenciaAprobacion(issue, commitActual = undefined) {
+  const { ultimaEntrega: entrega, ultimoOrq, ultimoSergio: aprobacion } = leerHilo(issue);
+  if (!entrega || entrega !== ultimoOrq || !aprobacion || aprobacion.i <= entrega.i || !esOk(aprobacion.body)) return null;
+  const a = aprobacion.evidencia;
+  const e = entrega.evidencia;
+  if (![...CONF.autores, 'github-actions[bot]'].includes(e.autor)) return null;
+  if (!e.commit || (commitActual !== undefined && commitActual !== e.commit)) return null;
+  // gh --json comments no devuelve updatedAt: la lectura REST de espera-ok lo incorpora.
+  const completo = (x) => x.id && x.url && Number.isFinite(Date.parse(x.createdAt)) && Number.isFinite(Date.parse(x.updatedAt));
+  if (!completo(a) || !completo(e) || Date.parse(a.createdAt) <= Math.max(Date.parse(e.createdAt), Date.parse(e.updatedAt))) return null;
+  return { entrega: e, aprobacion: a };
+}
+
+// Un ok solo cierra una entrega concreta, publicada antes del comentario de aprobación.
 export function decidirRespuesta(issue) {
   const labels = nombresDe(issue);
   const { respuesta } = leerHilo(issue);
   if (!respuesta) return null;
-  if (labels.includes('espera-ok')) return esOk(respuesta) ? 'cerrar' : 'seguir';
+  if (labels.includes('espera-ok')) return esOk(respuesta) ? (evidenciaAprobacion(issue) ? 'cerrar' : null) : 'seguir';
   if (labels.includes('bloqueada')) return 'seguir';
   return null;
 }
@@ -155,10 +173,10 @@ export function decidirRespuesta(issue) {
 // Tampoco lo que carga el intento siguiente (que sigue desde la rama subida sin revisión) ni el propio orquestador.
 // Tampoco lo que el sincronizador del VPS copia como root a /root/bin ni lo que `aplicar` le instala a Hermes
 // (scripts/loops, hermes-content/deploy y skills): revisión de seguridad del PR #252, 20-oct.
-export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$|^\.claude\/settings[^/]*\.json$|(^|\/)\.mcp\.json$|^scripts\/orquesta\/|^scripts\/loops\/|^hermes-content\/(deploy|skills)\//i;
+export const PROTEGIDAS = /^(\.github|\.githooks|\.husky|\.claude|\.agents|\.hermes)(\/|$)|(^|\/)(AGENTS|CLAUDE|\.hermes)\.md$|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$|^\.claude\/settings[^/]*\.json$|(^|\/)\.mcp\.json$|^scripts\/orquesta\/|^scripts\/loops\/|^hermes-content\/(deploy|skills)\//i;
 
 // Sin cupo de Max o sin login no es culpa de la tarea: no se comenta ni se cuenta como falla (si no, todo queda `bloqueada`).
-const SIN_MOTOR = /usage limit|limit will reset|hit your (usage )?limit|invalid api key|oauth token (has )?(expired|been revoked)|authentication_error|not logged in|please run \/login/i;
+const SIN_MOTOR = /usage limit|limit will reset|hit your (usage )?limit|invalid api key|oauth (?:token|session) (has )?(expired|been revoked)|authentication_error|not logged in|please run \/login/i;
 export function sinMotor(r) {
   let res = '';
   try { const d = JSON.parse(r.out); if (d.is_error) res = String(d.result); } catch { /* codex: texto plano */ }
@@ -182,7 +200,7 @@ export function armarCuartito(c) {
   if (!c.leer?.length) return '';
   const [primero, ...resto] = c.leer;
   const aprende = c.aprende_en
-    ? `\nAl terminar, si aprendiste un método, una trampa o un dato medido, agregalo con la fecha a ${c.aprende_en}.`
+    ? `\nAl terminar, dejá una propuesta de aprendizaje con fecha y evidencia en la entrega, indicando como destino ${c.aprende_en}. No modifiques skills ni instrucciones: la incorporación la revisa el coordinador autorizado.`
     : '';
   return `\nTU CUARTITO (el método de tu área). Leé ${primero} antes de empezar; de estos, solo los que apliquen a la tarea:\n${resto.map((p) => `- ${p}`).join('\n')}${aprende}\n`;
 }
@@ -190,6 +208,7 @@ export function armarCuartito(c) {
 export function armarPrompt({ carril, issue, pedido, salida, rama, sigue = false }, conf = CONF) {
   const hilo = leerHilo(issue);
   const dir = path.posix.dirname(salida);
+  const evidencias = carril === 'video' ? `\nPAQUETE DE EVIDENCIAS obligatorio: copiá solo el preview de esta tarea al worktree (no todos los brutos), junto a la entrega. Escribí ${salida}.evidencias.json con {"version":1,"archivos":[{"ruta":"ruta/preview.mp4","bytes":123,"sha256":"hash SHA-256 real"}]}. Rutas relativas, archivos regulares dentro del worktree; hasta 20 archivos, 64 MiB por archivo y 128 MiB total. Incluí al menos un video que ffprobe pueda leer. No uses symlinks ni secretos. El revisor textual verifica integridad y datos técnicos, NO afirma haber visto el video; Sergio Urcullo aprueba la calidad visual.\n` : '';
   return `Sos el trabajador del carril "${carril}" de ONIA (${conf.carriles[carril].que}).
 Trabajás SOLO en esta carpeta: es un worktree aislado en la rama ${rama}.
 ${armarCuartito(conf.carriles[carril])}
@@ -197,13 +216,14 @@ TAREA #${issue.number}: ${issue.title}
 ${pedido.pedido}
 ${sigue ? '\nYA HAY TRABAJO HECHO en esta rama (intentos o vueltas anteriores): seguí desde ahí, no empieces de cero.\n' : ''}${hilo.indicaciones.length ? `\nINDICACIONES DE SERGIO URCULLO (mandan sobre el pedido; la última es la más nueva):\n${hilo.indicaciones.map((x) => `- ${x}`).join('\n')}\n` : ''}${hilo.motivo ? `\nINTENTO ANTERIOR RECHAZADO: ${hilo.motivo}\nCorregí eso primero.\n` : ''}${pedido.ok === 'sergio' ? `\nSergio Urcullo mira esto desde el celular antes de seguir. Si tiene algo visual, guardá capturas PNG a 390 y 1440 de ancho en ${dir}/${issue.number}-390.png y ${dir}/${issue.number}-1440.png.\n` : ''}
 ENTREGA OBLIGATORIA: escribí el resultado completo en ${salida} (creá las carpetas que falten).
+${evidencias}
 Lo lee Sergio Urcullo: arrancá con 3 líneas (qué hiciste · qué encontraste · qué sigue) y después el detalle.
 Si no podés terminar, escribí igual ${salida} empezando con "BLOQUEADO: <motivo concreto>" y lo que sí hiciste.
 
 REGLAS DURAS: no publiques en redes, no gastes dinero ni créditos, no le escribas a nadie, no toques producción ni el VPS. NO hagas commit, push ni merge: el orquestador commitea y entrega tus cambios (si no podés commitear, no es un bloqueo). Usá las skills del carril cuando apliquen.`;
 }
 
-export function armarRevision({ issue, pedido, salida, cambios }) {
+export function armarRevision({ issue, pedido, salida, cambios, evidencias }) {
   return `Sos el REVISOR de ONIA. Otro agente hizo este trabajo: vos lo juzgás con contexto limpio y no lo corregís.
 
 TAREA #${issue.number}: ${issue.title}
@@ -212,6 +232,7 @@ ${leerHilo(issue).indicaciones.length ? `\nINDICACIONES DE SERGIO URCULLO (deben
 ENTREGA: ${salida}
 ARCHIVOS CAMBIADOS:
 ${cambios}
+${evidencias ? `\nEVIDENCIA TÉCNICA comprobada por el programa (hash/tamaño/ffprobe):\n${JSON.stringify(evidencias)}\nNo has visto el video: no apruebes estética, ritmo ni contenido audiovisual como observados. La revisión aquí es textual/técnica; la aprobación visual queda para Sergio Urcullo.\n` : ''}
 
 Leé la entrega (y los archivos cambiados que haga falta) y comprobá:
 1. Hace lo que pide la tarea y cumple su "Hecho cuando".
@@ -349,19 +370,95 @@ function guardarAvance(base, wt, rama, carril, issue) {
 const repoDe = (c) => git(c.repo, 'remote', 'get-url', 'origin').replace(/^https:\/\/github\.com\/|\.git$/g, '');
 
 async function urlsRotas(urls) {
-  const rotas = [];
-  for (const u of urls.slice(0, 60)) {
+  const resultados = [];
+  for (const u of urls) {
     try {
       const r = await fetch(u, { redirect: 'follow', signal: AbortSignal.timeout(15_000), headers: { 'user-agent': 'Mozilla/5.0 (orquesta-onia)' } });
-      if (r.status === 404 || r.status === 410) rotas.push(`${u} (${r.status})`);
+      const estado = r.status >= 200 && r.status < 300 ? 'comprobada'
+        : [401, 403, 429].includes(r.status) ? 'no-verificable' : 'fallida';
+      resultados.push({ url: u, estado, status: r.status });
+      await r.body?.cancel();
     } catch (e) {
-      if (e.name !== 'TimeoutError') rotas.push(`${u} (no resuelve)`); // un sitio lento no es un enlace inventado
+      resultados.push({ url: u, estado: 'no-verificable', motivo: e.name });
     }
   }
-  return rotas;
+  return resultados;
 }
 
-async function verificar(wt, base, inicio, sigue, salida, pedido, r) {
+export function verificarEvidencias(wt, salida) {
+  try {
+    const interna = (ruta) => {
+      if (typeof ruta !== 'string' || !ruta || /[\\:\x00-\x1f]/.test(ruta) || path.isAbsolute(ruta) || ruta.split('/').some((s) => !s || s === '.' || s === '..')) throw new Error('ruta de evidencia inválida');
+      let f = wt;
+      for (const parte of ruta.split('/')) {
+        f = path.join(f, parte);
+        if (fs.lstatSync(f).isSymbolicLink()) throw new Error('ruta de evidencia con enlace simbólico');
+      }
+      const relativa = path.relative(fs.realpathSync(wt), fs.realpathSync(f));
+      if (relativa.startsWith('..') || path.isAbsolute(relativa) || fs.lstatSync(f).isSymbolicLink() || !fs.statSync(f).isFile()) throw new Error('ruta de evidencia fuera del worktree o no regular');
+      return f;
+    };
+    const manifest = interna(`${salida}.evidencias.json`);
+    if (fs.statSync(manifest).size > 65536) throw new Error('paquete demasiado grande');
+    const datosManifest = fs.readFileSync(manifest);
+    if (datosManifest.length > 65536) throw new Error('paquete demasiado grande');
+    const paquete = JSON.parse(datosManifest.toString('utf8'));
+    if (paquete.version !== 1 || !Array.isArray(paquete.archivos) || !paquete.archivos.length || paquete.archivos.length > 20) throw new Error('paquete de evidencia inválido');
+    const vistas = new Set();
+    let total = 0;
+    const archivos = paquete.archivos.map((a) => {
+      if (!/\.(mp4|mov|webm|mkv|png|jpg|jpeg)$/i.test(a.ruta)) throw new Error('tipo de evidencia no permitido: solo preview/media');
+      const f = interna(a.ruta);
+      if (vistas.has(fs.realpathSync(f))) throw new Error('ruta de evidencia duplicada');
+      vistas.add(fs.realpathSync(f));
+      const bytes = fs.statSync(f).size;
+      total += bytes;
+      if (bytes > 64 * 1024 * 1024 || total > 128 * 1024 * 1024 || bytes !== a.bytes) throw new Error('tamaño de evidencia inválido');
+      const sha256 = createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+      if (sha256 !== a.sha256) throw new Error('hash de evidencia inválido');
+      let sonda;
+      if (/\.(mp4|mov|webm|mkv)$/i.test(a.ruta)) {
+        sonda = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-protocol_whitelist', 'file', '-format_whitelist', 'mov,matroska,webm', '-show_entries', 'format=duration:stream=codec_type,width,height', '-of', 'json', f],
+          { encoding: 'utf8', timeout: 15000, maxBuffer: 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'], env: ENV_CHECK }));
+        if (!sonda.streams?.some((s) => s.codec_type === 'video') || !(Number(sonda.format?.duration) > 0)) throw new Error('ffprobe no acredita video con duración');
+      }
+      return { ruta: a.ruta, bytes, sha256, ...(sonda ? { sonda } : {}) };
+    });
+    if (!archivos.some((a) => a.sonda)) throw new Error('paquete sin preview de video comprobable');
+    return { falla: null, manifest: { ruta: `${salida}.evidencias.json`, bytes: datosManifest.length,
+      sha256: createHash('sha256').update(datosManifest).digest('hex'),
+      json_sha256: createHash('sha256').update(JSON.stringify(paquete)).digest('hex') }, archivos };
+  } catch (e) {
+    return { falla: `paquete de evidencias no verificable: ${e.message.slice(0, 200)}` };
+  }
+}
+
+// Comprueba blobs del commit capturado: cambios posteriores del worktree/HEAD no son esa entrega.
+export function verificarEvidenciasCommit(wt, commit, evidencias) {
+  try {
+    if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit)) throw new Error('commit inmutable inválido');
+    if (evidencias?.falla || !evidencias?.manifest || !Array.isArray(evidencias.archivos) || !evidencias.archivos.length) throw new Error('paquete verificado ausente');
+    const opciones = { timeout: 15000, maxBuffer: 65 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'], env: ENV_CHECK };
+    const prefijo = ['--no-replace-objects', '--literal-pathspecs', '-C', wt];
+    for (const a of [evidencias.manifest, ...evidencias.archivos]) {
+      if (typeof a.ruta !== 'string' || !a.ruta || /[\\:\x00-\x1f]/.test(a.ruta) || path.isAbsolute(a.ruta) || a.ruta.split('/').some((p) => !p || p === '.' || p === '..')) throw new Error('ruta de snapshot inválida');
+      const entradas = execFileSync('git', [...prefijo, 'ls-tree', '-z', commit, '--', a.ruta], opciones).toString('utf8').split('\0').filter(Boolean);
+      if (entradas.length !== 1 || !/^100(?:644|755) blob [0-9a-f]+\t/.test(entradas[0])) throw new Error(`archivo de snapshot no regular: ${a.ruta}`);
+      const datos = execFileSync('git', [...prefijo, 'cat-file', 'blob', `${commit}:${a.ruta}`], opciones);
+      if (a === evidencias.manifest && datos.length > 65536) throw new Error('manifest de snapshot demasiado grande');
+      // El contrato JSON tolera CRLF/formato; los medios se comparan byte por byte.
+      const coincide = a === evidencias.manifest
+        ? createHash('sha256').update(JSON.stringify(JSON.parse(datos.toString('utf8')))).digest('hex') === a.json_sha256
+        : datos.length === a.bytes && createHash('sha256').update(datos).digest('hex') === a.sha256;
+      if (!coincide) throw new Error(`integridad de snapshot no coincide: ${a.ruta}`);
+    }
+    return { falla: null, commit };
+  } catch (e) {
+    return { falla: `evidencia del commit no verificable: ${e.message.slice(0, 200)}` };
+  }
+}
+
+export async function verificar(wt, base, inicio, sigue, salida, pedido, r, requiereEvidencias = false) {
   const texto = leerSiExiste(path.join(wt, salida));
   if (r.code !== 0) return { texto, falla: `el agente no terminó bien (código ${r.code}): ${r.err.trim().slice(-300)}` };
   const tocada = git(wt, 'status', '--porcelain', '--', salida) !== ''
@@ -369,46 +466,73 @@ async function verificar(wt, base, inicio, sigue, salida, pedido, r) {
   // Al seguir una tarea, una vuelta puede arreglar solo código: que la salida no cambie ahí no es falla (lo juzga el revisor).
   if (texto != null && !tocada && !sigue) return { texto, falla: 'la salida ya existía y el agente no la cambió' };
   let falla = revisarSalida(texto);
+  let urls;
   const rutas = cambiosDe(wt, base);
   const prohibidas = rutas.filter((x) => PROTEGIDAS.test(x));
   if (!falla && prohibidas.length) falla = `tocó archivos que solo cambia una persona: ${prohibidas.join(', ')}`;
+  if (!falla && pedido.check != null && pedido.check !== 'urls' && !/^cmd +\S/.test(pedido.check)) falla = `check desconocido: ${pedido.check}`;
   if (!falla && pedido.check === 'urls') {
-    const rotas = await urlsRotas(urlsDe(texto));
-    if (rotas.length) falla = `enlaces que no abren: ${rotas.join(' · ')}`;
+    const enlaces = urlsDe(texto);
+    if (!enlaces.length) falla = 'check urls sin enlaces: no verificable';
+    else if (enlaces.length > 60) falla = 'check urls supera 60 enlaces: dividir la entrega para comprobarlos todos';
+    else {
+      urls = await urlsRotas(enlaces);
+      const malas = urls.filter((u) => u.estado !== 'comprobada');
+      if (malas.length) falla = `enlaces sin verificar: ${malas.map((u) => `${u.url} (${u.estado}: ${u.status ?? u.motivo})`).join(' · ')}`;
+    }
   }
   if (!falla && pedido.check?.startsWith('cmd ')) {
     // ponytail: corre fuera del sandbox el código que dejó el trabajador (tests, scripts de npm); aislarlo si la plataforma lee contenido ajeno.
     const k = await correr(pedido.check.slice(4), [], { cwd: wt, minutos: 15, shell: true, env: ENV_CHECK });
     if (k.code !== 0) falla = `el check "${pedido.check.slice(4)}" falló: ${(k.err || k.out).trim().slice(-300)}`;
   }
-  return { texto, falla, rutas };
+  const evidencias = !falla && requiereEvidencias ? verificarEvidencias(wt, salida) : undefined;
+  if (evidencias?.falla) falla = evidencias.falla;
+  if (!falla && evidencias) {
+    for (const ruta of [`${salida}.evidencias.json`, ...evidencias.archivos.map((a) => a.ruta)]) {
+      try { git(wt, '--literal-pathspecs', 'ls-files', '--error-unmatch', '--', ruta); }
+      catch { falla = `evidencia no versionada: ${ruta}; el revisor local no garantiza acceso en la entrega`; break; }
+    }
+  }
+  return { texto, falla, rutas, urls, evidencias };
 }
 
-function entregar(c, base, wt, rama, carril, issue) {
+function entregar(c, base, wt, rama, carril, issue, evidencias) {
   if (git(wt, 'status', '--porcelain') !== '') {
     git(wt, 'add', '-A', '--sparse');
     git(wt, 'commit', '-m', `orquesta(${carril}): ${issue.title}`);
   }
   if (git(wt, 'rev-list', '--count', `origin/${base}..HEAD`) === '0') throw new Error('el agente no dejó cambios para entregar');
-  reintentar(() => git(wt, 'push', '--force-with-lease', '-u', 'origin', rama)); // no pisa lo que alguien sumó al PR mientras tanto
+  const commit = git(wt, 'rev-parse', 'HEAD');
+  if (evidencias) {
+    const { falla } = verificarEvidenciasCommit(wt, commit, evidencias);
+    if (falla) throw new Error(falla); // antes de push: no publicar un preview distinto del comprobado
+  }
+  reintentar(() => git(wt, 'push', '--force-with-lease', 'origin', `${commit}:refs/heads/${rama}`));
   const repo = repoDe(c);
   try {
-    return gh('pr', 'create', '-R', repo, '--base', base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
+    const pr = gh('pr', 'create', '-R', repo, '--base', base, '--head', rama, '--title', `orquesta(${carril}): ${issue.title}`,
       '--body', `Tarea ${CONF.repo_cola}#${issue.number}, hecha por el orquestador (carril ${carril}).`);
+    return { pr, commit };
   } catch {
     // Sin «Allow GitHub Actions to create … pull requests» no hay PR, pero la rama ya está subida: se entrega el enlace igual.
-    return intentar(() => gh('pr', 'view', rama, '-R', repo, '--json', 'url', '-q', '.url'))
+    const pr = intentar(() => gh('pr', 'view', rama, '-R', repo, '--json', 'url', '-q', '.url'))
       ?? `https://github.com/${repo}/compare/${base}...${rama}?expand=1`;
+    return { pr, commit };
   }
 }
 
-async function revisar(wt, issue, pedido, salida, rutas) {
+export function argsRevision(modelo) {
+  return ['-p', '--restricted', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--model', modelo,
+    '--output-format', 'json', '--max-turns', '20', '--settings', path.join(AQUI, 'trabajador.settings.json')];
+}
+
+async function revisar(wt, issue, pedido, salida, rutas, evidencias) {
   const cambios = rutas.slice(0, 40).join('\n') || salida;
   const [cmd, ...pre] = ejecutable('claude');
   // --restricted: solo lee, confinado al worktree, y no carga settings ni MCP que haya dejado el trabajador.
-  const args = [...pre, '-p', '--restricted', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--model', CONF.revisor,
-    '--output-format', 'json', '--max-turns', '20', '--settings', path.join(AQUI, 'trabajador.settings.json')];
-  const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios }), minutos: 10 });
+  const args = [...pre, ...argsRevision(CONF.revisor)];
+  const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios, evidencias }), minutos: 10 });
   if (r.code !== 0) return { ok: false, infra: sinMotor(r), motivo: `no se pudo revisar (código ${r.code}): ${r.err.trim().slice(-200)}` };
   return { ...leerVeredicto(r.out), infra: sinMotor(r), usd: costoDe(r, { motor: 'claude' }).usd };
 }
@@ -430,15 +554,15 @@ async function trabajar(c, carril, issue, pedido, ruta) {
     await enFila(c.repo, () => intentar(() => guardarAvance(base, wt, rama, carril, issue)));
     return { ok: false, falla, salida, texto, wt, ...extra };
   };
-  const { texto, falla, rutas } = await verificar(wt, base, inicio, sigue, salida, pedido, r);
+  const { texto, falla, rutas, evidencias } = await verificar(wt, base, inicio, sigue, salida, pedido, r, carril === 'video');
   if (falla) return fallar(falla, { ...costoDe(r, ruta), infra: sinMotor(r) });
-  const rev = await revisar(wt, issue, pedido, salida, rutas); // el que revisa nunca es el que hizo
+  const rev = await revisar(wt, issue, pedido, salida, rutas, evidencias); // el que revisa nunca es el que hizo
   const extra = { ...costoDe(r, ruta), usd_revision: rev.usd };
   if (!rev.ok) return fallar(`el revisor lo rechazó: ${rev.motivo}`, { ...extra, infra: rev.infra });
-  const pr = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue));
+  const { pr, commit } = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue, evidencias));
   await enFila(c.repo, () => intentar(() => git(c.repo, 'worktree', 'remove', '--force', wt))); // si Windows lo tiene tomado, queda para la próxima
   const capturas = rutas.filter((x) => /\.png$/i.test(x)).map((x) => `https://github.com/${repoDe(c)}/blob/${rama}/${x}?raw=true`);
-  return { ok: true, esperaOk: pedido.ok === 'sergio', pr, salida, texto, capturas, notas: rev.notas, ...extra };
+  return { ok: true, esperaOk: pedido.ok === 'sergio' || carril === 'video', pr, commit, salida, texto, capturas, notas: rev.notas, ...extra };
 }
 
 async function hacerTarea({ carril, issue }) {
@@ -464,9 +588,10 @@ export function cuerpoCierre(res, fallasPrevias, vistos = 0) {
   const cabeza = (res.texto || '').split('\n').slice(0, 12).join('\n');
   const datos = `${res.motor} · ${res.modelo} · ${res.minutos} min${res.usd ? ` · US$ ${res.usd.toFixed(2)} equiv.` : ''}`;
   const revision = res.notas ? `\n\nRevisión (${CONF.revisor}):\n${res.notas}` : '';
+  const version = res.commit ? `\nCommit: ${res.commit}` : '';
   if (res.ok && res.esperaOk) {
     const fotos = (res.capturas || []).map((u) => `![captura](${u})`).join('\n');
-    return { bloquea: false, cuerpo: firmar(vistos, `👀 Listo para tu OK (${datos})\n\n${fotos ? `${fotos}\n\n` : ''}Entrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}\n\n**Respondé acá:** «ok» la cierra; si querés cambios, escribilos y sigue desde donde quedó.`) };
+    return { bloquea: false, cuerpo: firmar(vistos, `👀 Listo para tu OK (${datos})\n\n${fotos ? `${fotos}\n\n` : ''}Entrega: ${res.pr}\nArchivo: \`${res.salida}\`${version}\n\n${cabeza}${revision}\n\n**Respondé acá:** «ok» la cierra; si querés cambios, escribilos y sigue desde donde quedó.`) };
   }
   if (res.ok) return { bloquea: false, cuerpo: firmar(vistos, `✅ Hecho y revisado (${datos})\n\nEntrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}`) };
   const bloquea = fallasPrevias >= 1;
@@ -501,7 +626,15 @@ function atenderRespuestas(issues) {
     if (!d) return true;
     const n = String(it.number);
     if (d === 'cerrar') {
-      const cerrado = intentar(() => gh('issue', 'close', n, '-R', R, '--comment', firmar((it.comments || []).length, '✅ Aprobada por Sergio Urcullo.'))) !== null;
+      const evidencia = evidenciaAprobacion(it);
+      if (!evidencia) return false;
+      const carril = carrilDe(it);
+      const c = CONF.carriles[carril];
+      if (!c) return false;
+      const actual = intentar(() => gh('api', `repos/${repoDe(c)}/git/ref/heads/orquesta/${carril}-${n}`, '--jq', '.object.sha'));
+      if (!evidenciaAprobacion(it, actual)) return false; // sin red o con rama revisada, no aprobar
+      const cerrado = intentar(() => gh('issue', 'close', n, '-R', R, '--comment', firmar((it.comments || []).length,
+        `✅ Aprobada por ${evidencia.aprobacion.autor}.\n\nEvidencia de entrega y aprobación (no firma de identidad humana):\n${JSON.stringify(evidencia)}`))) !== null;
       if (cerrado) intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok'));
       return false; // cerrado o no, en esta pasada no se trabaja
     }
@@ -570,7 +703,14 @@ async function main() {
     : process.env.ORQUESTA_DONDE || (process.env.GITHUB_ACTIONS ? 'nube' : 'pc');
   if (!['pc', 'nube'].includes(donde)) throw new Error(`--donde inválido: ${donde} (pc | nube)`);
   const listar = () => JSON.parse(gh('issue', 'list', '-R', CONF.repo_cola, '-l', 'orquesta', '--state', 'open',
-    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments')).filter((it) => dondeDe(it) === donde);
+    '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments')).filter((it) => dondeDe(it) === donde).map((it) => {
+      if (nombresDe(it).includes('espera-ok')) {
+        it.comments = JSON.parse(gh('api', '--paginate', '--slurp', `repos/${CONF.repo_cola}/issues/${it.number}/comments`)).flat().map((c) => ({
+          id: c.node_id, url: c.html_url, body: c.body, author: { login: c.user?.login }, createdAt: c.created_at, updatedAt: c.updated_at,
+        }));
+      }
+      return it;
+    });
   if (argv.includes('--dry')) {
     for (const t of elegirTareas(listar(), CONF, soloCarril)) {
       console.log(`${t.carril}\t#${t.issue.number}\t${JSON.stringify(rutear(t.carril, leerPedido(t.issue.body)))}\t${t.issue.title}`);

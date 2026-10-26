@@ -4,11 +4,11 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
-  leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
+  leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor, evidenciaAprobacion,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -110,25 +110,74 @@ test('APROBADO con reservas no aprueba', () => {
 });
 
 test('PROTEGIDAS: workflows y hooks no los cambia un trabajador', () => {
+  for (const r of ['.github', '.githooks', '.husky', '.claude', '.agents', '.hermes']) assert.ok(PROTEGIDAS.test(r), `raíz que podría ser symlink: ${r}`);
   for (const r of ['.github/workflows/x.yml', '.githooks/pre-push', '.husky/pre-commit']) assert.ok(PROTEGIDAS.test(r), r);
   for (const r of ['.env', 'apps/web/.env.local', 'certs/a.pem', 'x/id_ed25519', 'gcp/credentials.json']) assert.ok(PROTEGIDAS.test(r), r);
   for (const r of ['.claude/settings.json', '.claude/settings.local.json', '.mcp.json', 'apps/x/.mcp.json',
     'scripts/orquesta/carriles.json', 'scripts/orquesta/trabajador.settings.json', 'scripts/orquesta/cuartitos/a/SKILL.md',
     'scripts/loops/orquesta-hermes.sh', 'hermes-content/deploy/hermes-agent/SOUL.md', 'hermes-content/skills/planificar-orquesta.md']) assert.ok(PROTEGIDAS.test(r), r);
+  for (const r of ['.hermes.md', 'AGENTS.md', 'CLAUDE.md', 'apps/web/AGENTS.md',
+    '.claude/skills/editor-videos/SKILL.md', '.claude/agents/revisor.md',
+    '.agents/skills/metodo/SKILL.md', '.hermes/skills/metodo/SKILL.md']) assert.ok(PROTEGIDAS.test(r), r);
   for (const r of ['docs/.github.md', 'hermes-content/docs/orquesta/marca/1.md', 'lib/x.ts', 'docs/environment.md',
-    '.claude/skills/editor-videos/SKILL.md', 'scripts/otro/orquesta.mjs']) assert.ok(!PROTEGIDAS.test(r), r);
+    'scripts/otro/orquesta.mjs']) assert.ok(!PROTEGIDAS.test(r), r);
 });
 
 test('cada carril tiene su cuartito y el prompt lo nombra', () => {
   for (const [nombre, c] of Object.entries(CONF.carriles)) assert.ok(c.leer?.length >= 3, nombre);
   const p = armarPrompt({ carril: 'video', issue: issue(1, 'video'), pedido: { pedido: 'X' }, salida: 's.md', rama: 'r' });
   assert.match(p, /TU CUARTITO.*edicion-referentes/s);
-  assert.match(p, /agregalo con la fecha a \.claude\/skills\/editor-videos\/SKILL\.md/);
-  assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /agregalo/);
+  assert.match(p, /propuesta.*entrega.*\.claude\/skills\/editor-videos\/SKILL\.md/s);
+  assert.match(p, /No modifiques skills ni instrucciones/);
+  assert.doesNotMatch(armarCuartito(CONF.carriles.comunidad), /propuesta de aprendizaje/);
   assert.equal(armarCuartito({}), '');
 });
 
-const hilo = (...bodies) => bodies.map((body) => ({ body, author: { login: 'oninteligenciaartificial' } }));
+// Metadatos ficticios con la forma de gh --json comments (no respuestas de API).
+const COMMIT_FIXTURE = 'a'.repeat(40);
+const hilo = (...bodies) => bodies.map((body, i) => ({ body: /👀 Listo|✅ Hecho/u.test(body) ? `${body}\nCommit: ${COMMIT_FIXTURE}` : body, author: { login: 'oninteligenciaartificial' },
+  id: `fixture-${i}`, url: `https://github.com/fixture/repo/issues/1#issuecomment-${i}`,
+  createdAt: new Date(Date.UTC(2026, 9, 21, 1, 0, i)).toISOString(),
+  updatedAt: new Date(Date.UTC(2026, 9, 21, 1, 0, i)).toISOString() }));
+
+test('un ok anterior a publicar la entrega nunca la aprueba', () => {
+  const it = issue(7, 'marca', { labels: ['espera-ok'], comments: hilo('pedido', 'ok', firmar(1, '👀 Listo para tu OK')) });
+  assert.equal(decidirRespuesta(it), null);
+});
+
+test('una entrega nueva o editada invalida el ok de la anterior', () => {
+  const comments = hilo(firmar(0, '👀 Listo entrega A'), 'ok', firmar(1, '👀 Listo entrega B'));
+  const it = issue(7, 'marca', { labels: ['espera-ok'], comments });
+  assert.equal(decidirRespuesta(it), null);
+  it.comments = hilo(firmar(0, '👀 Listo entrega A'), 'ok');
+  it.comments[0].updatedAt = '2026-10-21T02:00:00Z';
+  assert.equal(decidirRespuesta(it), null);
+});
+
+test('aprobación exige entrega, identidad y metadatos temporales verificables', () => {
+  const it = issue(7, 'marca', { labels: ['espera-ok'], comments: hilo(firmar(0, '👀 Listo entrega A'), 'ok') });
+  assert.equal(decidirRespuesta(it), 'cerrar');
+  delete it.comments[1].createdAt;
+  assert.equal(decidirRespuesta(it), null);
+  it.comments = hilo('un comentario sin entrega', 'ok');
+  assert.equal(decidirRespuesta(it), null);
+});
+
+test('marca de entrega de una cuenta ajena no puede aprobarse', () => {
+  const it = issue(7, 'marca', { labels: ['espera-ok'], comments: hilo(firmar(0, '👀 Listo entrega'), 'ok') });
+  it.comments[0].author.login = 'extrano';
+  assert.equal(decidirRespuesta(it), null);
+});
+
+test('aprobación queda vinculada al commit real de la entrega, no solo al PR mutable', () => {
+  const it = issue(7, 'marca', { labels: ['espera-ok'], comments: hilo(firmar(0, '👀 Listo entrega'), 'ok') });
+  assert.equal(evidenciaAprobacion(it).entrega.commit, COMMIT_FIXTURE);
+  assert.equal(evidenciaAprobacion(it, COMMIT_FIXTURE).aprobacion.autor, 'oninteligenciaartificial');
+  assert.equal(evidenciaAprobacion(it, 'b'.repeat(40)), null, 'otra revisión de rama requiere nuevo ok');
+  assert.equal(evidenciaAprobacion(it, null), null, 'no consultar la rama no equivale a confirmar su versión');
+  it.comments[0].body = it.comments[0].body.replace(`\nCommit: ${COMMIT_FIXTURE}`, '');
+  assert.equal(decidirRespuesta(it), null, 'una entrega antigua sin versión no se aprueba automáticamente');
+});
 
 test('cuartito: lo que se lee existe, y una ruta de la PC solo va en un carril que corre en la PC', () => {
   const crudo = JSON.parse(fs.readFileSync(new URL('./carriles.json', import.meta.url), 'utf8'));
@@ -156,6 +205,15 @@ test('sinMotor: sin cupo o sin login no es una falla de la tarea', () => {
   assert.ok(sinMotor({ out: '', err: "You've hit your usage limit. Try again later." })); // codex
   assert.ok(!sinMotor({ out: JSON.stringify({ is_error: false, result: 'el usage limit del competidor es 5' }), err: '' }));
   assert.ok(!sinMotor({ out: 'no JSON', err: 'tiempo agotado (40 min)' }));
+});
+
+test('sinMotor: OAuth vencido es infraestructura aunque el JSON diga subtype success', () => {
+  // Forma y mensaje observados en la prueba real de Claude CLI, sin credenciales.
+  const mensaje = 'Failed to authenticate: OAuth session expired and could not be refreshed';
+  const fallo = { subtype: 'success', is_error: true, terminal_reason: 'api_error', result: mensaje };
+  assert.ok(sinMotor({ out: JSON.stringify(fallo), err: '' }));
+  assert.ok(sinMotor({ out: '', err: mensaje }));
+  assert.ok(!sinMotor({ out: JSON.stringify({ is_error: false, result: mensaje }), err: '' }));
 });
 
 test('leerHilo separa lo de Sergio Urcullo de lo del orquestador', () => {
@@ -261,7 +319,8 @@ test('prepararWorktree sin media: baja solo texto desde un clon parcial y ralo, 
   g(origen, 'config', 'uploadpack.allowFilter', 'true');
   const repo = path.join(tmp, 'onia-hermes');
   // Lo mismo que hace actions/checkout con `sparse-checkout`: clon sin blobs y solo scripts/orquesta a la vista.
-  g(tmp, 'clone', '-q', '--filter=blob:none', '--sparse', pathToFileURL(origen).href, repo);
+  // --no-local fuerza el transporte (y el filtro) sin file:///C:/, que MSYS interpreta como /C:/.
+  g(tmp, 'clone', '-q', '--no-local', '--filter=blob:none', '--sparse', origen, repo);
   g(repo, 'sparse-checkout', 'set', 'scripts/orquesta');
   process.env.ORQUESTA_SIN_MEDIA = '1';
   const { wt, rama, sigue } = prepararWorktree({ repo }, 'main', 'marca', 7, { ...CONF, carpeta_trabajo: path.join(tmp, 'trabajo') });
