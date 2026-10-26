@@ -555,7 +555,7 @@ This session owns:
 - Weekly operating system documentation and cadence.
 - Onia Panel de Vendedores as the sales operating layer for leads, web diagnostics, notes, ideas, income and commissions.
 
-Canonical files:
+Canonical files (lo archivado el 17-oct salió de esta lista: ver `hermes-content/docs/historial/orquestacion-vieja/README.md`):
 - `AGENTS.md`
 - `PRODUCT.md`
 - `.agents/skills/impeccable/`
@@ -588,7 +588,6 @@ Canonical files:
 - `HERMES_VIDEO_LAB.md`
 - `HERMES_TELEGRAM_COMMAND_CENTER.md`
 - `HERMES_EXECUTION_PROTOCOL.md`
-- `hermes-content/docs/historial/orquestacion-vieja/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `HERMES_DAILY_CRONS.md`
 - `HERMES_WEEKLY_OPERATING_SYSTEM.md`
 - `.github/workflows/onia-hygiene-daily.yml`
@@ -619,9 +618,6 @@ Canonical files:
 - `FINANCE_LOG_2026.md`
 - `ONIA_CONTEXT_INTAKE.md`
 - `hermes-content/docs/ONIA.md`
-- `hermes-content/docs/historial/orquestacion-vieja/ORCHESTRATOR.md`
-- `hermes-content/docs/historial/orquestacion-vieja/DASHBOARD.md`
-- `hermes-content/docs/historial/orquestacion-vieja/OPERATIONS.md`
 - `hermes-content/docs/CONTENT_WORKFLOW.md`
 - `hermes-content/docs/SECURITY.md`
 - `hermes-content/docs/VIDEO_LAB.md`
@@ -630,7 +626,6 @@ Canonical files:
 - `hermes-content/docs/STORY_REFERENCES.md`
 - `hermes-content/docs/STYLE_REFERENCES.md`
 - `hermes-content/docs/EXECUTION_PROTOCOL.md`
-- `hermes-content/docs/historial/orquestacion-vieja/HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md`
 - `hermes-content/docs/DAILY_CRONS.md`
 - `hermes-content/docs/WEEKLY_OPERATING_SYSTEM.md`
 - `hermes-content/docs/N8N_CANONICAL.md`
@@ -687,7 +682,6 @@ Canonical files:
 - `hermes-content/docs/ONIA_CENTER_CODEX_INTEGRATION_RUNBOOK_2026.md`
 - `hermes-content/docs/ONIA_CENTER_AI_MODEL_ROUTING_2026.md`
 - `hermes-content/docs/ONIA_CENTER_DAILY_N8N_BRIEFING_RUNBOOK_2026.md`
-- `hermes-content/docs/historial/orquestacion-vieja/ONIA_PROJECT_HYGIENE_AUTOMATION_2026.md`
 - `hermes-content/docs/ONIA_N8N_TELEGRAM_CLEANUP_20260630.md`
 - `hermes-content/docs/ONIA_MEETING_INTELLIGENCE_SYSTEM_2026.md`
 - `hermes-content/docs/ONIA_7000_BOB_PRODUCTION_INFRA_INVESTMENT_PLAN_2026.md`
@@ -700,9 +694,7 @@ Canonical files:
 - `hermes-content/docs/ONIA_CAPITAL_RECOVERY_AND_ARTHUR_INVESTMENT_POLICY_2026.md`
 - `hermes-content/docs/BOLIVIAN_TR4_LOCAL_STATIC_AUDIT_20260624.md`
 - `hermes-content/docs/ONIA_SUSTAINABILITY_DASHBOARD_SPEC_2026.md`
-- `hermes-content/docs/historial/orquestacion-vieja/ONIA_COMPANY_OPERATING_MODEL_2026.md`
 - `hermes-content/docs/ONIA_CASH_ENGINE_SERVICE_CATALOG_2026.md`
-- `hermes-content/docs/historial/orquestacion-vieja/HERMES_OS_CONTROL_CENTER_2026.md`
 - `hermes-content/docs/ONIA_PANEL_VENDEDORES_2026.md`
 - `hermes-content/deploy/selfhosted/`
 - `hermes-content/deploy/n8n/workflows/onia-center-daily-briefing.json`
