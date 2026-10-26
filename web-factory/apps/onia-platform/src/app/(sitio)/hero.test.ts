@@ -107,7 +107,7 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
     // cae dentro del tramo y nombra al chatbot cuatro veces
     const head = PORTADA.slice(
       PORTADA.indexOf("const DESDE_MES"),
-      PORTADA.indexOf("const ADDONS_RESTO"),
+      PORTADA.indexOf("const JSON_LD"),
     ).replace(/\/\*[\s\S]*?\*\//g, " ");
     expect(head.length).toBeGreaterThan(300);
     expect(head).toContain("Todo el negocio");
@@ -169,49 +169,23 @@ describe("el hero de la portada se DIBUJA, no se captura", () => {
    * en proporción), y lo primero que pregunta es si la clase que vigila sigue
    * existiendo — para que el próximo rediseño lo deje rojo diciendo qué pasó.
    */
-  const BARRA_DEL_DIA = "diaBarra";
-
-  it("la clase que vigilan estos guards sigue existiendo en la hoja", () => {
-    expect(CSS).toContain(`.${BARRA_DEL_DIA} {`);
-  });
-
-  it("la banda del día ya no está en el hero", () => {
-    const enLaPagina = new RegExp(`className=\\{s\\.${BARRA_DEL_DIA}\\}`);
-    expect(seccionHero(PORTADA)).not.toMatch(enLaPagina);
-    // pero sigue viva en la página, con el add-on que la explica
-    expect(PORTADA).toMatch(enLaPagina);
-  });
-
-  it("las 9 horas y las 15 se DIBUJAN repartiendo el día entero", () => {
-    const vos = Number(/const HORAS_VOS = (\d+)/.exec(PORTADA)?.[1]);
-    const onia = Number(/const HORAS_ONIA = (\d+)/.exec(PORTADA)?.[1]);
-    // si no suman 24, el corte de las 18:00 deja de caer donde la regla dice
-    expect(vos + onia).toBe(24);
-
-    // ...y el ANCHO de cada franja tiene que ser esa hora, no una mitad y
-    // mitad decorativa: el TSX pasa las horas por `--span` y la hoja las
-    // reparte con `flex-grow` sobre base 0, que da 9/24 y 15/24 exactos.
-    // Con cualquier otra base el dibujo deja de decir lo que dice el texto.
-    expect(PORTADA).toMatch(/"--span": HORAS_VOS/);
-    expect(PORTADA).toMatch(/"--span": HORAS_ONIA/);
-    expect(CSS).toMatch(/flex:\s*var\(--span[^)]*\)\s+1\s+0/);
+  it("la portada corta conserva cinco bloques y deriva al detalle del chatbot", () => {
+    expect(PORTADA.match(/<Block\s/g)).toHaveLength(5);
+    expect(PORTADA).not.toMatch(/className=\{s\.diaBarra\}/);
+    expect(PORTADA).toContain('href: "/chatbot"');
   });
 
   it("los agentes no mandan nada solos", () => {
     // onia-core/contract.json:838 y app/api/cron/onia-agents/route.ts: todo lo
     // que contacta a un cliente queda en la cola de aprobación. Tres
     // diseñadores prometieron lo contrario acá antes de que existiera el guard.
-    // Los tres momentos del bloque verde viven en MOMENTOS, arriba del JSX.
-    // El tope era "function Lane"; Lane se retiró con los slabs (11-sep) y un
-    // indexOf que no encuentra devuelve -1, que como fin de slice recorta el
-    // final del archivo en silencio. El tope nuevo es el componente, que no
-    // se va a ninguna parte.
-    const momentos = PORTADA.slice(
-      PORTADA.indexOf("const MOMENTOS"),
+    const tareas = PORTADA.slice(
+      PORTADA.indexOf("const TAREAS"),
       PORTADA.indexOf("export default function Portada"),
     );
-    expect(momentos).toContain("Vos los aprobás");
-    expect(momentos).not.toMatch(
+    expect(tareas).toContain("Vos aprobás cada envío");
+    expect(tareas).toMatch(/primerPlanCon\("agentes"\)/);
+    expect(tareas).not.toMatch(
       /te avisa|manda sol|env[ií]a sol|cobra sol|autom[áa]ticamente/i,
     );
   });
