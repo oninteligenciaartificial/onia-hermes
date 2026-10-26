@@ -1,0 +1,36 @@
+# Claves que ONIA fija en %LOCALAPPDATA%\hermes\config.yaml (Hermes de la PC, v0.22.2).
+# El resto del archivo lo maneja Hermes. Se aplica con Hermes cerrado y con el respaldo A1 hecho
+# (handoff/hermes-local.md). (P) = la clave sale de la documentación de Hermes y no se probó.
+# Sin secretos: las llaves viven en .env y auth.json de esa carpeta, nunca acá.
+
+model: {default: gpt-6.1-sol}            # Astra solo en una sesión nueva; nunca Claude (falló el 21 y 22-oct)
+
+skills:
+  write_approval: true                   # va ANTES de external_dirs: external_dirs es escribible (skills.md:424-425)
+  external_dirs: ["E:/onia-wt/hermes-base/.claude/skills"]   # la única fuente de skills, desde un worktree limpio
+memory: {write_approval: true}
+auxiliary: {background_review: {enabled: false}}   # origen de 131 de las 194 reescrituras de sus propias skills
+
+approvals:
+  timeout: 500
+  deny: ["git push*", "git commit*", "git merge*", "git reset --hard*", "git checkout -- *", "git clean*",
+         "git stash*", "gh pr merge*", "gh issue edit*", "gh label*", "gh api*", "gh workflow*", "gh secret*",
+         "ssh *", "scp *", "Remove-Item*", "rm -rf*", "higgsfield generate create*"]
+command_allowlist: [cua:click:background]   # sin execute_code ni scripts con -e/-c: un push desde Python se salta deny
+
+delegation: {model: gpt-6.1-sol, provider: openai-codex, max_iterations: 120,
+             max_concurrent_children: 2, child_timeout_seconds: 900}   # hijos solo para leer y verificar
+
+compression:
+  threshold: 0.50
+  threshold_tokens: 200000               # gana el menor: compacta a 200k con 272k y con 900k
+  target_ratio: 0.20
+  protect_last_n: 20
+  protect_first_n: 0                     # el objetivo vive en /goal
+  tail_mode: lean
+  idle_compact_after_seconds: 1800
+  proactive_prune_tokens: 48000
+
+checkpoints: {enabled: true}             # (P)
+timezone: America/La_Paz
+display: {tool_progress: new}

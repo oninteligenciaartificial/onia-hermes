@@ -2,7 +2,24 @@
 
 **Objetivo**
 Dejar a Hermes local configurado una sola vez como coordinador que lee las reglas y skills de ONIA, no se salta permisos y aprende por PR. Hecho = Hermes arranca desde un worktree limpio, `/context` muestra el AGENTS.md acordado, el índice de skills nombra las de `.claude/skills` y un `git push` le pide aprobación.
-Estado al 26-oct: **auditoría hecha, configuración NO empezada.** La auditoría completa está en `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`.
+Estado al 26-oct: **auditoría hecha, decisiones tomadas y todo escrito en un PR en borrador. La configuración no
+se aplicó.** La auditoría completa está en `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`.
+
+Lo que decidió Sergio Urcullo el 26-oct:
+1. **Manda un AGENTS.md nuevo y compacto.** Se armó desde la reescritura de Hermes, sacándole lo que se había
+   autorizado a sí mismo («piloto de Orca»), y se le sumaron: quién hace qué, qué fuente manda, cuándo parar y los
+   casos de CLAUDE.md.
+2. **Planifica el Hermes de la PC; el del VPS avisa.** El del VPS carga una tarea solo cuando él se la dicta. Los dos
+   cargan con `origen:hermes` y `necesita-ok`. Hay una sola cola: Orca Orchestration, `.hermes/plans` y los goals
+   dejan de serlo.
+
+En el PR quedaron:
+- `AGENTS.md` y `CLAUDE.md` §«Quién orquesta».
+- `hermes-content/deploy/hermes-pc/{SOUL.md,config.onia.yaml}`.
+- `hermes-content/deploy/codex/AGENTS.global.md`.
+- `hermes-content/docs/ONIA_HARNESS.md`, reescrito: el mapa de archivos, el flujo de un encargo y qué se queda,
+  sale y falta.
+- La fila «Cerebro» de `scripts/orquesta/README.md`.
 
 **Qué quedó EN PRODUCCIÓN**
 Nada. No se cambió ni la config de Hermes ni la de Orca ni ningún archivo de reglas.
@@ -24,11 +41,14 @@ Nada. No se cambió ni la config de Hermes ni la de Orca ni ningún archivo de r
 - Hipótesis falsa: que hay 16 skills divergentes entre `.agents/skills` y `.claude/skills`. La diferencia real es 1 SKILL.md y 1 referencia; el resto es CRLF.
 
 **Qué depende de Sergio**
-1. Qué AGENTS.md manda: el de origin/main, la reescritura de Hermes o uno compacto nuevo. Es la decisión central: el resto se apoya en ella.
-2. El rol de Hermes local frente al Hermes del VPS. Hoy ninguna regla lo nombra y hay dos planificadores.
-3. Orca: si Hermes sigue corriendo ahí. Si sí: permisos en Manual (sin `--yolo`), Workspace Directory en E: y la telemetría apagada. Además, la regla de firewall del puerto 6768 solo en el perfil Privado.
+1. ~~Qué AGENTS.md manda~~ y ~~el rol de cada Hermes~~: decididos el 26-oct (arriba). Falta que apruebe el PR.
+2. Despachar `aplicar` en el VPS para pausar la revisión de cada 3 h y poner el SOUL nuevo (el control de permisos
+   frena ese despacho desde una sesión).
+3. Orca: Hermes ya no corre ahí y Orchestration queda apagado (sale de la decisión 2). Falta Workspace Directory en
+   E:, la telemetría apagada y la regla de firewall del puerto 6768 solo en el perfil Privado.
 4. Mantener o revertir las 6 reglas globales y `~/.codex/config.toml` que tocó Hermes.
-5. La protección de la rama `main` en GitHub (exigir PR).
+5. La protección de la rama `main` en GitHub. Medido el 26-oct: en un repo privado del plan gratis la API responde
+   «Upgrade to GitHub Pro». Es un gasto, así que lo decide él; mientras tanto, la barrera es local.
 6. Cerrar una de las dos TUI.
 
 **Próximos pasos**

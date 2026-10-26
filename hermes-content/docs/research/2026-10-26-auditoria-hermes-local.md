@@ -125,7 +125,9 @@ Método: 8 lectores en paralelo (docs oficiales locales de Hermes v0.22.2, docs 
 | Codex | Contratos cerrados en un worktree | Git | Según el contrato |
 | Orca | Tablero de Claude y Codex | Orquestar (salvo que él decida formalizarlo) | - |
 
-**Decisión abierta (la toma Sergio Urcullo):** ¿quién carga la cola, Hermes local, el del VPS o los dos con un tope común? Hoy hay dos planificadores, más Orca Orchestration, más `.hermes/tasks`: son demasiados.
+**Decidido por Sergio Urcullo el 26-oct:** planifica Hermes local. El del VPS avisa y carga solo lo que él le dicta.
+Hay una sola cola: los issues `orquesta`. La tabla vigente de actores está en `AGENTS.md` §1 y el mapa en
+`ONIA_HARNESS.md`.
 
 **Contrato único.** Conviene extender el formato del issue de la orquesta (`README:35-46`) en vez de crear otro:
 ```
@@ -248,7 +250,7 @@ compression:
 | A1 | `Copy-Item "$env:LOCALAPPDATA\hermes\config.yaml","$env:LOCALAPPDATA\hermes\SOUL.md","$env:LOCALAPPDATA\hermes\memories\USER.md" "$env:LOCALAPPDATA\hermes\backups\pre-orden-20261026\"` | Borrar la carpeta |
 | A2 | El bundle de la sección 6, paso 2 | Borrar el archivo |
 | A3 | Worktree base para Hermes: `git -C C:/dev/proyectos/onia-hermes worktree add --detach E:/onia-wt/hermes-base origin/main`; se actualiza con `git -C E:/onia-wt/hermes-base fetch; git -C E:/onia-wt/hermes-base checkout --detach origin/main` | `git worktree remove E:/onia-wt/hermes-base` |
-| A4 | En una rama nueva, con PR en borrador sin mergear: AGENTS.md compacto (menos de 200 líneas y unos 12 KB, por el tope de 32 KiB de Codex (P)); CLAUDE.md con `@AGENTS.md` en la primera línea; `hermes-content/deploy/hermes-agent-local/SOUL.md` (unas 15 líneas en español: rol de coordinador, canario, prohibiciones); USER.md propuesto; skill `onia-coordinar`; descripciones de 57 caracteres o menos; el contrato en el README de la orquesta; la skill orca actualizada; `.hermes/plans` y `.hermes/tasks` al `.gitignore` | Cerrar el PR |
+| A4 | En una rama nueva, con PR en borrador sin mergear: AGENTS.md compacto (menos de 200 líneas y unos 12 KB, por el tope de 32 KiB de Codex (P)); CLAUDE.md con `@AGENTS.md` en la primera línea; `hermes-content/deploy/hermes-pc/SOUL.md` (unas 15 líneas en español: rol de coordinador, canario, prohibiciones); USER.md propuesto; skill `onia-coordinar`; descripciones de 57 caracteres o menos; el contrato en el README de la orquesta; la skill orca actualizada; `.hermes/plans` y `.hermes/tasks` al `.gitignore` | Cerrar el PR |
 | A5 | Informe de diffs (reglas globales, `~/.codex`, `~/.claude/settings.json`) en `handoff/hermes-local.md` | Revertir el commit |
 
 ### B. Lo hace Claude con el OK de Sergio Urcullo (en este orden)

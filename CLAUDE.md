@@ -187,7 +187,14 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 > Sergio Urcullo, 19-oct-2026, al resolver las contradicciones entre CLAUDE.md, AGENTS.md y las memorias:
 > Hermes planifica y el programa fijo reparte; la sesión principal es donde él trabaja conmigo.
 
-- **Hermes planifica** (VPS, por Telegram): arma las tareas y las carga como issues `orquesta` + `carril:<área>`.
+- **Planifica el Hermes de la PC; el del VPS avisa** (Sergio Urcullo, 26-oct-2026, al auditar Hermes local: en seis
+  días la revisión de cada 3 h del VPS cargó una tarea, mientras el de la PC armaba una cola paralela con sus planes,
+  sus goals y las 32 tareas de Orca). El de la PC convierte sus pedidos en issues `orquesta` + `carril:<área>`,
+  verifica y escribe el handoff, sin tocar código ni Git. El del VPS queda en Telegram (resumen, cierre, calendario,
+  avisos) y carga una tarea solo si él se la dicta. Los dos cargan con `origen:hermes` + `necesita-ok`. **Una sola
+  cola**: Orca Orchestration, `.hermes/plans` y los goals no son cola. Tabla de actores: `AGENTS.md` §1.
+  Pendiente: pausar la revisión de cada 3 h del VPS (`aplicar`) y mover a Hermes de la PC a un worktree limpio
+  (`handoff/hermes-local.md`). Antes decía «Hermes planifica (VPS, por Telegram)».
 - **El programa fijo reparte** (`scripts/orquesta/orquesta.mjs`, sin LLM que coordine): toma cada issue, corre al
   trabajador del carril con su modelo, lo hace revisar con contexto limpio y deja PR + comentario. Corre en
   **GitHub Actions** lo que no usa logins (marca, comunidad, investigación) y **en la PC** lo que usa sus sesiones

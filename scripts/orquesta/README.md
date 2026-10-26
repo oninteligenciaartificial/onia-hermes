@@ -7,7 +7,7 @@ Un programa fijo reparte el trabajo; los modelos solo trabajan. Por qué así y 
 
 | Pieza | Dónde | Qué hace |
 |---|---|---|
-| Cerebro | Hermes en el VPS | Planifica, carga issues `origen:hermes` con `scripts/loops/orquesta-hermes.sh` y los revisa cada 3 h (skill `planificar-orquesta`; apagado hasta que esté el token de Issues en el VPS) |
+| Cerebro | Hermes de la PC (desde el 26-oct) | Planifica: carga issues con `gh issue create`, siempre con `origen:hermes` + `necesita-ok`, y verifica las entregas. El Hermes del VPS solo carga lo que Sergio Urcullo le dicta por Telegram (`scripts/loops/orquesta-hermes.sh`); su revisión de cada 3 h queda por pausar. Mapa completo: `hermes-content/docs/ONIA_HARNESS.md` |
 | Manos 24/7 | GitHub Actions (`.github/workflows/orquesta.yml`) | `orquesta.mjs --donde nube` con Claude Code y el token de Max (`CLAUDE_CODE_OAUTH_TOKEN`) |
 | Manos con logins | PC de Sergio Urcullo | `orquesta.mjs --donde pc`: lo que usa sus sesiones o archivos (video, Meta, Instagram, Higgsfield, Buffer) |
 
