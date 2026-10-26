@@ -97,7 +97,7 @@ de conversión, dominio): ese listado es el checklist que se le pide al cliente,
 - **Un solo layout por bloque.** No hay variantes; dos clientes del mismo template salen
   con la misma forma. Si hace falta otra forma, se decide con Sergio, no se improvisa.
 
-Plan y estado real: `hermes-content/docs/platform/ONIA_WEB_FACTORY_UPGRADE_PLAN_20260807.md`.
+Plan y estado real: `hermes-content/docs/historial/ONIA_WEB_FACTORY_UPGRADE_PLAN_20260807.md`.
 
 ## Regla Sergio (por qué existe esta skill)
 

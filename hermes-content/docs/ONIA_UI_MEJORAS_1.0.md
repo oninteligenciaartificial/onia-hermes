@@ -83,7 +83,7 @@ Revisé qué mejoras de la lista son «código cerrado» y no hay ninguna que Co
 
 | Mejora | Por qué no es de Codex hoy |
 |---|---|
-| B1, B2 | Diseño nuevo; B1 y B2 tocan el mismo archivo (`AgendaClient.tsx`). Es de Plataforma (`codex-relevo.md` §7) |
+| B1, B2 | Diseño nuevo; B1 y B2 tocan el mismo archivo (`AgendaClient.tsx`). Es de Plataforma (`historial/handoff/codex-relevo.md` §7) |
 | B4, B5, B6 | Mismo `FichaVista.tsx` que el parche P2; hasta aplicarlo, cualquier cambio rompe su `git apply` |
 | B3 | Depende de que C11a (reserva avisa) esté mergeado |
 | B7, A1 | Es mirar, no construir |

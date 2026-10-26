@@ -3,7 +3,7 @@
 > **Que es esto.** Salida cruda de los lentes del workflow `wf_4ca119e5-8e7`, rescatada al
 > cerrar la sesion del 2026-08-23 para que no se pierda con el transcript. NO es el plan
 > final: el workflow quedo corriendo y las fases de verificacion y diseno no habian
-> terminado. Ver `hermes-content/docs/handoff/claude-git-status-935f47.md` §"El frente de
+> terminado. Ver `hermes-content/docs/historial/handoff/claude-git-status-935f47.md` §"El frente de
 > imagenes con Higgsfield" para saber como retomarlo — incluye el `scriptPath` y el `runId`
 > para relanzarlo con cache.
 >

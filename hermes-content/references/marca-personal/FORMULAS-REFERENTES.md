@@ -42,10 +42,10 @@ rinden en cada catálogo; §2 suma las fórmulas F9 a F14; el cierre trae los n�
 | Ganchos | **Claim de resultado en primera persona** («reemplacé a mi editor con Astra + DaVinci») y **promesa de hallazgo con fuente** (rótulo «así te haces VIRAL en X» + caption «Claude analizó el algoritmo de twitter y esto encontró») | [O] fichas citadas |
 | Cuerpo | Astra: afirmación → proceso visible arriba (timeline de DaVinci, chat del agente) → explicación a cámara → keyword. X: fuente en pantalla (repo `xai-org/x-algorithm`, «2.814 archivos») → fragmento de código → tabla de pesos → castigo (report −234) → prueba propia (su tweet con «enlace copiado») | [O] |
 | Cómo muestra el "cómo" | Screencast con **zoom focal a la línea o botón que importa**, tarjetas de UI flotando junto a la cara, tabla arriba/cara abajo | [O] |
-| YouTube | Capítulos: resultado temprano → requisitos/configuración → creación → revisión → personalización. Ofrece recurso descargable y comunidad | [O-descripción] handoff `docs/handoff/CONTINUAR-GUIONES-CLAUDE-2026-09-28.md` §Investigación adicional |
+| YouTube | Capítulos: resultado temprano → requisitos/configuración → creación → revisión → personalización. Ofrece recurso descargable y comunidad | [O-descripción] handoff `docs/historial/handoff/CONTINUAR-GUIONES-CLAUDE-2026-09-28.md` §Investigación adicional |
 | Método de trabajo que enseña | «Una instrucción completa» por video (OBJETIVO / MATERIAL / ESTILO), inventario de crudos, tabla de cortes + preview antes de cortar | [O] tutorial de 28 min, visto entero el 24-jul (skill `ver-videos`) |
-| Cierre / CTA | **Comentá keyword** («Astra», «ANIMA») → tutorial. Fondo del CTA: b-roll totalmente desenfocado + texto centrado, keyword en amarillo | [O] Astra; [P] ANIMA (comentarios de `Ddz9G7KIEfT`, `docs/cola/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md`) |
-| Destino | Bio → forjabots.com, horizontesia.com (formación → Skool), hub link.me con YouTube. Encuentros presenciales y hot seat | [O] bio verificada 28-sep; [P] encuentros (`docs/cola/PLAN-CONTENIDO-23-27-SEP-2026.md`) |
+| Cierre / CTA | **Comentá keyword** («Astra», «ANIMA») → tutorial. Fondo del CTA: b-roll totalmente desenfocado + texto centrado, keyword en amarillo | [O] Astra; [P] ANIMA (comentarios de `Ddz9G7KIEfT`, `docs/historial/cola/marca-personal-sep/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md`) |
+| Destino | Bio → forjabots.com, horizontesia.com (formación → Skool), hub link.me con YouTube. Encuentros presenciales y hot seat | [O] bio verificada 28-sep; [P] encuentros (`docs/historial/cola/marca-personal-sep/PLAN-CONTENIDO-23-27-SEP-2026.md`) |
 | Edición | Cara **abajo ~45 % anclada**, apoyo **arriba ~55 %** que rota cada 1-3 s; 25-30 cortes en 92 s; subtítulos blancos 2-5 palabras con keyword amarilla; rótulo cian chico + título blanco; «ecuación de logos» (X + Y = 💰); b-roll ≤1,5 s; música tech + whoosh + pop. **Pero** el reel de X tiene solo 5 cortes en 74,6 s y alterna tres registros (tarjetas junto a la cara, grafo a pantalla completa con karaoke, split tabla/cara) | [O] ambas fichas |
 
 Actualidad: reels sobre Opus 5.5 (23-sep, `DdpMVvQopMC`) y Sonnet 5.5 (28-sep,
@@ -94,7 +94,7 @@ Ficha: `vi/2026-10-08-referente-gadzhi.md`.
 
 | Rasgo | Qué hace | Evidencia |
 |---|---|---|
-| Formatos | Reel a cámara, carrusel de lista curada | [P] reel `Dd2S811ODEy` (28-sep, Sonnet 5.5); [P] carrusel «repos» del 17-sep (notas en `docs/cola/PARA-PUBLICAR-APPLE-REPOS.md`) |
+| Formatos | Reel a cámara, carrusel de lista curada | [P] reel `Dd2S811ODEy` (28-sep, Sonnet 5.5); [P] carrusel «repos» del 17-sep (notas en `docs/historial/cola/marca-personal-sep/PARA-PUBLICAR-APPLE-REPOS.md`) |
 | Duración | **8-oct:** 53-89 s; sus 9 videos de TikTok de más de 20 mil duran 57-83 s. Remates de 12-15 s | [O] ficha Rocha §1.7 |
 | Ganchos | Novedad de modelo el mismo día del lanzamiento (Sonnet 5.5 publicado 28-sep, el día que salió) | [P] caption + fecha |
 | Ganchos (8-oct) | **Lo que rinde no es la noticia** (modelos: 9 % de las piezas y 1 % de las vistas de TikTok). Rinden: dolor + defecto visible («se nota a kilómetros», 87,9 mil); segmento + número + gratis («si tenés un negocio pequeño, 15 empleados gratis», 467 mil en IG, con una noticia de mayo contada en agosto); «tú que [hacés X]» (62,4 mil); «literalmente hice…» (42,4 mil). Título escrito de 4-7 palabras en el cuadro 0, nunca saludo | [O] ficha Rocha §3.1 |
@@ -102,7 +102,7 @@ Ficha: `vi/2026-10-08-referente-gadzhi.md`.
 | Cuerpo / "cómo" | Carrusel: **cada lámina = un nombre propio** (el repo) + un mock de terminal que muestra el mecanismo; marca grande (GitHub) en la portada. Nada de categorías abstractas como titular | [P] nuestra nota de estructura del 17-sep; la ficha del carrusel no se guardó |
 | Cierre / CTA | Sin dato del CTA de reels. **8-oct:** siempre igual, 8-15 s: oferta de una guía + «comentá [una pregunta que pide un dato] y te la paso» + «seguime y compartilo». La pregunta de uso trae más comentarios que la de gusto (0,61 % contra 0,08 % de las vistas). Nunca «link en la bio» | [O] ficha Rocha §3.4 |
 | Destino | Bio → tododeia.com: «la bóveda» con **287 guías gratis, sin registro** (Claude, Claude Code, Codex, MCP, skills, automatización), 2 ebooks pagos (USD 29 c/u), eventos LIVE (luma), llamadas 1:1, repos open source, colaboraciones | [O] web leída 29-sep y 28-sep |
-| Mecanismo de embudo | Cada short conduce a una guía pública, específica y actualizable; primero la biblioteca gratis, después el producto. **8-oct:** cada serie tiene además un repo propio en GitHub (whatsapp-agentkit 529 estrellas, the-architect 535) que es el imán real | [I] lectura nuestra del 22-sep (`PLAN-CONTENIDO-23-27-SEP-2026.md`) sobre lo observado en la web; [O] GitHub 8-oct |
+| Mecanismo de embudo | Cada short conduce a una guía pública, específica y actualizable; primero la biblioteca gratis, después el producto. **8-oct:** cada serie tiene además un repo propio en GitHub (whatsapp-agentkit 529 estrellas, the-architect 535) que es el imán real | [I] lectura nuestra del 22-sep (`hermes-content/docs/historial/cola/marca-personal-sep/PLAN-CONTENIDO-23-27-SEP-2026.md`) sobre lo observado en la web; [O] GitHub 8-oct |
 | Edición | Sin dato. **8-oct:** toma continua de cara con capas (título fijo, subtítulo blanco sin color, caja que escribe, ficha de logo) y 2-7 capturas; receta en la skill `edicion-referentes` | — |
 
 ### Erik Taveras (@eriktaveras)
@@ -165,7 +165,7 @@ Ficha: `vi/2026-10-08-referente-gadzhi.md`.
 | Fuente | Qué aporta | Evidencia |
 |---|---|---|
 | Ingeniero Binario, carrusel Graphify (12 láminas) | El mejor molde de **tutorial por pasos** del corpus: costo con cuenta → solución → requisitos → 01-05 con comando → **paso crítico marcado** → salida → mantenimiento → pregunta. CTA «Comenta 'AUDITAR'» | [O] `vi/2026-08-28-graphify-memoria-permanente-del-agente.md` |
-| Ingeniero Binario, reel 22-sep (64,97 s) | Terminal + cara; cierre con DM ofrecido | [P] `AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md` |
+| Ingeniero Binario, reel 22-sep (64,97 s) | Terminal + cara; cierre con DM ofrecido | [P] `hermes-content/docs/historial/cola/marca-personal-sep/AUDITORIA-GUIONES-COMUNIDAD-2026-09-28.md` |
 | Ingeniero Binario, historia-quiz | Código de 3 líneas con trampa → pregunta en barra de acento → **sticker nativo de encuesta** | [O] `vi/2026-09-02-ingenierobinario-historia-quiz.md` |
 | Revolutia (TikTok, 42 s) | Contraste «por defecto vs setup correcto» → promesa numerada («tres skills, tres conexiones») → nombres propios → giro («la diferencia no es el modelo, es lo que le instalás») → link en perfil a comunidad. Web arriba / cara abajo. Guardados > likes (6.874 vs 6.220 el 1-sep) | [O] guion completo en caption; montaje [I] en `vi/2026-09-01-revolutia-estilo-tiktok.md` |
 
@@ -486,7 +486,7 @@ el recurso y la entrega listos.
 | Molde | Portada | Láminas | Cierre | Evidencia |
 |---|---|---|---|---|
 | **C1 Tutorial técnico por pasos** | Problema + número de pasos («Tu agente tiene amnesia: 5 pasos…») | Costo con la cuenta hecha → solución → requisitos → `01`-`05`: comando en tarjeta negra, **advertencias en tarjeta blanca** (el único elemento claro, para que el ojo vaya ahí) → salida esperada → mantenimiento | Pregunta («¿contexto o suerte?») + «Comenta 'AUDITAR'». Cornisa fija «← Desliza» en todas | [O] Ingeniero Binario, 12/12 láminas |
-| **C2 Lista con nombres propios** | Marca reconocible en grande (GitHub) | Una lámina por elemento, con **su nombre** + un mock que muestra el mecanismo; nada de categorías abstractas | Sin dato del cierre de Enrique | [P] Enrique 17-sep; adaptación propia ya hecha: `docs/cola/PARA-PUBLICAR-APPLE-REPOS.md` |
+| **C2 Lista con nombres propios** | Marca reconocible en grande (GitHub) | Una lámina por elemento, con **su nombre** + un mock que muestra el mecanismo; nada de categorías abstractas | Sin dato del cierre de Enrique | [P] Enrique 17-sep; adaptación propia ya hecha: `docs/historial/cola/marca-personal-sep/PARA-PUBLICAR-APPLE-REPOS.md` |
 | **C3 Mecanismo → usos → recurso** | Mecanismo | Usos | Skill o tutorial | [P] Santiago `DdwmO09CN4y`, solo caption |
 | **C4 Relato de fundador en restricción** | La restricción (pitch de 60 s) | Mercado → por qué LATAM y EE. UU. → equipo → reposicionamiento | Sin dato | [P] Ian `Dd0-c9llMY_`, solo caption |
 | C5 (no es referente) Autoridad en 15 | Cifra de caso | Caso → oportunidad → «no hagas X» → 5 ejemplos → «la parte que todos se pierden» → playbook → cómo construirlo → distribución | Pregunta equivocada vs correcta + comentá PALABRA | [O] `vi/2026-08-23-carrusel-15-laminas-repos-nichados-buildercult.md`. Molde útil; sus cifras de ingresos no se usan |

@@ -65,7 +65,7 @@ volver a evaluarlos:
 | `ui.watermelon.sh` (Watermelon UI) | bloques/componentes; abre y cierra el reel | ✅ ya en `gallery-reference-sources.json` y en §5b de SOURCES.md (licencia sin confirmar) |
 | `deck.gallery` | decks y slides curados «para no arrancar de un lienzo en blanco» | 🟢 **agregada 18-sep** como fuente de cosecha (`deck-gallery`, inspiration-only): tipografía, jerarquía y storytelling para propuestas, OG y `slides` — no para layout web |
 | `swishy.ai` | «AI motion designer»: texto → animación/motion graphics (MP4/GIF) | 🟡 diferida: la IA dibuja el visual, choca con «la interfaz nunca la dibuja la IA». Sirve solo para piezas de redes (carril marca-personal), no para UI de cliente |
-| `replit.com` | «What will you build?»: builder de apps por prompt | ⛔ descartada: es un builder, no una galería; el pipeline es Claude Code + Web Factory. Su caja única de entrada ya está medida en `hermes-content/research/competencia/configuradores-web-ia-2026-09-17.md` |
+| `replit.com` | «What will you build?»: builder de apps por prompt | ⛔ descartada: es un builder, no una galería; el pipeline es Claude Code + Web Factory. Su caja única de entrada ya está medida en `hermes-content/docs/historial/research/competencia/configuradores-web-ia-2026-09-17.md` |
 | `motion.dev` | «450+ ejemplos copy-paste» React/JS/Vue | ✅ librería ya default de la casa (`motion-y-3d.md`); 🟢 **`/examples` agregada 18-sep** como fuente de cosecha (`motion-dev-examples`) para minar mecánica de microinteracciones |
 
 **Saldo:** de cinco, dos ya estaban, dos entran a la cosecha (deck.gallery, motion.dev/examples) y dos

@@ -1,6 +1,6 @@
 # ONIA Core
 
-Estado: beta canonico (v0.7.1), instalando en DentalGest y GestiOS.
+Estado: estable (v1.0.0, `contract.json`), adoptado en Onia Platform. DentalGest es el nombre viejo del pack dental y GestiOS es legado (`CLAUDE.md` §«Hay UN solo producto»).
 Owner: Onia / Hermes.
 
 > Beta contract cerrado: se agregaron las 8 piezas transversales
@@ -151,7 +151,7 @@ modulos, verticales o integraciones. No son la definicion del core.
   sistemas cuando este listo.
 - `ONIA_CORE_CLIENT_ADOPTION_MAP_2026.md`: clientes candidatos y arquetipos
   mapeados a tracks verticales, con orden de adopcion.
-- `ONIA_CORE_EXTERNAL_RESEARCH_20260703.md`: proyectos open source, modelos y
+- `hermes-content/docs/historial/onia-core/ONIA_CORE_EXTERNAL_RESEARCH_20260703.md`: proyectos open source, modelos y
   skills verificadas (GitHub, Hugging Face) como referencias de diseno.
 - `ONIA_VERTICAL_FACTORY_STRATEGY_2026.md`: estrategia de fabrica de
   verticales por rubro y go-to-market (un core, muchos verticales
@@ -162,7 +162,7 @@ modulos, verticales o integraciones. No son la definicion del core.
   0.7.0 los 11 rubros del roadmap con track+pack definidos).
 - `ONIA_CORE_INSTALL_GUIDE_2026.md`: receta repetible de instalacion en
   productos, destilada de la adopcion real en DentalGest.
-- `ONIA_STACK_ASSESSMENT_2026.md`: evaluacion del stack (Postgres/Prisma/Next
+- `hermes-content/docs/historial/onia-core/ONIA_STACK_ASSESSMENT_2026.md`: evaluacion del stack (Postgres/Prisma/Next
   confirmados; riesgos reales: tenant isolation, sync offline, motor
   compartido).
 - `ONIA_CORE_DENTALGEST_ADOPTION_PLAN_2026.md`: plan de sprints para instalar

@@ -26,7 +26,7 @@
 | Verde del "IA" + subrayado | `#3EA639` | verde "go", medio, ni neón ni oscuro |
 
 → El **verde de la identidad web debe calibrarse a ESTE verde** (convertir a oklch y derivar la escala
-light/dark desde acá). El doc de identidad (`ONIA_BRAND_2026.md`) debe reconciliarse con este valor.
+light/dark desde acá). El doc de identidad (`hermes-content/docs/historial/web-factory/ONIA_BRAND_2026.md`) debe reconciliarse con este valor.
 
 ## Variantes necesarias (pendientes)
 

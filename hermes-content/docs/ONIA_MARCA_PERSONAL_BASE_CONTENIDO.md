@@ -385,7 +385,7 @@ produce solo". Los ganchos del banco (RADAR §2) se cruzan con estos temas.
       **dos stickers absolutos bajados a mano** — el padding no los movía porque se anclan
       al lienzo, no al contenido. Las 5 regeneradas y miradas.
       **De paso:** la carpeta tenía **4 historias huérfanas** de la secuencia v1 que ya
-      nadie lista en `PARA-PUBLICAR-CURSO-DIA1.md`, que el generador de hoy no reproduce y
+      nadie lista en `historial/cola/marca-personal-sep/PARA-PUBLICAR-CURSO-DIA1.md`, que el generador de hoy no reproduce y
       que seguían rotas. Borradas — una carpeta de publicación con piezas que nadie
       mantiene es una trampa para el que publica.
       **La regla que queda:** un gate de formato se corre sobre **cada carpeta**, no una

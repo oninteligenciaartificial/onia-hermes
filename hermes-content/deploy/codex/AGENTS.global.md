@@ -1,6 +1,6 @@
 # Codex en la PC de Sergio Urcullo
 
-Va copiado en `~/.codex/AGENTS.md` y lo lee Codex en cualquier repo. Fuente: `hermes-content/deploy/codex/AGENTS.global.md`
+Se copia a `~/.codex/AGENTS.md` (`aplicar.ps1 -Codex`) y lo lee Codex en cualquier repo. Fuente: `hermes-content/deploy/codex/AGENTS.global.md`
 del repo onia-hermes. Si el `AGENTS.md` del repo que estás tocando dice otra cosa, manda el del repo, salvo que este
 sea más restrictivo.
 

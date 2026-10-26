@@ -6,7 +6,7 @@
 > `web-factory/apps/onia-platform/src/app/empezar/**`.
 >
 > Fuentes que manda este spec (no duplicar — editar la fuente):
-> - Identidad: `web-factory/docs/ONIA_BRAND_2026.md` (blanco/negro/verde, verde = encendido).
+> - Identidad: `hermes-content/docs/historial/web-factory/ONIA_BRAND_2026.md` (blanco/negro/verde, verde = encendido).
 > - Motion: `web-factory/docs/MOTION_PATTERN_BANK_2026.md` + kit `src/motion/` (se REUSA, cero librería nueva).
 > - Constantes: `src/lib/site.ts` (`waLink`, `APP_URL`, `DENTALGEST_URL`).
 > - Compliance C7: nunca "por ley" · portal del SIN gratis de frente · el agente REPROGRAMA
@@ -44,7 +44,7 @@ Respondé 3 preguntas y te decimos qué encenderíamos"). No tocan apps ajenas.
 - Contenedor angosto (~640px), blanco dominante, una pregunta centrada verticalmente.
 - Footer micro fijo: *"Sin registro. No te pedimos nombre, correo ni teléfono — hablás
   recién cuando vos quieras."*
-- Tokens de color: los de `ONIA_BRAND_2026.md` §1.3/§1.4 (verde `#027650` claro /
+- Tokens de color: los de `hermes-content/docs/historial/web-factory/ONIA_BRAND_2026.md` §1.3/§1.4 (verde `#027650` claro /
   `#4DBD8C` oscuro). El verde SOLO significa seleccionado/encendido/progreso — nunca decora.
 
 ---
@@ -91,7 +91,7 @@ Respondé 3 preguntas y te decimos qué encenderíamos"). No tocan apps ajenas.
 
 ## 2. Copy completo por pantalla
 
-Tono: ES boliviano, voseo, directo, sin hype (reglas §4 de `ONIA_BRAND_2026.md`).
+Tono: ES boliviano, voseo, directo, sin hype (reglas §4 de `hermes-content/docs/historial/web-factory/ONIA_BRAND_2026.md`).
 Todos los textos van EXACTOS — no parafrasear al implementar.
 
 ### 2.0 Shell (todas las pantallas)

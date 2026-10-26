@@ -223,7 +223,7 @@ nunca UI de cliente.
 (Website · Mobile · Design · Slides · Animation). Veredicto **Descartar**: no es galería ni fuente
 de diseño; el pipeline es Claude Code + Web Factory. Su caja única de entrada ya está medida
 contra Durable/Hostinger/Wix/10Web en
-`hermes-content/research/competencia/configuradores-web-ia-2026-09-17.md`.
+`hermes-content/docs/historial/research/competencia/configuradores-web-ia-2026-09-17.md`.
 
 | Fuente | Veredicto | Rol en la factory |
 |---|---|---|

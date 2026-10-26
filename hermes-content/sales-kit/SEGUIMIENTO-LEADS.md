@@ -79,7 +79,7 @@ la llamada no lo promete, L-05); la factura del SIAT; el agente de WhatsApp; «o
 
 1. **Hay un choque de minutos que Sergio Urcullo debe ver:** el primer mensaje del bot (publicado desde el 25-sep) y la página `/contacto` ofrecen una demo de **30 minutos**; la agenda de Cal.com es de **20** y este playbook dice 20 (L-04, `ONIA_PROMESA_VS_PRODUCTO.md`). Estos textos dicen 20.
 2. **No consta que las plantillas A, A (estética), B y B′ existan aprobadas en Meta** (no vi la lista). La última con nombres es del **3-sep** y tenía 3 (`confirmacion_cita`, `seguimiento_demo`, `recordatorio_demo`);
-   la auditoría del 2-oct contó **7 aprobadas, sin nombres registrados**, y dice que **ninguna sirve como primer mensaje ni para retomar a estos leads** (`research/ONIA_AUDITORIA_20261002.md`).
+   la auditoría del 2-oct contó **7 aprobadas, sin nombres registrados**, y dice que **ninguna sirve como primer mensaje ni para retomar a estos leads** (`historial/research/ONIA_AUDITORIA_20261002.md`).
    Hay que crearlas con los textos de arriba (WhatsApp Manager, a cargo de Plataforma o la madre). **El tiempo de aprobación no está medido.**
 3. **El método de pago de la cuenta de WhatsApp: el repo se contradice.** Los docs de agosto lo dan por cargado y el 131042 por resuelto; el 19-sep se previó que desde el 1-oct, sin método de pago, los
    envíos vuelven `failed` (`cola/chatbot.md`, sin medir). **No es** lo que dice el tablero `t_ac3aa802`, que habla de crédito de OpenAI. Se mira en WhatsApp Manager antes del primer envío y después se mira el estado de
@@ -251,7 +251,7 @@ Manager. Las respuestas dentro de la ventana no son plantilla.
    - «Tu cuaderno no miente, pero tampoco avisa» (brief `hermes-content/carousels/briefs/onia-cuaderno-no-avisa-20260820.json`).
      Al usarlo con estos leads, su frase «quién dejó de venir» no se convierte en promesa de tratamiento a medias.
 
-   Según `hermes-content/docs/handoff/marca-personal-carruseles.md` todavía no hay nada publicado en Instagram: se verifica antes de
+   Según `hermes-content/docs/historial/handoff/marca-personal-carruseles.md` todavía no hay nada publicado en Instagram: se verifica antes de
    mandarle un link a un lead.
 
 ---

@@ -1,11 +1,11 @@
-# Lucía: cómo se usa (para la madre)
+# Lucía: cómo se usa
 
 > Una página para operar. Personaje y reglas finas: `references/modelos/lucia/LUCIA.md` (§0 manda). Higgsfield: `docs/HIGGSFIELD_VIDEO_SYSTEM.md`. Plan: `docs/cola/lucia-diario/PLAN.md`. Medido en el repo el 10-oct-2026; lo que no pude verificar (VPS, saldo) lo digo. No existía un doc equivalente: `historial/ONIA_LUCIA_USO_PRACTICO_Y_FUNCIONES.md` (23-ago) trata de funciones, no de operar.
 
 ## 1. Qué es y para qué (Sergio Urcullo, 10-oct)
 - **Laboratorio de Higgsfield:** cada pieza prueba un método (identidad, motor, clip, QA). Lo aprendido se anota en este doc, `HIGGSFIELD_VIDEO_SYSTEM.md` o la skill, en el mismo commit.
 - **Cuenta a facturar después:** `@lucia.antelo.oficial`, vitrina de lo que el sistema produce. Métrica única: demos con `src=lucia-*` (`onia.com.bo/llamada?src=lucia-<pieza>`).
-- **No se pausa.** Se ajusta con datos (la regla «pausar el día 14» de PLAN §4 queda superada). El cron viejo de video (38 cr/día) sigue apagado: rompe el tope. Se avanza por piezas, ordenadas por la madre.
+- **No se pausa.** Se ajusta con datos (la regla «pausar el día 14» de PLAN §4 queda superada). El cron viejo de video (38 cr/día) sigue apagado: rompe el tope. Se avanza por piezas, cargadas como issues `orquesta` (`AGENTS.md` §1; la madre se retiró el 19-oct).
 
 ## 2. Flujo, paso a paso
 | # | Paso | Herramienta / comando exacto |
@@ -20,7 +20,7 @@
 
 ## 3. Qué cuesta y qué se aprueba
 - **Tope Lucía: 150 cr/mes** (Sergio Urcullo, 1-oct); octubre llevaba 52,5 al 5-oct. Semana tipo ≈ 35 cr. Saldo: NO lo leí (era ~438 el 8-oct, plan Pro, 4 jobs a la vez); se lee con `higgsfield account status` al empezar.
-- **Medido:** Soul 2k 0,12 · still Seedream 1 · Nano Banana Pro 2 · GPT Image 2.5 1 a 2,75 · Kling std sin sonido 6 s 7,5 y 10 s 12,5 · entrenar Soul 25 · `sync_so` 18,15 (FLUJO.md estima ~22, sin medir).
+- **Medido:** Soul 2k 0,12 · still Seedream 1 · Nano Banana Pro 2 · GPT Image 2.5 1 a 2,75 · Kling std sin sonido 6 s 7,5 y 10 s 12,5 · entrenar Soul 25 · `sync_so` 18,15 (`historial/cola/lucia-diario/FLUJO.md` estima ~22, sin medir).
 - **Siempre** `generate cost` antes de `create`; job, modelo, costo y decisión de QA a `v4/PROCEDENCIA.jsonl`. Lo caro se avisa, no se lanza.
 - **Sin preguntar:** imágenes y lotes chicos (menos de ~5 cr) dentro del tope; se avisa después con la lámina. **Lo revisado ya está aprobado** (10-oct): pasa el QA, se publica y se avisa con el enlace.
 - **Con aprobación específica:** lote de video, entrenar un Soul, y todo lo que suba la cara o la voz de Sergio Urcullo (es menor de edad: además el OK de Leslie Mercado Moreno).
@@ -34,12 +34,12 @@ Entrega verificada en la rama `origin/claude/zealous-babbage-fvtjck` (NO está e
 | 3 | **G3** reel 58 s | «Tres errores de la IA que atrapé antes de publicar» | sem 1 día 3-4 |
 | 4 | **C1** carrusel | «Un video sin grabar, en 3 pasos» | sem 2 día 1 |
 | 5 | **G2** reel 58 s | «La misma foto, seis clips: ¿quién pierde la cara?» | sem 2 día 3 |
-- G4, G5 y C2 salen después, solo cuando la madre valide sus guiones. Hasta 3 piezas por semana, 19:00 La Paz (23:00 UTC).
-- Estado de G1: el ensayo en el VPS lo frenó el permiso «Remote Shell Writes» de la madre (`handoff/madre-local.md`).
+- G4, G5 y C2 salen después, solo cuando Sergio Urcullo apruebe sus guiones (antes los validaba la madre, retirada el 19-oct). Hasta 3 piezas por semana, 19:00 La Paz (23:00 UTC).
+- Estado de G1: el ensayo en el VPS lo frenó el permiso «Remote Shell Writes» de la madre (`historial/handoff/madre-local.md`).
 
 ## 5. Token de Instagram de Lucía (vence 13 a 18-oct)
 - Postiz leyó 13/17/18-oct para las tres cuentas y no dice cuál es la de Lucía: **asumir el 13**. Hoy es 10, quedan 3 días.
-- **No verificado** (sin acceso al VPS): `FLUJO.md` (30-sep) dice que solo existen `ig-sergio.env` e `ig-oniahq.env`; `ig-lucia.env` puede no existir.
+- **No verificado** (sin acceso al VPS): `historial/cola/lucia-diario/FLUJO.md` (30-sep) dice que solo existen `ig-sergio.env` e `ig-oniahq.env`; `ig-lucia.env` puede no existir.
 - Dura 60 días y se refresca sin login si tiene más de 24 h y NO venció. `ig-refrescar.sh` (cron lunes 09:00 La Paz; el próximo es el 12-oct) recorre todos los `ig-*.env` y avisa solo si falla.
 - **Renovar:** (1) cargar el token de Lucía en `/root/.config/onia-publicar/ig-lucia.env` (`IG_USER_ID=`, `IG_TOKEN=`, modo 600), como se hizo con sergio y oniahq el 29-sep desde Postiz; (2) correr `/root/bin/ig-refrescar.sh` a mano: debe decir «ig-lucia renovado»; (3) ensayo de G1.
 - Si ya venció o no hay token: login de Instagram de Lucía en la app `OnIA Social API`, una vez, lo hace Sergio Urcullo; infra guarda el token. Con el 13 pasado no hay atajo.

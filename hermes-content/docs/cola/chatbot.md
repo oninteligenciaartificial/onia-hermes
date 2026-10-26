@@ -1,7 +1,7 @@
 # La cola — carril `chatbot`
 
 > **Por qué existe este archivo.** El carril chatbot era el único sin cola: tenía
-> `hermes-content/docs/handoff/chatbot.md`, que es **estado**, no plan. Y sin cola no puede
+> `hermes-content/docs/historial/handoff/chatbot.md`, que es **estado**, no plan. Y sin cola no puede
 > tener loop — un loop sin cola no tiene qué comer, así que el carril sólo avanza cuando
 > alguien abre su sesión a mano.
 >
@@ -13050,7 +13050,7 @@ archivos.**
 - [x] **1 · Contar si un desconocido YA escribió.** Contado contra las dos bases, no contra el
       handoff. **La respuesta es SÍ: cinco desconocidos, y ninguno se ve en `/inbox`.**
       **El número.** La cuenta 2 de Chatwoot tiene hoy **22 conversaciones**, no 26 — el
-      handoff (`hermes-content/docs/handoff/chatbot.md:142`) traía un número viejo. Repartidas
+      handoff (`hermes-content/docs/historial/handoff/chatbot.md:142`) traía un número viejo. Repartidas
       en cuatro inboxes: 3 `ONIA Demo` (8, todas pruebas nuestras de julio), 4 `Onia Web` (5),
       5 `Onia WhatsApp` (3), 7 `ZZ QA Clinica Chatbot` (6, todas QA).
       **Los cinco desconocidos**, con la evidencia que los distingue de una prueba nuestra —
@@ -13107,7 +13107,7 @@ archivos.**
 - [x] **"Pricing: ¿existe un escalón más barato sólo widget web, sin WhatsApp?"**. Sergio lo
       decidió el 30-ago: **OPCIÓN A, Bs 390 plano todo incluido**, ratificado y sin cambio de
       código porque `lib/pricing.ts:23` ya lo tenía (`entryMonthly: 390`, `annualTotal: 3900`).
-      La comparativa que sostiene la decisión: `hermes-content/docs/ONIA_PRICING_CHATBOT_PROPUESTA.md`.
+      La comparativa que sostiene la decisión: `hermes-content/docs/historial/ONIA_PRICING_CHATBOT_PROPUESTA.md`.
 
 **Lo construido y verificado en producción** (resumen; el detalle largo vive en el handoff):
 

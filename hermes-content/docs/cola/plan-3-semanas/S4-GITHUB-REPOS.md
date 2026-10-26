@@ -17,7 +17,7 @@ README», «su documentación dice». Nunca «lo instalé» ni «lo probé». An
 estrellas e issues y releer el comando del README (cambian rápido).
 
 **Regla de la serie que se mantiene:** sin estrellas en pantalla en los verticales (envejecen,
-`PARA-PUBLICAR-APPLE-REPOS.md`). Solo el YouTube usa números, siempre con la fecha en que se vieron.
+`historial/cola/marca-personal-sep/PARA-PUBLICAR-APPLE-REPOS.md`). Solo el YouTube usa números, siempre con la fecha en que se vieron.
 Ninguno de los 10 repos del carrusel ya publicado (anthropics/skills, claude-plugins-official,
 cloudflare/skills, gsap-skills, claude-mem, Understand-Anything, ponytail, caveman, karpathy-skills,
 ECC) se repite acá.
@@ -288,7 +288,7 @@ Los cuatro chequeos están en la comunidad de WhatsApp.
 
 ### G11 · YouTube · Cómo encontrar repos de IA que valen la pena (y cuáles no instalar)
 **Fórmula:** F5 horizontal (abrí la fuente) con el orden de F1 · **Pilar:** Claude Code · **Destino:** comunidad de WhatsApp (drop 11)
-**Evidencia:** github.com/trending (semanal, 29-sep: paperclip #1, +10.518) · API de GitHub 29-sep (issues: paperclip 2.571 / 914 y 3.464 PR abiertos; hindsight 76 / 1.168; security-audit-skill 19 / 3) · README y `LICENSE` de paperclipai/paperclip (Quickstart, Telemetry), mksglu/context-mode (Elastic License 2.0; logos con `href="#"`), vectorize-io/hindsight (Quick Start, Coding Agents, Memory Performance) · `docs/cola/PARA-PUBLICAR-APPLE-REPOS.md` («Escribí 197 piezas…»; orden oficial → empresa → comunidad) · regla de instalación en el `CLAUDE.md` global de Sergio Urcullo · comandos `gh` corridos el 29-sep
+**Evidencia:** github.com/trending (semanal, 29-sep: paperclip #1, +10.518) · API de GitHub 29-sep (issues: paperclip 2.571 / 914 y 3.464 PR abiertos; hindsight 76 / 1.168; security-audit-skill 19 / 3) · README y `LICENSE` de paperclipai/paperclip (Quickstart, Telemetry), mksglu/context-mode (Elastic License 2.0; logos con `href="#"`), vectorize-io/hindsight (Quick Start, Coding Agents, Memory Performance) · `docs/historial/cola/marca-personal-sep/PARA-PUBLICAR-APPLE-REPOS.md` («Escribí 197 piezas…»; orden oficial → empresa → comunidad) · regla de instalación en el `CLAUDE.md` global de Sergio Urcullo · comandos `gh` corridos el 29-sep
 
 #### Resultado
 
@@ -447,7 +447,7 @@ Con --no-llm igual consulta OSV.dev con los nombres de las dependencias (no el c
 
 **5 · G05 · Plantilla de comercial de producto** (comunidad) — estructura de `product-commercial-shotlist.md` (awesome-seedance, MIT)
 ⚠️ **Corregido 1-oct: NO se publica.** La atribución «MIT» es falsa para la plantilla (curaduría CC BY 4.0, LOTE-D).
-Lo reemplaza `G05` de `cola/drops/2026-10-01-drops-noticias-repos.md`.
+Lo reemplaza `G05` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`.
 ```
 Pedido al chat (con fotos del producto):
 "Quiero un comercial cinematográfico. Mi producto es [producto]. Tono: [tono]. [duración], [formato 16:9 o 9:16].

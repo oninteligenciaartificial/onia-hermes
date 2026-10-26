@@ -9,28 +9,34 @@
 #   $py = (Get-Content "$env:LOCALAPPDATA\hermes\installs\*\facts.json" -Raw | ConvertFrom-Json).packages.venv.environment + '\Scripts\python.exe'
 #   & $py -I hermes-content/deploy/hermes-pc/probar-deny.py hermes-content/deploy/hermes-pc/config.onia.yaml
 # Con --vivo al final compara con el config.yaml que usa Hermes y falla si su deny no es este (el 26-oct falla: allá
-# no hay deny). Cómo compara Hermes: sin mayúsculas, el comando entero y cada ejecutable sin su ruta (;, &&, |,
-# $(...), bash -c, env, nohup). Corre en Git Bash, no mira dentro de cmd ni de PowerShell, no resuelve variables ni
-# alias, ni lo que haga un script (node x.js, python -c), y deny no es un sandbox (security.md:182-184). Por eso además:
+# no hay deny). Cómo compara Hermes: sin mayúsculas, el comando entero y cada ejecutable sin su ruta con / (;, &&, |,
+# $(...), bash -c, env, nohup); una ruta de Windows con \ no la recorta (approval_detection.py:1404-1416). Corre en
+# Git Bash, no mira dentro de cmd ni de PowerShell, no resuelve variables ni alias, ni lo que haga un script
+# (node x.js, python -c), y deny no es un sandbox (security.md:182-184). Por eso además:
 # - sin execute_code ni scripts con -e/-c en el allowlist (en modo manual piden aprobación);
-# - HERMES_WRITE_SAFE_ROOT (variable de usuario de Windows, separador ;) limita write_file y patch a
-#   E:\onia-wt\hermes-base\hermes-content\docs\handoff y %LOCALAPPDATA%\hermes. Lo de la terminal
-#   (Set-Content, etc.) solo lo frenan los permisos del sistema operativo.
+# - HERMES_WRITE_SAFE_ROOT (variable de usuario de Windows, separador ;) limita write_file, patch, delete_file y
+#   move_file a E:\onia-wt\hermes-base\hermes-content\docs\handoff y %LOCALAPPDATA%\hermes (file_safety.py:222-228).
+#   No cubre skill_manage, que escribe directo (skill_manager_tool.py:406): las skills de external_dirs solo las
+#   protege skills.write_approval. Lo de la terminal (Set-Content, etc.) solo lo frenan los permisos del sistema.
 
 model: {default: gpt-6.1-sol}            # Astra solo en una sesión nueva; nunca Claude (falló el 21 y 22-oct)
 
 skills:
-  write_approval: true                   # va ANTES de external_dirs: external_dirs es escribible (skills.md:424-425)
+  write_approval: true                   # external_dirs es escribible (skills.md:424-425): sin esto skill_manage escribe ahí sin preguntar
   external_dirs: ["E:/onia-wt/hermes-base/.claude/skills"]   # la única fuente de skills, desde un worktree limpio
 memory: {write_approval: true}
 auxiliary: {background_review: {enabled: false}}   # origen de 131 de las 194 reescrituras de sus propias skills
 
 approvals:
-  mode: manual                           # (P) es el default (approval.py:253); se fija para que --yolo no quede implícito
+  mode: manual                           # pregunta todo. El default es smart: un LLM auxiliar aprueba lo de bajo riesgo
+                                         # (config_defaults.py:1679; manual es solo el respaldo si falta la clave,
+                                         # approval_context.py:253). Ningún modo frena --yolo: con yolo solo quedan
+                                         # los pisos y approvals.deny (approval.py:1137-1148)
   timeout: 500
   deny:
     # git que escribe, publica o borra, también con opciones globales (git -C x push, git -c a=b push). Hermes compara
-    # además el nombre del ejecutable sin su ruta, así que "git*" cubre git.exe y "C:\...\git.exe"
+    # además el nombre del ejecutable sin su ruta con /, así que "git*" cubre git.exe, C:/.../git.exe y /usr/bin/git.
+    # Una ruta de Windows con \ (sobre todo entre comillas) no la recorta: esa la frena "?:*", más abajo
     - "git* push*"
     - "git* commit*"
     - "git* merge"
@@ -69,8 +75,9 @@ approvals:
     - "cmd*"
     - "powershell*"
     - "pwsh*"
-    # GitHub: cargar issues va solo por scripts/orquesta/cargar-issue.mjs. "gh*" cubre gh.exe, la ruta completa y las
-    # opciones globales delante (gh -R x issue edit); "gh* issue -*" cubre las opciones entre el grupo y la acción
+    # GitHub: cargar issues va solo por scripts/orquesta/cargar-issue.mjs. "gh*" cubre gh.exe, la ruta con / (la de
+    # Windows con \ la frena "?:*") y -R delante del grupo (gh -R x issue edit: -R es del grupo, pero gh lo acepta
+    # ahí); "gh* issue -*" cubre las opciones entre el grupo y la acción
     # (gh issue -R x edit): para leer, las opciones van después de la acción (gh issue view 1 -R x)
     - "gh* issue -*"
     - "gh* issue create*"
@@ -178,7 +185,8 @@ approvals:
 command_allowlist: []                    # sin cua:click:background: con GitHub abierto podía soltar o mergear a clics
 
 delegation: {model: gpt-6.1-sol, provider: openai-codex, max_iterations: 120,
-             max_concurrent_children: 2, child_timeout_seconds: 900}   # hijos solo para leer y verificar (P: falta medir si heredan deny)
+             max_concurrent_children: 2, child_timeout_seconds: 900}   # hijos solo para leer y verificar. Heredan deny por código
+             # (mismo proceso y config: approval_context.py:234-239), sin medir en vivo y salvo con el runtime Codex app-server
 
 compression:
   threshold: 0.50

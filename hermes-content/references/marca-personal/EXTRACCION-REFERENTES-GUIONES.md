@@ -115,7 +115,7 @@ solas esas definiciones ni el bloqueo de escritura de la agenda propuesta.
 ## Aplicación en la cola vigente
 
 La única copia de los guiones está en
-[Rodaje 27-sep, revisión 28-sep](../../docs/cola/RODAJE-MARCA-PERSONAL-2026-09-27.md).
+[Rodaje 27-sep, revisión 28-sep](../../docs/historial/cola/marca-personal-sep/RODAJE-MARCA-PERSONAL-2026-09-27.md).
 Se reescribieron los 12 activos. G00 sigue siendo captura de rescate; G07/G08
 siguen en banco avanzado. No se ordena regrabar temas con bruto sin localizarlo.
 

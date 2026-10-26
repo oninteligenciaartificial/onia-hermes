@@ -496,7 +496,7 @@ altas nuevas bajo nuestra WABA más allá de 3 pilotos.
 - ManyChat WhatsApp connect: <https://help.manychat.com/hc/en-us/articles/19247843644060> · pricing: <https://flowgent.ai/blog/manychat-pricing>
 
 **Internos:** `ONIA_CHATBOT_LINEA_DE_ENTREGA.md` (línea de montaje + detalle
-Embedded Signup §1) · `ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802.md` (git
+Embedded Signup §1) · `historial/ONIA_MODELO_MULTICLIENTE_CHATBOT_20260802.md` (git
 `456c2bc8`: coexistencia, marca blanca, multi-cuenta) ·
 `ONIA_WHATSAPP_CHATWOOT_META_SALES_AUDIT_2026.md` (runbook de acceso sin
 passwords) · `historial/ONIA_META_WHATSAPP_CLIENTES_20260808.md` (runbook

@@ -11,7 +11,7 @@
 - **Prioridad de Sergio Urcullo (30-sep): primero la comunidad de WhatsApp, después el presencial.**
 - **Ritmo vigente desde el 1-oct:** avisos lun/mié/vie 19:00 atados al video del día. Sin audio
   dominical ni «wins» (se sacaron el 30-sep: Sergio Urcullo no los había elegido). Reemplaza al «1 drop/día» de §Cadencia, que con una sola persona se
-  cortó. Textos de la vuelta: `cola/drops/2026-10-01.md`.
+  cortó. Textos de la vuelta: `historial/cola/drops/2026-10-01.md`.
 - **Qué es exclusivo (aclarado por Sergio Urcullo, 30-sep: «el video de YT solo lo envío a la comunidad» = también lo comparte ahí, no lo esconde):** los videos de YouTube siguen PÚBLICOS. Lo
   exclusivo es lo de §«Las seis cosas» de `ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`: llega primero
   (el link del video 24 h antes, sin listar), el archivo o prompt completo, lo que salió mal, y
@@ -228,7 +228,7 @@ este documento.
 > ⚠️ La versión anterior (03-sep, opción B, `t_f5b868da`) decía que el lunes 14 arrancaba
 > la "SEMANA 2" con los drops de n8n/automatizar de abajo. **Quedó vieja el 10-sep**: la
 > semana del 14 es la **semana 1 del motor, tema Mi stack**, con sus 6 drops ya escritos
-> en `cola/drops/2026-09-14.md` … `2026-09-19.md` — cada uno entrega un archivo real de
+> en `historial/cola/drops/2026-09-14.md` … `2026-09-19.md` — cada uno entrega un archivo real de
 > `/stack/archivos`. Los drops genéricos de abajo NO se tiran: se reusan (ver su nota).
 
 | días | qué va a Announcements |
@@ -236,7 +236,7 @@ este documento.
 | mié 02 → mar 08 | ✅ **serie D0-D6 completa**, un drop por día — cumplida |
 | mié 09 → vie 12 | **puente**: sin pieza nueva; a lo sumo recordatorio de lo que más reaccionó |
 | ~~sáb 13~~ **jue 10** | ✅ **el carrusel «Mi stack» YA ENVIADO** por Sergio Urcullo el 10-sep (se adelantó al plan del sábado) |
-| **dom 13, 19:00** | 🟢 **drop del beneficio nuevo**: los 15 minutos 1-a-1 con el link EXCLUSIVO `cal.com/sergiourcullo/15min` (oculto de la página pública; sólo vive acá) + recordatorio de que el lunes arranca la semana. Texto listo: `cola/drops/2026-09-13.md` |
+| **dom 13, 19:00** | 🟢 **drop del beneficio nuevo**: los 15 minutos 1-a-1 con el link EXCLUSIVO `cal.com/sergiourcullo/15min` (oculto de la página pública; sólo vive acá) + recordatorio de que el lunes arranca la semana. Texto listo: `historial/cola/drops/2026-09-13.md` |
 | lun 14 → sáb 19 | **semana Mi stack**: 1 drop por día con su archivo — ya escritos en `cola/drops/` |
 | **dom 20, 19:00** | cierre: los **5 archivos juntos** → link `/stack/archivos` (sólo acá) + qué viene |
 | lun 21 | en Instagram sale la promesa «comentá STACK» — **la comunidad ya lo tuvo todo antes**: ésa es la ventaja visible de estar adentro |
@@ -354,7 +354,7 @@ lo que ya se grabó y escribió para afuera, más lo que afuera no se cuenta.
 ## Drops de reserva: «qué automatizar primero» (ritmo lun-dom, listos para pegar)
 
 > ⚠️ **Corregido el 10-sep: éstos NO son la semana del 14.** La semana del 14 es Mi stack
-> (`cola/drops/2026-09-14.md` en adelante). Éstos se **reusan** como candidatos para la
+> (`historial/cola/drops/2026-09-14.md` en adelante). Éstos se **reusan** como candidatos para la
 > semana del **21**, si el viernes 19 Sergio Urcullo elige el tema «cómo saber qué
 > automatizar primero» del mapa — cuelgan todos de ese tema y ya están escritos.
 

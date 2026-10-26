@@ -2,7 +2,7 @@
 
 > **Actualización 28-sep:** el [mapa de frentes](ONIA_MAPA_DE_TEMAS.md) organiza
 > Sergio, enseñanza de IA/Lucía, casos de ONIA, demos de Platform y aplicación
-> en comunidad. Los [guiones vigentes](cola/RODAJE-MARCA-PERSONAL-2026-09-27.md)
+> en comunidad. Los [guiones vigentes](historial/cola/marca-personal-sep/RODAJE-MARCA-PERSONAL-2026-09-27.md)
 > entregan un ejemplo útil antes del CTA. La regla antigua «sólo qué/por qué»
 > queda corregida: también enseñamos el cómo de una unidad pequeña completa.
 > Los estados y métricas fechados de abajo son históricos.
@@ -46,7 +46,7 @@ eso es lo que evita que la próxima sesión lo deshaga— sino poner una puerta 
 | ¿Cómo se produce y distribuye un recurso? ¿Cuál es su estado? | [`ONIA_RECURSOS_UN_RECURSO_TRES_PUERTAS.md`](ONIA_RECURSOS_UN_RECURSO_TRES_PUERTAS.md) |
 | ¿Por qué vale la comunidad si todo es público? ¿Qué videos prometen? | [`ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md`](ONIA_COMUNIDAD_QUE_LA_HACE_VALER.md) |
 | ¿Qué va en cada carril y qué NO? | [`ONIA_MARCA_PERSONAL_TRES_CARRILES.md`](ONIA_MARCA_PERSONAL_TRES_CARRILES.md) |
-| ¿Qué hago esta semana, y quién hace qué? | [`cola/ARRANQUE-MOTOR-SEMANAL.md`](cola/ARRANQUE-MOTOR-SEMANAL.md) — vence el 21-sep |
+| ¿Qué hago esta semana, y quién hace qué? | [`historial/cola/marca-personal-sep/ARRANQUE-MOTOR-SEMANAL.md`](historial/cola/marca-personal-sep/ARRANQUE-MOTOR-SEMANAL.md) — vence el 21-sep |
 
 **Si dos se contradicen, gana `ONIA_DONDE_VA_CADA_COSA.md`** en todo lo que sea lugar y
 exclusividad; para lo demás, gana el más específico.

@@ -735,7 +735,7 @@ Meta AI) hablando con **el agente de la clínica**.
 | ¿Deja de tener sentido sin el núcleo? | sí: sin agenda no hay qué reservar | ✅ |
 | ¿Se entrega sin horas por cliente? | **solo si es UNA integración de plataforma** para todas las clínicas, como hace Zocdoc; clínica por clínica, cada ecosistema pide su alta | ⚠️ |
 
-**Lo que pasa en el mundo al 30-sep-2026** (`research/ONIA_TENDENCIAS_AGENTES_20260930.md`, con fuentes):
+**Lo que pasa en el mundo al 30-sep-2026** (`historial/research/ONIA_TENDENCIAS_AGENTES_20260930.md`, con fuentes):
 
 - **Pasa, pero en EE.UU. y por agregadores:** Zocdoc dentro de Gemini (12-ago-2026) y su red para que el
   prestador integre una vez y quede reservable en varios asistentes (22-sep-2026); Google llamando a negocios
@@ -780,7 +780,7 @@ ficha. Consecuencia de venta: **nunca vender el add-on como "un bot que responde
 | ¿Deja de tener sentido sin el núcleo? | no: funciona sin Onia Platform | ❌ |
 | ¿Se entrega sin horas por cliente? | no: es operación pesada en los dos lados | ❌ |
 
-**Lo que dice el mercado** (`research/ONIA_MARKETPLACE_EVALUACION_20260930.md`, con fuentes; extractos de
+**Lo que dice el mercado** (`historial/research/ONIA_MARKETPLACE_EVALUACION_20260930.md`, con fuentes; extractos de
 buscador, sin abrir las páginas): los que están son superapps con respaldo global (Yango abrió comida en
 La Paz en sep-2026 con 206 restaurantes el primer día; PedidosYa es de Delivery Hero); desde el DS 5199
 (2024) una app de transporte necesita empresa local y registro en la ATT; los comparables tardaron ~13-14

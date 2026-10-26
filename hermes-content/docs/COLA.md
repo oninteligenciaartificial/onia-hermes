@@ -34,7 +34,7 @@ entero por las pantallas reales y quedó fotografiado: org QA `zz-qa-cobro-e2e` 
 `subscription_payments`), aprobado en `/admin/payments` como superadmin, y la fila terminó
 `APPROVED` con la org pasando de trial a `basic` con `planEnd = 2026-10-10` **calculado solo**.
 La pantalla del cliente dice "Plan activo hasta el 10 de octubre de 2026". Capturas en el
-handoff [`handoff/cobro-e2e.md`](handoff/cobro-e2e.md).
+handoff [`historial/handoff/cobro-e2e.md`](historial/handoff/cobro-e2e.md).
 *(Acá decía que la org `ZZ QA Circuito Completo` del 2026-09-01 tenía el pago APPROVED. Esa
 corrida EXISTIÓ pero su org ya no está: la limpieza QA la borró y el FK en cascada se llevó la
 fila — el 2026-09-10 `subscription_payments` amaneció con CERO filas. Un pago REAL de un

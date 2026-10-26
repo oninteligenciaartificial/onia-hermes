@@ -1,7 +1,7 @@
 # L08 · ¿Cuántos pacientes se olvidan de su cita? — instrucción completa (v2, método Santiago medido)
 
 Una instrucción por video, ejecutada ENTERA. **Receta y reglas: `.claude/skills/editor-videos/SKILL.md` § «Reels de Lucía»**
-(leerla primero). Guion: `hermes-content/docs/cola/lucia-diario/S1-GUIONES.md` § L08. Por qué así:
+(leerla primero). Guion: `hermes-content/docs/historial/cola/lucia-diario/S1-GUIONES.md` § L08. Por qué así:
 `hermes-content/references/video-intake/2026-10-01-santiago-erik-edicion-medida.md`.
 R = `/home/user/onia-hermes` · ES = `R/.claude/skills/editor-videos/scripts/` · P = `R/videos/lucia-l08/`.
 

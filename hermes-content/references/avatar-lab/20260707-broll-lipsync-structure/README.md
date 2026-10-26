@@ -20,7 +20,7 @@ Formato definido a pedido de Sergio, comparando su investigacion de herramientas
 basado en una busqueda en vivo con `models_explore(action=search, query="veo google")`
 que devolvio vacio. Sergio lo cuestiono con razon. La realidad: **el catalogo completo
 y correcto ya estaba documentado** en
-[`hermes-content/references/higgsfield-capabilities-map-20260706.md`](../../higgsfield-capabilities-map-20260706.md)
+[`hermes-content/docs/historial/references/higgsfield-capabilities-map-20260706.md`](../../../docs/historial/references/higgsfield-capabilities-map-20260706.md)
 desde el dia anterior — `veo3`/`veo3_1`/`veo3_1_lite` ya figuraban ahi. Mi error no fue
 de catalogo sino de proceso: no consulte ese doc antes de responder y confie en una
 busqueda en vivo con query angosta, que no es confiable para "¿existe X?" (`search`

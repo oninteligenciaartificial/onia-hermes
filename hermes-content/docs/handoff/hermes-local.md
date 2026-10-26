@@ -61,7 +61,7 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
 **Intentos fallidos**
 - Hermes con Claude como proveedor (`claude-opus-5-5`, `claude-sonnet-4-6`, 21 y 22-oct): falló el refresh de OAuth, y además la vía Max solo gasta créditos de *extra usage*. No reintentar (onia-router: «el token de Max en Hermes» va en No usar).
 - Delegar a hijos `gpt-6-luna` con `max_iterations: 40`: cortó los guiones, que fueron rechazados.
-- Hipótesis falsa: que `skills.external_dirs` es de solo lectura. Es escribible (`skills.md:424-425`), y por eso `write_approval: true` va ANTES.
+- Hipótesis falsa: que `skills.external_dirs` es de solo lectura. Es escribible (`skills.md:424-425`), y por eso hace falta `skills.write_approval: true` (el orden de las claves en el YAML no importa).
 - Hipótesis falsa: que hay 16 skills divergentes entre `.agents/skills` y `.claude/skills`. La diferencia real es 1 SKILL.md y 1 referencia; el resto es CRLF.
 
 **Qué depende de Sergio**
@@ -75,7 +75,7 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
 8. Cerrar el PR #226 (reemplazado por #269): la sesión no tiene permiso para escribir en GitHub.
 9. Sacar del autosync la excepción del integrador apagado (`scripts/git-autosync.js:43`), en un PR propio con su prueba.
 5. La protección de la rama `main` en GitHub. Medido el 26-oct: en un repo privado del plan gratis la API responde
-   «Upgrade to GitHub Pro». Es un gasto, así que lo decide él; mientras tanto, la barrera es local.
+   «Upgrade to GitHub Pro». Es un gasto (4 USD por mes según el FAQ de planes de GitHub, que es de 2020: confirmar el monto en Settings → Billing), así que lo decide él; mientras tanto, la barrera es local.
 6. Cerrar una de las dos TUI.
 
 **Próximos pasos**

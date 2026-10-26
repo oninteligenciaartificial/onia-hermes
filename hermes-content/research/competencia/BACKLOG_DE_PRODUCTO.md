@@ -355,7 +355,7 @@ No pude comprobar que Onia carezca de lo siguiente, así que solo lo anoto: la f
 - Funciones que hoy no se pueden cumplir, como el "24/7 con IA" en WhatsApp: el agente de WhatsApp de Onia sigue pendiente y no debe nombrarse en la venta.
 
 ## Pendiente
-- **Dapta, Sendy y los demás:** no los revisé en esta pasada. Solo existen fichas anteriores (`DAPTA_TEARDOWN.md`, `SENDYPRO_TEARDOWN.md`, `MAPA_COMPETENCIA.md`), sin actualizar.
+- **Dapta, Sendy y los demás:** no los revisé en esta pasada. Solo existen fichas anteriores (`hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md`, `SENDYPRO_TEARDOWN.md`, `MAPA_COMPETENCIA.md`), sin actualizar.
 - **Videos y capturas de YouTube:** no verificados.
 
 **Fuentes:**
@@ -429,7 +429,7 @@ No pude comprobar que Onia carezca de lo siguiente, así que solo lo anoto: la f
 - **Reseñas.** Capterra 3,9 con solo 8 reseñas. Capterra lista un precio inicial de USD 83,99 que no coincide con la web, así que no lo uso **[NV]**. No encontré ficha en G2. Elogian lo fácil de usar y el soporte. No leí las dos reseñas de 1 estrella.
 - **Fuentes:** leadsales.io/precios/, leadsales.io, [Capterra](https://www.capterra.com/p/215729/Leadsales-CRM/reviews/). Capturas en leadsales.io/product/*.png. Demo en video del producto: no hay, solo entrevistas de clientes.
 
-**Dapta y Sendy:** ya tienen teardown en la carpeta (`DAPTA_TEARDOWN.md`, `SENDYPRO_TEARDOWN.md`). No los repetí.
+**Dapta y Sendy:** ya tienen teardown en la carpeta (`hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md`, `SENDYPRO_TEARDOWN.md`). No los repetí.
 
 ## (b) Funciones que Onia NO tiene, por impacto
 
@@ -764,7 +764,7 @@ Cada función se prueba con el flujo real de una clínica antes de ofrecerla, co
 - **Telemedicina y análisis de rayos X con IA.** Son riesgo clínico y regulatorio, y no los pide el cliente ideal.
 - **Contact Center que escribe solo por WhatsApp sin aprobación.** Onia propone y el dueño aprueba. Con 0 clientes, ese control es parte de lo que se vende.
 
-**Competidores pedidos por Sergio Urcullo pero no cubiertos:** esta tarea fue solo Dentalink y Doctocliq. Dapta y Sendy ya tienen fichas (`DAPTA_TEARDOWN.md`, `SENDYPRO_TEARDOWN.md`) y los demás tienen las suyas en `research/competencia/`. Hoy no los revisé.
+**Competidores pedidos por Sergio Urcullo pero no cubiertos:** esta tarea fue solo Dentalink y Doctocliq. Dapta y Sendy ya tienen fichas (`hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md`, `SENDYPRO_TEARDOWN.md`) y los demás tienen las suyas en `research/competencia/`. Hoy no los revisé.
 
 Sources:
 - [Doctocliq, planes y precios](https://doctocliq.com/planes-y-precios)
@@ -787,7 +787,7 @@ Revisé las fichas internas existentes y verifiqué en vivo con WebFetch y WebSe
   - No usé el navegador integrado, así que no vi capturas ni videos nuevos.
   - YouTube bloqueó esta IP en la pasada del 1-oct. Los videos `Hw46jlPf4mU` y `LrsAQlkSUeE` siguen sin mirarse.
   - G2 y Trustpilot no aparecieron en la búsqueda.
-- **No pedido por el brief, pero relevante:** los demás competidores nombrados por Sergio Urcullo (Dapta, Sendy y otros) están fuera de este encargo. Ya tienen `DAPTA_TEARDOWN.md` y `SENDYPRO_TEARDOWN.md` en la carpeta de competencia.
+- **No pedido por el brief, pero relevante:** los demás competidores nombrados por Sergio Urcullo (Dapta, Sendy y otros) están fuera de este encargo. Ya tienen `hermes-content/docs/historial/research/competencia/DAPTA_TEARDOWN.md` y `SENDYPRO_TEARDOWN.md` en la carpeta de competencia.
 
 ## (a) Fichas por competidor
 

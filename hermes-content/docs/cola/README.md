@@ -1,6 +1,6 @@
 # Las colas — un carril, un objetivo, una pantalla que lo prueba
 
-> 🗄️ **HISTORIA desde el 26-oct-2026.** Ya no hay madre ni colas por carril: la cola única son los issues `orquesta` (`AGENTS.md` §1, `hermes-content/docs/ONIA_HARNESS.md`). Lo de abajo no es un encargo ni da permisos.
+> 🗄️ **HISTORIA desde el 26-oct-2026.** Ya no hay madre ni colas por carril: la cola única son los issues `orquesta` (`AGENTS.md` §1, `hermes-content/docs/ONIA_HARNESS.md`). Lo de abajo no es un encargo ni da permisos. En `cola/` quedan solo los archivos que todavía lee algo (gates de `npm test`, el resumen de Hermes del VPS, su SOUL o prompts de loops): `chatbot.md`, `plataforma-v1.md`, `loops.md`, `tandas-v1.json`, `recorrido-cliente.md`, `EQUIPO.md`, `TABLERO.md`, `tendencias.md`, `marca-personal.md`, `drops/`, `plan-3-semanas/`, `lucia-diario/` y `loop/`. Esperan aparte `GUIONES-PARA-GRABAR-2026-09-29.md` y `AUDITORIA-8-CARRUSELES.md` (los nombra un script) y `LEARNINGS-APROBADOS-MARCA-PERSONAL.md` (falta pasarlo a su skill). Lo fechado de septiembre pasó a `historial/cola/` el 26-oct.
 
 > **Por qué existe esta carpeta.** El 2026-08-31 se midió: **349 commits repartidos en 5 ramas
 > y ninguno en `main`**. El trabajo estaba hecho y no llegaba a ningún lado. La sensación de
@@ -77,7 +77,7 @@ hecha y, más abajo, la repetía como pendiente.
 
 ## Lo que sí está pre-autorizado
 
-Mergear a `main` con los tres gates en verde (Sergio, 2026-08-29). Avisar después, no antes.
+~~Mergear a `main` con los tres gates en verde (Sergio, 2026-08-29). Avisar después, no antes.~~ **Ya no vale:** `main` avanza solo por PR revisado (`AGENTS.md` §6, desde el 5-oct).
 
 ## Los loops — cómo se ponen para que trabajen sin que Sergio promptee
 

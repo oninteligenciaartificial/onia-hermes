@@ -360,7 +360,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
 ### V-10 - Grabar con el iPhone como cámara, y la miniatura que se busca puntuando
 - **Replica:** iPhone por USB como cámara en OBS, perfil y nivel de audio verificados con una
   grabación de prueba; la miniatura sale de puntuar todos los fotogramas, no de elegir a ojo.
-- **Evidencia:** `hermes-content/docs/handoff/yt-canal.md` (2026-09-06); memoria
+- **Evidencia:** `hermes-content/docs/historial/handoff/yt-canal.md` (2026-09-06); memoria
   `miniatura-youtube-metodo.md` (detalle en la skill editor-videos).
 - **Nivel:** P - **Formato:** V60 + HL - **Riesgo:** Bajo.
 
@@ -412,7 +412,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
   un vigía avisa hasta que alguien lo aprueba; el cobro por API del banco se arma primero en modo
   simulado con la misma forma que la API real.
 - **Evidencia:** `onia-platform/components/billing/QRPaymentModal.tsx`; `hermes-content/deploy/vps-ops/vigia-comprobantes.sh`
-  (2026-09-24); `bot/bcp-qr.mjs` (modo mock, "el bot jamás cobra solo"); `handoff/cobro-e2e.md`
+  (2026-09-24); `bot/bcp-qr.mjs` (modo mock, "el bot jamás cobra solo"); `historial/handoff/cobro-e2e.md`
   (cobro probado E2E el 10-sep). Que Stripe no opera para comercios bolivianos viene de memoria
   (`lety-cobra-tarjeta-antes-del-trial.md`): confirmar en fuente de Stripe.
 - **Nivel:** I - **Formato:** HL - **Riesgo:** Alto: nunca mostrar la cuenta de cobro, el
@@ -539,7 +539,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
 ### L-03 - Canario visual: capturas por viewport, peso y tiempo de cada pantalla
 - **Replica:** script con navegador headless que abre N pantallas, captura por viewport (no
   `fullPage`: rompe headers sticky) y compara peso contra la corrida anterior.
-- **Evidencia:** `scripts/canario_visual.mjs`; `hermes-content/docs/handoff/canario-visual.md`
+- **Evidencia:** `scripts/canario_visual.mjs`; `hermes-content/docs/historial/handoff/canario-visual.md`
   (2026-09-02: una página cayó de 2.231 KB a 449 KB, el widget dejó de cargar).
 - **Nivel:** I - **Formato:** V60 + HL - **Riesgo:** Bajo.
 
@@ -555,7 +555,7 @@ Leyenda: **Nivel** P = principiante, I = intermedio, A = avanzado. **Formato** V
 - **Replica:** seguir el camino de un visitante de punta a punta (formulario -> WhatsApp -> bot)
   y verificar qué recibe al final.
 - **Evidencia:** memoria `web-lead-bot-lo-trata-como-pregunta-precio.md` (2026-09-17: el pedido
-  de web llegaba al bot como pregunta de precio de la plataforma); `handoff/web-creator.md`.
+  de web llegaba al bot como pregunta de precio de la plataforma); `historial/handoff/web-creator.md`.
 - **Nivel:** P - **Formato:** V60 - **Riesgo:** Medio: confirmar si ya se corrigió antes de
   contarlo en presente.
 

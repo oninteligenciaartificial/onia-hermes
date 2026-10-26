@@ -224,7 +224,7 @@ Seguidores y likes no se miden como resultado.
   - Lucía Libertaria: mdzol, 12-ago-2026 [T].
   - Thiago Navarro: El Heraldo, 30-sep-2026 [T].
   - Velvet Sundown: Exclaim, 04-jul-2025 [T].
-- Repo: `hermes-content/docs/cola/lucia-diario/S1-PIEZAS.md` (v2, 1-oct-2026).
+- Repo: `hermes-content/docs/historial/cola/lucia-diario/S1-PIEZAS.md` (v2, 1-oct-2026).
 
 **Pendientes que anoto sin hacerlos:**
 1. Corregir el «6 de 8 muertas» en `docs/ONIA_LUCIA_BENCHMARK_QUE_VENDE_20260817.md`.

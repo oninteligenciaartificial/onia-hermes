@@ -2,7 +2,7 @@
 
 > Fuente de verdad del apartado de marketing (sin fecha: se EDITA, no se duplica).
 > Espejo del "Sistema Sergio" de Samuel, adaptado a las otras dos cuentas del ecosistema.
-> Investigación base: `research/ONIA_TENDENCIAS_INFLUENCERS_IA_20260821.md` (30 fuentes),
+> Investigación base: `historial/research/ONIA_TENDENCIAS_INFLUENCERS_IA_20260821.md` (30 fuentes),
 > `references/video-intake/RADAR_DE_GANCHOS.md`, plan Samuel (19-ago).
 
 ## 0. La fórmula (compartida con el plan de Samuel)

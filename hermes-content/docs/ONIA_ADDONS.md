@@ -43,7 +43,7 @@ ningún add-on se entrega hoy sin horas de Sergio Urcullo.
 **Qué existe hoy.**
 - ✔ **`onia.com.bo/servicios/webs` responde 200** con el configurador: *Landing de Captación Bs 2.000 · Web Profesional Bs 4.500 · Web Pro Onia
   «lo vemos en una llamada»*, **Cuidado Web Bs 190 / 390 / 690 al mes**, registro de contactos en CRM/n8n con setup de Bs 790. Pago 50/50.
-- El motor `web-factory` está **construido sin probar de punta a punta:** *«Sitio generado → publicado: NO EXISTE»* (publicar es manual, `handoff/web-creator.md` §5b).
+- El motor `web-factory` está **construido sin probar de punta a punta:** *«Sitio generado → publicado: NO EXISTE»* (publicar es manual, `historial/handoff/web-creator.md` §5b).
   **0 pagos:** solo propuestas (AW Climatización, BENCH) y demos de ejemplo. Entregar cuesta 4-6 h (landing) o 1,5-2 días (profesional) de Sergio Urcullo
   (`ONIA_WEB_COMO_SE_VENDE.md` §3-4).
 - **Dos listas de precio vivas:** 790 / 1.500 / 2.900 en `ONIA_WEB_COMO_SE_VENDE.md` §5 y `ONIA_CATALOGO_DE_IDEAS.md`, contra 2.000 / 4.500 en la web.

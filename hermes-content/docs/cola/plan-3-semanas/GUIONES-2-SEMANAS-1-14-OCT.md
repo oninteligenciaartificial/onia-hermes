@@ -1,6 +1,6 @@
 # Guiones de dos semanas · jueves 1 → miércoles 14 de octubre de 2026
 
-Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados con nuestra regla, que dé valor, que no esté vacío, que demuestre algo»*, con informativos, repos top y noticias. Cada pieza pasó por la vara de 7 del `BRIEF-ESCRITOR.md`, por fecha, evidencia y cierre. Auditoría completa (qué se cambió y por qué): `auditoria-20260930/LOTE-A…D.md`.
+Pedido de Sergio Urcullo (30-sep): *«dame los guiones de 2 semanas, verificados con nuestra regla, que dé valor, que no esté vacío, que demuestre algo»*, con informativos, repos top y noticias. Cada pieza pasó por la vara de 7 del `BRIEF-ESCRITOR.md`, por fecha, evidencia y cierre. Auditoría completa (qué se cambió y por qué): `historial/cola/plan-3-semanas/auditoria-20260930/LOTE-A…D.md`.
 
 **Ritmo:** días normales = 3 verticales (tutorial · informativo · caso o negocio), ~1 hora de grabación. Días de YouTube (sáb 3, mar 6, vie 9, mar 13) = el largo + 1 vertical. Cada vertical da además 2 yaps a Trial (edición mía).
 
@@ -35,7 +35,7 @@ Cada pieza cierra pidiendo un comentario con su palabra. El recurso no cambió: 
 | Vie 2 | D02-A | EFFORT | comunidad · drop con la tabla de esfuerzo |
 | Vie 2 | DD-A | CACHE | comunidad · drop tabla Sol vs Astra y la cuenta de caché |
 | Vie 2 | D04-C | MIRAR | comunidad · drop 6 de S1 «Prompt para verificar mirando» |
-| Sáb 3 | D01-C (YouTube) | TRAMPA | comunidad · el reto de las tres propuestas (`drops/2026-10-01.md`, mensaje 2) |
+| Sáb 3 | D01-C (YouTube) | TRAMPA | comunidad · el reto de las tres propuestas (`historial/cola/drops/2026-10-01.md`, mensaje 2) |
 | Sáb 3 | N06 (rehecha el 2-oct) | ANTIGRAVITY | comunidad · drop N06 «De Gemini CLI a Antigravity CLI» |
 | Dom 4 | D01-A | SKILL | web `/claude-code` · video 02 «Instalarlo, y tu primera skill» |
 | Dom 4 | N02 | MIGRAR | comunidad · drop «Checklist de migración desde Sonnet 4.5» |
@@ -73,7 +73,7 @@ En YouTube no hay DM: se contesta el comentario con el mismo link.
 
 ## Antes de grabar (condiciones que salieron de la auditoría)
 
-- ✅ **WhatsApp cobra por mensaje (D02-B): confirmado el 1-oct** en la página de Meta (cobro por mensaje desde el 1-oct, misma tarifa que utilidad, 1.000 gratis por mes por número). Queda igual. `VERIFICACION-LAPTOP-20261001.md` §1.
+- ✅ **WhatsApp cobra por mensaje (D02-B): confirmado el 1-oct** en la página de Meta (cobro por mensaje desde el 1-oct, misma tarifa que utilidad, 1.000 gratis por mes por número). Queda igual. `historial/cola/plan-3-semanas/VERIFICACION-LAPTOP-20261001.md` §1.
 - ✅ **Ventana de anuncios (S2-D08-C, dom 11): corregida el 1-oct** — Meta dice «hasta 7 días» (no 72 h) y solo si el cliente escribe desde la app del celular.
 - **«Quedaban 2, había 44» (D05-C, lun 12):** el 44 es el conteo del 20-ago. Hoy el filtro muestra **38** activos de 96: si aparece en pantalla, decí «hoy, contadas de nuevo, son treinta y ocho»; no presentes 38 como el número de aquel día.
 - **«424 commits» (D05-A): confirmado** en la memoria local (1-sep).
@@ -114,7 +114,7 @@ La regla: si Sonnet empata en dos de tres, usalo por defecto. Opus, solo para el
 La planilla para anotarlo está en la comunidad.
 
 ### N03 · Vertical · Claude Code ya no te pregunta casi nada: qué deja pasar el modo auto
-*Noticia* · **Demuestra:** la barra de estado de Claude Code con el modo; Shift+Tab ciclando modos; la lista «Blocked by default» / «Allowed by default» de la doc; el bloque de `settings.json` y la sesión nueva mostrando «manual mode on» · **Cierre:** comentá COMUNIDAD → DM con el link a la comunidad de WhatsApp (drop N03 «Volver a modo manual», en `cola/drops/2026-10-01-drops-noticias-repos.md`). ⚠️ Corregido el 1-oct: acá decía MANUAL; al grabar, Sergio Urcullo dijo «comentá comunidad» y manda lo que dijo
+*Noticia* · **Demuestra:** la barra de estado de Claude Code con el modo; Shift+Tab ciclando modos; la lista «Blocked by default» / «Allowed by default» de la doc; el bloque de `settings.json` y la sesión nueva mostrando «manual mode on» · **Cierre:** comentá COMUNIDAD → DM con el link a la comunidad de WhatsApp (drop N03 «Volver a modo manual», en `historial/cola/drops/2026-10-01-drops-noticias-repos.md`). ⚠️ Corregido el 1-oct: acá decía MANUAL; al grabar, Sergio Urcullo dijo «comentá comunidad» y manda lo que dijo
 
 Tu Claude Code probablemente ya no te pide permiso para casi nada. Desde fines de septiembre arranca en modo auto, en todos los planes. Esto es lo que deja pasar.
 
@@ -205,7 +205,7 @@ El prompt completo está en la comunidad: comentá MIRAR y te paso el link.
 ## Sáb 3-oct
 
 ### D01-C · YouTube · Opus 5.5 o Sonnet 5.5: cuál usar y cómo cambiarlo en Claude Code
-*Tutorial / caso* · **Demuestra:** la misma tarea con trampa corrida en los dos modelos el 28-sep, con los mismos tres totales, más los comandos `--model` / `/model` en pantalla · **Cierre:** comentá TRAMPA → link a la comunidad, con el prompt de las tres propuestas (existe: `drops/2026-10-01.md`, mensaje 2; preparado, no enviado); en YouTube no hay DM: va como respuesta al comentario
+*Tutorial / caso* · **Demuestra:** la misma tarea con trampa corrida en los dos modelos el 28-sep, con los mismos tres totales, más los comandos `--model` / `/model` en pantalla · **Cierre:** comentá TRAMPA → link a la comunidad, con el prompt de las tres propuestas (existe: `historial/cola/drops/2026-10-01.md`, mensaje 2; preparado, no enviado); en YouTube no hay DM: va como respuesta al comentario
 
 #### Resultado primero
 
@@ -344,7 +344,7 @@ Cómo sabés que quedó: tu prueba corre sin error y la respuesta indica el mode
 La lista completa está en la comunidad de WhatsApp: comentá MIGRAR y te paso el link.
 
 ### S2-D07-A · Vertical · La regla de 24 horas que rompe tu bot de WhatsApp
-*Tutorial / caso* · **Demuestra:** la plantilla de seguimiento aprobada de ONIA en pantalla y el error ciento treinta y un mil cuarenta y siete, que es cómo sabés que te pasó · **Cierre:** comentá VENTANA → DM con el link a la comunidad, drop «Mensajes de seguimiento» (falta escribir: en `PRODUCCION-GUIONES-2026-09-29.md` §Drops 6 hay solo una línea que lo describe, sin contenido)
+*Tutorial / caso* · **Demuestra:** la plantilla de seguimiento aprobada de ONIA en pantalla y el error ciento treinta y un mil cuarenta y siete, que es cómo sabés que te pasó · **Cierre:** comentá VENTANA → DM con el link a la comunidad, drop «Mensajes de seguimiento» (falta escribir: en `historial/cola/marca-personal-sep/PRODUCCION-GUIONES-2026-09-29.md` §Drops 6 hay solo una línea que lo describe, sin contenido)
 
 Si tu bot de WhatsApp le escribe a un cliente que no contesta hace más de veinticuatro horas, ese mensaje no sale.
 
@@ -398,7 +398,7 @@ Cómo sabés que anduvo: cambiá algo de código, pedile un commit y fijate que 
 La plantilla está en la comunidad de WhatsApp: comentá VERIFY y te paso el link.
 
 ### S2-D08-A · Vertical · ¿La IA le promete a tu cliente algo que no confirmaste?
-*Tutorial / caso* · **Demuestra:** las dos respuestas reales de la prueba del 28-sep (sin reglas / con dos listas), en pantalla estilo chat · **Cierre:** comentá PROMESA → DM con el link a la comunidad, drop «Bot con dos listas» (existe: `PRODUCCION-GUIONES-2026-09-29.md` §Drops 3 + las dos respuestas de §Prueba 2)
+*Tutorial / caso* · **Demuestra:** las dos respuestas reales de la prueba del 28-sep (sin reglas / con dos listas), en pantalla estilo chat · **Cierre:** comentá PROMESA → DM con el link a la comunidad, drop «Bot con dos listas» (existe: `historial/cola/marca-personal-sep/PRODUCCION-GUIONES-2026-09-29.md` §Drops 3 + las dos respuestas de §Prueba 2)
 
 ¿Un bot con IA le promete a tu cliente una entrega que nunca confirmaste? Lo probé.
 

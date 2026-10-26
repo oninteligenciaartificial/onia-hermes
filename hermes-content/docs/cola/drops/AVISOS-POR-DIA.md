@@ -1,7 +1,7 @@
 # Avisos de Onia Community, día por día · vie 2 → mié 14-oct-2026
 
 **Cómo se usa:** el día indicado, pegá en *Avisos* cada texto (lo que está entre `~~~~`), en orden y **antes de la hora** (es la del primer video del día, 12:30; si subís el YouTube antes, pegá antes). La imagen o el archivo va justo después de su texto. Lo marcado ⛔ no se pega.
-**De dónde sale cada texto:** copiado tal cual de su drop de origen, nombrado en cada aviso (`drops/2026-10-01.md`, `drops/2026-10-01-drops-noticias-repos.md` y la sección «Drops» de `plan-3-semanas/S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md` y `S4-GITHUB-REPOS.md`). CACHE, VENTANA, PROMESA, PRUEBAS y REVISAR se armaron el 1-oct sin revisor y pasaron el revisor escéptico el 2-oct (lo corregido, en su origen). **Si se corrige un drop, se corrige en el origen y acá.**
+**De dónde sale cada texto:** copiado tal cual de su drop de origen, nombrado en cada aviso (`historial/cola/drops/2026-10-01.md`, `historial/cola/drops/2026-10-01-drops-noticias-repos.md` y la sección «Drops» de `plan-3-semanas/S1-GUIONES.md`, `S2-GUIONES.md`, `S3-GUIONES.md` y `S4-GITHUB-REPOS.md`). CACHE, VENTANA, PROMESA, PRUEBAS y REVISAR se armaron el 1-oct sin revisor y pasaron el revisor escéptico el 2-oct (lo corregido, en su origen). **Si se corrige un drop, se corrige en el origen y acá.**
 **Cada recurso arranca con su PALABRA en negrita:** el que llega por DM la busca en Avisos. Al final: qué mandar por DM y los huecos.
 
 ---
@@ -15,7 +15,7 @@ Nada: lo de hoy no salió y pasa al viernes temprano.
 ### Vie 2-oct · antes de las 12:30
 
 #### 2-1 · Vuelta + reto → TRAMPA (YouTube D01-C y carrusel K1 del sábado)
-Origen: `drops/2026-10-01.md`, mensajes 1 y 2 (corregidos 1-oct: fecha y ritmo). Pegalo primero. Después, la imagen `carousels/out/sergio-comunidad-reto-presupuestos-20261001/slide-01.png`.
+Origen: `historial/cola/drops/2026-10-01.md`, mensajes 1 y 2 (corregidos 1-oct: fecha y ritmo). Pegalo primero. Después, la imagen `carousels/out/sergio-comunidad-reto-presupuestos-20261001/slide-01.png`.
 
 ~~~~
 Volví 👋
@@ -63,7 +63,7 @@ La respuesta la dejo mañana sábado a las 10:00 👀
 ~~~~
 
 #### 2-2 · Recursos de los videos de ayer → PLANILLA · COMUNIDAD (N03, modo auto) · TARIFA
-Origen: drop 1 de `S1-GUIONES.md` · `N03` y `drop-2` de `drops/2026-10-01-drops-noticias-repos.md`. Van juntos para no pasar de 3 avisos.
+Origen: drop 1 de `S1-GUIONES.md` · `N03` y `drop-2` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. Van juntos para no pasar de 3 avisos.
 
 ~~~~
 *PLANILLA* · *Planilla Sonnet vs Opus*
@@ -147,7 +147,7 @@ Contá en General: *¿te dio cero o te toca pagar?*
 ~~~~
 
 #### 2-3 · Recursos de hoy → EFFORT (video D02-A y carrusel K10) · MIRAR (D04-C) · CACHE (DD-A y su carrusel)
-Origen: `drop-EFFORT` de `drops/2026-10-01-drops-noticias-repos.md` (corregido 1-oct: cierre a General) · drop 6 de `S1-GUIONES.md` · `CACHE` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct: fórmula con la escritura en caché, «0» solo vale después del primer pedido, 30 minutos, contexto corto).
+Origen: `drop-EFFORT` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (corregido 1-oct: cierre a General) · drop 6 de `S1-GUIONES.md` · `CACHE` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct: fórmula con la escritura en caché, «0» solo vale después del primer pedido, 30 minutos, contexto corto).
 
 ~~~~
 *EFFORT* · *Mi tabla de esfuerzo para Claude Code*
@@ -237,7 +237,7 @@ Contá en General: *¿qué parte de tus pedidos se repite siempre igual?*
 ### Sáb 3-oct · a las 10:00 (antes del YouTube D01-C, del carrusel K1 y de la noticia N06)
 
 #### 3-1 · Respuesta del reto → TRAMPA
-Origen: `drops/2026-10-01.md`, mensaje 3. Después, la imagen `carousels/out/sergio-comunidad-reto-presupuestos-20261001/slide-02.png`.
+Origen: `historial/cola/drops/2026-10-01.md`, mensaje 3. Después, la imagen `carousels/out/sergio-comunidad-reto-presupuestos-20261001/slide-02.png`.
 
 ~~~~
 *TRAMPA* · *La respuesta del reto*
@@ -262,7 +262,7 @@ La clave son dos pedidos: *la fórmula* y *de dónde sacó cada dato*. Así ves 
 ~~~~
 
 #### 3-2 · ANTIGRAVITY (noticia N06 y su carrusel)
-Origen: `N06` de `drops/2026-10-01-drops-noticias-repos.md` (rehecho el 2-oct).
+Origen: `N06` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (rehecho el 2-oct).
 
 ~~~~
 *ANTIGRAVITY* · *De Gemini CLI a Antigravity CLI*
@@ -311,7 +311,7 @@ Contá en General: *¿usabas Gemini CLI? ¿Qué tuviste que mover a mano?*
 ### Dom 4-oct · antes de las 12:30
 
 #### 4-1 · MIGRAR (noticia N02 y su carrusel)
-Origen: `N02` de `drops/2026-10-01-drops-noticias-repos.md`.
+Origen: `N02` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`.
 
 ~~~~
 *MIGRAR* · *Checklist: de Sonnet 4.5 a Sonnet 5.5*
@@ -345,7 +345,7 @@ Contame en General: *¿cuántos resultados te dio la búsqueda del paso 1?*
 ~~~~
 
 #### 4-2 · VENTANA (S2-D07-A; también el carrusel K5 del dom 11)
-Origen: `VENTANA` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; textos copiados de `bot/config.mjs`; corregidos «20 h después de ese mensaje», «tus números y los de prueba» y «empieza o termina en una variable»).
+Origen: `VENTANA` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; textos copiados de `bot/config.mjs`; corregidos «20 h después de ese mensaje», «tus números y los de prueba» y «empieza o termina en una variable»).
 
 ~~~~
 *VENTANA* · *Mis mensajes de seguimiento*
@@ -397,7 +397,7 @@ Comprobar: preguntale a Claude una regla que solo está en AGENTS.md.
 ~~~~
 
 #### 5-2 · VERIFY (noticia N04 y su carrusel)
-Origen: `N04` de `drops/2026-10-01-drops-noticias-repos.md`.
+Origen: `N04` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`.
 
 ~~~~
 *VERIFY* · *Plantilla: la skill verify*
@@ -427,7 +427,7 @@ Contame en General: *¿qué chequeo le pusiste a tu verify?*
 ~~~~
 
 #### 5-3 · PROMESA (S2-D08-A y carrusel K6)
-Origen: `PROMESA` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; copiado de `PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2; agregada la línea que explica los `[…]`). ⚠️ Las respuestas están recortadas (`[…]`) y las completas no están en el repo; el guion y el caption de K6 dicen «completas»: al grabar, decí «las dos respuestas están en la comunidad», sin «completas», y sacalo también del caption de K6.
+Origen: `PROMESA` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; copiado de `historial/cola/marca-personal-sep/PRODUCCION-GUIONES-2026-09-29.md` §Prueba 2; agregada la línea que explica los `[…]`). ⚠️ Las respuestas están recortadas (`[…]`) y las completas no están en el repo; el guion y el caption de K6 dicen «completas»: al grabar, decí «las dos respuestas están en la comunidad», sin «completas», y sacalo también del caption de K6.
 
 ~~~~
 *PROMESA* · *Bot con dos listas: la prueba del 28-sep*
@@ -474,7 +474,7 @@ Orden del archivo: al arrancar → las que más se rompen → producto → cómo
 ~~~~
 
 #### 6-2 · DIAGRAMA (R01)
-Origen: `R01` de `drops/2026-10-01-drops-noticias-repos.md`.
+Origen: `R01` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`.
 
 ~~~~
 *DIAGRAMA* · *GitDiagram: cambiá hub por diagram y mirá cómo está armado un repo*
@@ -570,7 +570,7 @@ Las skills de plugins no se tocan acá: /plugin.
 ~~~~
 
 #### 8-2 · CODEGRAPH (R06)
-Origen: `R06` de `drops/2026-10-01-drops-noticias-repos.md`. Condición: releer el README ese día; si cambió, gana el README.
+Origen: `R06` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. Condición: releer el README ese día; si cambió, gana el README.
 
 ~~~~
 *CODEGRAPH* · *CodeGraph: instalar, apagar la telemetría y desinstalar*
@@ -617,7 +617,7 @@ El primero, dentro de cada proyecto: borra su mapa (la carpeta .codegraph). El s
 ~~~~
 
 #### 8-3 · PRUEBAS (carrusel K4)
-Origen: `PRUEBAS` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; copiado del brief de K4; corregidas la prueba 2, «el mismo mensaje reentregado, con el mismo id», y la 5, «Pedí hablar con una persona»).
+Origen: `PRUEBAS` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct; copiado del brief de K4; corregidas la prueba 2, «el mismo mensaje reentregado, con el mismo id», y la 5, «Pedí hablar con una persona»).
 
 ~~~~
 *PRUEBAS* · *Las 5 pruebas antes de activar tu bot*
@@ -669,7 +669,7 @@ LOS OCHO CHEQUEOS
 ~~~~
 
 #### 9-2 · PDF (R03)
-Origen: `R03` de `drops/2026-10-01-drops-noticias-repos.md`. Condición: releer el Quickstart ese día; si cambió, gana el README.
+Origen: `R03` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. Condición: releer el Quickstart ese día; si cambió, gana el README.
 
 ~~~~
 *PDF* · *PageIndex: el script del Quickstart, comentado en español*
@@ -723,7 +723,7 @@ Y el 98,7 % de acierto que muestran es una medición suya en otra prueba (Financ
 ~~~~
 
 #### 9-3 · REVISAR (carrusel K9)
-Origen: `REVISAR` de `drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct, sin cambios; copiado del brief de K9).
+Origen: `REVISAR` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (revisado 2-oct, sin cambios; copiado del brief de K9).
 
 ~~~~
 *REVISAR* · *Mi editor de IA, paso a paso*
@@ -785,7 +785,7 @@ Origen: drop 5 de `S2-GUIONES.md`.
 ~~~~
 
 #### 10-3 · ⛔ MARKETING (R05) — no pegar hasta que decidas
-Origen: `R05` de `drops/2026-10-01-drops-noticias-repos.md`. **Decidí vos:** el paquete de marketing entero, escaneado el 1-oct, da 100/100 · DO NOT INSTALL. Si no lo recomendás, borrá la viñeta «O el paquete entero» y su bloque de comandos (y el guion R05 cambia, ver la condición en el origen). Antes, confirmá en la laptop que una skill con puntaje bajo muestra CAUTION.
+Origen: `R05` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. **Decidí vos:** el paquete de marketing entero, escaneado el 1-oct, da 100/100 · DO NOT INSTALL. Si no lo recomendás, borrá la viñeta «O el paquete entero» y su bloque de comandos (y el guion R05 cambia, ver la condición en el origen). Antes, confirmá en la laptop que una skill con puntaje bajo muestra CAUTION.
 
 ~~~~
 *MARKETING* · *claude-skills: escaneá cada skill antes de instalarla*
@@ -848,7 +848,7 @@ Si contestás a mano desde la app WhatsApp Business, esto no te toca.
 ~~~~
 
 #### 11-2 · DERECHOS (R02)
-Origen: `R02` de `drops/2026-10-01-drops-noticias-repos.md`. Condición: releer `README-en.md` ese día; si cambió «Background Music» o el comando de Docker, gana el README.
+Origen: `R02` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. Condición: releer `README-en.md` ese día; si cambió «Background Music» o el comando de Docker, gana el README.
 
 ~~~~
 *DERECHOS* · *Antes de publicar un video hecho con MoneyPrinterTurbo*
@@ -913,7 +913,7 @@ timeout 50m claude -p --allowedTools "Read,Edit,Grep,Glob,Bash" < prompt.md >> l
 ~~~~
 
 #### 12-3 · REMOTION (R07)
-Origen: `R07` de `drops/2026-10-01-drops-noticias-repos.md`. Condición: releer `LICENSE.md` ese día (avisa un cambio en Remotion 5.0).
+Origen: `R07` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. Condición: releer `LICENSE.md` ese día (avisa un cambio en Remotion 5.0).
 
 ~~~~
 *REMOTION* · *Remotion: ¿en qué licencia caés?*
@@ -1005,7 +1005,7 @@ Es el archivo con el que se armó el carrusel de hoy: todo el texto en un JSON, 
 ### Mié 14-oct · antes de las 12:30
 
 #### 14-1 · CONEXIONES (S1-D07-B)
-Origen: `drop-14` de `drops/2026-10-01-drops-noticias-repos.md` (reemplaza al drop 14 de S1, que no se publica).
+Origen: `drop-14` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md` (reemplaza al drop 14 de S1, que no se publica).
 
 ~~~~
 *CONEXIONES* · *Qué MCP te sobran: medilo, no lo adivines*
@@ -1042,7 +1042,7 @@ Corré /usage, apretá w y contá en General: *¿cuántos de tus MCP no aparecen
 ~~~~
 
 #### 14-2 · BUCLE (R04)
-Origen: `R04` de `drops/2026-10-01-drops-noticias-repos.md`.
+Origen: `R04` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`.
 
 ~~~~
 *BUCLE* · *AI Engineering from Scratch: por dónde arrancar con agentes*
@@ -1137,7 +1137,7 @@ Link de la comunidad: `https://chat.whatsapp.com/ENplPbR8GrbGsdMrGgLxzu` (el de 
 
 1. **Sáb 3 · N06 rehecha (2-oct):** el lugar libre lo ocupa ANTIGRAVITY (aviso 3-2), «Google cambió Gemini CLI gratis por Antigravity CLI». Fuentes oficiales en el drop N06.
 2. **MARKETING · sáb 10:** escrito, pero espera tu decisión (aviso 10-3). Si no lo recomendás, se ajusta o se baja R05.
-3. **Revisados el 2-oct:** CACHE (vie 2), VENTANA (dom 4), PROMESA (lun 5), PRUEBAS (jue 8) y REVISAR (vie 9). Corregidos CACHE, VENTANA y PRUEBAS; PROMESA, una línea; REVISAR, sin cambios. Qué y por qué: la línea ⚠️ de cada uno en `drops/2026-10-01-drops-noticias-repos.md`. El texto de acá y el del origen es el mismo (comprobado con script).
+3. **Revisados el 2-oct:** CACHE (vie 2), VENTANA (dom 4), PROMESA (lun 5), PRUEBAS (jue 8) y REVISAR (vie 9). Corregidos CACHE, VENTANA y PRUEBAS; PROMESA, una línea; REVISAR, sin cambios. Qué y por qué: la línea ⚠️ de cada uno en `historial/cola/drops/2026-10-01-drops-noticias-repos.md`. El texto de acá y el del origen es el mismo (comprobado con script).
 4. **PROMESA:** las dos respuestas están recortadas (`[…]`) y las completas no existen en el repo (buscadas en el árbol, en todo el historial de git y en las transcripciones). El guion y el caption de K6 dicen «completas»: sacalo de los dos antes de grabar (lun 5) y antes de publicar K6.
 5. **BRIEF · mar 13:** el cierre de K7 dice «te mando por mensaje el JSON». Alinealo a la comunidad o mandá el archivo por DM.
 6. **DELEGAR · mié 7:** la web `/claude-code` dice «3 subagentes» (hoy es 1). Corregila antes.

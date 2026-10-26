@@ -670,9 +670,9 @@ Regla: si Sonnet empata en 2 de 3 → Sonnet por defecto; Opus para el tipo de t
 ```
 
 **2 · D02-B · La cuenta de WhatsApp desde el 1-oct** (comunidad)
-⚠️ **Corregido 1-oct: NO se publica.** Lo reemplaza `drop-2` de `cola/drops/2026-10-01-drops-noticias-repos.md`:
+⚠️ **Corregido 1-oct: NO se publica.** Lo reemplaza `drop-2` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`:
 Meta confirmó que el servicio se cobra a la tarifa de utility y con 1.000 gratis por mes y por número
-(`VERIFICACION-LAPTOP-20261001.md` §1); este decía «service cuando Meta la publique».
+(`historial/cola/plan-3-semanas/VERIFICACION-LAPTOP-20261001.md` §1); este decía «service cuando Meta la publique».
 ```
 Fuente: developers.facebook.com/documentation/business-messaging/whatsapp/pricing → rate cards → Rates (CSV), en USD
 Fila: país del número del CLIENTE (Bolivia +591 = "Rest of Latin America")
@@ -817,7 +817,7 @@ Fable solo cuando Opus con esfuerzo alto no alcanzó.
 ```
 
 **14 · D07-B · MCP** (DM)
-⚠️ **Corregido 1-oct: NO se publica.** Lo reemplaza `drop-14` de `cola/drops/2026-10-01-drops-noticias-repos.md`:
+⚠️ **Corregido 1-oct: NO se publica.** Lo reemplaza `drop-14` de `historial/cola/drops/2026-10-01-drops-noticias-repos.md`:
 este usaba `grep "mcp__"` como criterio para sacar servidores, y la medición del 29-sep lo desmiente
 (13 servidores sin ninguna mención en archivos se usaban igual; LOTE-B, Pendientes).
 ```bash

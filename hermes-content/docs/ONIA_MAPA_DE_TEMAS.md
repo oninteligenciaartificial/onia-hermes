@@ -108,7 +108,7 @@ Referentes: se adapta el prompt visible de Marian, la especificación de Ian,
 la comparación de Tiago, la fuente/encargo de Erik y la pantalla narrada de
 Santiago. No todas esas fuentes entregan recetas completas. La cobertura y sus
 límites están en [Extracción de referentes](../references/marca-personal/EXTRACCION-REFERENTES-GUIONES.md);
-los [12 guiones revisados](cola/RODAJE-MARCA-PERSONAL-2026-09-27.md) son la cola de producción.
+los [12 guiones revisados](historial/cola/marca-personal-sep/RODAJE-MARCA-PERSONAL-2026-09-27.md) son la cola de producción.
 
 ---
 

@@ -216,7 +216,7 @@
 > - Por la madre pidió además que digan que Onia es **«un sistema con IA»**.
 > - **Esperando dos cosas:**
 >   1. las 22 capturas de anuncios de la competencia, que hace la madre
->      (`research/competencia/anuncios/PEDIDO-CAPTURAS.md`);
+>      (`docs/historial/research/competencia/PEDIDO-CAPTURAS.md`);
 >   2. la lista de frases de IA verdaderas que arma Plataforma (`session_014HGgof9kHQkdLXhsZsAq6A`).
 > - **Plan:**
 >   - pack `referentes` (como `sergio-k6v2-*`);
@@ -346,9 +346,9 @@ autosync de esta rama). **Ninguna campaña creada, cero gasto.**
   `hermes-content/docs/historial/ONIA_DENTALGEST_ESTRUCTURA_ULTIMA_MILLA_2026.md` (corrección TuDoc/SIAT) · `ONIA_CATALOGO_DE_IDEAS.md`
   (puntero a §14) · `hermes-content/docs/historial/ONIA_PAUTA_COMPETENCIA_20260815.md` y `hermes-content/docs/historial/ONIA_ADS_CAMPANA_1_LISTA_20260813.md` (marcadas
   como fotos de agosto) · `COORDINATION_MANIFEST.md` §EL HILO (fila Mercado, id vivo de Lucía, avisos).
-- Investigación completa, con fuentes: `research/ONIA_MERCADO_COMPETENCIA_BOLIVIA_20260930.md` ·
-  `ONIA_TENDENCIAS_AGENTES_20260930.md` · `ONIA_MARKETPLACE_EVALUACION_20260930.md` ·
-  `ONIA_META_ADS_PLAYBOOK_20260930.md` · `ONIA_BIBLIOTECA_ANUNCIOS_20260930.md`.
+- Investigación completa, con fuentes: `historial/research/ONIA_MERCADO_COMPETENCIA_BOLIVIA_20260930.md` ·
+  `historial/research/ONIA_TENDENCIAS_AGENTES_20260930.md` · `historial/research/ONIA_MARKETPLACE_EVALUACION_20260930.md` ·
+  `historial/research/ONIA_META_ADS_PLAYBOOK_20260930.md` · `historial/research/ONIA_BIBLIOTECA_ANUNCIOS_20260930.md`.
 - **1-oct:** `ONIA_PROSPECTOS_DENTAL_SCZ.md` §6.5 (cupos 9-10) · `ONIA_PROSPECTOS_OTROS_RUBROS_SCZ.md` (re-lectura
   en vivo, 18 negocios) · `ONIA_ADQUISICION_Y_PAUTA.md` §5.8.1 y filas 2, 7 y 8 de §5.9 ·
   `ONIA_LEADS_ESPERANDO.md` §3 (borradores) · `sales-kit/02-GUION-DEMO.md` (guion por rubro) ·

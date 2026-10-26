@@ -2,7 +2,9 @@
 
 Lo leen los tres. Codex y Hermes leen solo este archivo: Hermes carga uno solo, el primero que encuentra entre
 `.hermes.md`, `AGENTS.override.md`, `AGENTS.md` y `CLAUDE.md`. Claude lee además `CLAUDE.md`, que guarda el caso real
-detrás de cada regla. Si este archivo y `CLAUDE.md` dicen distinto, es un error: se sigue el más restrictivo y se avisa.
+detrás de cada regla; este archivo le llega solo en la PC, por un ajuste de `~/.claude/settings.json` que la nube no
+lee (`hermes-content/docs/ONIA_HARNESS.md` §2). Si este archivo y `CLAUDE.md` dicen distinto, es un error: se sigue
+el más restrictivo y se avisa.
 
 Versión decidida por Sergio Urcullo el 26-oct-2026. Reemplaza la del 19-oct, escrita para Codex («no orquestás»), y
 la reescritura que Hermes hizo el 25-oct sin commit ni revisión.

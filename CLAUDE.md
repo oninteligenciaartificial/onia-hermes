@@ -102,7 +102,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   no demuestra aprendizaje aplicado: hace falta una tarea que la use.
 - **Al tocar el producto (`onia-platform`) son OBLIGATORIAS sus skills propias**
   (`onia-frontend/backend/db/seguridad/deploy/verificacion` en su `.claude/skills/`) —
-  solo se autolistan en sesiones abiertas DENTRO de ese repo.
+  se autolistan en sesiones abiertas DENTRO de ese repo, o si se suma su carpeta con `--add-dir` o `/add-dir`
+  (trae su `.claude/skills` y su `.claude/agents`; la orquesta ya pasa `--add-dir` con `dirs_extra`). Corregido el
+  26-oct: antes decía «solo dentro de ese repo» (code.claude.com/docs/en/skills).
 - Al aprender una trampa nueva: **editar la skill que corresponda**, no crear doc suelto.
   Skill pública instalada que sirva: usarla, no reinventar.
 - **Autoconocimiento: cada sesión se entrena a sí misma.** Sergio Urcullo, 2026-10-01: *«tienen que
@@ -518,7 +520,10 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
   la regla es del que mergea: resolver ANTES de soltar el turno, y verificar cero marcadores.
 - ⚠️ **El hook Stop puede publicar el estado A MEDIAS de un subagente** (hoy, solo en la sesión principal,
   la única que mueve `main` directo; en el resto queda en su rama). El autosync corre
-  cuando un subagente termina su turno, no cuando el trabajo está terminado. El 2026-08-23
+  al final de CADA turno del agente principal (o de cada turno de una sesión `claude` aparte en su worktree), no
+  cuando el trabajo está terminado, y se lleva lo que los subagentes dejaron en el árbol. Que un subagente lanzado
+  con la herramienta Agent termine dispara `SubagentStop`, que el repo no configura (corregido el 26-oct;
+  code.claude.com/docs/en/hooks). No corre si el usuario interrumpe ni con error de API. El 2026-08-23
   se llevó **217 líneas de CSS a `origin/main` antes de que existiera el markup que las
   usa** (`e4e7fa2a`), a mitad de una sesión que todavía tenía dos archivos por escribir.
   No rompió nada **por casualidad**: eran clases CSS sin usar, que no pueden romper un

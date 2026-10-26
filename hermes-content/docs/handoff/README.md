@@ -1,6 +1,6 @@
 # HANDOFF — el estado escrito al cerrar un carril
 
-> Esto es **el artefacto que le faltaba a la regla del CLAUDE.md §3** ("Al cerrar la sesión,
+> Esto es **el artefacto que le faltaba a la regla de `CLAUDE.md` §«Nada a medias»** ("Al cerrar la sesión,
 > dejar el estado escrito"). La regla existía hace semanas y nunca tuvo plantilla ni lugar:
 > por eso se cumplía a veces y en el chat, que se pierde.
 
@@ -47,8 +47,13 @@ sí chocaría — y además rompería *"nada suelto en la raíz"* (CLAUDE.md §4
 
 - **Sin fecha en el nombre**: es el estado ACTUAL del carril, se sobrescribe. Un tema, un
   archivo (CLAUDE.md §2).
-- Cuando el carril cierra de verdad y se mergea, su handoff se borra. Si vale como historia,
-  se mueve a `hermes-content/docs/historial/` con fecha.
+- Cuando el carril cierra de verdad y se mergea, su handoff no se borra: se mueve con `git mv` a
+  `hermes-content/docs/historial/handoff/` (así se hizo el 26-oct con los de la madre, los loops y la 1.0).
+- **Acá quedan solo los vivos.** El planificador de Hermes del VPS (`hermes-content/skills/planificar-orquesta.md`)
+  lista esta carpeta y lee los «Próximos pasos» de cada archivo: un handoff muerto acá se lee como trabajo vivo.
+  Qué handoff tiene cada área: `ONIA_HARNESS.md` §9.
+- El Hermes de la PC escribe el suyo en `E:/onia-wt/hermes-base/hermes-content/docs/handoff/` y lo commitea la
+  sesión principal de Claude, por PR (`AGENTS.md` §9).
 
 ---
 

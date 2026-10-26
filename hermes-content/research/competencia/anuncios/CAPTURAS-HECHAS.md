@@ -1,6 +1,6 @@
 # Capturas hechas: anuncios de la competencia (1-oct-2026)
 
-Responde a `PEDIDO-CAPTURAS.md`. Capturado el 1-oct-2026 (20:30-21:10, hora de La Paz) desde la PC de Sergio Urcullo,
+Responde a `hermes-content/docs/historial/research/competencia/PEDIDO-CAPTURAS.md`. Capturado el 1-oct-2026 (20:30-21:10, hora de La Paz) desde la PC de Sergio Urcullo,
 con Playwright headless, **sin iniciar sesión** en Facebook. Se abrió `facebook.com/ads/library/?id=<id>` y se capturó
 la tarjeta del anuncio con el texto completo desplegado («Ver más»).
 

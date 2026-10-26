@@ -104,7 +104,7 @@ No se pudo comparar `/checkout` (pide sesión): lo hace Q5 (#194) cuando entre.
 
 Estados: ✅ visto (en pantalla o en el código, cuando es un dato comercial) · 🟡 a medias · ❌ no se puede prometer
 hoy · 🚫 fuera de la oferta · ⬜ sin verificar. El inventario completo, con la frase textual y el paso de
-verificación de cada una, está en `ONIA_PROMESA_VS_PRODUCTO_INVENTARIO.md`.
+verificación de cada una, está en `historial/ONIA_PROMESA_VS_PRODUCTO_INVENTARIO.md`.
 
 | # | Capacidad | Dónde aparece | Estado | Prueba | Qué hace falta |
 |---|---|---|---|---|---|

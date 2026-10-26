@@ -4,7 +4,7 @@
 >
 > *«Podés generar videos de Lucía con ropa de doctora, después con ropa de abogada, con ropa de todo, pero ella es
 > una persona única, es una influencer de ella. Vive en Santa Cruz: buscá lugares fancy, aesthetic, y ponela ahí.»*
-> Evidencia: `hermes-content/docs/research/LUCIA_MUNDO_INVESTIGACION_20261002.md`. Plan: `docs/cola/lucia-diario/PLAN.md`.
+> Evidencia: `hermes-content/docs/historial/research/LUCIA_MUNDO_INVESTIGACION_20261002.md`. Plan: `docs/cola/lucia-diario/PLAN.md`.
 > Esta decisión del 2-oct NO cubre el §0-canon: sus 10 datos siguen PROPUESTOS hasta el sí de Sergio Urcullo (nota del 2026-10-17).
 >
 > **Quién es.** Una sola persona: Lucía Antelo, 26, cruceña, **influencer de sí misma**, que declara que es IA con

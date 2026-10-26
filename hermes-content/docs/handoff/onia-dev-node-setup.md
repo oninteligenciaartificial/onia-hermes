@@ -68,7 +68,7 @@ dar un comentario real: hay **dos apps de Meta** en el sistema (`156221540879605
 **Por qué no se activó igual:** encender el rechazo con el secreto equivocado tira **todos** los
 comentarios reales, y no se nota hasta que alguien pregunta por qué no le llegó nada.
 
-Doc completo: [`ONIA_IG_COMENTARIO_A_DM.md`](../ONIA_IG_COMENTARIO_A_DM.md) §3.
+Doc completo: [`ONIA_IG_COMENTARIO_A_DM.md`](../historial/ONIA_IG_COMENTARIO_A_DM.md) §3.
 
 ### 3.2 La capa por video existe y está VACÍA a propósito
 
@@ -107,7 +107,7 @@ BIOS y el arranque automático — depende de Sergio Urcullo (§6).
 | `scripts/loops/vigia-disco.sh` | `ONIA_DISCO_MAQUINA` / `ONIA_DISCO_CAIDA`; omite la línea de docker donde docker no existe |
 | `web-factory/apps/onia-platform/scripts/deploy-vivo.test.ts` | `HAY_GIT` + `it.skipIf` en los 3 casos que dependen de git (**zona de web-venta** — se avisó en el commit) |
 | `CLAUDE.md` | regla nueva: *"`main` se mueve DEBAJO tuyo mientras medís"*, con sus comandos verificados |
-| `hermes-content/docs/ONIA_IG_COMENTARIO_A_DM.md` | **nuevo**: el circuito IG completo — por qué no te banea, estado de la firma, la regla de la palabra sin recurso, cómo se configura una palabra por video, por qué `success` no prueba nada |
+| `hermes-content/docs/historial/ONIA_IG_COMENTARIO_A_DM.md` | **nuevo**: el circuito IG completo — por qué no te banea, estado de la firma, la regla de la palabra sin recurso, cómo se configura una palabra por video, por qué `success` no prueba nada |
 | `hermes-content/deploy/vps-ops/ig-firma.sh` | **nuevo**, 61 líneas, versionado: verifica el HMAC **en el VPS**, cuerpo en base64, prueba los dos secretos candidatos, **nunca los imprime** |
 | n8n `1jS4jwmNmvcQpqqH` | capa `VIDEOS` por media_id; `media_id`, `palabra_de_video`, `firma_ok`, `firma_motivo` en la salida; webhook con `rawBody: true`; 3 nodos nuevos `Firma: preparar` / `Firma: verificar` / `Firma: veredicto` |
 

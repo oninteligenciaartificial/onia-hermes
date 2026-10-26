@@ -123,7 +123,7 @@ como texto. Un link entra siempre.
 `https://claude.ai/code/artifact/667b1ec5-e963-4f8d-b43c-268f4b4243c5`
 Las seis herramientas, qué hace cada una, **qué no hace**, y cómo instalarla. Con checklist
 que recuerda dónde quedó el lector.
-El DM que lleva a ella: [`cola/PARA-PUBLICAR-DM-STACK.md`](cola/PARA-PUBLICAR-DM-STACK.md).
+El DM que lleva a ella: [`historial/cola/marca-personal-sep/PARA-PUBLICAR-DM-STACK.md`](historial/cola/marca-personal-sep/PARA-PUBLICAR-DM-STACK.md).
 
 **Qué SÍ va:** el paso a paso completo y real de lo que se prometió. Comandos que funcionan,
 tiempos honestos, y en cada herramienta un bloque de **«qué no hace»** — que es la parte que

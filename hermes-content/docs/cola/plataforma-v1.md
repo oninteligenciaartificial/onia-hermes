@@ -196,7 +196,7 @@ trabaría el merge de todos los carriles.
            | awk '{s+=$1} END {print "assets="s}'
          ```
 
-      3. **Proyecto scaffoldeado y en el repo:** `out/videos/conversacion-chatbot/`
+      3. **Proyecto scaffoldeado y en el repo:** `videos/conversacion-chatbot/`
          (`npx hyperframes init --example=blank`; el CLI resolvió `0.8.77`). Categoría del
          router de HyperFrames para esta pieza: **`motion-graphics`** — 7 s, 16:9, sin
          narración, el movimiento ES el mensaje. El guion **no se inventa**: se copia literal de
@@ -221,7 +221,7 @@ trabaría el merge de todos los carriles.
          `ffmpeg -encoders`, no con `-version`).
 
       **2026-09-25 12:43-13:15 La Paz — RENDERIZADO, MEDIDO Y MIRADO. El archivo existe:**
-      `out/videos/conversacion-chatbot/renders/conversacion-chatbot_2026-09-25_16-45-05.mp4`.
+      `videos/conversacion-chatbot/renders/conversacion-chatbot_2026-09-25_16-45-05.mp4`.
 
       - **Las medidas, con `ffprobe` sobre el mp4 y no con el reporte del CLI** (que también las
         dice, y coinciden): **469.551 B (459 KB)**, **7,0 s**, **1920×1080**, h264, 30 fps,
@@ -236,7 +236,7 @@ trabaría el merge de todos los carriles.
         los 5,6 s (`ffmpeg -ss 5.6 -frames:v 1`) — no la captura del navegador, que es otro
         instrumento y ya engañó a este proyecto antes. Las cuatro burbujas legibles, texto
         nítido, sin ligaduras rotas. El contact-sheet de los 8 cuadros queda versionado en
-        `out/videos/conversacion-chatbot/snapshots/contact-sheet.jpg`.
+        `videos/conversacion-chatbot/snapshots/contact-sheet.jpg`.
       - **Fidelidad: el guion es LITERAL.** Las cuatro burbujas, las horas (23:47/23:47/23:48/
         23:48) y la cabecera salen de `conversacion.tsx` leído del ref (en un worktree sparse el
         archivo no está en disco y «no existe» miente: `git show HEAD:<ruta>`). Cero montos,
@@ -337,9 +337,9 @@ trabaría el merge de todos los carriles.
       tome esta cola: publicar lo que genera el motor, la tienda que sale con el `<h1>` de otra
       marca, dirección y estructura que no llegan al entregable, las fotos por rubro y el código
       muerto viven todos en `onia-hermes/web-factory/**`. Estado, orden y comandos en
-      `hermes-content/docs/handoff/web-creator.md` §7 y §8.
+      `hermes-content/docs/historial/handoff/web-creator.md` §7 y §8.
 
-      ⚠️ **Antes de prometer la web en el bot, leer `handoff/web-creator.md` §5b:** hoy el motor
+      ⚠️ **Antes de prometer la web en el bot, leer `historial/handoff/web-creator.md` §5b:** hoy el motor
       genera el sitio pero **no existe camino a un dominio publicado**. Se vende con precio
       publicado y se entrega a mano. Si el bot promete entrega automática, miente.
 
@@ -2807,7 +2807,7 @@ y sin operar. Acá se opera, con verificación por ítem.
       de las cuales **7 son QA** (`zz-qa-clinica-chatbot`, `zz-qa-ferreteria-tornillo`,
       `zz-qa-estetica-modulos`, `qa-modulos-mrk0q`, `qa-modulos-rj7tv`,
       `zz-qa-salteo-horarios-20260906`, `zz-qa-cobro-e2e`) con sus usuarios `+qa*@gmail.com` /
-      `zz-qa-*@onia.com.bo` (receta de limpieza en `hermes-content/docs/handoff/cobro-e2e.md`;
+      `zz-qa-*@onia.com.bo` (receta de limpieza en `hermes-content/docs/historial/handoff/cobro-e2e.md`;
       verificación mirando con `scripts/onia-mirar.js`). **Se quedan:** `onia-interna`
       (superadmin, LA cuenta central),
       `bolivian-electricidad` (cliente real, gmail de Sergio Urcullo). **Pregunta abierta:**
