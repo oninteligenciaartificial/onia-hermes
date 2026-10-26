@@ -152,7 +152,7 @@ describe("la promesa fiscal nunca se publica sin su salvedad", () => {
       "Nuestro emisor está registrado ante el SIN y la homologación está en trámite. " +
         "Mientras tanto cada venta queda lista y facturás en el Portal Web del SIN, gratis y legal.",
       "Nuestro emisor ya está registrado ante el SIN y en trámite de homologación; mientras " +
-        "tanto, podés emitir por el portal gratuito del SIN sin re-tipear tus números.",
+        "tanto, podés emitir por el portal gratuito del SIN ingresando los datos de cada factura.",
     ]) {
       expect(AFIRMA_FISCAL.test(sana)).toBe(true);
       expect(
@@ -164,7 +164,7 @@ describe("la promesa fiscal nunca se publica sin su salvedad", () => {
     // Y no se dispara donde no hay promesa fiscal: «SIN» suelto es común en la
     // superficie legítima y no puede bastar para acusar a una página.
     expect(
-      AFIRMA_FISCAL.test("emitís por el portal gratuito del SIN, sin re-tipear tus números"),
+      AFIRMA_FISCAL.test("emitís por el portal gratuito del SIN, ingresando los datos de cada factura"),
       "el patrón se dispara con «SIN» suelto: daría rojo sobre toda la superficie fiscal honesta",
     ).toBe(false);
   });

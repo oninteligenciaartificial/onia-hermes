@@ -125,9 +125,8 @@ export default function Facturacion() {
         </Reveal>
       </Block>
 
-      {/* 2 · Qué resuelve un sistema — el único bloque con imagen de la
-          página, y va justo acá porque acá está el DOLOR: tipear cada venta
-          dos veces. La foto es de CONTEXTO (una contadora de noche con el
+      {/* 2 · Qué resuelve Onia mientras el emisor sigue en homologación.
+          La foto es de CONTEXTO (una contadora de noche con el
           archivador de papel), no de producto, y NO agrega ni una sola
           afirmación fiscal: el texto sigue saliendo entero de lib/siat.ts y
           la nota honesta del bloque 3 queda intacta. El alt describe la
@@ -202,7 +201,7 @@ export default function Facturacion() {
       <Block surface="green" labelledBy="cierre-siat">
         <Reveal>
           <h2 id="cierre-siat" className={s.h2} style={{ maxWidth: "20ch" }}>
-            Dejá tu operación lista antes del plazo.
+            Tené tus ventas y compras ordenadas.
           </h2>
           <div className={s.actions}>
             <Btn href={EMPEZAR_URL}>{CTA_ALTA}</Btn>
