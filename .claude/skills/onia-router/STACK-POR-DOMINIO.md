@@ -99,7 +99,8 @@ el método está en `onia-ventas-pauta`. Esta tabla dice qué sección abrir en 
 |---|---|
 | Ver qué sostienen los competidores | `onia-ventas-pauta` §4.1, §8.2 (Biblioteca por el MCP) y §9.9 (se cuentan los que sobreviven 7+ días) · `web-factory/docs/ADS_PATTERN_BANK_2026.md` |
 | Escribir el anuncio | `onia-ventas-pauta` §9 (de punta a punta) · `copywriting` · los hooks de `anunciante-supremo` resumidos en §9.9 |
-| Hacer el creativo | `onia-ventas-pauta` §9.4 · `diseno-contenido-onia` · `editor-videos` · `higgsfield-generate` (cotiza antes; video con OK) |
+| Hacer el creativo | `onia-ventas-pauta` §9.4 · `diseno-contenido-onia` · `editor-videos` · Higgsfield según §9.10 (qué función, cuánto cuesta y dónde NO entra) con `higgsfield-generate` (cotiza antes; video con OK) |
+| Funnel: a dónde va el clic | `onia-ventas-pauta` §9.10 (destinos verificados el 27-oct) |
 | Armar la campaña | `onia-ventas-pauta` §5 (la campaña como archivo) · MCP de Meta Ads |
 | Medir y renovar | MCP de Meta Ads (insights) · `onia-ventas-pauta` §9.6 y §9.9 (cuatro grupos, un eje por vez) |
 | Seguir al lead | `onia-ventas-pauta` §5.1 (WhatsApp y remarketing) |

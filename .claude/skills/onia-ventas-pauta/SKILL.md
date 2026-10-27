@@ -765,6 +765,39 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 - **Pendiente:** ver los dos Canva (403 de Cloudflare desde la nube, 17-oct); decisión de Sergio Urcullo sobre devolución y
   sobre un proveedor de QR sin NIT («Tesavis [?]», no verificado).
 
+### 9.10 Higgsfield en la pauta y el funnel (27-oct)
+
+> Investigación completa, con fuentes y fechas: `hermes-content/docs/research/2026-10-27-higgsfield-anuncios-y-funnel.md`.
+> Los créditos salen de documentación pública o de mediciones viejas del repo: **ninguno está cotizado con la cuenta**.
+
+- **En un anuncio de software Higgsfield pone poco.** Lo que vende no se genera: la pantalla real, el copy verificado, una
+  persona real, el destino y el seguimiento. Marketing Studio y Ads Studio están hechos para producto físico. Su estilo
+  «SaaS» inventa la interfaz, y sus plantillas de reseña, testimonio y antes/después fabrican clientes: no se usan.
+- **Dónde sí entra, de más barato a más caro** (créditos por intento; un crédito ≈ US$ 0,05):
+  - un fondo sin texto con Soul 2.0: ~0,12;
+  - una imagen con texto con GPT Image 2.5: ~1;
+  - ideas de ángulo con Ads Studio: 4 por maqueta. No se publica ni su copy ni su diseño;
+  - una apertura de 3-5 s sin personas: Kling 3.0 sin sonido ~6 (extrapolado) o Seedance 2.5, 35 por 5 s;
+  - un presentador IA de 10-15 s con Marketing Studio: 70-90 a 720p. Solo si Sergio Urcullo lo pide.
+- **La tanda 1 de Meta no necesita Higgsfield.** Las tres copias del concepto A1 (estático, video de 11 s y selfie) salen
+  de código y de una grabación (§4.2 y `ONIA_ADQUISICION_Y_PAUTA.md` §5). Como mucho entra una variante de apertura
+  (A1-V-b), con tope de 20 créditos, cotizada y con OK.
+- **El primer trabajo útil cuesta cero: cotizar.** `higgsfield generate cost` por función, para llenar la tabla con
+  números de la cuenta. Trampa: con una ruta local, `generate cost` sube el archivo.
+- **El funnel de Onia Platform, verificado el 27-oct:**
+  1. Anuncio → WhatsApp del bot, con el código (D1, D2, D3) en el texto precargado.
+  2. Las 5 preguntas de `ONIA_CLIENTE_IDEAL.md`.
+  3. Llamada en `sergiourcullo.vercel.app/llamada`: cal.com, responde 200.
+  4. Registro en `app.onia.com.bo/register`: responde 200.
+  5. Seguimiento del día 3, 7 y 14 con piezas reales.
+
+  `onia.com.bo/llamada` da 404: no se usa como destino.
+- **Riesgos abiertos:**
+  - Los términos de Higgsfield (23-oct) piden 18 años, y no está escrito quién es el titular de la cuenta.
+  - Meta etiqueta «AI info» lo hecho con IA de terceros. Es inferencia, sin probar.
+  - Hay una contradicción que decide Sergio Urcullo: `ONIA_PLAN_1.0_Y_CAJA.md` §4 deja octubre sin gasto de Higgsfield
+    para pauta, y `HIGGSFIELD_VIDEO_SYSTEM.md` le asigna 340 créditos.
+
 ### 8.2 Biblioteca de Anuncios por el conector `Meta_ads` (8-oct): cómo se usa y qué NO dice
 - **Herramienta:** `mcp__Meta_ads__ads_library_search` (se carga con ToolSearch). **Pide en cada llamada** `client_conversation_id` (20 caracteres alfanuméricos, el mismo toda la conversación) y `client_model`; exige al menos `search_terms`, `page_ids` o `countries`. Solo funciona con una cuenta de anuncios activa (ONIA Ads lo es).
 - **Devuelve:** nombre de página, titular, fecha de inicio (epoch), moneda y enlace. **No devuelve el creativo ni el texto.** Los **más nuevos van primero y el tope es 50**: de un anunciante con más de 50 activos **no se ven los más viejos** (error de lectura que casi cometo con Dentalink, 92 activos). Para los viejos, `page_ids` + capturar desde la PC.
