@@ -87,6 +87,15 @@ export function rutear(carril, pedido, conf = CONF) {
   return { motor, nivel, modelo: pedido.modelo || tabla[nivel] };
 }
 
+// Un juez LLM favorece lo que generó el mismo modelo: si el trabajador usó el revisor de siempre, revisa el alterno.
+// Se compara por familia: un `modelo:` escrito a mano («sonnet», «claude-sonnet-5-5[1m]») sigue siendo Sonnet.
+const familia = (m) => (/haiku|sonnet|opus|fable/i.exec(String(m)) || [String(m)])[0].toLowerCase();
+// En orden: el primero que no sea de la familia del trabajador; los demás, por si ese se queda sin cupo.
+export function revisoresPara(modeloTrabajador, conf = CONF) {
+  const todos = [conf.revisor, conf.revisor_alterno, conf.revisor_respaldo].filter(Boolean);
+  return todos.filter((m) => familia(m) !== familia(modeloTrabajador));
+}
+
 export function rutaSalida(c, pedido, numero) {
   const s = (pedido.salida || `${c.salida}/${numero}.md`).replace(/\\/g, '/');
   if (path.isAbsolute(s) || /^[a-z]:/i.test(s) || s.split('/').includes('..')) throw new Error(`salida inválida: ${s}`);
@@ -402,11 +411,11 @@ function entregar(c, base, wt, rama, carril, issue) {
   }
 }
 
-async function revisar(wt, issue, pedido, salida, rutas) {
+async function revisar(wt, issue, pedido, salida, rutas, revisor) {
   const cambios = rutas.slice(0, 40).join('\n') || salida;
   const [cmd, ...pre] = ejecutable('claude');
   // --restricted: solo lee, confinado al worktree, y no carga settings ni MCP que haya dejado el trabajador.
-  const args = [...pre, '-p', '--restricted', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--model', CONF.revisor,
+  const args = [...pre, '-p', '--restricted', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--model', revisor,
     '--output-format', 'json', '--max-turns', '20', '--settings', path.join(AQUI, 'trabajador.settings.json')];
   const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios }), minutos: 10 });
   if (r.code !== 0) return { ok: false, infra: sinMotor(r), motivo: `no se pudo revisar (código ${r.code}): ${r.err.trim().slice(-200)}` };
@@ -432,8 +441,13 @@ async function trabajar(c, carril, issue, pedido, ruta) {
   };
   const { texto, falla, rutas } = await verificar(wt, base, inicio, sigue, salida, pedido, r);
   if (falla) return fallar(falla, { ...costoDe(r, ruta), infra: sinMotor(r) });
-  const rev = await revisar(wt, issue, pedido, salida, rutas); // el que revisa nunca es el que hizo
-  const extra = { ...costoDe(r, ruta), usd_revision: rev.usd };
+  // El que revisa nunca es el que hizo. Sin cupo de uno, revisa el siguiente: si no, la tarea vuelve en bucle.
+  let rev; let revisor;
+  for (revisor of revisoresPara(ruta.modelo)) {
+    rev = await revisar(wt, issue, pedido, salida, rutas, revisor);
+    if (!rev.infra) break;
+  }
+  const extra = { ...costoDe(r, ruta), usd_revision: rev.usd, revisor };
   if (!rev.ok) return fallar(`el revisor lo rechazó: ${rev.motivo}`, { ...extra, infra: rev.infra });
   const pr = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue));
   await enFila(c.repo, () => intentar(() => git(c.repo, 'worktree', 'remove', '--force', wt))); // si Windows lo tiene tomado, queda para la próxima
@@ -463,7 +477,7 @@ async function hacerTarea({ carril, issue }) {
 export function cuerpoCierre(res, fallasPrevias, vistos = 0) {
   const cabeza = (res.texto || '').split('\n').slice(0, 12).join('\n');
   const datos = `${res.motor} · ${res.modelo} · ${res.minutos} min${res.usd ? ` · US$ ${res.usd.toFixed(2)} equiv.` : ''}`;
-  const revision = res.notas ? `\n\nRevisión (${CONF.revisor}):\n${res.notas}` : '';
+  const revision = res.notas ? `\n\nRevisión (${res.revisor || CONF.revisor}):\n${res.notas}` : '';
   if (res.ok && res.esperaOk) {
     const fotos = (res.capturas || []).map((u) => `![captura](${u})`).join('\n');
     return { bloquea: false, cuerpo: firmar(vistos, `👀 Listo para tu OK (${datos})\n\n${fotos ? `${fotos}\n\n` : ''}Entrega: ${res.pr}\nArchivo: \`${res.salida}\`\n\n${cabeza}${revision}\n\n**Respondé acá:** «ok» la cierra; si querés cambios, escribilos y sigue desde donde quedó.`) };
