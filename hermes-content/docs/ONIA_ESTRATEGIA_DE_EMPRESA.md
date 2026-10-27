@@ -22,15 +22,25 @@ Lo decidió Sergio Urcullo el 26-oct-2026 en la sesión principal, con el pedido
 arquitectura. Hasta el 3-nov manda sobre la etapa 1 (§7) en el orden de trabajo; §7 y el test de tres preguntas (§10)
 siguen valiendo para decidir qué se **construye**.
 
+**Qué reglas cambia y cuáles no.** Las fuentes de ingreso que fijó dejan de lado, hasta el 3-nov, dos reglas de
+`CLAUDE.md` (lo dice el plan, no lo dijo él con estas palabras; si no es así, se corrige acá): «no se abre
+una línea de negocio nueva», porque el curso, los talleres, la comunidad, el freelance y la consultoría entran como
+caja, no como producto a construir; y «Onia vende software, nunca horas», porque suma 1 a 1 pagas y consultoría.
+Siguen igual: lo que ve el público pasa por su OK con captura (`AGENTS.md` §3; también las piezas de redes), no se
+fabrica ni se exhibe obra, «usted» con clientes y voseo en su marca personal, y el gasto pide su sí. Lo
+«multinegocio» de Onia Platform (web, influencers de IA) es visión, no se construye ahora (§10). La primera sesión
+después del 3-nov le pregunta qué sigue y archiva o reescribe esta sección.
+
 **La situación.**
 - Cero ventas y cero ingresos hasta el 26-oct.
 - **Meta de caja: Bs 3.000 cobrados para el 3-nov-2026**, para sobrevivir el mes.
-- Suscripciones: **Claude vence el 3-nov** y baja de Max US$200 a **US$100**. **Codex vence el 13-nov.**
+- Suscripciones (dicho por él el 26-oct): **Claude vence el 3-nov** y baja de Max US$200 a **US$100**. **Codex
+  vence el 13-nov.**
 
 **Prioridades, en orden.**
 1. Lanzar el curso, los talleres y la comunidad, orquestados por Claude y por bots de IA.
 2. Onia Platform con lo que pide el BCP para habilitar la API de QR, y hablar con el banco.
-3. Contenido diario orgánico, sin pauta paga.
+3. Contenido diario orgánico, sin pauta paga (la pauta de Bs 300 del taller del 31-oct es aparte y la decide él).
 
 **Contenido diario: 7 videos.**
 - 3 verticales: noticias de IA, autoridad y su día a día, pensados junto con Claude para que tengan sentido.
@@ -49,7 +59,7 @@ y webinars · automatizar la empresa para que Sergio Urcullo se dedique sobre to
 **Agentes por usuario de Windows:** no por ahora (Sergio Urcullo, 26-oct). Lo que pueda ir a la nube va a la nube
 (GitHub Actions o el VPS); el VPS es producción, así que ahí no se corren renders ni trabajos pesados.
 
-### Lo que se puede y lo que no en 7 días (Claude, 26-oct, medido)
+### Lo que se puede y lo que no en 7 días (Claude, 26-oct; medido salvo donde se dice)
 
 - **La vía más corta es el taller del sáb 31-oct**, que ya está armado para cobrar exactamente Bs 3.000
   (`TALLER_31_OCT.md`: 50 cupos a Bs 50/60/70). Pero **la venta no se abrió**: la página sigue con `noindex` y sin el
@@ -61,10 +71,13 @@ y webinars · automatizar la empresa para que Sergio Urcullo se dedique sobre to
   freelance. Una landing ya tiene precio, Bs 2.000 (`webs.ts`, decisión del 17-sep); las webs generadas todavía se
   publican a mano.
 - **7 videos por día en 5 redes no está automatizado.** Hoy solo Instagram sale solo (Buffer, `ig-reel.mjs`).
-  YouTube, TikTok, LinkedIn y Facebook no están conectados y Postiz está caído (`ONIA_PUBLICACION_MULTICANAL.md`).
+  YouTube, LinkedIn y Facebook figuran «sin verificar» desde el 27-sep (`ONIA_PUBLICACION_MULTICANAL.md`), TikTok
+  ni siquiera está entre esos destinos, y Postiz responde 502 (medido el 26-oct).
   Los 3 yaps y la edición sí se pueden armar con la orquesta (carril video); grabar los 3 verticales es tiempo de
   Sergio Urcullo.
-- **Con Claude Max de US$100 el cupo baja a la mitad:** menos trabajos largos en paralelo y más tareas cortas.
+- **Con Claude Max de US$100 el cupo baja a la cuarta parte**, no a la mitad: Max US$100 es «5x» y Max US$200 es
+  «20x» del plan Pro (planes publicados por Anthropic; no medido acá). Menos trabajos largos en paralelo y más
+  tareas cortas.
 - **Codex vence el 13-nov:** el carril plataforma corre con Codex; después necesita otro motor (Claude) o renovar.
 - **API de QR del BCP:** la lleva María Bayá (Banca Empresas). Al 20-oct faltaba mandarle el contacto y la
   certificación **electrónica** del NIT (memoria del 20-oct; volver a mirar el buzón antes de actuar).
