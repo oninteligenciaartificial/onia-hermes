@@ -174,7 +174,7 @@ try {
 
     # -----------------------------------------------------------------------------------------------------------
     Paso '9. Carpeta de pedidos'
-    New-Item -ItemType Directory -Force -Path (Join-Path $HermesHome 'pedidos') | Out-Null
+    New-Item -ItemType Directory -Force -Path (Join-Path $HermesHome 'pedidos'), (Join-Path $HermesHome 'cache\scratch') | Out-Null
     Write-Host "$HermesHome\pedidos"
 
     # -----------------------------------------------------------------------------------------------------------
@@ -195,7 +195,8 @@ if ($fallo) {
 
 # ---------------------------------------------------------------------------------------------------------------
 Paso '11. Escritura segura y Codex'
-$raices = "$handoff;$HermesHome"
+# 26-oct: ya no toda la home (con ella write_file podía reescribir su SOUL, su memoria y su auth.json)
+$raices = "$handoff;$HermesHome\pedidos;$HermesHome\cache\scratch"
 if ($EscrituraSegura) {
     [Environment]::SetEnvironmentVariable('HERMES_WRITE_SAFE_ROOT', $raices, 'User')
     Write-Host "HERMES_WRITE_SAFE_ROOT = $raices (variable de usuario; vale para las ventanas que abras desde ahora)"
@@ -216,5 +217,5 @@ Paso '12. Listo'
 Write-Host "Respaldo: $respaldo  (para volver atrás: revertir.ps1 -Respaldo `"$respaldo`")"
 Write-Host 'Para arrancar Hermes, en una ventana nueva de PowerShell:'
 Write-Host "  Set-Location '$Base'"
-Write-Host '  hermes --tui'
+Write-Host '  hermes --tui -m gpt-6.1-sol --provider openai-codex   # la TUI arrancaba con Astra aunque config.yaml diga Sol (26-oct)'
 Write-Host 'Sin --yolo. Adentro, corré /context y fijate que aparezca AGENTS.md.'

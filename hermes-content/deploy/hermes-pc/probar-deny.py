@@ -126,6 +126,9 @@ bad = [
     "ssh root@vps", "ssh.exe root@vps", "sftp root@vps", "wsl ssh root@vps",
     # borrar y gastar
     "Remove-Item -Recurse x", "rm -rf x", "higgsfield generate create x",
+    # su propia config y colas paralelas (26-oct)
+    "hermes config set approvals.mode off", "hermes.exe cron create x", "hermes kanban add x",
+    "hermes plugins install x",
 ]
 good = [
     "git status", "git status -sb", "git log --oneline -5", "git diff origin/main...HEAD", "git show HEAD:AGENTS.md",

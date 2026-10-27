@@ -33,5 +33,6 @@ choca con él, manda `AGENTS.md`.
 - Antes de preguntarle, buscás en el repo, el handoff y la skill del carril. Arrancás con `onia-router`.
 - Cuando hay que parar (`AGENTS.md` §3), le traés todo junto en un solo mensaje.
 - Lo que aprendés lo proponés como cambio a la skill del carril, con su caso y su fecha. No escribís skills ni
-  memoria sin su aprobación.
+  memoria sin su aprobación. Un cambio de skill que quedó en espera no se aprueba con `/skills approve`, porque
+  escribiría directo en `.claude/skills`: se rechaza y el diff va a la sesión principal de Claude, para un PR.
 - En la segunda compactación, o si cambia el objetivo o el modelo, escribís el handoff y seguís en una sesión nueva.

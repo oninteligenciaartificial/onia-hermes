@@ -24,14 +24,34 @@ model: {default: gpt-6.1-sol}            # Astra solo en una sesión nueva; nunc
 skills:
   write_approval: true                   # external_dirs es escribible (skills.md:424-425): sin esto skill_manage escribe ahí sin preguntar
   external_dirs: ["E:/onia-wt/hermes-base/.claude/skills"]   # la única fuente de skills, desde un worktree limpio
+  project_discovery: false               # preventivo: con `hermes skills trust`, .agents/skills le ganaría a external_dirs (skills.md:494,498)
+  disabled:                              # 26-oct: de fábrica, le enseñan lo que el SOUL prohíbe o son ruido para un coordinador
+    [claude-code, codex, opencode, computer-use, github, requesting-code-review, simplify-code,
+     hermes-agent-skill-authoring, inspecting-hermes-desktop-dom, product-price-monitor, competitor-news-monitor,
+     weekly-review-planning, meeting-action-items, email-inbox-triage, himalaya, google-workspace, llm-wiki,
+     codebase-inspection, sdlc-review, spike, test-driven-development, systematic-debugging, node-inspect-debugger,
+     architecture-diagram, ascii-video, baoyu-infographic, claude-design, design-md, humanizer, manim-video, p5js,
+     popular-web-designs, songwriting-and-ai-music, gif-search, songsee, youtube-content, obsidian, airtable, box,
+     maps, powerpoint, arxiv, teams-meeting-pipeline, document-to-action-items,
+     higgsfield-generate, higgsfield-soul-id, hyperframes-cli, hyperframes-registry]   # del repo: gastan o instalan
 memory: {write_approval: true}
 auxiliary: {background_review: {enabled: false}}   # origen de 131 de las 194 reescrituras de sus propias skills
+curator: {enabled: false}                # no reorganiza skills por su cuenta (curator.md:406-410)
+loops: {max_ticks: 10}                   # un /loop se pausa a las 10 vueltas (default 100, config_defaults.py:1412)
+
+# 26-oct: no toma prestados los logins de Claude Code ni de Codex. Hermes los refresca y, como son de un solo uso,
+# deja deslogueado al otro (security.md, «Borrowed CLI logins»). Las filas copilot y anthropic se sacan con
+# `hermes auth remove`, fuera de Hermes.
+auth: {adopt_external_logins: false}
+# Sin tareas programadas ni tablero propios: la única cola son los issues `orquesta` (AGENTS.md §1). Son
+# herramientas, no comandos, así que el deny no las ve (toolsets.py:117,157).
+agent: {disabled_toolsets: [cronjob, kanban]}
 
 approvals:
-  mode: manual                           # pregunta todo. El default es smart: un LLM auxiliar aprueba lo de bajo riesgo
-                                         # (config_defaults.py:1679; manual es solo el respaldo si falta la clave,
-                                         # approval_context.py:253). Ningún modo frena --yolo: con yolo solo quedan
-                                         # los pisos y approvals.deny (approval.py:1137-1148)
+  mode: manual                           # pregunta antes de lo que Hermes clasifica como peligroso, no antes de todo
+                                         # (security.md:58). El default es smart: un LLM auxiliar aprueba lo de bajo
+                                         # riesgo (config_defaults.py:1679). Ningún modo frena --yolo ni /yolo: con
+                                         # yolo solo quedan los pisos y approvals.deny (approval.py:1137-1148)
   timeout: 500
   deny:
     # git que escribe, publica o borra, también con opciones globales (git -C x push, git -c a=b push). Hermes compara
@@ -182,6 +202,9 @@ approvals:
     - "rd /s*"
     - "rmdir*"
     - "higgsfield generate create*"
+    # su propia config, cron, kanban y plugins desde la terminal (hermes config set, hermes cron create…)
+    - "hermes *"
+    - "hermes.exe *"
 command_allowlist: []                    # sin cua:click:background: con GitHub abierto podía soltar o mergear a clics
 
 delegation: {model: gpt-6.1-sol, provider: openai-codex, max_iterations: 120,
