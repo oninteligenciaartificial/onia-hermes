@@ -128,7 +128,7 @@ todo el día**, con la PC prendida, también con batería). Primero trae `main`;
 el motivo queda en `pasadas.log`:
 
 ```powershell
-schtasks /Create /F /TN "ONIA Orquesta" /SC DAILY /ST 00:00 /RI 10 /DU 24:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && (git pull --ff-only -q origin main && set ORQUESTA_TELEGRAM=1&& node scripts\orquesta\orquesta.mjs --donde pc) >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
+schtasks /Create /F /TN "ONIA Orquesta" /SC DAILY /ST 00:00 /RI 10 /DU 24:00 /TR "conhost.exe --headless cmd /c cd /d C:\dev\proyectos\onia-hermes && (git pull --ff-only -q origin main && set ORQUESTA_TELEGRAM=1&& node scripts\orquesta\orquesta.mjs --donde pc) >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
 Set-ScheduledTask -TaskName "ONIA Orquesta" -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Hours 3))
 ```
 
@@ -140,6 +140,13 @@ Por qué cada 10 minutos y no cada 3 h (Sergio Urcullo, 27-oct: «la más efecti
   Hermes. Dos pasadas no se pisan: el candado de `orquesta.mjs` y `IgnoreNew` en la tarea.
 - La segunda línea deja correr con batería y corta una pasada colgada a las 3 h. `schtasks` sola no arranca con
   batería (lo que tenía la tarea vieja).
+- `conhost.exe --headless` corre la pasada sin ventana: la tarea es «solo interactiva» y con `cmd /c` a secas abría
+  una consola cada 10 min que robaba el foco (revisión del 27-oct). Probado: `&&`, el paréntesis y `>>` pasan igual.
+  El comando entero mide 227 caracteres; `schtasks /TR` acepta hasta 261.
+- Una tarea soltada sin cupo o sin login espera una hora antes de volver a tomarse (`sin-cupo-<n>` en
+  `~/.onia-orquesta`). Si no, se rearmaba su worktree y avisaba por Telegram 6 veces por hora.
+- Riesgo conocido: el `git pull` corre 144 veces por día en el checkout principal. Nadie trabaja ahí, pero si alguien
+  lo usa, puede chocar con su `index.lock` (`handoff/hermes-local.md`, ítem 8).
 
 `=1&&` va pegado a propósito: con un espacio antes de `&&`, cmd guarda «1 » (medido) y `orquesta.mjs`, que pide
 `=== '1'`, no manda el resumen a Telegram.
