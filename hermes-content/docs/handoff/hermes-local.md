@@ -127,9 +127,34 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
    monto en Settings → Billing), así que lo decide él; mientras tanto, la barrera es local.
 10. Túnel SSH solo con 3108: hecho el 26-oct (PR #271), medido después del reinicio.
 
-**Próximos pasos**
-**El orden y la prueba de cada paso son los de `ONIA_HARNESS.md` §7, del 0 al 8.** La §10 de la auditoría queda
-solo como referencia de comandos y de cómo volver atrás. Lo que cambió respecto de ella:
-- la skill `onia-coordinar` no se hace, porque `AGENTS.md` y el SOUL alcanzan;
-- el contrato único está en `AGENTS.md` §4;
-- el PR de A4 es este.
+**Próximos pasos** (relevo del 26-oct, ~22:30; la sesión principal `e24cb7a5` llegó al límite de contexto)
+
+Ya en `main` el 26-oct: #269 (harness), #270 (estado y los dos informes en `research/2026-10-26-*`), #271 (túnel
+solo 3108), #272 (plan de supervivencia), #273 (el revisor de la orquesta nunca es de la familia del trabajador, con
+respaldo si falta cupo) y #274 (Hermes endurecido: sin logins prestados, sin cron ni kanban, bloqueo de `hermes*` y
+`python -m hermes`, 48 skills de fábrica apagadas, escritura solo en handoff, pedidos y cachescratch;
+`probar-deny` 183/45/0).
+
+En este orden:
+1. **Aplicar #274 a Hermes de la PC.** Con Hermes cerrado (la sesión anterior lo dejó abierto en una pestaña de la
+   app, con `-m gpt-6.1-sol`):
+   `powershell -ExecutionPolicy Bypass -File hermes-contentdeployhermes-pcaplicar.ps1 -EscrituraSegura -Codex`
+   desde `C:devproyectosonia-hermes`. Después, en una PowerShell nueva: `hermes auth list`; si no hay un
+   openai-codex propio, `hermes auth add openai-codex` (lo hace Sergio Urcullo); `hermes auth remove` de copilot y
+   anthropic. Abrir con `hermes --tui -m gpt-6.1-sol --provider openai-codex` desde `E:onia-wthermes-base` y
+   mirar `/context`. Prueba de hecho: `probar-deny.py --vivo` da «mismo approvals.deny» y 0 fallas.
+2. **Reinstalar la tarea programada** (comando de `scripts/orquesta/README.md` §«Correr»; la corre él). A las 21:30
+   seguía la vieja, con `&`.
+3. **Plan de supervivencia** (`ONIA_ESTRATEGIA_DE_EMPRESA.md`, sección del 26-oct): Bs 3.000 al 3-nov. Lo más
+   corto es abrir la venta del taller del sáb 31-oct (`TALLER_31_OCT.md`): falta su número de WhatsApp, su OK a
+   la página y el QR fijo de Credinet (Leslie Mercado Moreno). Le preguntó la sesión anterior y no contestó todavía.
+   En paralelo, textos de ofertas 1 a 1 (taller, llamadas, una landing de Bs 2.000) que manda él.
+4. **Primera tarea real de Hermes** con `cargar-issue.mjs --dry` y después la carga (siempre con `necesita-ok`).
+5. Pendientes que no corren esta semana: guarda del autosync para el checkout principal y sacar `onia-cola`
+   (ítem 8 de arriba); conectar YouTube, TikTok, LinkedIn y Facebook en Buffer (con su login); banco de 30 pruebas de
+   decisiones de Hermes (`research/2026-10-26-onia-autonoma-propuesta.md` §5, él lo pidió para después); el BCP
+   (María Bayá espera el contacto y la certificación electrónica del NIT); Codex vence el 13-nov y el carril
+   plataforma corre con Codex.
+
+El orden de §7 de `ONIA_HARNESS.md` sigue valiendo para lo del harness; la §10 de la auditoría queda solo como
+referencia de comandos y de cómo volver atrás.
