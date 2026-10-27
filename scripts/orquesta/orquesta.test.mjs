@@ -9,6 +9,7 @@ import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
   leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
+  revisorPara,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -276,4 +277,13 @@ test('prepararWorktree sin media: baja solo texto desde un clon parcial y ralo, 
   fs.writeFileSync(path.join(wt, 'docs/cap-390.PNG'), 'png');
   fs.writeFileSync(path.join(wt, 'docs/a.md'), 'cambiado');
   assert.deepEqual(cambiosDe(wt, 'main').sort(), ['docs/a.md', 'docs/cap-390.PNG']);
+});
+
+test('el revisor nunca es el mismo modelo que hizo la tarea (AGENTS.md §1)', () => {
+  const conf = { revisor: 'claude-sonnet-5-5', revisor_alterno: 'claude-opus-5-5' };
+  assert.equal(revisorPara('claude-sonnet-5-5', conf), 'claude-opus-5-5'); // marca/comunidad en normal
+  assert.equal(revisorPara('claude-opus-5-5', conf), 'claude-sonnet-5-5');
+  assert.equal(revisorPara('haiku', conf), 'claude-sonnet-5-5');
+  assert.equal(revisorPara('gpt-6.1-sol', conf), 'claude-sonnet-5-5'); // Codex en plataforma
+  assert.notEqual(revisorPara(rutear('marca', {}).modelo), rutear('marca', {}).modelo); // con carriles.json real
 });
