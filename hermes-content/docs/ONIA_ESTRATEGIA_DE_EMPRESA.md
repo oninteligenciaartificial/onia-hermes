@@ -16,6 +16,61 @@
 
 ---
 
+## ⚠️ 26-oct-2026 · Plan de supervivencia de Sergio Urcullo (manda hasta el 3-nov)
+
+Lo decidió Sergio Urcullo el 26-oct-2026 en la sesión principal, con el pedido de anotarlo antes de terminar la
+arquitectura. Hasta el 3-nov manda sobre la etapa 1 (§7) en el orden de trabajo; §7 y el test de tres preguntas (§10)
+siguen valiendo para decidir qué se **construye**.
+
+**La situación.**
+- Cero ventas y cero ingresos hasta el 26-oct.
+- **Meta de caja: Bs 3.000 cobrados para el 3-nov-2026**, para sobrevivir el mes.
+- Suscripciones: **Claude vence el 3-nov** y baja de Max US$200 a **US$100**. **Codex vence el 13-nov.**
+
+**Prioridades, en orden.**
+1. Lanzar el curso, los talleres y la comunidad, orquestados por Claude y por bots de IA.
+2. Onia Platform con lo que pide el BCP para habilitar la API de QR, y hablar con el banco.
+3. Contenido diario orgánico, sin pauta paga.
+
+**Contenido diario: 7 videos.**
+- 3 verticales: noticias de IA, autoridad y su día a día, pensados junto con Claude para que tengan sentido.
+- 1 horizontal: un tutorial de IA gratis que lleve a la comunidad y al curso.
+- 3 «yaps»: contenido ya hecho, reeditado de otra forma para los trial reels y llegar a quien no lo sigue.
+- Redes: YouTube, TikTok, LinkedIn, Facebook e Instagram.
+
+**Fuentes de ingreso.** Cursos · llamadas 1 a 1 pagas · Onia Platform · trabajos freelance (páginas web y demás) ·
+consultoría. A futuro, Onia Platform como plataforma **multinegocio** que englobe todo eso: crear tu web y tu
+contenido, influencers de IA, manejar el negocio, cobrar y vender funciones.
+
+**Propósitos.** Estudiar IA, sin guion · mejorar en ventas: practicar con la Biblioteca de anuncios de Meta, funnels
+y webinars · automatizar la empresa para que Sergio Urcullo se dedique sobre todo al contenido, también con IA
+(Higgsfield) · cuidar los pagos · sobrevivir con los ingresos.
+
+**Agentes por usuario de Windows:** no por ahora (Sergio Urcullo, 26-oct). Lo que pueda ir a la nube va a la nube
+(GitHub Actions o el VPS); el VPS es producción, así que ahí no se corren renders ni trabajos pesados.
+
+### Lo que se puede y lo que no en 7 días (Claude, 26-oct, medido)
+
+- **La vía más corta es el taller del sáb 31-oct**, que ya está armado para cobrar exactamente Bs 3.000
+  (`TALLER_31_OCT.md`: 50 cupos a Bs 50/60/70). Pero **la venta no se abrió**: la página sigue con `noindex` y sin el
+  número de WhatsApp, y faltan el QR y el texto de devolución (Leslie Mercado Moreno). Se abre en un día si Sergio
+  Urcullo pone su número y aprueba la página, y si sale el QR fijo de Credinet. Con 497 seguidores y unos 30 en la
+  comunidad, el escenario base del mismo doc son 30 cupos (Bs 1.650); el mínimo para dictarlo, 6 pagos al jue 29.
+- **El orgánico no llega a Bs 3.000 en 7 días.** Es el motor de las semanas siguientes. La caja de esta semana sale
+  de ofertas directas que manda Sergio Urcullo a su gente, 1 a 1: el taller, llamadas 1 a 1 pagas y un trabajo
+  freelance. Una landing ya tiene precio, Bs 2.000 (`webs.ts`, decisión del 17-sep); las webs generadas todavía se
+  publican a mano.
+- **7 videos por día en 5 redes no está automatizado.** Hoy solo Instagram sale solo (Buffer, `ig-reel.mjs`).
+  YouTube, TikTok, LinkedIn y Facebook no están conectados y Postiz está caído (`ONIA_PUBLICACION_MULTICANAL.md`).
+  Los 3 yaps y la edición sí se pueden armar con la orquesta (carril video); grabar los 3 verticales es tiempo de
+  Sergio Urcullo.
+- **Con Claude Max de US$100 el cupo baja a la mitad:** menos trabajos largos en paralelo y más tareas cortas.
+- **Codex vence el 13-nov:** el carril plataforma corre con Codex; después necesita otro motor (Claude) o renovar.
+- **API de QR del BCP:** la lleva María Bayá (Banca Empresas). Al 20-oct faltaba mandarle el contacto y la
+  certificación **electrónica** del NIT (memoria del 20-oct; volver a mirar el buzón antes de actuar).
+
+---
+
 ## 0. La respuesta corta
 
 1. **ONIA no necesita financiación.** El punto de equilibrio está a **5 clientes**. Ningún
