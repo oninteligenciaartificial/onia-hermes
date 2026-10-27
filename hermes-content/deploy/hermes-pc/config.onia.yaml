@@ -4,7 +4,7 @@
 # Sin secretos: las llaves viven en .env y auth.json de esa carpeta, nunca acá.
 #
 # approvals.deny se prueba con probar-deny.py (en esta carpeta), que usa la función real de Hermes
-# (tools/approval_floors.py, _match_user_deny_rule) y su parser de YAML; 26-oct: 177 casos a bloquear y 41 lecturas
+# (tools/approval_floors.py, _match_user_deny_rule) y su parser de YAML; 26-oct: 183 casos a bloquear y 45 lecturas
 # que pasan, 0 fallas. Se corre después de cada cambio acá y de cada actualización de Hermes, desde la raíz del repo:
 #   $py = (Get-Content "$env:LOCALAPPDATA\hermes\installs\*\facts.json" -Raw | ConvertFrom-Json).packages.venv.environment + '\Scripts\python.exe'
 #   & $py -I hermes-content/deploy/hermes-pc/probar-deny.py hermes-content/deploy/hermes-pc/config.onia.yaml
@@ -42,7 +42,9 @@ loops: {max_ticks: 10}                   # un /loop se pausa a las 10 vueltas (d
 
 # 26-oct: no toma prestados los logins de Claude Code ni de Codex. Hermes los refresca y, como son de un solo uso,
 # deja deslogueado al otro (security.md, «Borrowed CLI logins»). Las filas copilot y anthropic se sacan con
-# `hermes auth remove`, fuera de Hermes.
+# `hermes auth remove`, fuera de Hermes. Con la adopción apagada, Hermes ya no se recupera solo desde el login del Codex
+# CLI (auth_codex.py:230-233): si `hermes auth list` no muestra un openai-codex propio, Sergio Urcullo corre
+# `hermes auth add openai-codex` (código de dispositivo) antes de usarlo.
 auth: {adopt_external_logins: false}
 # Sin tareas programadas ni tablero propios: la única cola son los issues `orquesta` (AGENTS.md §1). Son
 # herramientas, no comandos, así que el deny no las ve (toolsets.py:117,157).
@@ -203,9 +205,12 @@ approvals:
     - "rd /s*"
     - "rmdir*"
     - "higgsfield generate create*"
-    # su propia config, cron, kanban y plugins desde la terminal (hermes config set, hermes cron create…)
-    - "hermes *"
-    - "hermes.exe *"
+    # su propia config, cron, kanban y plugins desde la terminal (hermes config set, hermes cron create…). "hermes*"
+    # cubre también hermes.cmd, hermes-agent (lanza un turno de modelo) y hermes-acp, igual que "claude*" y "codex*";
+    # no frena cat hermes-content/…, rg hermes ni cd …/hermes (probado con _match_user_deny_rule, 26-oct)
+    - "hermes*"
+    - "python* -m hermes*"
+    - "py -m hermes*"
 command_allowlist: []                    # sin cua:click:background: con GitHub abierto podía soltar o mergear a clics
 
 delegation: {model: gpt-6.1-sol, provider: openai-codex, max_iterations: 120,

@@ -195,7 +195,8 @@ if ($fallo) {
 
 # ---------------------------------------------------------------------------------------------------------------
 Paso '11. Escritura segura y Codex'
-# 26-oct: ya no toda la home (con ella write_file podía reescribir su SOUL, su memoria y su auth.json)
+# 26-oct: ya no toda la home (con ella write_file podía reescribir su SOUL, su memoria y su auth.json). cache\scratch
+# queda porque ahí deja sus borradores de trabajo; no le da nada nuevo: desde la terminal ya puede escribir archivos.
 $raices = "$handoff;$HermesHome\pedidos;$HermesHome\cache\scratch"
 if ($EscrituraSegura) {
     [Environment]::SetEnvironmentVariable('HERMES_WRITE_SAFE_ROOT', $raices, 'User')
@@ -219,3 +220,5 @@ Write-Host 'Para arrancar Hermes, en una ventana nueva de PowerShell:'
 Write-Host "  Set-Location '$Base'"
 Write-Host '  hermes --tui -m gpt-6.1-sol --provider openai-codex   # la TUI arrancaba con Astra aunque config.yaml diga Sol (26-oct)'
 Write-Host 'Sin --yolo. Adentro, corré /context y fijate que aparezca AGENTS.md.'
+Write-Host 'Antes, en esa ventana: hermes auth list. Si no hay un openai-codex propio de Hermes, hermes auth add openai-codex'
+Write-Host '(con la adopción de logins apagada ya no toma el del Codex CLI). Las filas copilot y anthropic: hermes auth remove.'

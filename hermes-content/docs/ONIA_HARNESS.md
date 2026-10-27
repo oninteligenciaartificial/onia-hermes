@@ -177,7 +177,7 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
    - `--dry` del cargador muestra `necesita-ok`;
    - `probar-deny.py --vivo`, corrido con el python de Hermes (el comando está en la cabecera del script), da
      «mismo approvals.deny» y 0 fallas. Hoy falla a propósito, porque el `config.yaml` vivo no tiene deny. En modo
-     repo, sin `--vivo`, hoy da 0 fallas: 177 comandos que tienen que bloquearse y 41 lecturas que tienen que pasar.
+     repo, sin `--vivo`, hoy da 0 fallas: 183 comandos que tienen que bloquearse y 45 lecturas que tienen que pasar.
      Se vuelve a correr en cada actualización de Hermes.
 5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. **Hoy `aplicar` no puede hacerlo**: su
    control previo falla si el SOUL no trae `## Planificar la orquesta` (`aplicar.sh:309-314`), y además crea ese

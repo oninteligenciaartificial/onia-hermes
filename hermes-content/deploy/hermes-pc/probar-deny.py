@@ -128,6 +128,8 @@ bad = [
     "Remove-Item -Recurse x", "rm -rf x", "higgsfield generate create x",
     # su propia config y colas paralelas (26-oct)
     "hermes config set approvals.mode off", "hermes.exe cron create x", "hermes kanban add x",
+    "hermes.cmd config set approvals.mode off", "hermes-agent 'x'", "hermes-acp", "hermes",
+    "python -m hermes_cli.main config set x y", "py -m hermes_cli.main cron create x",
     "hermes plugins install x",
 ]
 good = [
@@ -141,6 +143,8 @@ good = [
     "node scripts/orquesta/cargar-issue.mjs --dry --archivo x", "node scripts/orquesta/cargar-issue.mjs --archivo x",
     "node scripts/orquesta/cargar-issue.mjs --dry --titulo x", "node --test scripts/orquesta/cargar-issue.test.mjs",
     "rg orquesta scripts", "rg deny .claude/skills", "cat E:/onia-wt/hermes-base/.claude/skills/onia-router/SKILL.md",
+    "cat hermes-content/docs/ONIA_HARNESS.md", "rg hermes scripts", "cd E:/onia-wt/hermes-base",
+    "ls C:/Users/PC/AppData/Local/hermes/pedidos",
     "Get-Content scripts/orquesta/README.md", "cat $(git rev-parse --show-toplevel)/AGENTS.md", "echo $HOME",
     "git log --oneline | head -5", "/c/Program\\ Files/Git/cmd/git status",
 ]
