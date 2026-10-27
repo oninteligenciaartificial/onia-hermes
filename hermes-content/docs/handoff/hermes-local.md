@@ -15,9 +15,17 @@ Medido después, sin abrir la TUI:
 
 Falta la prueba con la TUI abierta (`/context`) y la primera tarea real.
 
-⚠️ **La TUI arranca con `gpt-6-astra-900k` aunque `config.yaml` diga `gpt-6.1-sol`** (medido 26-oct, 21:10: el
-banner de `hermes --tui` decía astra, sin variables `HERMES_INFERENCE_*`). Causa sin encontrar. Mientras tanto se
-abre con `hermes --tui -m gpt-6.1-sol --provider openai-codex`, que sí muestra Sol. La auditoría completa está en
+**26-oct, 23:06: el #274 quedó aplicado de verdad.** Sergio Urcullo corrió `aplicar.ps1 -EscrituraSegura -Codex`
+desde su PowerShell, con 24 claves cambiadas y `probar-deny` en 183/45/0. Después se midió desde el panel Terminal:
+`config.yaml` de 134.857 bytes, `default: gpt-6.1-sol`, `adopt_external_logins: false`, `HERMES_WRITE_SAFE_ROOT` en
+handoff, pedidos y cache\scratch, y otra vez 183/45/0. Respaldo: `backups\pre-orden-20261026-230615`.
+
+⚠️ **La corrida de las 19:56 nunca llegó a Hermes.** La hizo una herramienta de Claude, y la app (paquete MSIX)
+desvía a `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Local\hermes` lo que sus herramientas escriben en
+`%LOCALAPPDATA%`. Esa era la causa de que la TUI arrancara con Astra «aunque config.yaml diga Sol». Por lo mismo,
+las mediciones de la sección de arriba («Medido después, sin abrir la TUI») leían esa copia, no la config real.
+La copia se apartó a `hermes-copia-vieja-20261026`. Desde ahora `aplicar.ps1` y `revertir.ps1` frenan si los corre
+Claude. Método completo: skill `onia-hermes-jarvis`, «Trampas ya pagadas». La auditoría completa sigue en
 `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`.
 
 Lo que decidió Sergio Urcullo el 26-oct:
@@ -135,20 +143,20 @@ respaldo si falta cupo) y #274 (Hermes endurecido: sin logins prestados, sin cro
 `python -m hermes`, 48 skills de fábrica apagadas, escritura solo en handoff, pedidos y cachescratch;
 `probar-deny` 183/45/0).
 
-En este orden:
-1. **Aplicar #274 a Hermes de la PC.** Con Hermes cerrado (la sesión anterior lo dejó abierto en una pestaña de la
-   app, con `-m gpt-6.1-sol`):
-   `powershell -ExecutionPolicy Bypass -File hermes-contentdeployhermes-pcaplicar.ps1 -EscrituraSegura -Codex`
-   desde `C:devproyectosonia-hermes`. Después, en una PowerShell nueva: `hermes auth list`; si no hay un
-   openai-codex propio, `hermes auth add openai-codex` (lo hace Sergio Urcullo); `hermes auth remove` de copilot y
-   anthropic. Abrir con `hermes --tui -m gpt-6.1-sol --provider openai-codex` desde `E:onia-wthermes-base` y
-   mirar `/context`. Prueba de hecho: `probar-deny.py --vivo` da «mismo approvals.deny» y 0 fallas.
-2. **Reinstalar la tarea programada** (comando de `scripts/orquesta/README.md` §«Correr»; la corre él). A las 21:30
-   seguía la vieja, con `&`.
-3. **Plan de supervivencia** (`ONIA_ESTRATEGIA_DE_EMPRESA.md`, sección del 26-oct): Bs 3.000 al 3-nov. Lo más
-   corto es abrir la venta del taller del sáb 31-oct (`TALLER_31_OCT.md`): falta su número de WhatsApp, su OK a
-   la página y el QR fijo de Credinet (Leslie Mercado Moreno). Le preguntó la sesión anterior y no contestó todavía.
-   En paralelo, textos de ofertas 1 a 1 (taller, llamadas, una landing de Bs 2.000) que manda él.
+En este orden (actualizado el 26-oct, 23:30, por la sesión que siguió al relevo):
+1. ~~Aplicar #274~~: hecho a las 23:06 (arriba). Le falta a Sergio Urcullo, en una PowerShell nueva: `hermes auth list`;
+   si no hay un openai-codex propio, `hermes auth add openai-codex`; `hermes auth remove copilot <n>` y
+   `hermes auth remove anthropic <n>` (el número sale de la lista). Después abrir con
+   `hermes --tui -m gpt-6.1-sol --provider openai-codex` desde `E:\onia-wt\hermes-base` y mirar `/context`.
+   Con la config real en Sol, el `-m` ya no debería hacer falta: probarlo sin él una vez.
+2. **Reinstalar la tarea programada** (comando de `scripts/orquesta/README.md` §«Correr»; la corre él). Se le pasó
+   el comando el 26-oct.
+3. **Plan de supervivencia** (`ONIA_ESTRATEGIA_DE_EMPRESA.md`, sección del 26-oct): Bs 3.000 al 3-nov. El número de
+   WhatsApp ya estaba desde el 19-oct (`handoff/comunidad.md`). La página `/auditoria` quedó con el número y sin
+   `noindex` en el PR «página lista para abrir la venta y ofertas 1 a 1» (#276, sin mergear), pero **a Sergio
+   Urcullo no le gusta el resultado**. No se publica hasta saber qué cambiar. Falta además el QR fijo de Credinet
+   Web (Leslie Mercado Moreno). Las ofertas 1 a 1 están en `sales-kit/07-OFERTAS-1-A-1.md`; a la llamada paga le
+   falta el precio.
 4. **Primera tarea real de Hermes** con `cargar-issue.mjs --dry` y después la carga (siempre con `necesita-ok`).
 5. Pendientes que no corren esta semana: guarda del autosync para el checkout principal y sacar `onia-cola`
    (ítem 8 de arriba); conectar YouTube, TikTok, LinkedIn y Facebook en Buffer (con su login); banco de 30 pruebas de

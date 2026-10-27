@@ -55,7 +55,7 @@ Briefs viejos decían «6 condiciones»: la sexta no está escrita en ningún ar
 
 | # | Condición | Dueño | Estado 26-oct 22:15 |
 |---|---|---|---|
-| 1 | Página `/auditoria` publicada con el botón a WhatsApp | Agente (deploy Vercel) con OK de Sergio Urcullo a las capturas | Con el número, sin `noindex`; OK de Sergio Urcullo a las capturas del 26-oct. Sin publicar (`/auditoria` da 404) |
+| 1 | Página `/auditoria` publicada con el botón a WhatsApp | Agente (deploy Vercel) con OK de Sergio Urcullo a las capturas | Con el número, sin `noindex`. A Sergio Urcullo no le gusta el resultado (26-oct): no se publica hasta saber qué cambiar. Sin publicar (`/auditoria` da 404) |
 | 2 | Textos aprobados: página, carruseles, plantillas A-D (§5) | Sergio Urcullo | Capturas enviadas el 19-oct |
 | 3 | Número de WhatsApp atendido por Sergio Urcullo | Sergio Urcullo | ✅ +591 71654992, dado el 19-oct |
 | 4 | QR del BCP, titular y cómo se factura | Leslie Mercado Moreno | Pendiente: el QR fijo sale de Credinet Web, la banca empresa del BCP |

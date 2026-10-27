@@ -127,6 +127,18 @@ CLI de Hermes.
 
 ## Trampas ya pagadas
 
+- **Hermes de la PC: lo que una herramienta de Claude escribe en `%LOCALAPPDATA%` no llega a Hermes** (26-oct). La app
+  de Claude es un paquete MSIX, y Windows desvía esas escrituras a `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Local\hermes`.
+  Ahí quedó la corrida de `aplicar.ps1` de las 19:56. Por eso la TUI arrancaba con Astra «aunque config.yaml diga Sol»:
+  Hermes leía el archivo real y la sesión leía la copia.
+  - Las lecturas de esa sesión también ven la copia, y parecía que la config «volvía sola» a una versión vieja.
+  - `aplicar.ps1` y `revertir.ps1` se corren desde una PowerShell normal o desde el panel Terminal de la app (ahí no
+    está `CLAUDECODE`). Los dos ahora frenan si ven `CLAUDECODE`.
+  - Para leer el estado real desde una sesión, un `.ps1` corrido con `run_in_terminal`.
+  - La copia vieja se apartó a `…\LocalCache\Local\hermes-copia-vieja-20261026`.
+  - Lo que hay en `backups\config\config.yaml.good.*` lo escribe Hermes cada vez que lee bien la config. Es una foto,
+    no una restauración.
+
 - **Un «ok» de Hermes no es trabajo hecho** (20-oct). La primera revisión de la orquesta quedó `last_status: ok` y su
   salida (`/root/.hermes/cron/output/<id>/`, sección 18 del diagnóstico desde el #266) era `[SILENT]`: la sección
   «La revisión de cada 3 horas» solo miraba SUS tareas (`--revisar` lista `origen:hermes`) y no decía de dónde
