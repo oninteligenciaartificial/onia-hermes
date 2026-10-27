@@ -34,19 +34,7 @@ skills:
      architecture-diagram, ascii-video, baoyu-infographic, claude-design, design-md, humanizer, manim-video, p5js,
      popular-web-designs, songwriting-and-ai-music, gif-search, songsee, youtube-content, obsidian, airtable, box,
      maps, powerpoint, arxiv, teams-meeting-pipeline, document-to-action-items,
-     dogfood,
-     # 26-oct: del repo quedan solo las 7 del coordinador (onia-router, equipo-de-agentes, aprender-de-todo,
-     # onia-hermes-jarvis, onia-continuidad, orca, panel-onia). Las de cada carril las cargan sus trabajadores.
-     ad-creative, api-design, backend-patterns, captions-overlay, changelog-video, competitor-profiling,
-     content-strategy, copywriting, cut-the-curve, database-migrations, deep-research, deployment-patterns,
-     diseno-contenido-onia, docker-patterns, edicion-referentes, editor-videos, embedded-captions,
-     faceless-explainer, figma, general-video, higgsfield-generate, higgsfield-soul-id, hyperframes,
-     hyperframes-animation, hyperframes-cli, hyperframes-core, hyperframes-creative, hyperframes-keyframes,
-     hyperframes-registry, impeccable, media-use, motion-doctrine, motion-graphics, music-to-video,
-     n8n-mcp-tools-expert, n8n-workflow-patterns, onia-chatbot, onia-contabilidad-bolivia, onia-core, onia-infra,
-     onia-propuestas, onia-ventas-pauta, onia-web-factory, oversized-cursor, postgres-patterns, pr-to-video, pricing,
-     product-launch-video, remotion-to-hyperframes, sacar-prompt, seam-craft, security-review, slideshow,
-     talking-head-recut, ver-videos, verification-loop, web-factory-design-research, web-factory-intake-assets]
+     higgsfield-generate, higgsfield-soul-id, hyperframes-cli, hyperframes-registry]   # del repo: gastan o instalan
 memory: {write_approval: true}
 auxiliary: {background_review: {enabled: false}}   # origen de 131 de las 194 reescrituras de sus propias skills
 curator: {enabled: false}                # no reorganiza skills por su cuenta (curator.md:406-410)

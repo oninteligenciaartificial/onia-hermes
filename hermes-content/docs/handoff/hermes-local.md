@@ -155,8 +155,8 @@ Medido desde el panel Terminal (fuera de la copia de la app de Claude):
 | # | Paso | Quién | Prueba de hecho |
 |---|---|---|---|
 | 1 | `hermes auth remove copilot 1` y `hermes auth remove anthropic 1` | Sergio Urcullo | `hermes auth list` muestra solo openai-codex y gemini |
-| 2 | Recortar skills: del repo quedan las 7 del coordinador (PR «Hermes solo con las skills del coordinador») | Claude, con su OK para mergear | `hermes skills list`: 14 habilitadas (7 del repo + hermes-agent, pdf, docx, xlsx, notion, grounded-citations, blocked-page-recovery) |
-| 3 | Volver a correr `aplicar.ps1 -EscrituraSegura -Codex` con Hermes cerrado, desde su PowerShell | Sergio Urcullo | Paso 6 con «skills.disabled: lista de 48 -> lista de 103»; paso 10 con 0 fallas |
+| 2 | ~~Recortar skills a 7~~: descartado el 26-oct. Sergio Urcullo quiere que Hermes sepa lo mismo que Claude. Se limpian en el origen las repetidas y las que se contradicen (`research/2026-10-26-skills-y-autonomia-hermes.md` §5) | Claude, por PR, con su OK | Las contradicciones de §4.2 corregidas |
+| 3 | Leer X: perfil dedicado `C:/Users/PC/BovedaPrivada/BrowserProfiles/x`, donde Sergio Urcullo inicia sesión una vez, más el lector de Playwright | Sergio Urcullo (login) y Claude (lector) | Una búsqueda en X devuelve posts con autor y fecha |
 | 4 | Abrir Hermes en una PowerShell o en el panel Terminal de la app, **no en Orca**: Orca lo abre con `--yolo` (sin aprobaciones) y en el checkout principal | Sergio Urcullo | `/context` muestra `AGENTS.md`; `/status` muestra Sol |
 | 5 | Reinstalar la tarea programada (`scripts/orquesta/README.md` §«Correr») | Sergio Urcullo | `schtasks /Query /TN "ONIA Orquesta" /V /FO LIST` sin `&` suelto |
 | 6 | Primera tarea real: la página del taller, que a Sergio Urcullo no le gusta, como pedido de Hermes con `--dry` y después cargado | Hermes, con su OK | Issue con `necesita-ok` en la cola |
