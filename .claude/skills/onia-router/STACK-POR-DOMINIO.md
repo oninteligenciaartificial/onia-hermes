@@ -90,6 +90,27 @@ vías (`start_image` · `image_references` · `video_extension`) en
 | Comunidad | `community-marketing` · `onboarding` |
 | Medir si sirvió | MCP de Meta Ads (insights) |
 
+### 1.6 Meta Ads: de la Biblioteca al anuncio que vende (27-oct)
+
+La estrategia (canales, tope, qué se puede prometer) manda en `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md`;
+el método está en `onia-ventas-pauta`. Esta tabla dice qué sección abrir en cada paso.
+
+| Paso | Qué se usa |
+|---|---|
+| Ver qué sostienen los competidores | `onia-ventas-pauta` §4.1, §8.2 (Biblioteca por el MCP) y §9.9 (se cuentan los que sobreviven 7+ días) · `web-factory/docs/ADS_PATTERN_BANK_2026.md` |
+| Escribir el anuncio | `onia-ventas-pauta` §9 (de punta a punta) · `copywriting` · los hooks de `anunciante-supremo` resumidos en §9.9 |
+| Hacer el creativo | `onia-ventas-pauta` §9.4 · `diseno-contenido-onia` · `editor-videos` · `higgsfield-generate` (cotiza antes; video con OK) |
+| Armar la campaña | `onia-ventas-pauta` §5 (la campaña como archivo) · MCP de Meta Ads |
+| Medir y renovar | MCP de Meta Ads (insights) · `onia-ventas-pauta` §9.6 y §9.9 (cuatro grupos, un eje por vez) |
+| Seguir al lead | `onia-ventas-pauta` §5.1 (WhatsApp y remarketing) |
+
+- **Estado medido el 27-oct:** el MCP de Meta Ads ve **ONIA Ads `act_1073680778314945`**, activa y consultable,
+  **sin método de pago**. Hasta que Sergio Urcullo cargue la tarjeta no corre ningún anuncio. La otra cuenta que ve
+  (`679613631427810`, sin business) no se usa.
+- **`anunciante-supremo`** (skill de un curso de infoproductos, en claude.ai): se usa su método (hooks, variantes de un
+  solo eje, reuso de música, B-roll y voz). Producir con ella pide el OK de Sergio Urcullo: usa la llave de APIMART, un
+  tercero, gasta ~US$ 1 por tanda y su plantilla 1 renderiza con Remotion, que está jubilado.
+
 ---
 
 ## 2. Diseño · UI · UX
@@ -187,7 +208,7 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 | Capacidad | Dónde vive |
 |---|---|
 | Higgsfield (imagen/video generativo) | CLI oficial + skill `higgsfield-generate` |
-| Meta Ads · Biblioteca de Anuncios | MCP |
+| Meta Ads · Biblioteca de Anuncios | MCP (ve ONIA Ads desde el 1-oct; cómo se usa en §1.6) |
 | Supabase · Vercel · n8n · Cloudflare · Notion · Figma · Drive · Gmail · Calendar | MCP |
 | ElevenLabs | API REST desde el VPS (no hay MCP) |
 | HyperFrames | skills del repo `.claude/skills/hyperframes*` (restaurado 2026-10-02) |
