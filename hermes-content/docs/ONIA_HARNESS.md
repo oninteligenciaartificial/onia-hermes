@@ -138,19 +138,20 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
 0. **Antes del merge: limpiar el checkout principal.**
    - ✅ El 26-oct sus 116 cambios se copiaron a la rama `rescate/checkout-principal-20261026` (pusheada) y se
      verificaron archivo por archivo.
-   - Falta que él corra `E:\onia-wt\limpiar-checkout-principal.ps1`: la revisión de seguridad no dejó borrar desde
-     la sesión.
-   - También hay que reinstalar la tarea programada con el comando de `scripts/orquesta/README.md` §«Correr».
+   - ✅ Él corrió `E:\onia-wt\limpiar-checkout-principal.ps1` el 26-oct: el checkout quedó igual a `main`.
+   - Falta reinstalar la tarea programada con el comando de `scripts/orquesta/README.md` §«Correr» (a las 19:45 del
+     26-oct seguía la vieja).
 
    Si no, la tarea corre desde ese checkout, su `git pull` falla y, con el `&` actual, sigue sobre el código viejo
    sin dejar el error en el log.
-1. Mergear el PR. Lleva:
+1. ✅ Mergear el PR (#269, `4fd5f64f`, 26-oct). Lleva:
    - `AGENTS.md`;
    - este mapa;
    - el SOUL, la config y el instalador de Hermes de la PC;
    - el cargador de issues;
    - el `AGENTS.global.md` de Codex.
-2. a 4. **Un solo comando, con Hermes cerrado y desde una copia del repo con el PR mergeado:**
+2. a 4. ✅ Corrido el 26-oct a las 19:56; lo medido después está en `handoff/hermes-local.md`. Falta mirar
+   `/context` con la TUI abierta. **Un solo comando, con Hermes cerrado y desde una copia del repo con el PR mergeado:**
    `powershell -ExecutionPolicy Bypass -File hermes-content\deploy\hermes-pc\aplicar.ps1 -EscrituraSegura -Codex`.
    El script hace, en orden:
    - el respaldo en `%LOCALAPPDATA%\hermes\backups\pre-orden-<fecha>`;
@@ -181,7 +182,7 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
    trabajo y no tiene un paso para pausarlo. Hace falta cambiar `aplicar.sh` y su prueba
    (`hermes-jarvis-aplicar.test.mjs`) en un PR propio, junto con `hermes-content/skills/planificar-orquesta.md`, que
    todavía dice «vos planificás». Después lo despacha él.
-6. Orca: no lanzar Hermes desde ahí y no activar Orchestration. Cerrar la corrida `run_66e1d03c2397`.
+6. Orca: abrir a Hermes ahí solo con Settings → Agents → Agent permissions en **Manual** (en Yolo le pasa `--yolo`) y en la carpeta `E:\onia-wt\hermes-base`; nunca activar Orchestration. Cerrar la corrida `run_66e1d03c2397`.
 7. Pasar a issues lo vigente de `.hermes/plans` y `.hermes/tasks`, y archivar el resto.
 8. ✅ Reglas globales de Claude (26-oct):
    - Se mantienen las seis que tocó Hermes, porque son mejores que las de antes: sacan los modelos viejos y el 80 %

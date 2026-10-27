@@ -3,8 +3,18 @@
 **Objetivo**
 Dejar a Hermes local configurado una sola vez como coordinador que lee las reglas y skills de ONIA, no se salta permisos y aprende por PR. Hecho = Hermes arranca desde un worktree limpio, `/context` muestra el AGENTS.md acordado, el índice de skills nombra las de `.claude/skills`, un `git -C . push` sale bloqueado y `--dry` de
 `scripts/orquesta/cargar-issue.mjs` muestra `necesita-ok`.
-Estado al 26-oct: **auditoría hecha, decisiones tomadas y todo escrito en un PR en borrador. La configuración no
-se aplicó.** La auditoría completa está en `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`.
+Estado al 26-oct, 20:00: **PR #269 mergeado (`4fd5f64f`) y `aplicar.ps1 -EscrituraSegura -Codex` corrido a las
+19:56.** Respaldo para volver atrás: `%LOCALAPPDATA%\hermes\backups\pre-orden-20261026-195633` (`revertir.ps1 -Respaldo …`).
+Medido después, sin abrir la TUI:
+- `probar-deny.py --vivo`: «mismo approvals.deny», 173 bloqueos, 41 lecturas, 0 fallas.
+- `hermes skills list` en `E:\onia-wt\hermes-base`: 65 skills `external` del repo, sin `onia-sesion-madre`.
+- `build_context_files_prompt(cwd=hermes-base)`, con el python de Hermes: carga el `AGENTS.md` del 26-oct y no
+  `CLAUDE.md`; `load_soul_md()` trae el SOUL nuevo.
+- `cargar-issue.mjs --dry` desde `hermes-base`: pone `orquesta`, `carril:investigacion`, `origen:hermes` y
+  `necesita-ok`, y no crea nada.
+
+Falta la prueba con la TUI abierta (`/context`) y la primera tarea real. La auditoría completa está en
+`hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`.
 
 Lo que decidió Sergio Urcullo el 26-oct:
 1. **Manda un AGENTS.md nuevo y compacto.** Se armó desde la reescritura de Hermes, sacándole lo que se había
@@ -41,17 +51,20 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
   `E:/respaldo-ramas-mergeadas-20261026.txt`, por si hay que recrearlas.
 
 **Qué quedó a medias, y dónde**
-- PR [#269](https://github.com/oninteligenciaartificial/onia-hermes/pull/269) en borrador (rama
-  `claude/hermes-orca-config-b2d5eb`). No se mergea hasta correr el paso 0.
-- **Checkout principal (paso 0).** Sus 116 cambios, incluida la reescritura de Hermes, están en
-  `rescate/checkout-principal-20261026`, pusheada y verificada archivo por archivo. Pero el checkout sigue sucio:
-  la revisión de seguridad no dejó borrar desde la sesión. Lo limpia `E:\onia-wt\limpiar-checkout-principal.ps1`.
-  Si alguien hace `git checkout -- .` antes, no se pierde nada: está en esa rama.
-- **Worktrees.** El trabajo sin commitear de otros 13 está en ramas `rescate/<carpeta>-20261026`, pusheadas, y las
-  11 ramas que solo existían en la PC, en `E:/respaldo-ramas-solo-locales-20261026.bundle`. Los saca, y mueve a E:
-  las 41 huérfanas, `E:\onia-wt\limpiar-worktrees.ps1`.
+- **Checkout principal (paso 0): limpio.** Sergio Urcullo corrió `E:\onia-wt\limpiar-checkout-principal.ps1` el
+  26-oct. Antes se re-verificó que sus 30 cambios trackeados y los 96 archivos a borrar seguían iguales en
+  `rescate/checkout-principal-20261026`. Quedan sin trackear, a propósito, `.hermes/plans`, `.hermes/tasks`,
+  `references/formacion` y `harness-hermes-20261024/panel-ejecucion`: el `.gitignore` de `main` ya los ignora.
+- **Tarea programada:** sigue la vieja (`… & set ORQUESTA_TELEGRAM=1 && …`, medido 19:45). La reinstala él con el
+  comando de `scripts/orquesta/README.md` §«Correr».
+- **Worktrees.** `E:\onia-wt\limpiar-worktrees.ps1` corría a las 20:00 (C: pasó de 33 a 85 GB libres).
+  - Sus «Falló mover … (código 9)» no perdieron nada: las seis carpetas quedaron enteras en
+    `E:\archivo-worktrees-20261026` y eran casi todo `node_modules` (de 25 a 3.026 archivos fuera de él). Ver
+    «Intentos fallidos».
+  - `web-v1-revision` y `confident-dirac-a1b422` quedaron sin registrar, con unos 540 MB cada una de
+    `web-factory/node_modules` más copias de archivos de Git. Se borran con `cmd /c rd /s /q "\\?\<ruta>"`.
   - `onia-hermes-contenido` no se rescató: tiene clips de Lucía de más de 5 MB. No lo toca ningún script.
-- Hermes, Codex y el VPS siguen sin configurar: van con `aplicar.ps1` después del merge (`ONIA_HARNESS.md` §7).
+- El VPS sigue sin el cambio del paso 5 de §7 (PR propio de `aplicar.sh`).
 
 **Archivos y cambios**
 - Home de Hermes: `C:/Users/PC/AppData/Local/hermes` (config.yaml, SOUL.md de fábrica, memories/USER.md, skills/onia con 2 skills creadas por él). `C:/Users/PC/.hermes` lo escribe Orca y Hermes no lo lee.
@@ -63,15 +76,24 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
 - Delegar a hijos `gpt-6-luna` con `max_iterations: 40`: cortó los guiones, que fueron rechazados.
 - Hipótesis falsa: que `skills.external_dirs` es de solo lectura. Es escribible (`skills.md:424-425`), y por eso hace falta `skills.write_approval: true` (el orden de las claves en el YAML no importa).
 - Hipótesis falsa: que hay 16 skills divergentes entre `.agents/skills` y `.claude/skills`. La diferencia real es 1 SKILL.md y 1 referencia; el resto es CRLF.
+- `robocopy /E /MOVE` de una carpeta con `node_modules` de pnpm sale con código 9 (8 = algo falló + 1 = copió),
+  aunque la carpeta termine entera en el destino. pnpm arma `node_modules` con junctions; robocopy las sigue y
+  después no encuentra lo que ya movió por el otro camino. Antes de alarmarse: mirar si el origen sigue en C: y
+  contar en el destino los archivos fuera de `node_modules`.
+- Comparar el árbol de un worktree contra su rama de rescate con un índice temporal (`read-tree` + `add -A` +
+  `write-tree`) da «cambió» en falso si el HEAD avanzó por un pull o si el worktree es sparse. Lo que vale es
+  comparar por archivo lo que el script descarta: `git status` y `hash-object` contra la rama de rescate.
 
 **Qué depende de Sergio**
 1. ~~Qué AGENTS.md manda~~ y ~~el rol de cada Hermes~~: decididos el 26-oct (arriba). Falta que apruebe el PR.
 2. Despachar `aplicar` en el VPS para pausar la revisión de cada 3 h y poner el SOUL nuevo (el control de permisos
    frena ese despacho desde una sesión).
-3. Orca: Hermes ya no corre ahí y Orchestration queda apagado (sale de la decisión 2). Falta Workspace Directory en
+3. Orca: Hermes corre ahí solo con Agent permissions en Manual y abierto en `hermes-base`; Orchestration queda apagado (sale de la decisión 2). Falta Workspace Directory en
    E:, la telemetría apagada y la regla de firewall del puerto 6768 solo en el perfil Privado.
 4. ~~Reglas globales y `~/.codex/config.toml`~~: se mantienen (26-oct). Lo de Hermes era mejor que lo anterior.
-7. Correr los dos scripts de limpieza de `E:\onia-wt\`, mergear #269 y correr `aplicar.ps1` con Hermes cerrado.
+7. ~~Correr los dos scripts de limpieza, mergear #269 y correr `aplicar.ps1`~~: hecho el 26-oct. Falta reinstalar
+   la tarea programada, borrar las dos carpetas que quedaron y, en Orca, poner Settings → Agents → Agent
+   permissions en **Manual** (sin eso abre a Hermes con `--yolo`).
 8. Cerrar el PR #226 (reemplazado por #269): la sesión no tiene permiso para escribir en GitHub.
 9. Sacar del autosync la excepción del integrador apagado (`scripts/git-autosync.js:43`), en un PR propio con su prueba.
 5. La protección de la rama `main` en GitHub. Medido el 26-oct: en un repo privado del plan gratis la API responde

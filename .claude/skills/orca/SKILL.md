@@ -52,6 +52,12 @@ Medido el 16-oct-2026 (docs oficiales onorca.dev + instalación de la PC, solo l
 - **Orca lanza `hermes --tui --yolo`** con `Set-Location C:/dev/proyectos/onia-hermes`, es decir, en el checkout de `main` y no en un worktree. Sin approvals: `--yolo` solo respeta `approvals.deny` y la lista fija.
 - **Home desdoblada:** en Windows nativo Hermes usa `%LOCALAPPDATA%\hermes` (`hermes_constants.py:51-58`). Orca le pone el plugin `orca-status` en `C:/Users/PC/.hermes`, que Hermes no lee: Orca no recibe su estado.
 - **Hermes lee UN solo archivo de proyecto** (`.hermes.md` → `AGENTS.override.md` → `AGENTS.md` → `CLAUDE.md`): con AGENTS.md en la raíz, el CLAUDE.md de la raíz nunca entra (el de una subcarpeta sí, si no tiene AGENTS.md). No carga `~/.claude/**` ni `.claude/skills` como contexto (sus herramientas sí pueden leer y escribir ahí); para las skills hace falta `skills.external_dirs`, que es ESCRIBIBLE: primero `skills.write_approval: true`.
+- **Orca abre a Hermes con `--yolo` salvo en Manual** (26-oct): `out/shared/tui-agent-permissions.js:41` de la
+  v1.4.240 pone `hermes: '--yolo'` en la tabla de Yolo, y en Manual no pasa argumentos. Con Settings → Agents →
+  Agent permissions en Manual, y abierto en `E:\onia-wt\hermes-base`, Orca sirve de ventana para hablarle.
+- **El chat del portal no anda en Windows nativo**: necesita una PTY POSIX y pide WSL2
+  (`website/docs/user-guide/features/web-dashboard.md:163`). El resto del portal sí: sesiones, trabajos y config.
+  Para chatear: la TUI, o Hermes Desktop (`user-guide/desktop.md`; no instalado el 26-oct, pide OK).
 - **El portal** es `hermes dashboard --no-open` → `127.0.0.1:9119` (entrada `hermes-dashboard` en `.claude/launch.json`). Sesiones, skills y config se leen en solo lectura desde `/api/*`, con `window.__HERMES_SESSION_TOKEN__`.
 - **Puerto 6768** de Orca: escucha en `0.0.0.0`, con el firewall abierto en el perfil Público.
 - Auditoría completa y plan: `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`; estado: `handoff/hermes-local.md`.
