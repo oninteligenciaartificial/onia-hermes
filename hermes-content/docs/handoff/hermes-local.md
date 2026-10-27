@@ -143,6 +143,24 @@ respaldo si falta cupo) y #274 (Hermes endurecido: sin logins prestados, sin cro
 `python -m hermes`, 48 skills de fábrica apagadas, escritura solo en handoff, pedidos y cachescratch;
 `probar-deny` 183/45/0).
 
+### Lo que le toca a Sergio Urcullo (dejado el 27-oct de madrugada, mientras dormía)
+
+En este orden, todo desde una PowerShell normal (no desde Claude):
+1. `hermes auth remove copilot 1` y `hermes auth remove anthropic 1`. El de copilot es su token de GitHub.
+2. Mirar el PR «inventario de skills, autonomía por opciones y acceso a X» (#277) y dar el OK para mergear.
+3. Con el PR mergeado, en `C:\dev\proyectos\onia-hermes`:
+   `powershell -ExecutionPolicy Bypass -File scripts\pc\ordenar-agentes-pc.ps1`. Primero en seco; si la lista le
+   parece bien, el mismo comando con `-Aplicar`. Archiva 27 skills personales, 48 de Codex, 48 comandos y 26
+   agentes, y apaga Superpowers (en Claude y en Codex) y en Codex Remotion, Vercel y la tercera copia de
+   HyperFrames. Vuelve atrás con `-Revertir <manifiesto>`.
+4. Abrir Hermes (`Set-Location E:\onia-wt\hermes-base; hermes --tui -m gpt-6.1-sol --provider openai-codex`) y
+   mirar `/context`.
+5. Reinstalar la tarea programada (`scripts/orquesta/README.md` §«Correr»).
+6. Decidir si se paga Grok con X (desde USD 8 por mes) para leer X de verdad. X bloquea los navegadores automáticos,
+   y esquivar ese bloqueo no se hace.
+7. Siguiente tarea, la que pidió él: la bóveda cifrada para los agentes. KeePassXC está instalado, pero
+   `Agentes.kdbx` no existe, y `BovedaPrivada` tiene un `.txt` de variables y una llave SSH sin cifrar.
+
 ### Revisión para dejarlo operando (26-oct, 23:45, a pedido de Sergio Urcullo)
 
 Medido desde el panel Terminal (fuera de la copia de la app de Claude):
