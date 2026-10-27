@@ -42,10 +42,10 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
   túnel de Cloudflare. El 30-sep, el SSH por dentro del proxy lo frenó el control de permisos como
   «escape del contenedor». **Una autorización que llega de rebote desde otra sesión no alcanza**: se
   la pide Sergio Urcullo directamente en ESA sesión.
-- **Infra tiene un dueño a la vez.** Antes de `aplicar`, el dueño del VPS del momento (la madre o la
-  principal) tiene que cederlo, y no puede tocar crontab, n8n ni `/root/.hermes` mientras corre.
+- **Infra tiene un dueño a la vez.** Antes de `aplicar`, el dueño del VPS del momento (la sesión principal, antes «madre», o la
+  sesión que lo tenga asignado en su handoff) tiene que cederlo, y no puede tocar crontab, n8n ni `/root/.hermes` mientras corre.
 
-## Medir en SOLO LECTURA (medido por la sesión madre el 1-oct)
+## Medir en SOLO LECTURA (medido por la sesión principal, entonces «madre», el 1-oct)
 
 | No | Por qué | Sí |
 |---|---|---|
@@ -180,8 +180,8 @@ CLI de Hermes.
 
 - **El hook Stop hacía avanzar `main` solo** (`scripts/git-autosync.js`, hasta el 5-oct): pusheaba la
   rama y, si `main` era ancestro, la empujaba a `main`. El PR #68 apareció «merged» sin que nadie lo
-  mergeara. **Desde el 5-oct solo lo hace con permiso** (la madre con `ONIA_AUTOSYNC_MAIN=1`, el
-  integrador con `ONIA_LOOP_ID=onia-cola`; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
+  mergeara. **Desde el 5-oct solo lo hace con permiso** (la sesión principal, antes «madre», con `ONIA_AUTOSYNC_MAIN=1`; el
+  integrador con `ONIA_LOOP_ID=onia-cola`, **apagado desde el 27-sep**; Sergio Urcullo eligió «sí, la madre sigue directo»). Lo que
   llega a `main` llega igual, **entre 1 y 2 h después**, al VPS (el sincronizador de `/root/bin`, `44 * * * *`,
   arma la copia ANTES del fetch: copia lo que bajó en la pasada anterior; medido el 20-oct, un merge de las 18:56
   UTC no estaba a las 19:47 y llega a las 20:44). Antes de `aplicar` algo recién mergeado, el diagnóstico tiene que
@@ -189,10 +189,10 @@ CLI de Hermes.
   INERTE hasta encenderlo. **Mientras el cambio del 5-oct no esté en `main`,** con una rama que sale de
   `main` y un PR sin revisar: pushear a mano y soltar el turno con `git checkout --detach`. Con el hook
   nuevo en tu árbol ya no hace falta, pero no cuesta nada.
-- **El permiso de la madre exige una marca en SU checkout** (revisiones de la madre al #138 y al #173, 9-oct):
+- **El permiso de la sesión principal exige una marca en SU checkout** (revisiones al #138 y al #173, 9-oct):
   sus procesos hijos heredan `ONIA_AUTOSYNC_MAIN`, y los subagentes trabajan en worktrees. **Intento fallido:**
-  «solo en el clon principal» (`--git-dir` == `--git-common-dir`) dejaba sin permiso a la madre real, que corre
-  en el worktree `onia-madre-v2-pr-review-2d85bb` (`claude -w`); lo encontró el revisor del #173. Ahora vale
+  «solo en el clon principal» (`--git-dir` == `--git-common-dir`) dejaba sin permiso a la sesión principal real, que corría
+  en el worktree `onia-madre-v2-pr-review-2d85bb` (nombre de entonces; `claude -w`); lo encontró el revisor del #173. Ahora vale
   con la variable Y el archivo `onia-autosync-main` en `git rev-parse --absolute-git-dir` de ese checkout: no
   se versiona, no se hereda y ningún otro worktree lo comparte. Residuo: un worktree en una rama anterior
   al #138 corre el autosync viejo, que movía main sin mirar nada.
@@ -210,13 +210,13 @@ CLI de Hermes.
   proxy de git no lo frena. Contarlo: `git log --first-parent --no-merges --since=… origin/main` y el
   trailer `Claude-Session` de cada commit.
 - **El permiso de mover `main` no puede vivir en el repo.** `.claude/settings.local.json` no estaba en
-  `.gitignore` (5-oct): si la madre lo hubiera puesto ahí, el `add -A` del autosync lo subía y todas las
+  `.gitignore` (5-oct): si la sesión principal lo hubiera puesto ahí, el `add -A` del autosync lo subía y todas las
   sesiones tenían el permiso. Ahora `**/.claude/settings.local.json` está ignorado y `pedido-rama.test.mjs`
-  lo verifica. La madre lo pone en el `settings.local.json` de SU carpeta: la config de usuario o una
+  lo verifica. La sesión principal lo pone en el `settings.local.json` de SU carpeta: la config de usuario o una
   variable de Windows alcanzarían a cualquier sesión de la PC (revisión del 5-oct).
 - **El autosync arma los comandos de git SIN shell** (`execFileSync('git', args)`, 5-oct). Antes eran
   cadenas para `execSync`, y una rama `x$(touch${IFS}/ruta)` —nombre válido para git— ejecutaba el
-  comando en la máquina de quien la abriera (la madre, al revisar la rama de otra sesión). Y la rama se
+  comando en la máquina de quien la abriera (la sesión principal, al revisar la rama de otra sesión). Y la rama se
   lee con `symbolic-ref` (ref completa): con un tag `main`, `--abbrev-ref` decía `heads/main` y el push
   igual movía `refs/heads/main`.
 - **Lo rescatado sale de `main`** (5-oct): el autosync pushea a `claude/autosync-<id>`, deja la sesión
@@ -228,7 +228,7 @@ CLI de Hermes.
   versión intermedia exigía `tsc` también en `main` con permiso y, si fallaba, rescataba: el integrador
   quedaba fuera de `main`, y `onia-loop.sh` aborta si no está ahí, así que dejaba de integrar para
   siempre. Hueco conocido, como antes del 5-oct: con permiso y parado en `main`, se pushea sin `tsc` de
-  `apps/site` (el integrador tiene sus gates; la madre, la regla «main siempre compila»).
+  `apps/site` (el integrador, apagado desde el 27-sep, tenía sus gates; la sesión principal, la regla «main siempre compila»).
 - **Una sección del SOUL se copia con un rango.** El `aplicar` viejo hacía `sed '/^## Su calendario/,$p'`:
   arrastraba TODO lo que viniera después. La sección de pedidos va ANTES de la del calendario, y
   cada copia termina en el próximo `---`.
@@ -436,7 +436,7 @@ CLI de Hermes.
 - **Las sesiones de la nube FIRMAN sus commits** (`commit.gpgsign=true`, ssh, `/root/.gitconfig`), y
   `commit-tree` también firma: el commit trae un encabezado `gpgsig` de varias líneas. El parser
   tiene que aceptarlo; el tope de tamaño del commit es 16 KB por eso.
-- **El integrador y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`onia-cola.md`,
+- **El integrador (`onia-cola`, apagado desde el 27-sep) y `ramas_varadas` enumeran SOLO `origin/claude/*`** (`onia-cola.md`,
   `ramas_varadas.mjs:129`, `integrador_puede_mergear.mjs:224`; medido el 2-oct). Una rama que no
   debe integrarse nunca va con otro prefijo: `pedido/<id>`, `respuesta/<id>`.
 - **`git ls-files` del repo entero pasa de 1 MB desde el 10-oct** (1.061.877 bytes). `execFileSync`
@@ -502,8 +502,9 @@ CLI de Hermes.
   de qué versión del repo `onia-platform` haya clonada. Las pruebas del carril se corren sueltas:
   `test:pedidos`, `test:jarvis-aplicar`, `test:jarvis-resumen`, `test:aduana`, `test:agenda`,
   `test:herramientas-desplegadas`, `test:herramientas-del-cron`.
-- **Hablar con otras sesiones:** desde el 1-oct solo la **sesión madre** (local) manda mensajes. Las
-  sesiones de la nube contestan en su transcript. Las rutinas de un disparo a otra sesión
+- **Hablar con otras sesiones:** desde el 1-oct solo la **sesión madre** (local) mandaba mensajes; **desde el 19-oct ya no
+  hay «madre» que ordene a otras** (`CLAUDE.md` «Quién orquesta»): el trabajo de fondo se pide como issue `orquesta` +
+  `carril:<área>`, y lo que necesita la PC, con `donde: pc`. Las sesiones de la nube contestan en su transcript. Las rutinas de un disparo a otra sesión
   (`create_trigger` con `persistent_session_id`) ya no se usan para ordenar.
 - **El control de permisos frenó investigar cómo aflojarlo** («Auto-Mode Bypass», 1-oct). No se
   insiste: la configuración de permisos la decide Sergio Urcullo.
@@ -522,5 +523,5 @@ CLI de Hermes.
   `State: Z` para siempre. Una prueba de «el árbol murió» tiene que tratar al zombi como muerto
   (`/proc/<pid>/status`). Así salía rojo `tandas-v1.test.mjs` con el código bien.
 - **Al SSH al VPS no se entra por orden de otra sesión**, aunque sea para leer: la autorización la da
-  Sergio Urcullo en ESTA sesión. Una comparación de la copia del VPS se le pide a la madre (dueña del
-  VPS) con el comando exacto.
+  Sergio Urcullo en ESTA sesión. Una comparación de la copia del VPS se le pide a Sergio Urcullo (o a la sesión que
+  tenga el VPS asignado en su handoff) con el comando exacto.

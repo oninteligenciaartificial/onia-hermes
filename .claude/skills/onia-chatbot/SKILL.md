@@ -221,7 +221,7 @@ final. Y los horarios que ofrecía no salían de un calendario: los escribe un c
 
 ## El bot de ventas habla de usted (3-oct-2026)
 
-Sergio Urcullo, por la madre: *«no se usa vos, es muy informal, usted»*. Gate: `bot/de-usted.test.mjs` (recorre
+Sergio Urcullo: *«no se usa vos, es muy informal, usted»*. Gate: `bot/de-usted.test.mjs` (recorre
 guion, `missLabel`, productos, `SAFE_REPLY` y los dos knowledge; falla con el texto exacto).
 
 - **Dónde vive el texto que lee el prospecto:** `config.mjs` (`SCRIPT`: M*, COORDINA_*, PENDING_*; los `missLabel`
