@@ -33,9 +33,13 @@
 
 - **Bs 3.000 exige vender los 50 cupos.** No hay margen: con 49 son Bs 2.930.
 - Vale el precio del momento en que se acredita el pago. El escalón cambia a mano en la página cuando se acreditan los pagos 15 y 35.
-- Mínimo para dictarlo: **6 pagos acreditados** al jue 29, 20:00.
+- Mínimo para dictarlo: **6 pagos acreditados** al vie 30, 20:00 (antes jue 29; ver §4, 26-oct).
 - **Lo que queda de los Bs 3.000:** la pauta resta Bs 300 (queda Bs 2.700). Si se factura, el IVA y el IT salen del precio: lo define Leslie Mercado Moreno (§3). El QR del BCP no cobra comisión.
 - **Ritmo necesario:** 50 pagos en 9 días de venta (mié 21 → jue 29) ≈ **6 pagos por día**.
+- **26-oct: la venta no abrió el 21** (pausa de Sergio Urcullo del 19-oct, `handoff/comunidad.md`). Si abre el mar 27
+  y cierra el vie 30 son **4 días**: 50 cupos piden ~13 pagos por día. Al ritmo del escenario base (30 en 9 días,
+  ~3 por día) salen ~13 cupos, unos **Bs 650**. El resto de los Bs 3.000 del plan de supervivencia sale de las
+  ofertas 1 a 1 (`sales-kit/07-OFERTAS-1-A-1.md`): una landing de Bs 2.000 mueve más que el taller entero.
 - **Cuánta gente tiene que ver la oferta** (supuesto de `ONIA_LANZAMIENTO_PREPAGO.md` §2, no promesa): con 3 % de compra, ~1.700 personas con intención. Hoy hay **497 seguidores en @sergiourcullo** (medido el 19-oct) y ~30 en la comunidad: por eso la pauta y los mensajes 1 a 1.
 
 | Escenario | Cupos | Cobrado |
@@ -49,19 +53,32 @@
 
 Briefs viejos decían «6 condiciones»: la sexta no está escrita en ningún archivo. **Son 5.**
 
-| # | Condición | Dueño | Estado 19-oct 22:40 |
+| # | Condición | Dueño | Estado 26-oct 22:15 |
 |---|---|---|---|
-| 1 | Página `/auditoria` publicada con el botón a WhatsApp | Agente (deploy Vercel) con OK de Sergio Urcullo a las capturas | Lista en el repo; falta el número y su OK |
+| 1 | Página `/auditoria` publicada con el botón a WhatsApp | Agente (deploy Vercel) con OK de Sergio Urcullo a las capturas | Con el número, sin `noindex` y cierre al vie 30; capturas 390/1440 del 26-oct; falta su OK. Sin publicar (`/auditoria` da 404) |
 | 2 | Textos aprobados: página, carruseles, plantillas A-D (§5) | Sergio Urcullo | Capturas enviadas el 19-oct |
-| 3 | Número de WhatsApp atendido por Sergio Urcullo | Sergio Urcullo | Decidió su número personal; falta escribirlo |
-| 4 | QR del BCP, titular y cómo se factura | Leslie Mercado Moreno | Pendiente |
+| 3 | Número de WhatsApp atendido por Sergio Urcullo | Sergio Urcullo | ✅ +591 71654992, dado el 19-oct |
+| 4 | QR del BCP, titular y cómo se factura | Leslie Mercado Moreno | Pendiente: el QR fijo sale de Credinet Web, la banca empresa del BCP |
 | 5 | Texto de devolución revisado | Leslie Mercado Moreno | Pendiente (la regla ya está decidida) |
 
-**Botón:** `https://wa.me/591<NÚMERO>?text=Hola%2C%20quiero%20mi%20cupo%20del%20taller%20del%20s%C3%A1bado%2031` en los 3 enlaces de `hermes-content/sitio-sergiourcullo/auditoria/index.html` (hoy `#reservar`). Al publicar, sacar el `noindex`.
+**Botón (puesto el 26-oct):** `https://wa.me/59171654992?text=Hola%2C%20quiero%20mi%20cupo%20del%20taller%20del%20s%C3%A1bado%2031` en los 3 enlaces de `hermes-content/sitio-sergiourcullo/auditoria/index.html`. El `noindex` ya no está.
 
-**Devolución:** una vez confirmado el cupo, no hay devolución. Solo si el taller no se dicta (menos de 6 pagos al jue 29, 20:00, o por una causa de Sergio Urcullo) se devuelve el pago completo, a la cuenta de origen, en 3 días hábiles (plazo propuesto; lo confirma Leslie Mercado Moreno con el texto).
+**Devolución:** una vez confirmado el cupo, no hay devolución. Solo si el taller no se dicta (menos de 6 pagos al vie 30, 20:00, o por una causa de Sergio Urcullo) se devuelve el pago completo, a la cuenta de origen, en 3 días hábiles (plazo propuesto; lo confirma Leslie Mercado Moreno con el texto).
 
 ## 4. Calendario día por día (hora de La Paz)
+
+### 26-oct · calendario comprimido (propuesta de Claude; va con el OK de la página)
+
+La tabla de abajo es la del 19-oct: la venta no abrió el mié 21. Desde el día en que Sergio Urcullo da el OK a la
+página y sale el QR:
+- **Día de apertura:** página viva, bio → `/auditoria`, carrusel 1, historia, aviso en la comunidad y el primer
+  lote de ofertas 1 a 1 (`sales-kit/07-OFERTAS-1-A-1.md`).
+- **Día siguiente:** carrusel 2. La pauta de Bs 300 se reparte en los días que queden hasta el vie 30.
+- **Clase gratis del mar 27: no va.** No hay días para anunciarla.
+- Los reels salen solo si ya están grabados.
+- **Cierre vie 30, 20:00** (antes jue 29): un día más de venta. Ahí se mide el mínimo de 6 pagos; el link de Meet
+  y el pre-trabajo salen el vie 30 a la noche. Si Sergio Urcullo prefiere el jue 29, se vuelve en la página y acá.
+- Sáb 31, 10:00: el taller, igual.
 
 Un solo CTA por pieza: **«Link en mi perfil»** (la bio apunta a `/auditoria`). Sin «comentá y te mando»: el DM por comentario no está probado.
 
@@ -108,7 +125,7 @@ Flujo de tres toques: perfil → botón de WhatsApp → QR. Plantillas A-D en `O
 |---|---|---|
 | 1 | Vie 23 (3 días de venta) | **≥ 15 pagos:** sigue la meta de Bs 3.000. **8-14:** sigue, la meta realista baja a ~Bs 1.500. **5-7:** se revisa el mensaje y el alcance. **< 5:** parar y revisar; no bajar el precio por reflejo |
 | 2 | Mar 27 (clase gratis) | **≥ 25:** se apunta a llenar los 50. **< 15:** se dicta igual si hay 6 o más |
-| Cierre | Jue 29, 20:00 | **< 6 pagos:** no se dicta y se devuelve todo |
+| Cierre | Vie 30, 20:00 (antes jue 29) | **< 6 pagos:** no se dicta y se devuelve todo |
 
 ## 8. Piezas y archivos
 
