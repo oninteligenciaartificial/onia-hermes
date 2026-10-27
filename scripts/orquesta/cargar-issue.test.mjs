@@ -5,8 +5,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validarPedido, inicioDelDia, main, CARRILES, REPO, TOPE, Rechazo } from './cargar-issue.mjs';
-import { leerPedido } from './orquesta.mjs';
+import { validarPedido, inicioDelDia, horaLaPaz, main, CARRILES, REPO, TOPE, Rechazo } from './cargar-issue.mjs';
+import { leerPedido, opcionesDe } from './orquesta.mjs';
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT = path.join(AQUI, 'cargar-issue.mjs');
@@ -306,6 +306,127 @@ test('si el issue queda sin necesita-ok, lo cierra; si no puede confirmarlo, avi
   r = await correr([], PEDIDO, ghFalso({ ver: { code: 1, stdout: '', stderr: 'x' } }).gh);
   assert.equal(r.codigo, 1);
   assert.match(r.err, /no pude confirmar sus labels/);
+});
+
+// ---------- opciones y recomendada por silencio (27-oct-2026) ----------
+
+const OPCIONES = '## Opciones\n- A: Solo el brief, una página.\n- B: Brief con tabla de competidores. (recomendada)\n- C: Informe completo.';
+// El mismo PEDIDO (nube + urls + investigación = nivel B) con `opciones: si` y la sección.
+const conOpciones = (cambio = (t) => t) => cambio(PEDIDO.replace('check: urls', 'check: urls\nopciones: si').replace('Hecho cuando:', `\n${OPCIONES}\n\nHecho cuando:`));
+const conSeccion = (seccion) => conOpciones((t) => t.replace(OPCIONES, seccion));
+const LABELS_B = ['orquesta', 'carril:investigacion', 'origen:hermes', 'necesita-ok', 'ok-por-silencio'];
+const verConLabels = (nombres) => ({ code: 0, stdout: JSON.stringify({ labels: nombres.map((name) => ({ name })) }), stderr: '' });
+
+test('opciones: si en el nivel B suma ok-por-silencio y orquesta.mjs lee las mismas opciones que se validaron', () => {
+  const p = validarPedido(conOpciones());
+  assert.deepEqual(p.labels, LABELS_B);
+  assert.equal(p.nivelB, true);
+  assert.equal(p.recomendada, 'B');
+  const leido = leerPedido(p.cuerpo);
+  assert.equal(leido.check, 'urls', 'la cabecera se sigue leyendo igual');
+  assert.equal(leido.donde, 'nube');
+  assert.doesNotMatch(p.cuerpo, /^opciones:/m, 'opciones: es una orden para este comando; la sección viaja en el texto');
+  assert.equal(opcionesDe(leido.pedido).recomendada, 'B');
+  assert.equal(opcionesDe(leido.pedido).opciones.length, 3);
+});
+
+test('opciones: la sección «## Opciones» es obligatoria y se valida (2 o 3 renglones, una sola recomendada)', () => {
+  for (const [caso, seccion] of Object.entries({
+    'sin sección': 'Nada de opciones.',
+    'una sola': '## Opciones\n- A: x (recomendada)',
+    cuatro: '## Opciones\n- A: a\n- B: b (recomendada)\n- C: c\n- D: d',
+    'ninguna recomendada': '## Opciones\n- A: a\n- B: b',
+    'dos recomendadas': '## Opciones\n- A: a (recomendada)\n- B: b (recomendada)',
+    'letras salteadas': '## Opciones\n- A: a\n- C: c (recomendada)',
+  })) assert.throws(() => validarPedido(conSeccion(seccion)), (e) => e instanceof Rechazo && e.codigo === 65 && /## Opciones/.test(e.message), caso);
+  assert.ok(validarPedido(conSeccion('## Opciones\n- A: a\n- B: b (recomendada)')));
+  rechaza(conOpciones((t) => t.replace('opciones: si', 'opciones: quizas')), /^opciones:/);
+  rechaza(conOpciones((t) => t.replace('opciones: si', 'opciones: si\nopciones: si')), /dos veces/);
+});
+
+test('opciones: Hermes no puede pedir el label: ok-por-silencio no es un campo y solo lo suma el nivel B', () => {
+  rechaza(conOpciones((t) => t.replace('opciones: si', 'ok-por-silencio: si')), /campo desconocido «ok-por-silencio:»/);
+  rechaza(conOpciones((t) => t.replace('opciones: si', 'etiquetas: ok-por-silencio')), /campo desconocido/);
+  rechaza(conOpciones((t) => t.replace('opciones: si', 'opciones: si\nsilencio: 1')), /campo desconocido/);
+});
+
+test('fuera del nivel B nunca se suma ok-por-silencio, aunque traiga opciones', () => {
+  for (const [caso, cambio] of Object.entries({
+    'en la PC': (t) => t.replace('donde: nube', 'donde: pc'),
+    'check cmd': (t) => t.replace('check: urls', 'check: cmd npm test'),
+    'ok sergio': (t) => t.replace('opciones: si', 'opciones: si\nok: sergio'),
+    plataforma: (t) => t.replace('carril: investigacion', 'carril: plataforma'),
+    video: (t) => t.replace('carril: investigacion', 'carril: video'),
+  })) {
+    const p = validarPedido(conOpciones(cambio));
+    assert.equal(p.nivelB, false, caso);
+    assert.ok(!p.labels.includes('ok-por-silencio'), caso);
+    assert.deepEqual(p.labels, ['orquesta', `carril:${p.carril}`, 'origen:hermes', 'necesita-ok'], caso);
+  }
+  const sinOpciones = validarPedido(PEDIDO);
+  assert.equal(sinOpciones.nivelB, false, 'nube + urls pero sin opciones: no hay recomendada que dejar salir');
+  assert.ok(!sinOpciones.labels.includes('ok-por-silencio'));
+  for (const carril of ['marca', 'comunidad']) {
+    assert.ok(validarPedido(conOpciones((t) => t.replace('carril: investigacion', `carril: ${carril}`))).labels.includes('ok-por-silencio'), carril);
+  }
+});
+
+test('horaLaPaz: la hora límite se dice en La Paz (UTC-4), también al cruzar de día', () => {
+  assert.equal(horaLaPaz(AHORA + 6 * 3_600_000), '26/10 17:00');
+  assert.equal(horaLaPaz(Date.parse('2026-10-27T03:30:00Z')), '26/10 23:30');
+  assert.equal(horaLaPaz(Date.parse('2026-10-27T04:00:00Z')), '27/10 00:00');
+});
+
+test('nivel B: crea con ok-por-silencio y el mensaje final dice la recomendada y la hora límite en La Paz', async () => {
+  const f = ghFalso({ ver: verConLabels(LABELS_B) });
+  const r = await correr([], conOpciones(), f.gh);
+  assert.equal(r.codigo, 0, r.err);
+  const crear = f.llamadas.find((l) => l.args[1] === 'create');
+  assert.deepEqual(crear.args.filter((a) => a.startsWith('--label=')),
+    ['--label=orquesta', '--label=carril:investigacion', '--label=origen:hermes', '--label=necesita-ok', '--label=ok-por-silencio']);
+  assert.match(r.out, /Tarea #321 cargada/);
+  assert.match(r.out, /recomendada \(B\)/);
+  assert.match(r.out, /26\/10 17:00 \(hora de La Paz\)/, 'ahora (11:00 en La Paz) + 6 h');
+  assert.match(r.out, /«no»/, 'dice cómo frenarla');
+  assert.doesNotMatch(r.out, /No arranca hasta que/, 'en el nivel B sí arranca solo, a esa hora');
+});
+
+test('fuera del nivel B el mensaje final sigue diciendo que no arranca hasta que Sergio Urcullo saque necesita-ok', async () => {
+  const r = await correr([], conOpciones((t) => t.replace('donde: nube', 'donde: pc')), ghFalso().gh);
+  assert.equal(r.codigo, 0, r.err);
+  assert.match(r.out, /No arranca hasta que Sergio Urcullo le quite «necesita-ok»/);
+  assert.doesNotMatch(r.out, /por silencio/);
+});
+
+test('--dry del nivel B muestra el label y la hora límite sin llamar a gh', async () => {
+  const f = ghFalso();
+  const r = await correr(['--dry'], conOpciones(), f.gh);
+  assert.equal(r.codigo, 0, r.err);
+  assert.equal(f.llamadas.length, 0);
+  assert.match(r.out, /Labels: orquesta, carril:investigacion, origen:hermes, necesita-ok, ok-por-silencio/);
+  assert.match(r.out, /26\/10 17:00 \(hora de La Paz\)/);
+  assert.match(r.out, /## Opciones/);
+});
+
+test('si el issue se crea sin ok-por-silencio avisa y no lo cierra: queda esperando a Sergio Urcullo con necesita-ok', async () => {
+  const f = ghFalso(); // ver por defecto: solo los 4 de siempre, como si el label no existiera
+  const r = await correr([], conOpciones(), f.gh);
+  assert.equal(r.codigo, 1);
+  assert.match(r.err, /ok-por-silencio/);
+  assert.ok(!f.llamadas.some((l) => l.args[1] === 'close'));
+});
+
+test('con silencio_horas menor a 6 no carga un pedido del nivel B; los demás no necesitan ese valor', async () => {
+  const f = ghFalso();
+  const err = [];
+  const conf = { silencio_horas: 5 };
+  const base = { gh: f.gh, candado: CANDADO, ahora: AHORA, log: () => {}, error: (s) => err.push(s), conf };
+  assert.equal(await main(['--archivo', 'p.txt'], { ...base, leer: () => conOpciones() }), 1);
+  assert.match(err.join('\n'), /silencio_horas/);
+  assert.equal(await main(['--archivo', 'p.txt', '--dry'], { ...base, leer: () => conOpciones() }), 1);
+  assert.equal(f.llamadas.length, 0, 'no llegó a contar ni a crear');
+  assert.equal(await main(['--archivo', 'p.txt'], { ...base, leer: () => PEDIDO }), 0, 'sin opciones no hace falta');
+  assert.equal(await main(['--archivo', 'p.txt'], { ...base, leer: () => conOpciones((t) => t.replace('donde: nube', 'donde: pc')) }), 0, 'fuera del nivel B tampoco');
 });
 
 test('la línea de comandos real: --archivo con --dry, también por una junction; la entrada estándar no se lee', () => {

@@ -10,6 +10,15 @@ choca con él, manda `AGENTS.md`.
   en un archivo UTF-8 dentro de `%LOCALAPPDATA%\hermes\pedidos\`; el comando no acepta stdin, porque PowerShell
   rompe las tildes. Primero lo corrés con `--dry` y se lo mostrás. Ese comando pone `origen:hermes` y `necesita-ok` y frena en 10 por día.
   `gh issue create` te está bloqueado. Él suelta cada tarea sacándole `necesita-ok`.
+- Cuando él decide **cómo** se hace una tarea, le das opciones: el pedido lleva `opciones: si` y, en el texto, una
+  sección `## Opciones` con 2 o 3 renglones `- A: …`, `- B: …` (qué entrega y qué cuesta cada una) y **uno solo** que
+  termina en `(recomendada)`. La recomendada la elegís por la etapa vigente y el plan de supervivencia
+  (`hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md`, sección del 26-oct) y por lo que él ya decidió (`AGENTS.md`, los
+  handoffs): la que más acerca a clientes pagando con menos de sus horas, no la más completa. Si no contesta en 6 h o
+  más, esa sale sola, pero **solo si el código ve el nivel B** (`AGENTS.md` §1): vos no lo elegís ni lo pedís, y
+  `ok-por-silencio` no es un campo. Una tarea de la PC, con `check: cmd`, de plataforma o video, con una línea `ok:`, o que
+  gaste, publique o toque a un tercero espera siempre su `necesita-ok`: no le pongas una recomendada pensando que sale.
+  Decile la hora límite que imprime el comando.
 - Seguir cada tarea: leer el issue, el PR y el recibo. El «hecho cuando» se comprueba contra los archivos y la salida
   real, no contra el resumen del trabajador.
 - Al cerrar o al relevarte, escribir el handoff del carril en
