@@ -5,7 +5,7 @@ Dejar a Hermes local configurado una sola vez como coordinador que lee las regla
 `scripts/orquesta/cargar-issue.mjs` muestra `necesita-ok`.
 Estado al 26-oct, 21:30: **PR #269 mergeado (`4fd5f64f`) y `aplicar.ps1 -EscrituraSegura -Codex` corrido a las
 19:56.** Respaldo para volver atrás: `%LOCALAPPDATA%\hermes\backups\pre-orden-20261026-195633` (`revertir.ps1 -Respaldo …`).
-Medido después, sin abrir la TUI:
+Medido después, sin abrir la TUI (⚠️ sobre la copia de la app de Claude, no vale: ver «26-oct, 23:06» abajo):
 - `probar-deny.py --vivo`: «mismo approvals.deny», 173 bloqueos, 41 lecturas, 0 fallas.
 - `hermes skills list` en `E:\onia-wt\hermes-base`: 65 skills `external` del repo, sin `onia-sesion-madre`.
 - `build_context_files_prompt(cwd=hermes-base)`, con el python de Hermes: carga el `AGENTS.md` del 26-oct y no
@@ -152,8 +152,8 @@ En este orden (actualizado el 26-oct, 23:30, por la sesión que siguió al relev
 2. **Reinstalar la tarea programada** (comando de `scripts/orquesta/README.md` §«Correr»; la corre él). Se le pasó
    el comando el 26-oct.
 3. **Plan de supervivencia** (`ONIA_ESTRATEGIA_DE_EMPRESA.md`, sección del 26-oct): Bs 3.000 al 3-nov. El número de
-   WhatsApp ya estaba desde el 19-oct (`handoff/comunidad.md`). La página `/auditoria` quedó con el número y sin
-   `noindex` en el PR «página lista para abrir la venta y ofertas 1 a 1» (#276, sin mergear), pero **a Sergio
+   WhatsApp ya estaba desde el 19-oct (`handoff/comunidad.md`). La página `/auditoria` quedó con el número (y con
+   `noindex` hasta su OK) en el PR «página lista para abrir la venta y ofertas 1 a 1» (#276), pero **a Sergio
    Urcullo no le gusta el resultado**. No se publica hasta saber qué cambiar. Falta además el QR fijo de Credinet
    Web (Leslie Mercado Moreno). Las ofertas 1 a 1 están en `sales-kit/07-OFERTAS-1-A-1.md`; a la llamada paga le
    falta el precio.

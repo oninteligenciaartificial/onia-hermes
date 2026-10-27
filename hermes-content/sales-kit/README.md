@@ -17,8 +17,8 @@ paciente con un tratamiento a medias que no volvió a agendar.
 | `03-SCRIPTS-WHATSAPP.md` | primer contacto, re-apertura y seguimiento |
 | `04-OBJECIONES.md` | qué responder cuando frenan |
 | `05-CHECKLIST-CAPTURAS.md` | qué capturas hacen falta antes de mostrar |
-| `07-OFERTAS-1-A-1.md` | ofertas de la semana del 27-oct (taller, landing de Bs 2.000, llamada paga) que manda Sergio Urcullo; se archiva después del 3-nov |
 | `06-VSL-DENTAL.md` | el video de venta (largo de ~4 min y corto de 60 s), cada frase atada a su fila de `ONIA_PROMESA_VS_PRODUCTO.md`; no se publica hasta tener la cuenta demo |
+| `07-OFERTAS-1-A-1.md` | ofertas de la semana del 27-oct (taller, landing de Bs 2.000, llamada paga) que manda Sergio Urcullo; se archiva después del 3-nov |
 
 **Kit 1.0 (2026-09-28).** Se reescribió entero sobre lo que hace la 1.0 de onia-platform
 (candidato `ed163e26`, verificado contra el código). Lo que cambió respecto del kit de julio:

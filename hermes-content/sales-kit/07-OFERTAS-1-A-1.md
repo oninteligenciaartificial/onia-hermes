@@ -52,8 +52,8 @@ del momento, dos preguntas y el QR).
 > y el hosting van a su nombre y se pagan aparte. Puede ver qué incluye acá: onia.com.bo/servicios/webs
 > ¿Le interesa que lo veamos?
 
-**Si pregunta por un ejemplo:** `sergiourcullo.vercel.app/auditoria` es una página de este tipo (una pantalla, un
-botón a WhatsApp), hecha por nosotros. No se muestra una web de cliente: todavía no hay ninguna publicada.
+**Si pregunta por un ejemplo:** todavía no hay una web de cliente publicada para mostrar. Se le manda lo que incluye
+(`onia.com.bo/servicios/webs`) y no se inventa un ejemplo.
 
 **Qué no se promete:** plazos de entrega ni resultados de ventas. Lo que incluye y lo que no está en la página de
 `/servicios/webs` (sale de `webs.ts`); si pregunta algo que no está ahí, se le dice que se lo confirma.
