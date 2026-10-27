@@ -89,9 +89,9 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
   (`.hermes/plans`, `.hermes/tasks`, los originales del curso de `references/formacion` y `panel-ejecucion`), dejó el
   checkout parado en `claude/autosync-e24cb7a5-…` y la pusheó (`b185a4e4`, 56 archivos, sin secretos según el
   barrido). Se volvió a `main` con `symbolic-ref` + `reset --mixed` (sin tocar archivos) y `pull`; con el
-  `.gitignore` de `main` esos archivos ya quedan ignorados. Falta borrar la rama de GitHub (decisión de Sergio
-  Urcullo) y que `git-autosync.js` no actúe nunca en el checkout que usa la tarea programada (PR propio, junto con
-  sacar la excepción del integrador).
+  `.gitignore` de `main` esos archivos ya quedan ignorados. La rama se borró de GitHub y de la PC el 26-oct, con el
+  OK de Sergio Urcullo. Falta que `git-autosync.js` no actúe nunca en el checkout que usa la tarea programada (PR
+  propio, junto con sacar la excepción del integrador).
 - Comparar el árbol de un worktree contra su rama de rescate con un índice temporal (`read-tree` + `add -A` +
   `write-tree`) da «cambió» en falso si el HEAD avanzó por un pull o si el worktree es sparse. Lo que vale es
   comparar por archivo lo que el script descarta: `git status` y `hash-object` contra la rama de rescate.
