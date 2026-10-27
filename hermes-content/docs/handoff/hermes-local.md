@@ -13,7 +13,11 @@ Medido después, sin abrir la TUI:
 - `cargar-issue.mjs --dry` desde `hermes-base`: pone `orquesta`, `carril:investigacion`, `origen:hermes` y
   `necesita-ok`, y no crea nada.
 
-Falta la prueba con la TUI abierta (`/context`) y la primera tarea real. La auditoría completa está en
+Falta la prueba con la TUI abierta (`/context`) y la primera tarea real.
+
+⚠️ **La TUI arranca con `gpt-6-astra-900k` aunque `config.yaml` diga `gpt-6.1-sol`** (medido 26-oct, 21:10: el
+banner de `hermes --tui` decía astra, sin variables `HERMES_INFERENCE_*`). Causa sin encontrar. Mientras tanto se
+abre con `hermes --tui -m gpt-6.1-sol --provider openai-codex`, que sí muestra Sol. La auditoría completa está en
 `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`.
 
 Lo que decidió Sergio Urcullo el 26-oct:
@@ -106,7 +110,12 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
 7. ~~Correr los dos scripts de limpieza, mergear #269 y correr `aplicar.ps1`~~: hecho el 26-oct. Falta reinstalar
    la tarea programada, borrar las dos carpetas que quedaron y, en Orca, poner Settings → Agents → Agent
    permissions en **Manual** (sin eso abre a Hermes con `--yolo`).
-8. Cerrar el PR #226 (reemplazado por #269): la sesión no tiene permiso para escribir en GitHub.
+8. ~~Cerrar el PR #226~~: hecho el 26-oct con su OK, junto con otros 12 PR de la época madre (#143, #195, #199,
+   #201, #202, #204, #206, #221, #227, #228, #229, #232) y el issue #268. Se borraron 32 ramas remotas que ya estaban
+   en `main`; las `rescate/*` quedan. El #265 (los trabajadores leen el handoff y dejan «## Aprendido») **no** se
+   cerró: sirve y está por revisar.
+10. Decidido el 26-oct: cuenta bot de GitHub y usuario de Windows propio para Hermes (los crea él; la guía sale del
+    informe de aislamiento). Túnel SSH solo con 3108 (PR #271).
 9. Sacar del autosync la excepción del integrador apagado (`scripts/git-autosync.js:43`), en un PR propio con su prueba.
 5. La protección de la rama `main` en GitHub. Medido el 26-oct: en un repo privado del plan gratis la API responde
    «Upgrade to GitHub Pro». Es un gasto (4 USD por mes según el FAQ de planes de GitHub, que es de 2020: confirmar el monto en Settings → Billing), así que lo decide él; mientras tanto, la barrera es local.
