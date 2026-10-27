@@ -4,7 +4,7 @@
 # Sin secretos: las llaves viven en .env y auth.json de esa carpeta, nunca acá.
 #
 # approvals.deny se prueba con probar-deny.py (en esta carpeta), que usa la función real de Hermes
-# (tools/approval_floors.py, _match_user_deny_rule) y su parser de YAML; 26-oct: 173 casos a bloquear y 41 lecturas
+# (tools/approval_floors.py, _match_user_deny_rule) y su parser de YAML; 26-oct: 177 casos a bloquear y 41 lecturas
 # que pasan, 0 fallas. Se corre después de cada cambio acá y de cada actualización de Hermes, desde la raíz del repo:
 #   $py = (Get-Content "$env:LOCALAPPDATA\hermes\installs\*\facts.json" -Raw | ConvertFrom-Json).packages.venv.environment + '\Scripts\python.exe'
 #   & $py -I hermes-content/deploy/hermes-pc/probar-deny.py hermes-content/deploy/hermes-pc/config.onia.yaml
@@ -15,7 +15,8 @@
 # (node x.js, python -c), y deny no es un sandbox (security.md:182-184). Por eso además:
 # - sin execute_code ni scripts con -e/-c en el allowlist (en modo manual piden aprobación);
 # - HERMES_WRITE_SAFE_ROOT (variable de usuario de Windows, separador ;) limita write_file, patch, delete_file y
-#   move_file a E:\onia-wt\hermes-base\hermes-content\docs\handoff y %LOCALAPPDATA%\hermes (file_safety.py:222-228).
+#   move_file a E:\onia-wt\hermes-base\hermes-content\docs\handoff, %LOCALAPPDATA%\hermes\pedidos y
+#   %LOCALAPPDATA%\hermes\cache\scratch (file_safety.py:222-228). Ya no toda la home, desde el 26-oct.
 #   No cubre skill_manage, que escribe directo (skill_manager_tool.py:406): las skills de external_dirs solo las
 #   protege skills.write_approval. Lo de la terminal (Set-Content, etc.) solo lo frenan los permisos del sistema.
 
