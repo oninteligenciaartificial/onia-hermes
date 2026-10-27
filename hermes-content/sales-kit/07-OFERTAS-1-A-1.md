@@ -18,7 +18,7 @@
 | Landing de Captación | Bs 2.000 | **1 sola** cubre dos tercios de la meta | Un negocio conocido sin página, o que hace publicidad y no tiene adónde mandarla |
 | Llamada 1 a 1 paga | {precio} | Completa lo que falte | Quien no puede el sábado o quiere verlo solo con su caso |
 
-Con 4 días de venta, el taller solo no llega a Bs 3.000 (la cuenta está en `TALLER_31_OCT.md` §2). Por eso la landing
+Con 3 días de venta, el taller solo no llega a Bs 3.000 (la cuenta está en `TALLER_31_OCT.md` §2). Por eso la landing
 va en la misma tanda: es el único ítem que mueve la meta con una sola respuesta.
 
 ## 1. Taller del sábado 31 (vos)
