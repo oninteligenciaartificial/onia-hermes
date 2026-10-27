@@ -22,6 +22,10 @@ const keyPath = process.env.VPS_KEY_PATH || path.join(os.homedir(), ".ssh", "oni
 const appPort = Number(process.env.ONIA_CENTER_LOCAL_PORT || 3012);
 const watchIntervalMs = Number(process.env.ONIA_CENTER_TUNNEL_WATCH_MS || 15000);
 const audioTunnelEnabled = process.env.ONIA_AUDIO_TUNNEL_ENABLED !== "false";
+// 26-oct: Speakr va siempre a pedido, y Supabase también con --tunnel-only. Abiertos, cualquier proceso de la PC
+// llegaba a la base de producción del VPS. La app completa de ONIA Center sigue abriendo Supabase.
+const supabaseTunnelEnabled = !tunnelOnly || process.env.ONIA_SUPABASE_TUNNEL_ENABLED === "true";
+const speakrTunnelEnabled = process.env.ONIA_SPEAKR_TUNNEL_ENABLED === "true";
 const speakrLocalPort = Number(process.env.ONIA_SPEAKR_LOCAL_PORT || 3107);
 const speachesLocalPort = Number(process.env.ONIA_SPEACHES_LOCAL_PORT || 3108);
 
@@ -134,19 +138,19 @@ async function ensureTunnel(supabaseLocalPort) {
     throw new Error(`No existe la llave SSH: ${keyPath}`);
   }
 
-  const portMap = [
-    { label: "Supabase API", local: supabaseLocalPort, remote: 54321 },
-    { label: "Supabase studio", local: 54322, remote: 54322 },
-    { label: "Supabase db", local: 54323, remote: 54323 },
-    { label: "Supabase auth", local: 54320, remote: 54320 },
-    { label: "Supabase extra", local: 54329, remote: 54329 },
-  ];
+  const portMap = supabaseTunnelEnabled
+    ? [
+        { label: "Supabase API", local: supabaseLocalPort, remote: 54321 },
+        { label: "Supabase studio", local: 54322, remote: 54322 },
+        { label: "Supabase db", local: 54323, remote: 54323 },
+        { label: "Supabase auth", local: 54320, remote: 54320 },
+        { label: "Supabase extra", local: 54329, remote: 54329 },
+      ]
+    : [];
 
   if (audioTunnelEnabled) {
-    portMap.push(
-      { label: "Speakr", local: speakrLocalPort, remote: 3107 },
-      { label: "Speaches", local: speachesLocalPort, remote: 3108 },
-    );
+    if (speakrTunnelEnabled) portMap.push({ label: "Speakr", local: speakrLocalPort, remote: 3107 });
+    portMap.push({ label: "Speaches", local: speachesLocalPort, remote: 3108 });
   }
 
   const sshArgs = ["-N", "-o", "ExitOnForwardFailure=yes", "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=3", "-i", keyPath];
@@ -195,9 +199,9 @@ async function main() {
 
   console.log("ONIA Center local activo");
   if (!tunnelOnly) console.log(`App: http://localhost:${appPort}/onia-center/login`);
-  console.log(`Supabase tunnel: 127.0.0.1:${supabaseLocalPort} -> ${vpsHost}:54321`);
+  if (supabaseTunnelEnabled) console.log(`Supabase tunnel: 127.0.0.1:${supabaseLocalPort} -> ${vpsHost}:54321`);
   if (audioTunnelEnabled) {
-    console.log(`Speakr tunnel: 127.0.0.1:${speakrLocalPort} -> ${vpsHost}:3107`);
+    if (speakrTunnelEnabled) console.log(`Speakr tunnel: 127.0.0.1:${speakrLocalPort} -> ${vpsHost}:3107`);
     console.log(`Speaches tunnel: 127.0.0.1:${speachesLocalPort} -> ${vpsHost}:3108`);
   }
   console.log(`Logs: ${logRoot}`);
