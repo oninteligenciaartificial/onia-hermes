@@ -16,6 +16,8 @@ En la PC de Sergio Urcullo (fuera de Git), verificado el 20-oct:
 - Plugin `claude-security` 0.12.0. Actualizados: ponytail 5.3.2, superpowers 7.0.0, document-skills dbd4588f9e10,
   frontend-design a0b04d9ddcca. Requieren reiniciar Claude Code.
 - Skills en `~/.claude/skills/`: `code-review-spec`, `diagnosing-bugs`, `next-dev-loop`, `prisma-cli`, `diagram-design`.
+  27-oct: `diagram-design` sale con la segunda poda de `scripts/pc/ordenar-agentes-pc.ps1`, porque no se usó y
+  `artifact-diagramming` cubre lo mismo. Las otras tres quedan porque las lee el trabajador de plataforma.
 - ZIP `E:/onia-skills-zip/ver-videos.zip` (de `origin/main` 9f4a8f14, 17 archivos).
 
 **Qué quedó a medias, y dónde**

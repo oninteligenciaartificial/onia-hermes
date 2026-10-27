@@ -134,7 +134,7 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
 - Corpus transversal de la tanda: `hermes-content/references/ui-patterns/APRENDIZAJE_WEBS.md`.
 
 ## Flujo de skills (en orden)
-1. **Intake + dirección:** `brainstorming` → definir estilo concreto (no "clean minimal").
+1. **Intake + dirección:** definir estilo concreto (no "clean minimal").
 2. **Investigar patrones:** **primero `ui-patterns/` (propio)**, después browser
    (Awwwards/referencias) + `data/references` internas.
 3. **Taste & sistema:** `taste-design` · `ui-ux-pro-max` · `impeccable` (reglas duras de calidad).
@@ -142,13 +142,13 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
    conocimiento"** — skills → pattern banks → aprendizaje crudo → packages. Leerlo
    ANTES de diseñar; el aprendizaje nuevo sigue esa cadena, nunca doc suelto.
 4. **Construcción:** para sitios de cliente = editar bloques/templates del generador.
-   Para superficies Next (onia-platform): `frontend-design` · `frontend-patterns` ·
-   `react-components` · `shadcn-ui` · `ui-styling` · `nextjs-turbopack`.
+   Para superficies Next (onia-platform): `onia-frontend` de su repo (manda) · `frontend-design` (plugin) ·
+   `next-dev-loop` *PC*.
 5. **Copy:** todo texto que generamos (titulares por rubro, bajadas de fallback, servicios sin
    descripción) pasa por `humanizer` o `stop-slop` antes de quedar. `web-factory/generate/slop.test.ts`
    vigila una lista en español. El motor escribe `data/clients/<slug>.DESIGN.md` (tokens con rol,
    contraste medido, componentes, voz): es lo que lee cualquier agente para repetir el estilo.
-6. **Revisión:** `design-review` + preview en navegador (verificar en vivo, no pedirle a
+6. **Revisión:** `impeccable` (critique) + preview en navegador (verificar en vivo, no pedirle a
    Sergio que revise a mano).
 
 ## Piso de calidad / benchmark

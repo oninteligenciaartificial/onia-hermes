@@ -1,5 +1,10 @@
 # Skills del carril — cuál cargar y cuándo
 
+> ⚠️ **Historia desde el 27-oct-2026.** Muchas skills de abajo ya no existen: se sacaron el 29-sep y el 27-oct,
+> por no usarse. Para aprender de una referencia manda `aprender-de-todo`, que lleva cada dimensión a su skill. Para
+> hacer el trabajo mandan `onia-router` y `.claude/skills/onia-router/STACK-POR-DOMINIO.md`. Se conserva por los
+> errores de la tabla del final, que siguen valiendo.
+
 Hay **196 skills globales** instaladas + 33 propias del repo. En ~70 videos analizados usé dos.
 Eso es el problema que este documento arregla: no falta capacidad, falta ruteo.
 

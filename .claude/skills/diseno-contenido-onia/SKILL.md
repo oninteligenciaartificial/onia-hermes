@@ -358,4 +358,4 @@ El CLI autenticado está en el VPS: `HF_CMD="ssh -i <llave> -o BatchMode=yes roo
 ## 7. Skills de diseño que se cargan con esta
 
 `impeccable` (register brand; las leyes de color/tipo/layout) · `design-dna` (sacar tokens de
-una referencia nueva) · `banner-design` (piezas sueltas) · `hyperframes` (si la lámina se anima).
+una referencia nueva) · `hyperframes` (si la lámina se anima).

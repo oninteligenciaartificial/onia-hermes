@@ -5,7 +5,8 @@
 #   powershell -ExecutionPolicy Bypass -File scripts\pc\ordenar-agentes-pc.ps1            # solo muestra qué movería
 #   powershell -ExecutionPolicy Bypass -File scripts\pc\ordenar-agentes-pc.ps1 -Aplicar   # mueve y deja manifiesto
 #   powershell -ExecutionPolicy Bypass -File scripts\pc\ordenar-agentes-pc.ps1 -Revertir <manifiesto.json>
-# Lo que el router todavía nombra (STACK-POR-DOMINIO.md) NO se toca: se decide aparte, junto con el router.
+# Segunda poda (27-oct, con el router podado): en las personales quedan las 11 usadas en 32 días, las 3 que lee el
+# trabajador de plataforma (carriles.json) y las 15 idénticas al repo. ad-creative sale: la personal es la vieja y le gana a la del repo.
 param([switch]$Aplicar, [string]$Revertir)
 $ErrorActionPreference = 'Stop'
 # Mirar sí puede cualquiera; mover lo decide Sergio Urcullo y lo corre en una PowerShell normal
@@ -17,9 +18,16 @@ $codex = Join-Path $HOME '.codex'
 
 $gstack = 'gstack', 'benchmark-models', 'browse', 'canary', 'context-restore', 'context-save', 'design-consultation', 'design-html',
     'design-review', 'devex-review', 'document-generate', 'health', 'investigate', 'land-and-deploy', 'landing-report', 'office-hours', 'qa', 'review'
+$sinUso = 'ad-creative', 'ads', 'agentic-engineering', 'analytics', 'architecture-decision-records', 'article-writing', 'autonomous-loops',
+    'banner-design', 'brand', 'brandkit', 'claude-api', 'click-path-audit', 'codebase-onboarding', 'competitors', 'context-budget',
+    'continuous-agent-loop', 'copy-editing', 'cost-aware-llm-pipeline', 'design', 'design-md', 'design-system', 'diagram-design',
+    'documentation-lookup', 'e2e-testing', 'exa-search', 'frontend-patterns', 'image-to-code', 'imagegen-frontend-web', 'industrial-brutalist-ui',
+    'iterative-retrieval', 'make-plan', 'minimalist-ui', 'n8n-code-javascript', 'n8n-expression-syntax', 'n8n-node-configuration',
+    'n8n-validation-expert', 'nextjs-turbopack', 'react-components', 'shadcn-ui', 'slides', 'social', 'supabase',
+    'supabase-postgres-best-practices', 'ui-styling', 'writing-guidelines'
 $grupos = @(
-    @{ carpeta = "$claude\skills"; archivo = "$claude\skills-archivadas-$fecha"; motivo = 'personales: gstack (decidido), caveman, HyperFrames de septiembre, carpetas que no son skills'
-       nombres = $gstack + @('caveman-commit', 'caveman-help', 'caveman-review', 'hyperframes-audio', 'hyperframes-studio', 'prompt-optimizer',
+    @{ carpeta = "$claude\skills"; archivo = "$claude\skills-archivadas-$fecha"; motivo = 'personales: gstack (decidido), caveman, HyperFrames de septiembre, carpetas que no son skills y las que no se usaron en 32 días'
+       nombres = $gstack + $sinUso + @('caveman-commit', 'caveman-help', 'caveman-review', 'hyperframes-audio', 'hyperframes-studio', 'prompt-optimizer',
                              'everything-claude-code', 'claude-token-eficiente', '.trash') }
     @{ carpeta = "$codex\skills"; archivo = "$codex\skills-archivadas-$fecha"; motivo = 'Codex: copias viejas que pisan ~/.agents/skills (el repo), git/deploy prohibidos, sin uso'
        nombres = @('hyperframes', 'hyperframes-animation', 'hyperframes-cli', 'hyperframes-core', 'hyperframes-creative', 'hyperframes-keyframes',

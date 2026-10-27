@@ -703,8 +703,8 @@ Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo 
 
 ### 9.7 Skills de afuera: qué sirve y qué no (8-oct)
 
-- **Globales en la PC (la nube no las ve):** `ad-creative` (el sistema de ganchos sirve), `ads`, `copywriting`,
-  `copy-editing`, `social`. ⛔ De `ad-creative` **no se usan** las plantillas de reseña, testimonio, antes/después,
+- **En el repo (la nube las ve):** `ad-creative` (el sistema de ganchos sirve) y `copywriting`. Para pulir el texto,
+  `humanizer` (solo en la PC). `ads`, `copy-editing` y `social` se archivaron el 27-oct por no usarse. ⛔ De `ad-creative` **no se usan** las plantillas de reseña, testimonio, antes/después,
   prensa, competidor ni el chat falso estilo iMessage: chocan con «no fabricar» y «ningún material nombra a la
   competencia». Están en inglés y de tú: se adaptan a usted.
 - **Ninguna skill instalada escribe un VSL.** Lo único público con estructura de VSL es
