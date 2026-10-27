@@ -197,6 +197,11 @@ Esto es lo que más caro sale, porque **hay puertos locales que no son locales**
 
 En tu PC ahora mismo:
 
+> **Desde el 26-oct el watchdog de arranque (`--tunnel-only`) abre solo `3108` (Speaches).** Los túneles de abajo
+> ya no están abiertos siempre: se piden con `ONIA_SUPABASE_TUNNEL_ENABLED=true` (54320-54329) u
+> `ONIA_SPEAKR_TUNNEL_ENABLED=true` (3107), o corriendo la app de ONIA Center sin `--tunnel-only`. Motivo: cualquier
+> proceso de la PC llegaba a la base de producción. La tabla queda como referencia de qué es cada puerto.
+
 | Puerto | Quién lo tiene | Qué es de verdad |
 |---|---|---|
 | `127.0.0.1:55321-55330` | `com.docker.backend.exe` | **LOCAL.** Tu Supabase de desarrollo (base en `55322`, Studio en `55323`) |

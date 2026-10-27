@@ -22,8 +22,8 @@ const keyPath = process.env.VPS_KEY_PATH || path.join(os.homedir(), ".ssh", "oni
 const appPort = Number(process.env.ONIA_CENTER_LOCAL_PORT || 3012);
 const watchIntervalMs = Number(process.env.ONIA_CENTER_TUNNEL_WATCH_MS || 15000);
 const audioTunnelEnabled = process.env.ONIA_AUDIO_TUNNEL_ENABLED !== "false";
-// 26-oct: con --tunnel-only, Supabase y Speakr van solo a pedido. Abiertos, cualquier proceso de la PC llegaba a
-// la base del VPS. La app completa de ONIA Center sigue necesitando Supabase.
+// 26-oct: Speakr va siempre a pedido, y Supabase también con --tunnel-only. Abiertos, cualquier proceso de la PC
+// llegaba a la base de producción del VPS. La app completa de ONIA Center sigue abriendo Supabase.
 const supabaseTunnelEnabled = !tunnelOnly || process.env.ONIA_SUPABASE_TUNNEL_ENABLED === "true";
 const speakrTunnelEnabled = process.env.ONIA_SPEAKR_TUNNEL_ENABLED === "true";
 const speakrLocalPort = Number(process.env.ONIA_SPEAKR_LOCAL_PORT || 3107);
