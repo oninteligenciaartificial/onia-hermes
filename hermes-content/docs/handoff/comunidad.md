@@ -3,6 +3,10 @@
 Archivo único del carril. Actualizado 19-oct-2026, 22:45 La Paz, por Claude (Opus 5.5), sesión local «taller + contenido diario».
 Fuente del taller: `hermes-content/docs/TALLER_31_OCT.md` (manda sobre todo lo demás).
 
+**▶ 26-oct: se retoma por el plan de supervivencia** (`ONIA_ESTRATEGIA_DE_EMPRESA.md`, sección del 26-oct). La página
+ya tiene el número (cierre jue 29, como estaba; el `noindex` sigue hasta su OK), pero a Sergio Urcullo no le gusta el resultado
+(26-oct): no se publica hasta saber qué cambiar. Falta también el QR de Leslie Mercado Moreno. El calendario comprimido está en `TALLER_31_OCT.md` §4, y las ofertas 1 a 1 en `sales-kit/07-OFERTAS-1-A-1.md`.
+
 **⏸ 20-oct: venta en pausa por decisión de Sergio Urcullo** (19-oct, 23:00): «la página queda para después; por ahora haremos investigación y aprendizaje y ordenaremos las sesiones». Los carruseles «aún no salen». Pidió aprender a vender valor y psicología de compra con Iman Gadzhi: hecho en `references/video-intake/2026-10-20-gadzhi-vender-valor-psicologia.md` (§3 = auditoría del taller con propuestas, nada cambiado) y regla en `onia-ventas-pauta` §10. Cada día sin vender resta uno de los 9 días de venta: si la apertura pasa del vie 23, revisar la fecha del taller antes de abrir.
 
 ## 1. Objetivo

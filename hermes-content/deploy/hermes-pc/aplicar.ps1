@@ -22,6 +22,12 @@ $Base = [IO.Path]::GetFullPath($Base).TrimEnd('\')
 $Repo = [IO.Path]::GetFullPath($Repo).TrimEnd('\')   # PowerShell 5.1 rompe un argumento con espacios que termina en \
 $homeReal = [IO.Path]::GetFullPath((Join-Path $env:LOCALAPPDATA 'hermes')).TrimEnd('\')
 $deploy = Join-Path $Base 'hermes-content\deploy\hermes-pc'
+# 26-oct: la app de Claude es un paquete MSIX y Windows desvía lo que sus herramientas escriben en %LOCALAPPDATA% a
+# Packages\Claude_*\LocalCache. Hermes nunca ve eso (la corrida de las 19:56 quedó ahí y la TUI siguió con Astra).
+if ($env:CLAUDECODE -and $HermesHome -eq $homeReal) {
+    Write-Host 'Esto se corre desde una PowerShell normal o el panel Terminal, no desde una herramienta de Claude.' -ForegroundColor Yellow
+    exit 1
+}
 
 function Paso([string]$texto) { Write-Host ''; Write-Host "== $texto" -ForegroundColor Cyan }
 

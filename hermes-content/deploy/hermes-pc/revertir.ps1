@@ -13,6 +13,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $HermesHome = [IO.Path]::GetFullPath($HermesHome).TrimEnd('\')
 $homeReal = [IO.Path]::GetFullPath((Join-Path $env:LOCALAPPDATA 'hermes')).TrimEnd('\')
+# Desde una herramienta de Claude, Windows escribe en una copia del paquete MSIX que Hermes no lee (ver aplicar.ps1)
+if ($env:CLAUDECODE -and $HermesHome -eq $homeReal) {
+    Write-Host 'Esto se corre desde una PowerShell normal o el panel Terminal, no desde una herramienta de Claude.' -ForegroundColor Yellow
+    exit 1
+}
 
 function Huellas([string]$ruta) {
     # la misma que en aplicar.ps1: sha256 de un archivo, o "ruta relativa|sha256" de cada archivo de una carpeta
