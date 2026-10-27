@@ -123,13 +123,23 @@ node --test scripts/orquesta/orquesta.test.mjs
 gh workflow run orquesta.yml -R oninteligenciaartificial/onia-hermes   # una pasada de la nube
 ```
 
-Sin `--donde`, la PC es `pc` y Actions es `nube` (`GITHUB_ACTIONS`). Automático en la PC (Windows,
-cada 3 h de 8 a 23 con la PC prendida). Primero trae `main`; si el pull falla, esa pasada no corre y el motivo queda
-en `pasadas.log`:
+Sin `--donde`, la PC es `pc` y Actions es `nube` (`GITHUB_ACTIONS`). Automático en la PC (Windows, **cada 10 minutos
+todo el día**, con la PC prendida, también con batería). Primero trae `main`; si el pull falla, esa pasada no corre y
+el motivo queda en `pasadas.log`:
 
 ```powershell
-schtasks /Create /F /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 180 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && (git pull --ff-only -q origin main && set ORQUESTA_TELEGRAM=1&& node scripts\orquesta\orquesta.mjs --donde pc) >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
+schtasks /Create /F /TN "ONIA Orquesta" /SC DAILY /ST 00:00 /RI 10 /DU 24:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && (git pull --ff-only -q origin main && set ORQUESTA_TELEGRAM=1&& node scripts\orquesta\orquesta.mjs --donde pc) >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
+Set-ScheduledTask -TaskName "ONIA Orquesta" -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Hours 3))
 ```
+
+Por qué cada 10 minutos y no cada 3 h (Sergio Urcullo, 27-oct: «la más efectiva para poder trabajar todo el día»):
+- Una pasada sin tareas no gasta modelo: mira GitHub, dice «no hay tareas pendientes» y termina, sin Telegram.
+- El gasto sale de cada tarea, y cada una espera su OK (`necesita-ok`) o el nivel B. Las 3 h solo demoraban: una
+  tarea soltada a las 8:05 arrancaba a las 11:00.
+- Lo que la frena es lo de siempre: `paralelo` (3 a la vez), `minutos_max` (40) y el tope de 10 cargas por día de
+  Hermes. Dos pasadas no se pisan: el candado de `orquesta.mjs` y `IgnoreNew` en la tarea.
+- La segunda línea deja correr con batería y corta una pasada colgada a las 3 h. `schtasks` sola no arranca con
+  batería (lo que tenía la tarea vieja).
 
 `=1&&` va pegado a propósito: con un espacio antes de `&&`, cmd guarda «1 » (medido) y `orquesta.mjs`, que pide
 `=== '1'`, no manda el resumen a Telegram.
@@ -140,7 +150,9 @@ checkout principal con cambios sin commitear) la orquesta corre igual sobre cód
 y el espacio antes de `&&` la deja sin Telegram. La reinstala Sergio Urcullo pegando el comando de arriba en una
 PowerShell (`/F` reemplaza la tarea existente).
 
-La nube corre sola: al etiquetar o comentar un issue de la orquesta y cada 3 h de 8 a 23 (La Paz).
+La nube corre sola: al etiquetar o comentar un issue de la orquesta, **al sacarle `necesita-ok` o `bloqueada`** (desde
+el 27-oct: antes esperaba la pasada siguiente) y cada 3 h de 8 a 23 (La Paz). Las 3 h de la nube quedan: son para
+los reintentos, y la cuenta es GitHub Free (2.000 min por mes; una pasada vacía cobra 1 minuto).
 Necesita el secreto `CLAUDE_CODE_OAUTH_TOKEN` (lo crea Sergio Urcullo con `claude setup-token`).
 
 `ORQUESTA_TELEGRAM=1` manda el resumen de la pasada al resumen diario de Hermes (aduana, sin interrumpir).
@@ -195,6 +207,26 @@ labels y cuerpo sin llamar a `gh` (no mira el tope ni toma el candado).
 Salidas: 0 cargada · 64 uso (sin `--archivo` o el pedido como argumento, por ejemplo) · 65 pedido inválido · 75 tope,
 repetida u otra carga en curso · 1 `gh` falló o no se sabe si se cargó (lo dice). Pruebas:
 `node --test scripts/orquesta/cargar-issue.test.mjs`.
+
+## Hermes vigila (27-oct)
+
+Mientras Sergio Urcullo trabaja, el Hermes de la PC sigue la cola con su `/loop` oficial (documentación de Hermes,
+`user-guide/features/loops.md`). La orquesta reparte; Hermes mira, verifica y trae lo que hay que decidir. No lanza
+pasadas ni agentes (`AGENTS.md` §1). Al abrir la sesión del día, Sergio Urcullo pega esto en la TUI:
+
+```
+/loop 20m Revisá la cola de la orquesta: los issues orquesta abiertos y los que se cerraron desde la vuelta anterior. Por cada entrega nueva, compará el PR y el recibo con su «Hecho cuando» y decime en una línea si cumple. Si una quedó bloqueada, proponé el arreglo. Si hay algo que decidir, traelo como opciones con la recomendada. Si no cambió nada, contestá solo «sin cambios».
+```
+
+Por qué así:
+- **El kanban de Hermes no sirve para repartir.** No puede lanzar a Codex ni a Claude Code: su propia
+  documentación dice que eso no está resuelto (`kanban-worker-lanes.md`, «Adding an external CLI worker lane»), y el
+  PR de Codex se cerró sin mergear. Además sería una segunda cola.
+- **Orca Orchestration tampoco:** tuvo 7 fallas de arranque y abre a Hermes con `--yolo`
+  (`research/2026-10-26-auditoria-hermes-local.md` §7).
+- **El `/loop` tiene tope:** se pausa solo a las 40 vueltas (`config.onia.yaml`, `loops.max_ticks`), que a 20 min son
+  unas 13 h. Cada vuelta es un turno completo de Hermes; con la cola quieta contesta «sin cambios». `/loop pause`,
+  `/loop resume` y `/loop stop` lo manejan.
 
 ## Opciones y la recomendada por silencio (27-oct)
 

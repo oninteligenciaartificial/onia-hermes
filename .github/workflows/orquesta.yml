@@ -8,6 +8,7 @@ name: ONIA Orquesta (nube)
 # Se dispara:
 #   - al ponerle a un issue el label `orquesta` o `carril:*` (una tarea nueva),
 #   - cuando Sergio Urcullo comenta un issue de la orquesta («ok» o una indicación),
+#   - cuando Sergio Urcullo le saca `necesita-ok` (suelta la tarea) o `bloqueada` (la reintenta),
 #   - cada 3 h de 8 a 23 en La Paz (reintentos de la primera falla), y a mano:
 #       gh workflow run orquesta.yml -R oninteligenciaartificial/onia-hermes
 #
@@ -17,7 +18,7 @@ name: ONIA Orquesta (nube)
 
 on:
   issues:
-    types: [labeled]
+    types: [labeled, unlabeled]
   issue_comment:
     types: [created]
   schedule:
@@ -37,8 +38,11 @@ jobs:
   pasada:
     if: >-
       github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issues' && github.event.sender.login == 'oninteligenciaartificial' &&
+      (github.event_name == 'issues' && github.event.action == 'labeled' && github.event.sender.login == 'oninteligenciaartificial' &&
         (github.event.label.name == 'orquesta' || startsWith(github.event.label.name, 'carril:'))) ||
+      (github.event_name == 'issues' && github.event.action == 'unlabeled' && github.event.sender.login == 'oninteligenciaartificial' &&
+        contains(github.event.issue.labels.*.name, 'orquesta') &&
+        (github.event.label.name == 'necesita-ok' || github.event.label.name == 'bloqueada')) ||
       (github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
         contains(github.event.issue.labels.*.name, 'orquesta') && github.event.comment.user.login == 'oninteligenciaartificial' &&
         !startsWith(github.event.comment.body, '<!-- orquesta'))
