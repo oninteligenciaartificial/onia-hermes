@@ -76,10 +76,22 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
 - Delegar a hijos `gpt-6-luna` con `max_iterations: 40`: cortó los guiones, que fueron rechazados.
 - Hipótesis falsa: que `skills.external_dirs` es de solo lectura. Es escribible (`skills.md:424-425`), y por eso hace falta `skills.write_approval: true` (el orden de las claves en el YAML no importa).
 - Hipótesis falsa: que hay 16 skills divergentes entre `.agents/skills` y `.claude/skills`. La diferencia real es 1 SKILL.md y 1 referencia; el resto es CRLF.
-- `robocopy /E /MOVE` de una carpeta con `node_modules` de pnpm sale con código 9 (8 = algo falló + 1 = copió),
-  aunque la carpeta termine entera en el destino. pnpm arma `node_modules` con junctions; robocopy las sigue y
-  después no encuentra lo que ya movió por el otro camino. Antes de alarmarse: mirar si el origen sigue en C: y
-  contar en el destino los archivos fuera de `node_modules`.
+- **`robocopy /E /MOVE` sin `/XJ` sigue las junctions de pnpm, también las que salen de la carpeta** (26-oct). Los
+  `node_modules` de los worktrees huérfanos tenían junctions con ruta absoluta a los paquetes del checkout principal.
+  `limpiar-worktrees.ps1` movió así 490 archivos versionados de `web-factory/apps/onia-platform`,
+  `apps/dentalgest-landing` y `packages/templates` del checkout principal a
+  `E:\archivo-worktrees-20261026\cta-home\web-factory\node_modules\…`. Se restauraron con `git restore`; lo no
+  versionado que se fue a E: es solo build (`.next`, `tsbuildinfo`, `next-env.d.ts`, un `node_modules` chico). El
+  «código 9» (8 = algo falló + 1 = copió) sale por eso. **Para mover carpetas con `node_modules`: `/XJ` siempre**, y
+  después de mover, `git status` en todo checkout que pudiera ser destino de una junction.
+- **El hook Stop de la sesión commiteó en el checkout principal** (26-oct, 19:46). Recién limpio, ya no tenía los
+  archivos `C:Users…` que hacían fallar `git add -A`, así que el autosync commiteó lo que seguía sin trackear
+  (`.hermes/plans`, `.hermes/tasks`, los originales del curso de `references/formacion` y `panel-ejecucion`), dejó el
+  checkout parado en `claude/autosync-e24cb7a5-…` y la pusheó (`b185a4e4`, 56 archivos, sin secretos según el
+  barrido). Se volvió a `main` con `symbolic-ref` + `reset --mixed` (sin tocar archivos) y `pull`; con el
+  `.gitignore` de `main` esos archivos ya quedan ignorados. Falta borrar la rama de GitHub (decisión de Sergio
+  Urcullo) y que `git-autosync.js` no actúe nunca en el checkout que usa la tarea programada (PR propio, junto con
+  sacar la excepción del integrador).
 - Comparar el árbol de un worktree contra su rama de rescate con un índice temporal (`read-tree` + `add -A` +
   `write-tree`) da «cambió» en falso si el HEAD avanzó por un pull o si el worktree es sparse. Lo que vale es
   comparar por archivo lo que el script descarta: `git status` y `hash-object` contra la rama de rescate.
