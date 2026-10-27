@@ -88,8 +88,12 @@ export function rutear(carril, pedido, conf = CONF) {
 }
 
 // Un juez LLM favorece lo que generó el mismo modelo: si el trabajador usó el revisor de siempre, revisa el alterno.
-export function revisorPara(modeloTrabajador, conf = CONF) {
-  return modeloTrabajador === conf.revisor && conf.revisor_alterno ? conf.revisor_alterno : conf.revisor;
+// Se compara por familia: un `modelo:` escrito a mano («sonnet», «claude-sonnet-5-5[1m]») sigue siendo Sonnet.
+const familia = (m) => (/haiku|sonnet|opus|fable/i.exec(String(m)) || [String(m)])[0].toLowerCase();
+// En orden: el primero que no sea de la familia del trabajador; los demás, por si ese se queda sin cupo.
+export function revisoresPara(modeloTrabajador, conf = CONF) {
+  const todos = [conf.revisor, conf.revisor_alterno, conf.revisor_respaldo].filter(Boolean);
+  return todos.filter((m) => familia(m) !== familia(modeloTrabajador));
 }
 
 export function rutaSalida(c, pedido, numero) {
@@ -437,8 +441,12 @@ async function trabajar(c, carril, issue, pedido, ruta) {
   };
   const { texto, falla, rutas } = await verificar(wt, base, inicio, sigue, salida, pedido, r);
   if (falla) return fallar(falla, { ...costoDe(r, ruta), infra: sinMotor(r) });
-  const revisor = revisorPara(ruta.modelo);
-  const rev = await revisar(wt, issue, pedido, salida, rutas, revisor); // el que revisa nunca es el que hizo
+  // El que revisa nunca es el que hizo. Sin cupo de uno, revisa el siguiente: si no, la tarea vuelve en bucle.
+  let rev; let revisor;
+  for (revisor of revisoresPara(ruta.modelo)) {
+    rev = await revisar(wt, issue, pedido, salida, rutas, revisor);
+    if (!rev.infra) break;
+  }
   const extra = { ...costoDe(r, ruta), usd_revision: rev.usd, revisor };
   if (!rev.ok) return fallar(`el revisor lo rechazó: ${rev.motivo}`, { ...extra, infra: rev.infra });
   const pr = await enFila(c.repo, () => entregar(c, base, wt, rama, carril, issue));

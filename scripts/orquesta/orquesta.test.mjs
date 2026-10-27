@@ -9,7 +9,7 @@ import {
   CONF, leerPedido, elegirTareas, rutear, rutaSalida, revisarSalida, urlsDe, argsAgente,
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
   leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
-  revisorPara,
+  revisoresPara,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -279,11 +279,20 @@ test('prepararWorktree sin media: baja solo texto desde un clon parcial y ralo, 
   assert.deepEqual(cambiosDe(wt, 'main').sort(), ['docs/a.md', 'docs/cap-390.PNG']);
 });
 
-test('el revisor nunca es el mismo modelo que hizo la tarea (AGENTS.md §1)', () => {
-  const conf = { revisor: 'claude-sonnet-5-5', revisor_alterno: 'claude-opus-5-5' };
-  assert.equal(revisorPara('claude-sonnet-5-5', conf), 'claude-opus-5-5'); // marca/comunidad en normal
-  assert.equal(revisorPara('claude-opus-5-5', conf), 'claude-sonnet-5-5');
-  assert.equal(revisorPara('haiku', conf), 'claude-sonnet-5-5');
-  assert.equal(revisorPara('gpt-6.1-sol', conf), 'claude-sonnet-5-5'); // Codex en plataforma
-  assert.notEqual(revisorPara(rutear('marca', {}).modelo), rutear('marca', {}).modelo); // con carriles.json real
+test('el revisor nunca es de la familia del modelo que hizo la tarea (AGENTS.md §1)', () => {
+  const conf = { revisor: 'claude-sonnet-5-5', revisor_alterno: 'claude-opus-5-5', revisor_respaldo: 'haiku' };
+  assert.deepEqual(revisoresPara('claude-sonnet-5-5', conf), ['claude-opus-5-5', 'haiku']);
+  assert.deepEqual(revisoresPara('claude-opus-5-5', conf), ['claude-sonnet-5-5', 'haiku']);
+  assert.deepEqual(revisoresPara('haiku', conf), ['claude-sonnet-5-5', 'claude-opus-5-5']);
+  assert.deepEqual(revisoresPara('gpt-6.1-sol', conf), ['claude-sonnet-5-5', 'claude-opus-5-5', 'haiku']);
+  // un modelo: escrito a mano en el issue sigue siendo de su familia
+  for (const m of ['sonnet', 'claude-sonnet-5-5[1m]', 'Claude-Sonnet-5-5']) assert.equal(revisoresPara(m, conf)[0], 'claude-opus-5-5');
+  // con carriles.json real: todos los carriles, niveles y motores
+  const fam = (m) => (/haiku|sonnet|opus|fable/i.exec(m) || [m])[0].toLowerCase();
+  for (const carril of Object.keys(CONF.carriles)) for (const nivel of ['rapido', 'normal', 'profundo']) for (const motor of ['claude', 'codex']) {
+    const { modelo } = rutear(carril, { nivel, motor });
+    const lista = revisoresPara(modelo);
+    assert.ok(lista.length >= 2, `${carril}/${nivel}/${motor}: sin respaldo`);
+    for (const r of lista) assert.notEqual(fam(r), fam(modelo), `${carril}/${nivel}/${motor}: ${r} revisa a ${modelo}`);
+  }
 });

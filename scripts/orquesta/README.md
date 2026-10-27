@@ -62,7 +62,7 @@ Hecho cuando: cómo se comprueba.
    `workspace-write`.
 4. Comprueba el "hecho": existe el archivo de salida, tiene contenido, no dice `BLOQUEADO`, y pasa
    el `check` del pedido.
-5. Revisión con contexto limpio: otro Claude (`revisor` en `carriles.json`), solo con lectura, juzga
+5. Revisión con contexto limpio: otro Claude, de otra familia que el trabajador (`revisor`, `revisor_alterno` y `revisor_respaldo` en `carriles.json`, en ese orden; si uno no tiene cupo, revisa el siguiente), solo con lectura, juzga
    si cumple el "Hecho cuando" y si inventa algo. El que revisa nunca es el que hizo.
 6. Si pasa: commit, push de la rama `orquesta/<carril>-<n>`, PR y cierra el issue con el resumen y
    las notas del revisor. Si no: label `bloqueada` y el motivo en el issue. Para reintentar, sacar
