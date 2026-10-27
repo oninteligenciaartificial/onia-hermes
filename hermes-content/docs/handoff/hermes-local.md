@@ -3,7 +3,7 @@
 **Objetivo**
 Dejar a Hermes local configurado una sola vez como coordinador que lee las reglas y skills de ONIA, no se salta permisos y aprende por PR. Hecho = Hermes arranca desde un worktree limpio, `/context` muestra el AGENTS.md acordado, el índice de skills nombra las de `.claude/skills`, un `git -C . push` sale bloqueado y `--dry` de
 `scripts/orquesta/cargar-issue.mjs` muestra `necesita-ok`.
-Estado al 26-oct, 20:00: **PR #269 mergeado (`4fd5f64f`) y `aplicar.ps1 -EscrituraSegura -Codex` corrido a las
+Estado al 26-oct, 21:30: **PR #269 mergeado (`4fd5f64f`) y `aplicar.ps1 -EscrituraSegura -Codex` corrido a las
 19:56.** Respaldo para volver atrás: `%LOCALAPPDATA%\hermes\backups\pre-orden-20261026-195633` (`revertir.ps1 -Respaldo …`).
 Medido después, sin abrir la TUI:
 - `probar-deny.py --vivo`: «mismo approvals.deny», 173 bloqueos, 41 lecturas, 0 fallas.
@@ -101,25 +101,31 @@ Nada en producción. Cambios en la PC, fuera del repo, hechos el 26-oct:
   comparar por archivo lo que el script descarta: `git status` y `hash-object` contra la rama de rescate.
 
 **Qué depende de Sergio**
-1. ~~Qué AGENTS.md manda~~ y ~~el rol de cada Hermes~~: decididos el 26-oct (arriba). Falta que apruebe el PR.
-2. Despachar `aplicar` en el VPS para pausar la revisión de cada 3 h y poner el SOUL nuevo (el control de permisos
-   frena ese despacho desde una sesión).
-3. Orca: Hermes corre ahí solo con Agent permissions en Manual y abierto en `hermes-base`; Orchestration queda apagado (sale de la decisión 2). Falta Workspace Directory en
-   E:, la telemetría apagada y la regla de firewall del puerto 6768 solo en el perfil Privado.
-4. ~~Reglas globales y `~/.codex/config.toml`~~: se mantienen (26-oct). Lo de Hermes era mejor que lo anterior.
-7. ~~Correr los dos scripts de limpieza, mergear #269 y correr `aplicar.ps1`~~: hecho el 26-oct. Falta reinstalar
-   la tarea programada, borrar las dos carpetas que quedaron y, en Orca, poner Settings → Agents → Agent
-   permissions en **Manual** (sin eso abre a Hermes con `--yolo`).
-8. ~~Cerrar el PR #226~~: hecho el 26-oct con su OK, junto con otros 12 PR de la época madre (#143, #195, #199,
+1. ~~Qué AGENTS.md manda~~ y ~~el rol de cada Hermes~~: decididos el 26-oct (arriba).
+2. ~~Correr los dos scripts de limpieza, mergear #269 y correr `aplicar.ps1`~~: hecho el 26-oct. Falta reinstalar
+   la tarea programada y, en Orca, poner Settings → Agents → Agent permissions en **Manual** (sin eso abre a Hermes
+   con `--yolo`).
+3. ~~Cerrar el PR #226~~: hecho el 26-oct con su OK, junto con otros 12 PR de la época madre (#143, #195, #199,
    #201, #202, #204, #206, #221, #227, #228, #229, #232) y el issue #268. Se borraron 32 ramas remotas que ya estaban
    en `main`; las `rescate/*` quedan. El #265 (los trabajadores leen el handoff y dejan «## Aprendido») **no** se
    cerró: sirve y está por revisar.
-10. Decidido el 26-oct: cuenta bot de GitHub y usuario de Windows propio para Hermes (los crea él; la guía sale del
-    informe de aislamiento). Túnel SSH solo con 3108 (PR #271).
-9. Sacar del autosync la excepción del integrador apagado (`scripts/git-autosync.js:43`), en un PR propio con su prueba.
-5. La protección de la rama `main` en GitHub. Medido el 26-oct: en un repo privado del plan gratis la API responde
-   «Upgrade to GitHub Pro». Es un gasto (4 USD por mes según el FAQ de planes de GitHub, que es de 2020: confirmar el monto en Settings → Billing), así que lo decide él; mientras tanto, la barrera es local.
-6. Cerrar una de las dos TUI.
+4. Identidad propia de Hermes: el 26-oct eligió cuenta bot de GitHub y usuario de Windows propio, y ese mismo día,
+   más tarde, dijo que por ahora no hace falta un usuario por agente (plan de supervivencia en
+   `ONIA_ESTRATEGIA_DE_EMPRESA.md`). Además la cuenta bot no sirve como se pensó: en un repo privado de una cuenta
+   personal todo colaborador puede escribir. El reemplazo, para cuando se retome: token fine-grained de su cuenta que
+   solo lee y crea issues para Hermes, y una GitHub App para la orquesta (`research/2026-10-26-grok-y-aislamiento.md`).
+5. Despachar `aplicar` en el VPS para pausar la revisión de cada 3 h y poner el SOUL nuevo (el control de permisos
+   frena ese despacho desde una sesión).
+6. Orca: Hermes corre ahí solo con Agent permissions en Manual y abierto en `hermes-base`; Orchestration queda
+   apagado. Falta Workspace Directory en E:, la telemetría apagada y la regla de firewall del puerto 6768 solo en el
+   perfil Privado.
+7. ~~Reglas globales y `~/.codex/config.toml`~~: se mantienen (26-oct). Lo de Hermes era mejor que lo anterior.
+8. Sacar del autosync la excepción del integrador apagado (`scripts/git-autosync.js:43`) y que no actúe en el
+   checkout que usa la tarea programada, en un PR propio con su prueba.
+9. La protección de la rama `main` en GitHub. Medido el 26-oct: en un repo privado del plan gratis la API responde
+   «Upgrade to GitHub Pro». Es un gasto (4 USD por mes según el FAQ de planes de GitHub, que es de 2020: confirmar el
+   monto en Settings → Billing), así que lo decide él; mientras tanto, la barrera es local.
+10. Túnel SSH solo con 3108: hecho el 26-oct (PR #271), medido después del reinicio.
 
 **Próximos pasos**
 **El orden y la prueba de cada paso son los de `ONIA_HARNESS.md` §7, del 0 al 8.** La §10 de la auditoría queda

@@ -142,8 +142,9 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
    - Falta reinstalar la tarea programada con el comando de `scripts/orquesta/README.md` §«Correr» (a las 19:45 del
      26-oct seguía la vieja).
 
-   Si no, la tarea corre desde ese checkout, su `git pull` falla y, con el `&` actual, sigue sobre el código viejo
-   sin dejar el error en el log.
+   Con el checkout limpio, el `git pull` ya no falla. Lo que arregla la tarea nueva es el `&`: si algún día el pull
+   falla, la vieja sigue sobre el código viejo sin dejar el error en el log, y el espacio antes de `&&` la deja sin
+   Telegram.
 1. ✅ Mergear el PR (#269, `4fd5f64f`, 26-oct). Lleva:
    - `AGENTS.md`;
    - este mapa;
@@ -151,7 +152,8 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
    - el cargador de issues;
    - el `AGENTS.global.md` de Codex.
 2. a 4. ✅ Corrido el 26-oct a las 19:56; lo medido después está en `handoff/hermes-local.md`. Falta mirar
-   `/context` con la TUI abierta. **Un solo comando, con Hermes cerrado y desde una copia del repo con el PR mergeado:**
+   `/context` con la TUI abierta. Para repetirlo (por ejemplo, después de cambiar la config), es un solo comando, con
+   Hermes cerrado y desde una copia del repo con el PR mergeado:
    `powershell -ExecutionPolicy Bypass -File hermes-content\deploy\hermes-pc\aplicar.ps1 -EscrituraSegura -Codex`.
    El script hace, en orden:
    - el respaldo en `%LOCALAPPDATA%\hermes\backups\pre-orden-<fecha>`;
@@ -223,7 +225,7 @@ se pueda recuperar. La evidencia está en las secciones 3, 4 y 6 de la auditorí
 | El `AGENTS.md` de `main`, la reescritura de Hermes en el checkout principal y el encabezado de marca personal | Los reemplaza el nuevo. El PR #226 se cierra y su tabla de 184 reglas queda como insumo |
 | Las colas paralelas: Orca Orchestration (`run_66e1d03c2397`), `.hermes/plans`, `.hermes/tasks` y los goals usados como cola | Lo vigente pasa a issues; lo demás, a archivo |
 | La revisión de cada 3 h del Hermes del VPS | Se pausa con `aplicar`, sin borrarla |
-| Lanzar Hermes con `--yolo`, desde Orca o desde el checkout principal | Desde ahora: TUI a mano en `E:/onia-wt/hermes-base` |
+| Lanzar Hermes con `--yolo`, desde Orca o desde el checkout principal | Desde ahora: TUI en `E:/onia-wt/hermes-base`, a mano o desde Orca con Agent permissions en Manual (§7.6) |
 | `skills/onia/` de Hermes (`onia-operar-harness`, `onia-relevo-sesion`) | Lo útil va a las skills del repo; el resto, a `backups/` |
 | `onia-sesion-madre` y 25 de los 40 `.md` de `hermes-content/skills/` (sin tocar desde junio o julio) | ✅ **Hecho el 26-oct:** `onia-sesion-madre` y 23 `.md` en `historial/skills/`. Quedan 6 porque algo los lee: `guiones-diarios-onia` y `marca-personal-sergio` (`carriles.json`), `radar-creativo-onia` (workflow n8n), `audio-elevenlabs` (script del VPS) y las dos fiscales que cita `onia-contabilidad-bolivia`. Entraron 4 que solo tenían el revert del 2-oct |
 | `ONIA_EQUIPO_DE_AGENTES.md`, los dos `ORCHESTRATOR.md`, `PROJECTS_ORCHESTRATION.md`, `HERMES_OS_CONTROL_CENTER_2026.md`, `HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026.md` y `CODEX_SKILL_ROUTING.md` (en la raíz) | `historial/` con `git mv`. El harness del 10-oct ya está ahí. ✅ **Hecho el 26-oct:** `ONIA_EQUIPO_DE_AGENTES`, `HERMES_OS_CONTROL_CENTER_2026` y `HERMES_CLOSED_EXECUTION_AND_CONTINUOUS_WORK_2026`. **Pendientes**, porque los nombra código: los dos `ORCHESTRATOR.md` (`scripts/n8n-fix-assignments.js`, `docs-hygiene.test.mjs` y respaldos de n8n), `PROJECTS_ORCHESTRATION.md` (seed SQL y `operating-source.ts` de ONIA Center) y `CODEX_SKILL_ROUTING.md` (lista de la raíz de `docs-hygiene.mjs`) |
