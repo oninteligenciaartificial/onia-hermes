@@ -16,7 +16,7 @@ choca con él, manda `AGENTS.md`.
   (`hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md`, sección del 26-oct) y por lo que él ya decidió (`AGENTS.md`, los
   handoffs): la que más acerca a clientes pagando con menos de sus horas, no la más completa. Si no contesta en 6 h o
   más, esa sale sola, pero **solo si el código ve el nivel B** (`AGENTS.md` §1): vos no lo elegís ni lo pedís, y
-  `ok-por-silencio` no es un campo. Una tarea de la PC, con `check: cmd`, de plataforma o video, con `ok: sergio`, o que
+  `ok-por-silencio` no es un campo. Una tarea de la PC, con `check: cmd`, de plataforma o video, con una línea `ok:`, o que
   gaste, publique o toque a un tercero espera siempre su `necesita-ok`: no le pongas una recomendada pensando que sale.
   Decile la hora límite que imprime el comando.
 - Seguir cada tarea: leer el issue, el PR y el recibo. El «hecho cuando» se comprueba contra los archivos y la salida

@@ -10,7 +10,7 @@ import {
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
   leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
   revisoresPara, esNivelB, opcionesDe, horasDeSilencio, silencioVencido, atenderSilencio, armarRevision,
-  resumirSilencio, informeSilencio,
+  resumirSilencio, informeSilencio, atenderRespuestas,
 } from './orquesta.mjs';
 
 const issue = (number, carril, extra = {}) => ({
@@ -318,7 +318,8 @@ test('esNivelB: nube + urls + sin ok: sergio + un carril que no sea plataforma n
   for (const carril of ['investigacion', 'marca', 'comunidad']) assert.equal(esNivelB({ ...base, carril }), true, carril);
   for (const [caso, cambio] of Object.entries({
     'en la PC': { donde: 'pc' }, 'check cmd': { check: 'cmd npm test' }, 'check cmd node': { check: 'cmd node --test a.mjs' },
-    'sin check': { check: undefined }, 'ok sergio': { ok: 'sergio' }, plataforma: { carril: 'plataforma' },
+    'sin check': { check: undefined }, 'ok sergio': { ok: 'sergio' }, 'ok Sergio': { ok: 'Sergio' }, 'ok SERGIO': { ok: 'SERGIO' },
+    'ok cualquiera': { ok: 'todos' }, 'ok vacío': { ok: '' }, plataforma: { carril: 'plataforma' },
     video: { carril: 'video' }, 'carril inventado': { carril: 'inventado' }, 'sin donde': { donde: undefined },
   })) assert.equal(esNivelB({ ...base, ...cambio }), false, caso);
 });
@@ -411,8 +412,8 @@ test('silencioVencido: «no» la frena (saca ok-por-silencio, pone frenada, deja
 test('silencioVencido: otra respuesta suya, o una letra que no es opción, no libera nada ni deja salir por silencio', () => {
   const dosOpciones = BODY_B.replace('\n- C: Informe completo.', '');
   assert.equal(silencioVencido(enSilencio({ body: dosOpciones, comments: hilo('c') }), AHORA_S), null, 'no hay opción C');
-  // sin una letra ni «no» no se sabe qué quiso: queda con necesita-ok hasta que él lo saque (incluso «ok» y «dale»)
-  for (const texto of ['hmm, déjame pensarlo', 'ok', 'dale', 'cuando pueda lo miro', 'nota: mirá el precio', 'ah ya veo', '👍']) {
+  // sin una letra, «no» ni un «ok» no se sabe qué quiso: queda con necesita-ok hasta que él lo saque
+  for (const texto of ['hmm, déjame pensarlo', 'cuando pueda lo miro', 'nota: mirá el precio', 'ah ya veo', 'ok pero cambiá el título']) {
     assert.equal(silencioVencido(enSilencio({ comments: hilo(texto) }), AHORA_S), null, texto);
   }
 });
@@ -440,6 +441,7 @@ test('silencioVencido: la etiqueta puesta a mano no basta; si no es nivel B o fa
     'check cmd': { body: BODY_B.replace('check: urls', 'check: cmd npm test') },
     'sin check': { body: BODY_B.replace('check: urls\n', '') },
     'ok: sergio': { body: BODY_B.replace('check: urls', 'check: urls\nok: sergio') },
+    'ok: Sergio (mayúscula)': { body: BODY_B.replace('check: urls', 'check: urls\nok: Sergio') },
     'carril plataforma (nube y urls)': { labels: enCarril('plataforma') },
     'carril video (nube y urls)': { labels: enCarril('video') },
     'carril inventado': { labels: enCarril('inventado') },
@@ -456,50 +458,96 @@ test('silencioVencido: la etiqueta puesta a mano no basta; si no es nivel B o fa
 });
 
 test('elegirTareas: salio-por-silencio y frenada son avisos, no frenos; lo que frena sigue siendo necesita-ok', () => {
-  const lab = (...n) => issue(1, 'investigacion', { labels: conLabels(['orquesta', 'carril:investigacion', ...n]) });
+  const lab = (...n) => issue(1, 'investigacion', { body: BODY_B, labels: conLabels(['orquesta', 'carril:investigacion', ...n]) });
   assert.deepEqual(elegirTareas([lab('salio-por-silencio')]).map((t) => t.issue.number), [1]);
   assert.deepEqual(elegirTareas([lab('ok-por-silencio', 'necesita-ok')]), []);
   assert.deepEqual(elegirTareas([lab('frenada', 'necesita-ok')]), []);
 });
 
+test('elegirTareas: lo que salió por silencio se vuelve a comprobar como nivel B; si el cuerpo cambió a la PC o a cmd, no corre', () => {
+  const salio = (extra = {}) => issue(1, 'investigacion', { body: BODY_B, labels: conLabels(['orquesta', 'carril:investigacion', 'origen:hermes', 'salio-por-silencio']), ...extra });
+  assert.deepEqual(elegirTareas([salio()]).map((t) => t.issue.number), [1], 'control');
+  for (const [caso, extra] of Object.entries({
+    'donde: pc': { body: BODY_B.replace('donde: nube', 'donde: pc') },
+    'check cmd': { body: BODY_B.replace('check: urls', 'check: cmd npm test') },
+    'sin check': { body: BODY_B.replace('check: urls\n', '') },
+    'ok: sergio': { body: BODY_B.replace('check: urls', 'check: urls\nok: sergio') },
+    'ok: Sergio': { body: BODY_B.replace('check: urls', 'check: urls\nok: Sergio') },
+    'carril plataforma': { labels: conLabels(['orquesta', 'carril:plataforma', 'salio-por-silencio']) },
+    'carril video': { labels: conLabels(['orquesta', 'carril:video', 'salio-por-silencio']) },
+  })) assert.deepEqual(elegirTareas([salio(extra)]), [], caso);
+  // el mismo cuerpo SIN la marca corre: lo soltó Sergio Urcullo a mano, y eso es suyo
+  const aMano = issue(1, 'investigacion', { body: BODY_B.replace('donde: nube', 'donde: pc'), labels: conLabels(['orquesta', 'carril:investigacion']) });
+  assert.deepEqual(elegirTareas([aMano]).map((t) => t.issue.number), [1]);
+  // y uno que no sale del nivel B no pierde su turno por el de al lado: la siguiente del carril sí
+  assert.deepEqual(elegirTareas([salio({ body: BODY_B.replace('donde: nube', 'donde: pc') }), salio({ number: 2, createdAt: '2026-10-18T02:00:00Z' })]).map((t) => t.issue.number), [2]);
+});
+
+// `falla`: señales; la llamada falla si trae alguna entre sus argumentos («edit», «comment», «--add-label»…).
 function ghEspia({ falla = [] } = {}) {
   const llamadas = [];
   const gh = (...a) => {
     llamadas.push(a);
-    if (falla.includes(a[1])) throw new Error(`gh ${a[1]} falló`);
+    if (falla.some((f) => a.includes(f))) throw new Error(`gh ${a.slice(0, 2).join(' ')} falló`);
     return 'https://github.com/oninteligenciaartificial/onia-hermes/issues/5';
   };
   return { gh, llamadas };
 }
+const editar = (n, flag, ...nombres) => ['issue', 'edit', String(n), '-R', CONF.repo_cola, ...nombres.flatMap((l) => [flag, l])];
+const nombresDeLabels = (it) => it.labels.map((l) => l.name).sort();
 
-test('atenderSilencio: libera con UN cambio de labels y comenta firmado; en memoria el issue queda libre', () => {
+test('atenderSilencio: una letra saca necesita-ok y ok-por-silencio y comenta firmado; en memoria el issue queda libre', () => {
   const it = enSilencio({ number: 5, comments: hilo('x', 'b') });
   const { gh, llamadas } = ghEspia();
   assert.deepEqual(atenderSilencio([it], AHORA_S, { gh }), [it]);
-  assert.deepEqual(llamadas[0], ['issue', 'edit', '5', '-R', CONF.repo_cola, '--remove-label', 'necesita-ok', '--remove-label', 'ok-por-silencio']);
+  assert.deepEqual(llamadas[0], editar(5, '--remove-label', 'necesita-ok', 'ok-por-silencio'));
   assert.deepEqual(llamadas[1].slice(0, 6), ['issue', 'comment', '5', '-R', CONF.repo_cola, '--body']);
   assert.match(llamadas[1][6], /^<!-- orquesta vistos:2 -->\nElegiste B/);
   assert.equal(llamadas.length, 2);
   assert.deepEqual(elegirTareas([it]).map((t) => t.issue.number), [5]);
 });
 
-test('atenderSilencio: por silencio pone salio-por-silencio en el mismo cambio (esa etiqueta es la medición)', () => {
+test('atenderSilencio: por silencio, PRIMERO agrega la marca salio-por-silencio y solo si salió bien saca los frenos (gh edit no es atómico)', () => {
   const it = enSilencio({ number: 5 });
   const { gh, llamadas } = ghEspia();
   atenderSilencio([it], AHORA_S, { gh });
-  assert.deepEqual(llamadas[0], ['issue', 'edit', '5', '-R', CONF.repo_cola, '--remove-label', 'necesita-ok', '--remove-label', 'ok-por-silencio', '--add-label', 'salio-por-silencio']);
-  assert.match(llamadas[1][6], /Salió la recomendada \(B\) por silencio, a las 6 h/);
-  assert.deepEqual(it.labels.map((l) => l.name).sort(), ['carril:investigacion', 'origen:hermes', 'orquesta', 'salio-por-silencio']);
+  assert.deepEqual(llamadas[0], editar(5, '--add-label', 'salio-por-silencio'), 'un edit que solo agrega la marca');
+  assert.deepEqual(llamadas[1], editar(5, '--remove-label', 'necesita-ok', 'ok-por-silencio'));
+  assert.match(llamadas[2][6], /Salió la recomendada \(B\) por silencio, a las 6 h/);
+  assert.equal(llamadas.length, 3);
+  assert.deepEqual(nombresDeLabels(it), ['carril:investigacion', 'origen:hermes', 'orquesta', 'salio-por-silencio']);
   assert.deepEqual(elegirTareas([it]).map((t) => t.issue.number), [5]);
 });
 
-test('atenderSilencio: «no» deja el issue frenado; sin nada que hacer no llama a gh; --dry no escribe pero muestra el efecto', () => {
+test('atenderSilencio: si agregar la marca falla (por ejemplo, el label no existe) no saca ningún freno: el issue sigue frenado y se reintenta', () => {
+  const it = enSilencio({ number: 5 });
+  const e = ghEspia({ falla: ['--add-label'] });
+  atenderSilencio([it], AHORA_S, { gh: e.gh });
+  assert.equal(e.llamadas.length, 1, 'ni un --remove-label ni el comentario');
+  assert.ok(!e.llamadas.some((a) => a.includes('--remove-label')));
+  assert.deepEqual(nombresDeLabels(it), ['carril:investigacion', 'necesita-ok', 'ok-por-silencio', 'origen:hermes', 'orquesta']);
+  assert.deepEqual(elegirTareas([it]), []);
+  assert.equal(silencioVencido(it, AHORA_S)?.accion, 'silencio', 'la próxima pasada lo vuelve a intentar');
+});
+
+test('atenderSilencio: si sacar los frenos falla queda con necesita-ok (más la marca), sin comentario, y la próxima pasada lo reintenta', () => {
+  const it = enSilencio({ number: 5 });
+  const e = ghEspia({ falla: ['--remove-label'] });
+  atenderSilencio([it], AHORA_S, { gh: e.gh });
+  assert.equal(e.llamadas.length, 2, 'agregó la marca, falló al sacar, no comentó');
+  assert.deepEqual(nombresDeLabels(it), ['carril:investigacion', 'necesita-ok', 'ok-por-silencio', 'origen:hermes', 'orquesta', 'salio-por-silencio']);
+  assert.deepEqual(elegirTareas([it]), []);
+  assert.equal(silencioVencido(it, AHORA_S)?.accion, 'silencio');
+});
+
+test('atenderSilencio: «no» pone frenada primero y saca ok-por-silencio después; sin nada que hacer no llama a gh; --dry no escribe pero muestra el efecto', () => {
   const frenada = enSilencio({ number: 5, comments: hilo('no') });
   let e = ghEspia();
   atenderSilencio([frenada, enSilencio({ number: 6, createdAt: hace(1) }), issue(7, 'marca')], AHORA_S, { gh: e.gh });
-  assert.deepEqual(e.llamadas[0], ['issue', 'edit', '5', '-R', CONF.repo_cola, '--remove-label', 'ok-por-silencio', '--add-label', 'frenada']);
-  assert.equal(e.llamadas.length, 2, 'solo el de «no» (edit + comentario)');
-  assert.deepEqual(frenada.labels.map((l) => l.name).sort(), ['carril:investigacion', 'frenada', 'necesita-ok', 'origen:hermes', 'orquesta']);
+  assert.deepEqual(e.llamadas[0], editar(5, '--add-label', 'frenada'));
+  assert.deepEqual(e.llamadas[1], editar(5, '--remove-label', 'ok-por-silencio'));
+  assert.equal(e.llamadas.length, 3, 'solo el de «no» (dos edits + comentario)');
+  assert.deepEqual(nombresDeLabels(frenada), ['carril:investigacion', 'frenada', 'necesita-ok', 'origen:hermes', 'orquesta']);
   assert.deepEqual(elegirTareas([frenada]), []);
   e = ghEspia();
   const seca = enSilencio({ number: 8 });
@@ -508,15 +556,9 @@ test('atenderSilencio: «no» deja el issue frenado; sin nada que hacer no llama
   assert.deepEqual(elegirTareas([seca]).map((t) => t.issue.number), [8]);
 });
 
-test('atenderSilencio: si gh no pudo cambiar los labels, el issue sigue frenado; sin el comentario igual sale; con config inválida no suelta nada', () => {
-  const a = enSilencio({ number: 5 });
-  let e = ghEspia({ falla: ['edit'] });
-  atenderSilencio([a], AHORA_S, { gh: e.gh });
-  assert.equal(e.llamadas.length, 1, 'sin el cambio de labels no comenta');
-  assert.ok(a.labels.some((l) => l.name === 'necesita-ok'));
-  assert.deepEqual(elegirTareas([a]), []);
+test('atenderSilencio: sin el comentario igual sale; con config inválida no suelta nada', () => {
   const b = enSilencio({ number: 6 });
-  e = ghEspia({ falla: ['comment'] });
+  let e = ghEspia({ falla: ['comment'] });
   atenderSilencio([b], AHORA_S, { gh: e.gh });
   assert.deepEqual(elegirTareas([b]).map((t) => t.issue.number), [6]);
   const c = enSilencio({ number: 7 });
@@ -524,6 +566,21 @@ test('atenderSilencio: si gh no pudo cambiar los labels, el issue sigue frenado;
   atenderSilencio([c], AHORA_S, { gh: e.gh, conf: { ...CONF, silencio_horas: 3 } });
   assert.deepEqual(e.llamadas, []);
   assert.deepEqual(elegirTareas([c]), []);
+});
+
+test('«ok», «dale» o «sí» solos cuentan como elegir la recomendada (esOk), incluso antes de la hora', () => {
+  for (const texto of ['ok', 'Dale!', 'sí', 'Sí, me gustó, continúa', 'listo', '👍']) {
+    const d = silencioVencido(enSilencio({ createdAt: hace(1), comments: hilo(texto) }), AHORA_S);
+    assert.equal(d.accion, 'elegir', texto);
+    assert.equal(d.letra, 'B', `${texto}: la recomendada`);
+    assert.deepEqual([...d.quitar].sort(), ['necesita-ok', 'ok-por-silencio'], texto);
+    assert.match(d.comentario, /^Elegiste B \(la recomendada\)/, texto);
+  }
+  assert.equal(silencioVencido(enSilencio({ comments: hilo('a', 'ok') }), AHORA_S).letra, 'B', 'vale lo último que dijo');
+  assert.equal(silencioVencido(enSilencio({ comments: hilo('ok', 'a') }), AHORA_S).letra, 'A');
+  assert.equal(silencioVencido(enSilencio({ comments: hilo('no', 'ok') }), AHORA_S).accion, 'elegir', 'cambió de idea');
+  assert.equal(silencioVencido(enSilencio({ comments: hilo('ok', 'no') }), AHORA_S).accion, 'frenar');
+  assert.equal(silencioVencido(enSilencio({ comments: [deOtro('ok')] }), AHORA_S).accion, 'silencio', 'el «ok» de otra cuenta no es de Sergio');
 });
 
 test('el trabajador y el revisor reciben la opción elegida: la letra de Sergio Urcullo, la recomendada por silencio, o la recomendada', () => {
@@ -545,6 +602,73 @@ test('el trabajador y el revisor reciben la opción elegida: la letra de Sergio 
   assert.doesNotMatch(armarRevision({ issue: sin, pedido: leerPedido(sin.body), salida: 's.md', cambios: 's.md' }), /OPCIÓN/);
 });
 
+test('la opción queda fijada cuando se decide: después solo la cambia un comentario que sea exactamente una letra', () => {
+  const linea = (extra) => { const it = enSilencio(extra); return armarPrompt({ carril: 'investigacion', issue: it, pedido: leerPedido(it.body), salida: 's.md', rama: 'r' }); };
+  const liberada = conLabels(['orquesta', 'carril:investigacion', 'origen:hermes']);
+  const porSilencio = conLabels(['orquesta', 'carril:investigacion', 'origen:hermes', 'salio-por-silencio']);
+  const salioB = firmar(0, 'Salió la recomendada (B) por silencio, a las 6 h.');
+  const eligioB = firmar(1, 'Elegiste B: Brief con tabla de competidores.');
+  const SERGIO = /OPCIÓN ELEGIDA POR SERGIO URCULLO: /;
+  // salió B por silencio: lo que escribe después sin ser una letra sola no la cambia
+  for (const texto of ['a ver cómo va', 'A la tabla le falta el precio', 'a mi me gusta más', 'ah, y sumá el logo']) {
+    assert.match(linea({ labels: porSilencio, comments: hilo(salioB, texto) }), /OPCIÓN ELEGIDA POR SILENCIO[^\n]*: B - /, texto);
+  }
+  // ...y una letra sola sí, y gana sobre la etiqueta
+  for (const [texto, letra, descripcion] of [['a', 'A', 'Solo el brief'], ['A.', 'A', 'Solo el brief'], ['a)', 'A', 'Solo el brief'], ['C!', 'C', 'Informe completo']]) {
+    const p = linea({ labels: porSilencio, comments: hilo(salioB, texto) });
+    assert.match(p, new RegExp(`OPCIÓN ELEGIDA POR SERGIO URCULLO: ${letra} - ${descripcion}`), texto);
+    assert.doesNotMatch(p, /POR SILENCIO/, texto);
+  }
+  // eligió B y después escribe una frase que empieza con A: sigue B
+  for (const texto of ['A la tabla va el precio', 'a ver si queda más corto', 'c con otra cosa', 'ok, gracias']) {
+    assert.match(linea({ labels: liberada, comments: hilo('b', eligioB, texto) }), /OPCIÓN ELEGIDA POR SERGIO URCULLO: B - Brief con tabla/, texto);
+  }
+  // eligió B y después escribe solo «a»: ahora es A (la última letra sola manda)
+  assert.match(linea({ labels: liberada, comments: hilo('b', eligioB, 'a') }), /POR SERGIO URCULLO: A - Solo el brief/);
+  assert.match(linea({ labels: liberada, comments: hilo('b', eligioB, 'a', 'gracias', 'c') }), /POR SERGIO URCULLO: C - Informe completo/);
+  assert.match(linea({ labels: liberada, comments: hilo('b', eligioB, 'd') }), /POR SERGIO URCULLO: B - /, 'una letra que no es opción no cambia nada');
+  // antes de decidir vale la última letra escrita (con comentarios neutros en el medio), y «ok» es la recomendada
+  assert.match(linea({ labels: liberada, comments: hilo('hmm', 'a', 'gracias', eligioB, 'dale') }), /POR SERGIO URCULLO: A - /);
+  assert.match(linea({ labels: liberada, comments: hilo('ok', firmar(1, 'Elegiste B (la recomendada)')) }), SERGIO);
+  assert.match(linea({ labels: liberada, comments: hilo('ok', firmar(1, 'Elegiste B (la recomendada)')) }), /: B - Brief con tabla/);
+  // sin ningún comentario firmado todavía (el de la orquesta no llegó a salir) no hay «después»: vale lo escrito
+  assert.match(linea({ labels: liberada, comments: hilo('c') }), /POR SERGIO URCULLO: C - /);
+  // estable entre reintentos: ni la marca ni los comentarios de Sergio Urcullo de después de ⛔ lo mueven
+  const reintento = linea({ labels: conLabels(['orquesta', 'carril:investigacion', 'bloqueada']), comments: hilo('b', eligioB, firmar(2, '⛔ No se cerró (x)\n\nMotivo: y'), 'a ver el motivo') });
+  assert.match(reintento, /POR SERGIO URCULLO: B - /);
+});
+
+test('decidirRespuesta: un «no» a algo que ya salió por silencio lo vuelve a frenar, en vez de seguir', () => {
+  const bloq = (labels, ...comentarios) => issue(2, 'investigacion', { body: BODY_B, labels: conLabels(['orquesta', 'carril:investigacion', ...labels]), comments: hilo('⛔ No se cerró\n\nMotivo: x', ...comentarios) });
+  for (const texto of ['no', 'No.', 'no, mejor otra cosa']) {
+    assert.equal(decidirRespuesta(bloq(['bloqueada', 'salio-por-silencio'], texto)), 'frenar', `bloqueada: ${texto}`);
+    assert.equal(decidirRespuesta(bloq(['espera-ok', 'salio-por-silencio'], texto)), 'frenar', `espera-ok: ${texto}`);
+    assert.equal(decidirRespuesta(bloq(['bloqueada'], texto)), 'seguir', `sin salio-por-silencio es una indicación: ${texto}`);
+  }
+  assert.equal(decidirRespuesta(bloq(['bloqueada', 'salio-por-silencio'], 'nota: usá la foto 3')), 'seguir', '«nota» no es «no»');
+  assert.equal(decidirRespuesta(bloq(['bloqueada', 'salio-por-silencio'], 'usá la foto 3')), 'seguir');
+  assert.equal(decidirRespuesta(bloq(['espera-ok', 'salio-por-silencio'], 'dale')), 'cerrar');
+  assert.equal(decidirRespuesta(bloq(['bloqueada', 'salio-por-silencio'])), null, 'sin respuesta nada');
+});
+
+test('atenderRespuestas: el «no» a lo que salió por silencio vuelve a poner necesita-ok y frenada, y saca bloqueada', () => {
+  const it = issue(5, 'investigacion', { body: BODY_B, labels: conLabels(['orquesta', 'carril:investigacion', 'bloqueada', 'salio-por-silencio']), comments: hilo(firmar(0, '⛔ No se cerró\n\nMotivo: x'), 'no') });
+  const otra = issue(6, 'marca');
+  const { gh, llamadas } = ghEspia();
+  assert.deepEqual(atenderRespuestas([it, otra], { gh }), [otra], 'en esta pasada no se trabaja');
+  assert.deepEqual(llamadas[0], editar(5, '--add-label', 'necesita-ok', 'frenada'), 'primero el freno');
+  assert.deepEqual(llamadas[1], editar(5, '--remove-label', 'bloqueada'));
+  assert.match(llamadas[2][6], /^<!-- orquesta vistos:2 -->\nFrenada/);
+  assert.equal(llamadas.length, 3);
+  assert.deepEqual(nombresDeLabels(it), ['carril:investigacion', 'frenada', 'necesita-ok', 'orquesta', 'salio-por-silencio']);
+  assert.deepEqual(elegirTareas([it]), []);
+  const sinFreno = issue(7, 'investigacion', { body: BODY_B, labels: conLabels(['orquesta', 'carril:investigacion', 'bloqueada', 'salio-por-silencio']), comments: hilo(firmar(0, '⛔ x'), 'no') });
+  const e = ghEspia({ falla: ['--add-label'] });
+  atenderRespuestas([sinFreno], { gh: e.gh });
+  assert.equal(e.llamadas.length, 1, 'si no pudo poner el freno, no saca bloqueada ni comenta');
+  assert.ok(nombresDeLabels(sinFreno).includes('bloqueada'));
+});
+
 const issueConSilencio = (number, carril, state = 'CLOSED') => ({ number, title: `t${number}`, state, labels: conLabels(['orquesta', `carril:${carril}`, 'salio-por-silencio']) });
 const pr = (number, rama, state, mergedAt = null) => ({ number, headRefName: rama, state, mergedAt, url: `https://github.com/oninteligenciaartificial/onia-hermes/pull/${number}` });
 
@@ -563,15 +687,19 @@ test('resumirSilencio: cuántas salieron por silencio, cuántos PR se mergearon 
 
 test('informeSilencio: lee con gh sin escribir y lista los números; sin gh dice por qué', () => {
   const llamadas = [];
+  // #3 todavía tiene necesita-ok: se le puso la marca pero no se le sacó el freno (o un «no» lo volvió a frenar). No salió.
+  const pendiente = { ...issueConSilencio(3, 'comunidad', 'OPEN'), labels: conLabels(['orquesta', 'carril:comunidad', 'necesita-ok', 'salio-por-silencio']) };
   const gh = (...a) => {
     llamadas.push(a);
-    return JSON.stringify(a[0] === 'issue' ? [issueConSilencio(1, 'marca'), issueConSilencio(2, 'investigacion')] : [pr(11, 'orquesta/marca-1', 'MERGED', '2026-10-28T10:00:00Z')]);
+    return JSON.stringify(a[0] === 'issue' ? [issueConSilencio(1, 'marca'), issueConSilencio(2, 'investigacion'), pendiente] : [pr(11, 'orquesta/marca-1', 'MERGED', '2026-10-28T10:00:00Z'), pr(13, 'orquesta/comunidad-3', 'OPEN')]);
   };
   const texto = informeSilencio(gh);
-  assert.match(texto, /Salieron por silencio: 2/);
+  assert.match(texto, /Salieron por silencio: 2\n/);
   assert.match(texto, /PR mergeados: 1/);
   assert.match(texto, /PR cerrados sin mergear: 0/);
+  assert.match(texto, /PR abiertos: 0/, 'el PR del que todavía tiene necesita-ok no cuenta');
   assert.match(texto, /Sin PR: 1/);
+  assert.doesNotMatch(texto, /#3 /);
   assert.ok(llamadas.length >= 2 && llamadas.every((a) => a[1] === 'list'), 'solo list: no escribe nada');
   assert.ok(llamadas.some((a) => a.includes('salio-por-silencio') && a.includes('all')));
   const sinGh = () => { throw Object.assign(new Error('spawnSync gh ENOENT'), { code: 'ENOENT' }); };

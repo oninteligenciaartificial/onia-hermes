@@ -226,34 +226,52 @@ Sin la sección bien armada (falta, 1 o 4 renglones, ninguna o dos recomendadas)
 `opciones: si` no viaja en el issue (la sección sí) y `ok-por-silencio` no es un campo: Hermes no lo pide.
 
 **Nivel B** = todo esto junto, lo calcula el código con los campos del pedido (`esNivelB` en `orquesta.mjs`; no tiene
-que ver con `nivel:`, que elige el modelo): `donde: nube`, `check: urls`, sin `ok: sergio` y un carril que no sea
-`plataforma` ni `video`. Solo en el nivel B y con opciones, `cargar-issue.mjs` suma `ok-por-silencio` (además de
-`necesita-ok`) y su mensaje final dice la hora límite en La Paz. Fuera del nivel B no hay silencio nunca: corre
-cuando Sergio Urcullo saca `necesita-ok`.
+que ver con `nivel:`, que elige el modelo): `donde: nube`, `check: urls`, **ninguna línea `ok:`** (ni `ok: sergio` ni
+`ok: Sergio`) y un carril que no sea `plataforma` ni `video`. Solo en el nivel B y con opciones, `cargar-issue.mjs`
+suma `ok-por-silencio` (además de `necesita-ok`) y su mensaje final dice la hora límite en La Paz. Fuera del nivel B no
+hay silencio nunca: corre cuando Sergio Urcullo saca `necesita-ok`.
 
 **Qué hace `orquesta.mjs`.** En cada pasada, antes de elegir tareas (`atenderSilencio`, que usa `silencioVencido`), con
 cada issue que tiene `necesita-ok` y `ok-por-silencio`. Vuelve a calcular el nivel B y las opciones: una etiqueta
-puesta a mano en un issue de la PC (`donde: pc`), con `check: cmd` o sin opciones válidas no sale.
+puesta a mano en un issue de la PC (`donde: pc`), con `check: cmd` o sin opciones válidas no sale. Y un issue con
+`salio-por-silencio` se vuelve a comprobar como nivel B cada vez que se elige una tarea: si después alguien editó el
+cuerpo (`donde: pc`, `check: cmd`, una línea `ok:`), no corre.
 
 | Lo que contestó Sergio Urcullo | Qué pasa |
 |---|---|
 | Una letra (`b`, `B: más corto`, `a, y agregá el precio`) | Saca `necesita-ok` y `ok-por-silencio`, comenta «Elegiste B» y la opción llega al trabajador y al revisor dentro del pedido |
-| `no` | Saca `ok-por-silencio`, pone `frenada` y deja `necesita-ok` |
-| Nada, y pasaron `silencio_horas` desde la creación | Saca `necesita-ok` y `ok-por-silencio`, pone `salio-por-silencio` y comenta «Salió la recomendada (Y) por silencio, a las 6 h» |
-| Otra cosa (`ok`, `dale`, una duda) | Nada: no se sabe qué quiso, no sale por silencio y queda con `necesita-ok` hasta que él lo saque |
+| `ok`, `dale`, `sí` (solos, o hechos solo de palabras de aprobación: `esOk`) | Es aceptar la recomendada: lo mismo que una letra, con la recomendada, y comenta «Elegiste B (la recomendada)» |
+| `no` | Pone `frenada`, saca `ok-por-silencio` y deja `necesita-ok` |
+| Nada, y pasaron `silencio_horas` desde la creación | Pone `salio-por-silencio`, saca `necesita-ok` y `ok-por-silencio`, y comenta «Salió la recomendada (Y) por silencio, a las 6 h» |
+| Otra cosa (una duda, «ok pero cambiá el título») | Nada: no se sabe qué quiso, no sale por silencio y queda con `necesita-ok` hasta que él lo saque |
 
 - La respuesta tiene que ser de un autor de `autores`: no cuentan el orquestador (firma `<!-- orquesta -->`), un bot ni
-  otra cuenta. Si dice varias cosas, vale la última letra o «no»; un comentario neutro después no la borra.
-  Límite: Hermes y Sergio Urcullo usan la misma cuenta de GitHub, y un comentario de Hermes por esa cuenta pasa por
-  suyo (el riesgo de la sección «Lo que carga Hermes»; con una cuenta aparte para Hermes se cierra).
-- Un `a` suelto seguido de texto («a ver…») se lee como la opción A.
+  otra cuenta. Si dice varias cosas, vale lo último que fue una letra, «no» u «ok»; un comentario neutro después no lo
+  borra. Límite: Hermes y Sergio Urcullo usan la misma cuenta de GitHub, y un comentario de Hermes por esa cuenta pasa
+  por suyo (el riesgo de la sección «Lo que carga Hermes»; con una cuenta aparte para Hermes se cierra).
+- **La opción queda fijada cuando se decide.** El primer comentario firmado de la orquesta («Elegiste…», «Salió la
+  recomendada…») es ese momento. Vale la última letra (u «ok») que escribió antes, o la recomendada si salió por
+  silencio. Después solo la cambia un comentario que sea **exactamente** una letra (`a`, `A.`, `b)`), y ese gana sobre
+  `salio-por-silencio`; «A la tabla le falta el precio» o «a ver cómo va» no la mueven. Así el trabajador y el revisor
+  ven la misma opción en cada reintento.
+- Un «no» a lo que ya salió por silencio (la tarea quedó `bloqueada`, o `espera-ok`) la vuelve a frenar: pone
+  `necesita-ok` y `frenada` y saca `bloqueada`, en vez de seguir con el «no» como indicación. El informe no la cuenta.
+- Un `a` suelto seguido de texto («a ver…») se lee como la opción A **antes** de decidirse.
 - `silencio_horas` está en `carriles.json` (hoy 6). El código rechaza menos de 6: con un valor menor `cargar-issue`
   no carga pedidos del nivel B y `orquesta.mjs` no suelta nada por silencio (lo dice en el log).
 - La hora límite es un piso, no un reloj: lo suelta la próxima pasada de la nube (8, 11, 14, 17, 20 y 23 en La Paz) o el
   comentario de Sergio Urcullo. Un plazo que vence a las 00:30 sale a las 08:00.
 - Nada se publica ni se mergea solo: el PR sigue esperando su OK. `salio-por-silencio` y `frenada` no frenan nada.
 
-**Labels, una sola vez** (sin ellos `cargar-issue` no carga pedidos del nivel B y la orquesta no suelta nada):
+**Cómo cambia los labels.** `gh issue edit` no es atómico: cada `--add-label` y `--remove-label` es una mutación aparte,
+en paralelo. Si fueran un solo edit y fallara el agregado, se sacarían los frenos y el issue saldría sin la medición.
+Por eso van dos edits, en este orden: **primero lo que se agrega** (`salio-por-silencio`; `frenada`), y **solo si salió
+bien, lo que se saca** (`necesita-ok`, `ok-por-silencio`). Si falla uno, el issue queda con `necesita-ok` y la próxima
+pasada lo reintenta (queda dicho en el log). El comentario va al final: sin los labels no se suelta nada.
+
+**Labels, una sola vez.** Sin `ok-por-silencio`, `cargar-issue` no carga pedidos del nivel B. Sin `salio-por-silencio`, el
+primer edit falla y la orquesta no suelta nada por silencio (lo dice en el log). Sin `frenada`, el «no» no alcanza a
+marcarla, pero la tarea sigue frenada por `necesita-ok`:
 
 ```powershell
 gh label create ok-por-silencio -R oninteligenciaartificial/onia-hermes -d "Sale la recomendada si Sergio Urcullo no contesta (nivel B)"
@@ -263,5 +281,6 @@ gh label create frenada -R oninteligenciaartificial/onia-hermes -d "Sergio Urcul
 
 **Medición.** `node scripts/orquesta/orquesta.mjs --silencio-informe` solo lee: cuenta los issues con
 `salio-por-silencio` y de sus PR (rama `orquesta/<carril>-<n>`) cuántos se mergearon, cuántos se cerraron sin mergear y
-cuántos siguen abiertos. Pide `gh`; sin él sale 1 con el motivo. Con `--dry`, una pasada muestra qué soltaría por silencio
+cuántos siguen abiertos. No cuenta los que todavía tienen `necesita-ok` (la marca está, pero el freno no se sacó, o un
+«no» los volvió a frenar): esos no salieron. Pide `gh`; sin él sale 1 con el motivo. Con `--dry`, una pasada muestra qué soltaría por silencio
 (`silencio  #n  accion  letra`) sin escribir.

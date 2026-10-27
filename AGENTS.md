@@ -35,10 +35,11 @@ la reescritura que Hermes hizo el 25-oct sin commit ni revisión.
   label, un `check: cmd` corre sin sandbox en la PC (`scripts/orquesta/README.md`).
 - **Recomendada por silencio (Sergio Urcullo, 27-oct-2026).** Hermes le da 2 o 3 opciones con una recomendada
   (`opciones: si`). Si no contesta en `silencio_horas` de `carriles.json` (**6 h como mínimo**; el código rechaza
-  menos), sale la recomendada, **solo en el nivel B**: `donde: nube`, `check: urls`, sin `ok: sergio` y un carril que no
-  sea `plataforma` ni `video`. Lo calcula el código (`cargar-issue.mjs` y de nuevo `orquesta.mjs`), no Hermes. Fuera del
-  nivel B no hay silencio nunca: corre cuando él saca `necesita-ok`. Él contesta con la letra o con «no» para frenarla, y
-  lo que salió por silencio queda con `salio-por-silencio` y se mide (`orquesta.mjs --silencio-informe`).
+  menos), sale la recomendada, **solo en el nivel B**: `donde: nube`, `check: urls`, sin ninguna línea `ok:` y un carril
+  que no sea `plataforma` ni `video`. Lo calcula el código (`cargar-issue.mjs` y de nuevo `orquesta.mjs`), no Hermes.
+  Fuera del nivel B no hay silencio nunca: corre cuando él saca `necesita-ok`. Él contesta con la letra, con «ok» para
+  aceptar la recomendada o con «no» para frenarla, y lo que salió por silencio queda con `salio-por-silencio` y se mide
+  (`orquesta.mjs --silencio-informe`).
 
 ## 2. Qué manda
 

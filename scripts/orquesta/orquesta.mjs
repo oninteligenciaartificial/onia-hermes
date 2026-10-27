@@ -74,6 +74,8 @@ export function elegirTareas(issues, conf = CONF, soloCarril = null) {
     if (soloCarril && carril !== soloCarril) continue;
     if (!conf.autores.includes(it.author?.login)) continue; // la cola solo acepta pedidos del dueño
     if (nombresDe(it).some((n) => frenadas.has(n))) continue;
+    // Lo que salió por silencio salió como nivel B: si después alguien editó el cuerpo (donde: pc, check: cmd, ok:…), ya no.
+    if (nombresDe(it).includes('salio-por-silencio') && !nivelBDe(it, conf)) continue;
     porCarril[carril] ??= it;
   }
   return Object.entries(porCarril).map(([carril, issue]) => ({ carril, issue }));
@@ -130,8 +132,11 @@ export function leerHilo(issue, conf = CONF) {
   const ultimoOrq = cs.findLast((c) => c.orq);
   const ultimoSergio = deSergio.at(-1);
   const fallas = cs.filter((c) => c.orq && c.body.startsWith('⛔') && c.i > Math.max(ultimaEntrega?.i ?? -1, ultimoSergio?.i ?? -1));
+  const primeraOrq = cs.find((c) => c.orq)?.i ?? Infinity; // el primer comentario firmado marca el momento en que se decidió la opción
   return {
     deSergio: deSergio.map((c) => c.body), // todos, del más viejo al más nuevo: las respuestas a las opciones (silencioVencido)
+    antesDeLaOrquesta: deSergio.filter((c) => c.i < primeraOrq).map((c) => c.body),
+    despuesDeLaOrquesta: deSergio.filter((c) => c.i > primeraOrq).map((c) => c.body),
     indicaciones: deSergio.filter((c) => c.i >= (ultimaEntrega?.vistos ?? 0)).map((c) => c.body),
     fallasSeguidas: fallas.length, // una indicación nueva de Sergio Urcullo vuelve a cero
     motivo: fallas.at(-1)?.body.match(/^Motivo: (.+)$/m)?.[1] ?? null, // reintentar sin el motivo repite el error
@@ -150,11 +155,17 @@ export function esOk(texto) {
   return palabras.length > 0 && palabras.every((p) => PALABRAS_OK.has(p));
 }
 
+const primeraPalabra = (t) => String(t).trim().match(/^[\p{L}\p{N}_]+/u)?.[0].toLowerCase();
+const esNo = (t) => primeraPalabra(t) === 'no';
+
 // Qué hacer con un issue frenado al que Sergio Urcullo le contestó: «ok» lo cierra, cualquier otra cosa lo hace seguir.
+// Salvo un «no» a lo que ya salió por silencio: eso se vuelve a frenar (necesita-ok y frenada), no sigue.
 export function decidirRespuesta(issue) {
   const labels = nombresDe(issue);
   const { respuesta } = leerHilo(issue);
   if (!respuesta) return null;
+  const frenada = labels.includes('espera-ok') || labels.includes('bloqueada');
+  if (frenada && labels.includes('salio-por-silencio') && esNo(respuesta)) return 'frenar';
   if (labels.includes('espera-ok')) return esOk(respuesta) ? 'cerrar' : 'seguir';
   if (labels.includes('bloqueada')) return 'seguir';
   return null;
@@ -178,10 +189,17 @@ export function horasDeSilencio(conf = CONF) {
 
 // Nivel B: TODO junto. Lo calcula el código con los campos del pedido; Hermes no lo elige. Nada que ver con `nivel:`
 // del pedido (rapido|normal|profundo), que solo elige el modelo. `check === 'urls'` y no «no empieza con cmd»: un
-// pedido escrito a mano sin check, o con uno raro, tampoco sale por silencio.
+// pedido escrito a mano sin check, o con uno raro, tampoco sale por silencio. Cualquier línea `ok:` (no solo «sergio»:
+// «Sergio» en mayúscula también) lo saca del nivel B.
 export function esNivelB({ carril, donde, check, ok }, conf = CONF) {
   return Boolean(conf.carriles[carril]) && !CARRILES_SIN_SILENCIO.includes(carril)
-    && donde === 'nube' && check === 'urls' && ok !== 'sergio';
+    && donde === 'nube' && check === 'urls' && ok == null;
+}
+
+// El nivel B de un issue, con el cuerpo de AHORA (no el de cuando se cargó): se recalcula al soltarlo y al correrlo.
+function nivelBDe(issue, conf) {
+  const pedido = leerPedido(issue.body);
+  return esNivelB({ carril: carrilDe(issue), donde: dondeDe(issue, conf), check: pedido.check, ok: pedido.ok }, conf);
 }
 
 // «## Opciones» con 2 o 3 renglones «- A: …», «- B: …» y exactamente UNO que termina en «(recomendada)».
@@ -205,16 +223,17 @@ export function opcionesDe(texto = '') {
   return { ok: true, opciones, recomendada: reco[0].letra };
 }
 
-// «b», «B: pero más corto», «a, y agregá el precio»: la letra va primero, sola o con texto. «no» frena.
+// «b», «B: pero más corto», «a, y agregá el precio»: la letra va primero, sola o con texto. «no» frena. Un mensaje
+// hecho solo de palabras de aprobación («ok», «dale», «sí»: esOk) es aceptar la recomendada.
 // shortcut: un «a» suelto seguido de texto («a ver…») se lee como la opción A; upgrade si Sergio Urcullo lo sufre.
 function decisionDe(texto, letras) {
-  const w = String(texto).trim().match(/^[\p{L}\p{N}_]+/u)?.[0].toLowerCase();
-  if (w === 'no') return { no: true };
+  if (esNo(texto)) return { no: true };
+  const w = primeraPalabra(texto);
   if (w?.length === 1 && letras.includes(w.toUpperCase())) return { letra: w.toUpperCase() };
-  return null;
+  return esOk(String(texto)) ? { ok: true } : null;
 }
 
-// Lo último que decidió Sergio Urcullo con una letra o con «no» (un comentario neutro después no lo borra) y si
+// Lo último que decidió Sergio Urcullo con una letra, «no» u «ok» (un comentario neutro después no lo borra) y si
 // escribió algo. Valen los de un autor de carriles.json, no los del orquestador, un bot ni otra cuenta: leerHilo.
 // shortcut: Hermes y Sergio Urcullo comparten cuenta de GitHub; un comentario de Hermes por esa cuenta pasa por suyo.
 function respuestaA(issue, letras, conf) {
@@ -228,37 +247,43 @@ export function silencioVencido(issue, ahora, conf = CONF) {
   const horas = horasDeSilencio(conf);
   const labels = nombresDe(issue);
   if (LIBERAR.some((l) => !labels.includes(l))) return null;
-  const pedido = leerPedido(issue.body);
-  const nivelB = esNivelB({ carril: carrilDe(issue), donde: dondeDe(issue, conf), check: pedido.check, ok: pedido.ok }, conf);
-  if (!nivelB || !conf.autores.includes(issue.author?.login)) return null;
-  const o = opcionesDe(pedido.pedido);
+  if (!nivelBDe(issue, conf) || !conf.autores.includes(issue.author?.login)) return null;
+  const o = opcionesDe(leerPedido(issue.body).pedido);
   if (!o.ok) return null;
   const opcion = (letra) => o.opciones.find((x) => x.letra === letra);
   const { decision, escribio } = respuestaA(issue, o.opciones.map((x) => x.letra), conf);
-  if (decision?.letra) {
-    return { accion: 'elegir', letra: decision.letra, quitar: [...LIBERAR], poner: [], comentario: `Elegiste ${decision.letra}: ${opcion(decision.letra).texto}\nArranca con esa opción.` };
+  if (decision?.letra || decision?.ok) {
+    const letra = decision.letra ?? o.recomendada;
+    return { accion: 'elegir', letra, quitar: [...LIBERAR], poner: [], comentario: `Elegiste ${letra}${decision.ok ? ' (la recomendada)' : ''}: ${opcion(letra).texto}\nArranca con esa opción.` };
   }
   if (decision?.no) {
     return { accion: 'frenar', quitar: ['ok-por-silencio'], poner: ['frenada'], comentario: 'Frenada: contestaste «no». Sigue con `necesita-ok`; si querés correrla igual, sacale el label.' };
   }
-  // Escribió algo que no es una letra ni «no»: no se sabe qué quiso, así que no sale por silencio (y tampoco se libera).
+  // Escribió algo que no es una letra, «no» ni «ok»: no se sabe qué quiso, así que no sale por silencio (y tampoco se libera).
   if (escribio || !(Number(ahora) - Date.parse(issue.createdAt) >= horas * 3_600_000)) return null;
   const reco = opcion(o.recomendada);
   return { accion: 'silencio', letra: reco.letra, quitar: [...LIBERAR], poner: ['salio-por-silencio'], comentario: `Salió la recomendada (${reco.letra}) por silencio, a las ${horas} h.\nOpción: ${reco.texto}` };
 }
 
-// Lo que el trabajador hace y el revisor comprueba: la letra de Sergio Urcullo, la recomendada si salió por silencio,
-// o la recomendada si él solo sacó `necesita-ok` sin elegir. Sin «## Opciones» válidas, nada.
+// Lo que el trabajador hace y el revisor comprueba. Queda FIJADO cuando se decide (el primer comentario firmado de la
+// orquesta es ese momento): vale la última letra (o «ok» = la recomendada) que escribió Sergio Urcullo antes, o la
+// recomendada si salió por silencio. Después solo la cambia un comentario que sea EXACTAMENTE una letra («a», «A.»,
+// «b)»), y ese gana sobre la etiqueta; «A la tabla…» o «a ver…» no. Sin «## Opciones» válidas, nada.
+const LETRA_SOLA = /^([a-c])[.!)]?$/i;
 export function lineaOpcion(issue, pedido, conf = CONF) {
   const o = opcionesDe(pedido.pedido);
   if (!o.ok) return '';
   const opcion = (letra) => o.opciones.find((x) => x.letra === letra);
   const reco = opcion(o.recomendada);
+  const letras = o.opciones.map((x) => x.letra);
+  const { antesDeLaOrquesta, despuesDeLaOrquesta } = leerHilo(issue, conf);
+  const alDecidir = antesDeLaOrquesta.map((t) => decisionDe(t, letras)).findLast(Boolean);
+  const despues = despuesDeLaOrquesta.map((t) => t.trim().match(LETRA_SOLA)?.[1].toUpperCase()).filter((l) => letras.includes(l)).at(-1);
+  const letra = despues ?? alDecidir?.letra ?? (alDecidir?.ok ? reco.letra : undefined);
+  if (letra) return `OPCIÓN ELEGIDA POR SERGIO URCULLO: ${letra} - ${opcion(letra).texto}`;
   if (nombresDe(issue).includes('salio-por-silencio')) {
     return `OPCIÓN ELEGIDA POR SILENCIO (Sergio Urcullo no contestó a tiempo; sale la recomendada): ${reco.letra} - ${reco.texto}`;
   }
-  const letra = respuestaA(issue, o.opciones.map((x) => x.letra), conf).decision?.letra;
-  if (letra) return `OPCIÓN ELEGIDA POR SERGIO URCULLO: ${letra} - ${opcion(letra).texto}`;
   return `OPCIÓN: la recomendada, ${reco.letra} - ${reco.texto}`;
 }
 
@@ -625,40 +650,58 @@ function cerrarIssue(issue, res) {
   else intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
 }
 
-// Lo que Sergio Urcullo contestó desde la última pasada: «ok» cierra, una indicación destraba.
-function atenderRespuestas(issues) {
-  const R = CONF.repo_cola;
+// `gh issue edit` NO es atómico: cada --add-label y cada --remove-label es una mutación aparte, y corren en paralelo
+// (gh 2.92). Un solo edit con las dos cosas puede sacar los frenos y fallar al agregar (un label que no existe en el
+// repo), y el issue saldría sin la marca de la medición. Por eso van en dos edits, en este orden: PRIMERO lo que se
+// agrega (la marca; o el freno que se vuelve a poner) y SOLO si salió bien, lo que se saca. Si falla uno no se sigue: el
+// issue queda frenado y la próxima pasada lo reintenta. La memoria (it.labels) refleja cada paso que salió bien.
+function editarLabels(correrGh, conf, it, { poner, quitar }) {
+  for (const [flag, nombres] of [['--add-label', poner], ['--remove-label', quitar]]) {
+    if (!nombres.length) continue;
+    const args = ['issue', 'edit', String(it.number), '-R', conf.repo_cola, ...nombres.flatMap((l) => [flag, l])];
+    if (intentar(() => correrGh(...args)) === null) return false;
+    const sin = (it.labels || []).filter((l) => !nombres.includes(l.name || l));
+    it.labels = flag === '--add-label' ? [...sin, ...nombres.map((name) => ({ name }))] : sin;
+  }
+  return true;
+}
+
+// Lo que Sergio Urcullo contestó desde la última pasada: «ok» cierra, una indicación destraba; un «no» a lo que ya salió
+// por silencio lo vuelve a frenar (necesita-ok y frenada).
+export function atenderRespuestas(issues, { gh: correrGh = gh, conf = CONF } = {}) {
+  const R = conf.repo_cola;
   return issues.filter((it) => {
     const d = decidirRespuesta(it);
     if (!d) return true;
     const n = String(it.number);
     if (d === 'cerrar') {
-      const cerrado = intentar(() => gh('issue', 'close', n, '-R', R, '--comment', firmar((it.comments || []).length, '✅ Aprobada por Sergio Urcullo.'))) !== null;
-      if (cerrado) intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok'));
+      const cerrado = intentar(() => correrGh('issue', 'close', n, '-R', R, '--comment', firmar((it.comments || []).length, '✅ Aprobada por Sergio Urcullo.'))) !== null;
+      if (cerrado) intentar(() => correrGh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok'));
       return false; // cerrado o no, en esta pasada no se trabaja
     }
-    intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok', '--remove-label', 'bloqueada'));
+    if (d === 'frenar') {
+      const quitar = ['espera-ok', 'bloqueada'].filter((l) => nombresDe(it).includes(l));
+      const frenada = editarLabels(correrGh, conf, it, { poner: ['necesita-ok', 'frenada'], quitar });
+      if (frenada) intentar(() => correrGh('issue', 'comment', n, '-R', R, '--body', firmar((it.comments || []).length, 'Frenada: contestaste «no» a lo que había salido por silencio. Vuelve a esperar `necesita-ok`; si querés correrla igual, sacale el label.')));
+      return false;
+    }
+    intentar(() => correrGh('issue', 'edit', n, '-R', R, '--remove-label', 'espera-ok', '--remove-label', 'bloqueada'));
     it.labels = (it.labels || []).filter((l) => !['espera-ok', 'bloqueada'].includes(l.name || l));
     return true;
   });
 }
 
 // Antes de elegir tareas: lo que Sergio Urcullo contestó a las opciones, o la recomendada si no contestó a tiempo.
-// El cambio de labels va en UN solo `gh issue edit` (si la red cae, el issue no queda a medias) y antes del comentario:
-// sin el cambio no se suelta nada. Con `escribir: false` (--dry) solo lo cuenta y lo refleja en memoria.
+// Los labels van por editarLabels (dos edits, la marca primero) y antes del comentario: sin el cambio no se suelta nada.
+// Con `escribir: false` (--dry) solo lo cuenta y lo refleja en memoria.
 export function atenderSilencio(issues, ahora, { escribir = true, gh: correrGh = gh, conf = CONF, log = console.log } = {}) {
   try { horasDeSilencio(conf); } catch (e) { console.error(`[orquesta] ${e.message}: no suelto nada por silencio`); return issues; }
   for (const it of issues) {
     const d = intentar(() => silencioVencido(it, ahora, conf));
     if (!d) continue;
-    const n = String(it.number);
-    if (!escribir) log(`silencio\t#${n}\t${d.accion}\t${d.letra ?? ''}`);
-    else {
-      const edicion = ['issue', 'edit', n, '-R', conf.repo_cola, ...d.quitar.flatMap((l) => ['--remove-label', l]), ...d.poner.flatMap((l) => ['--add-label', l])];
-      if (intentar(() => correrGh(...edicion)) === null) continue; // un label que no existe en el repo también cae acá: queda frenado
-      intentar(() => correrGh('issue', 'comment', n, '-R', conf.repo_cola, '--body', firmar((it.comments || []).length, d.comentario)));
-    }
-    it.labels = [...(it.labels || []).filter((l) => !d.quitar.includes(l.name || l)), ...d.poner.map((name) => ({ name }))];
+    if (!escribir) log(`silencio\t#${it.number}\t${d.accion}\t${d.letra ?? ''}`);
+    if (!editarLabels(escribir ? correrGh : () => '', conf, it, d)) continue; // falló: queda frenado y se reintenta
+    if (escribir) intentar(() => correrGh('issue', 'comment', String(it.number), '-R', conf.repo_cola, '--body', firmar((it.comments || []).length, d.comentario)));
   }
   return issues;
 }
@@ -671,7 +714,9 @@ export function informeSilencio(runGh = gh, conf = CONF) {
       throw e;
     }
   };
-  const issues = leer('issue', 'list', '-R', conf.repo_cola, '-l', 'salio-por-silencio', '--state', 'all', '--limit', '200', '--json', 'number,title,state,labels');
+  // Con necesita-ok todavía no salió: le pusieron la marca y no alcanzó a sacarle el freno, o un «no» la volvió a frenar.
+  const issues = leer('issue', 'list', '-R', conf.repo_cola, '-l', 'salio-por-silencio', '--state', 'all', '--limit', '200', '--json', 'number,title,state,labels')
+    .filter((it) => !nombresDe(it).includes('necesita-ok'));
   const prs = issues.length ? leer('pr', 'list', '-R', conf.repo_cola, '--state', 'all', '--limit', '500', '--json', 'number,headRefName,state,mergedAt,url') : [];
   const r = resumirSilencio(issues, prs);
   const filas = r.filas.map((f) => `#${f.numero} ${f.carril} · ${f.titulo} · ${f.pr ? `PR ${f.estado} ${f.pr.url}` : 'sin PR'}`);
