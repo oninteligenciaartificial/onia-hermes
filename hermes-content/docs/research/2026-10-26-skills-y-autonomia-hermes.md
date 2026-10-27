@@ -76,6 +76,9 @@ Cambios en el código si se aprueba, en un PR con pruebas:
   la lista de tendencias, pero alcanza para seguir lo que se comparte. Hoy lo tiene Claude y no lo tiene Hermes.
 - **Claude in Chrome** leería x.com con la sesión de Sergio Urcullo, pero el 26-oct no había ningún Chrome conectado
   (`list_connected_browsers` vacío).
+- **Playwright con un perfil dedicado no sirve** (probado el 27-oct). En modo invisible X devuelve error
+  (`ERR_HTTP_RESPONSE_CODE_FAILURE`) o una página vacía. Abrirlo visible para esquivarlo sería evadir la detección
+  de bots, y eso no se hace. Además el login no se completó: no quedó la cookie `auth_token`. El perfil se borró.
 - **Grok** tiene búsqueda nativa en X. Pide The X Subscription desde USD 8/mes (`2026-10-26-grok-y-aislamiento.md`),
   y Hermes ya trae el proveedor `xai-oauth`. Es un gasto: lo decide él.
 
