@@ -4,6 +4,7 @@
     "oninteligenciaartificial"
   ],
   "paralelo": 3,
+  "silencio_horas": 6,
   "minutos_max": 40,
   "revisor": "claude-sonnet-5-5",
   "revisor_alterno": "claude-opus-5-5",
