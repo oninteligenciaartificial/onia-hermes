@@ -116,6 +116,14 @@ file script.sh    # DEBE decir "ASCII text executable", NO "with CRLF line termi
 `$(date)` llego convertido en `\1`. **No pelees con el escapado**: escribi el script local,
 `scp`, y ejecutalo. Es lo que funciona siempre.
 
+### `robocopy /MOVE` sin `/XJ` se lleva lo que apuntan las junctions (PC, 26-oct)
+
+Al mover a E: worktrees huérfanos con `node_modules` de pnpm, robocopy siguió sus junctions, que tenían ruta absoluta
+a los paquetes del checkout principal, y movió 490 archivos versionados de `web-factory` fuera de ese checkout. Sale
+con «código 9». **Siempre `/XJ` al mover o copiar algo con `node_modules`** (`rd /s /q` no sigue junctions: borra
+solo el enlace). Después de mover, `git status` en cada checkout que pudiera ser destino de una junction. Detalle en
+`hermes-content/docs/handoff/hermes-local.md` («Intentos fallidos»).
+
 ---
 
 ## 2. Cuando `docker` NO RESPONDE
