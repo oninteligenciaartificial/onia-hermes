@@ -28,8 +28,11 @@ El router `hyperframes` y sus skills (`hyperframes-core/cli/animation/creative/k
 `slideshow`, `remotion-to-hyperframes` y las plantillas `changelog-video`, `faceless-explainer`,
 `figma`, `music-to-video`, `pr-to-video`, `product-launch-video`) **viven en este repo** desde el
 22-jul; se borraron el 29-sep y se restauraron el 2026-10-02 porque con la copia global los
-archivos dejaron de editarse como quiere Sergio Urcullo. **Esta copia gana** sobre la de
-`~/.claude/skills` con el mismo nombre (orden de Claude Code: proyecto, después usuario).
+archivos dejaron de editarse como quiere Sergio Urcullo. Con el mismo nombre en `~/.claude/skills`, en Claude Code
+gana la **PERSONAL**, no la del repo (medido el 26-oct; code.claude.com/docs/en/skills). Las 15 personales que
+diferían se archivaron el 26-oct en `~/.claude/skills-archivadas-20261026`, así que hoy `hyperframes*` carga la del repo; si vuelve a
+aparecer una personal con el mismo nombre, le gana otra vez. Otros 16 nombres (p. ej. `ad-creative`, `copywriting`) siguen
+en las dos carpetas y en la PC se carga la personal (contado el 27-oct).
 Actualizarlas (`npx hyperframes skills update`) cambia cómo editan: solo con OK de Sergio Urcullo.
 
 ## Principio

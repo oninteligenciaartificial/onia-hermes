@@ -52,7 +52,7 @@ que uno realmente va a hacer.
 
 > **En la nube (10-oct-2026):** las skills de este mapa que están en `.claude/skills/` del repo, la nube las ve. Estas
 > siguen **solo en la PC** (`~/.claude/skills/`) y una sesión de la nube no las carga; si una tarea las necesita, se
-> la pide a la madre (`CLAUDE.md` «Sesión MADRE»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
+> la pide como issue `orquesta` con `donde: pc` (`CLAUDE.md` «Quién orquesta»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
 > `analytics` · `architecture-decision-records` · `article-writing` · `autonomous-loops` · `banner-design` · `brand` ·
 > `brandkit` · `browse` · `caveman-review` · `click-path-audit` · `codebase-onboarding` · `community-marketing` ·
 > `competitors` · `context-budget` · `context-restore` · `context-save` · `continuous-agent-loop` · `copy-editing` ·
@@ -94,7 +94,7 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 | Cuándo | Skills |
 |---|---|
 | Video en general / edición | skills propias `editor-videos` · `ver-videos` |
-| Motor HTML→MP4 | `hyperframes*` (copia global `~/.claude/skills`; flujo que falte: `npx hyperframes skills update <nombre>`) |
+| Motor HTML→MP4 | `hyperframes*` (las del repo, `.claude/skills/hyperframes*`, restauradas el 2026-10-02; con el mismo nombre le gana una copia personal de `~/.claude/skills`, §8; `npx hyperframes skills update <nombre>` solo con OK de Sergio Urcullo) |
 | **Juzgar el movimiento y la continuidad entre planos** | `motion-doctrine` · `cut-the-curve` · `seam-craft` (propias) |
 | Reconstruir un componente desde fotogramas | `image-to-code` |
 
@@ -199,11 +199,11 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 
 | Origen | Dónde | Ejemplos |
 |---|---|---|
-| Globales del filesystem | `~/.claude/skills/` (**110**) | `impeccable` · `copywriting` · `security-review` |
-| Del proyecto | `.claude/skills/` (**42**) | `onia-router` · `ver-videos` · `editor-videos` |
-| Plugins | `~/.claude/plugins/cache/` (**9**) | `gsap-skills` · `caveman` · `ponytail` |
+| Globales del filesystem | `~/.claude/skills/` (**~100**, contado el 26-oct) | `impeccable` · `copywriting` · `security-review` |
+| Del proyecto | `.claude/skills/` (**65**, contado el 27-oct en `main`) | `onia-router` · `ver-videos` · `editor-videos` |
+| Plugins | `~/.claude/plugins/cache/` (**10** carpetas, contado el 27-oct) | `gsap-skills` · `caveman` · `ponytail` |
 | De claude.ai | no están en disco — se listan con `ListSkills` | `docx` · `xlsx` · `pptx` · `pdf` · `skill-creator` · `abogado-del-diablo` |
-| HyperFrames | **el repo** (`.claude/skills/` y `.agents/skills/`, restaurado 2026-10-02; gana sobre la copia global) | `hyperframes` · `talking-head-recut` · `embedded-captions` |
+| HyperFrames | **el repo** (`.claude/skills/` y `.agents/skills/`, restaurado 2026-10-02). Con el mismo nombre gana la **personal** (`~/.claude/skills`): las de HyperFrames ya no tienen copia personal (se archivaron el 26-oct), pero 16 nombres del repo siguen también en `~/.claude/skills` (p. ej. `ad-creative`, `copywriting`, `deep-research`; contado el 27-oct) y ahí se carga la personal | `hyperframes` · `talking-head-recut` · `embedded-captions` |
 
 ## 9. Lo que NO es skill y se confunde
 

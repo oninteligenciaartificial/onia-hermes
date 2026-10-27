@@ -10,7 +10,7 @@ carril, cargá su stack, respetá las reglas duras. Fuente viva del mapa complet
 `hermes-content/docs/ONIA_SKILLS_STACK_Y_SUBAGENTES.md`.
 
 > 📇 **Mapa problema → skill: [`STACK-POR-DOMINIO.md`](STACK-POR-DOMINIO.md).**
-> Hay **116 carpetas en `~/.claude/skills/`** (contado el 20-oct; plugins: `claude plugin list`; el 2026-09-29 se sacaron las que no
+> Hay **~100 carpetas en `~/.claude/skills/`** (contado el 26-oct; plugins: `claude plugin list`; el 2026-09-29 se sacaron las que no
 > usaban ni Claude ni Codex; ver el historial de la limpieza). Esta tabla enruta por carril; ese
 > archivo enruta por dominio (contenido/marketing · diseño/UI/UX · frontend · backend ·
 > seguridad · research · proceso), que es como aparecen las tareas en la práctica.
@@ -80,7 +80,7 @@ la nube no lo tiene. Lo viejo de cada área está en `hermes-content/docs/histor
 | Carril / Proyecto | Skills núcleo | Subagente | Skill ONIA propia |
 |---|---|---|---|
 | **Referencia recibida** (link, reel, post, web, app, captura, audio o documento) | **`aprender-de-todo` primero**; link sin instrucción = aprender, no producir; después las skills por dimensión | Codex para ficha/síntesis con evidencia; revisión del carril | `aprender-de-todo` |
-| **A** onia-center (panel Next.js) | `impeccable` `ui-ux-pro-max` `taste-design` `frontend-design:frontend-design` `frontend-patterns` `react-components` `shadcn-ui` `ui-styling` `nextjs-turbopack` `design-review` `emil-design-eng` | — | `onia-web-factory` |
+| **A** onia-center (panel Next.js) — **ABANDONADO desde el 31-ago** (decisión de Sergio Urcullo, `ONIA_CATALOGO_DE_IDEAS.md`): no se le agrega nada ni se rutea trabajo acá; las pantallas del producto son de Onia Platform (`onia-frontend`, en `onia-platform`). El stack de UI de al lado sirve para cualquier pantalla | `impeccable` `ui-ux-pro-max` `taste-design` `frontend-design:frontend-design` `frontend-patterns` `react-components` `shadcn-ui` `ui-styling` `nextjs-turbopack` `design-review` `emil-design-eng` | — | `onia-web-factory` |
 | **B** wf-landing (landings cliente) | `impeccable` `taste-design` `design`/`design-md` `image-to-code` `98669c11ca63:web-artifacts-builder` `landing-report` `land-and-deploy` `imagegen-frontend-web` `banner-design` `design-dna` (teardown de referencia → JSON de tokens/estilo/efectos; tipografía SIEMPRE verificada contra el CSS real, no a ojo) `gsap-*` (plugin oficial GreenSock, scrollytelling) | — | `onia-web-factory` |
 | **C** propuestas (comercial) | `article-writing` `make-pdf` `slides` `document-generate` `brand` | — | `onia-propuestas` |
 | **D** DentaGest · **E** GestiOS *(repos aparte)* | `database-migrations` `postgres-patterns` `backend-patterns` `api-design` `security-review` | — | `onia-core` |
@@ -89,7 +89,7 @@ la nube no lo tiene. Lo viejo de cada área está en `hermes-content/docs/histor
 | **hermes-jarvis** (Hermes, Telegram de Sergio Urcullo, su calendario, pedidos a Claude) | **cargar `onia-hermes-jarvis`** — método, trampas y pruebas del carril; estado en `handoff/hermes-jarvis.md` | — | `onia-hermes-jarvis` |
 | **panel-onia** (mod de la app de Claude: sesiones, cola de la orquesta, nube, PC, Hermes y uso en vivo) | **cargar `panel-onia`** — el mod vive fuera del repo (`~/.claude/onia-mods/panel-onia`); la app corre la copia del cache: cambio = subir versión + 3 comandos (20-oct) | — | `panel-onia` |
 | **G** infra / n8n | `n8n-workflow-patterns` `n8n-mcp-tools-expert` `n8n-node-configuration` `n8n-code-javascript` `n8n-validation-expert` `docker-patterns` `deployment-patterns` | — | — |
-| **H** contenido · **J** video-remotion | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras por sus mecanismos medidos (sin copiar identidad ni guion), desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
+| **H** contenido · **J** video (HyperFrames; Remotion está jubilado) | **`diseno-contenido-onia` primero** (índice de imágenes, galería, packs y patrones) · **`edicion-referentes` para todo video nuevo de Sergio Urcullo** (Santiago Muñoz / Erik Taveras por sus mecanismos medidos (sin copiar identidad ni guion), desde el 3-oct) · `editor-videos` `ver-videos` `sacar-prompt` `hyperframes` `banner-design` `brand` + Higgsfield MCP | — | — |
 | **I** research/estrategia | `deep-research` `exa-search` `iterative-retrieval` `office-hours` | — | — |
 | **K** yt-canal/meta-ads · **L** yt-ciencia-cuerpo | `article-writing` `deep-research` (L=salud/YMYL: fuentes obligatorias) + video stack | — | — |
 | **onia-core** | `database-migrations` `postgres-patterns` `api-design` `backend-patterns` `verification-loop` | — | `onia-core` |
@@ -121,7 +121,7 @@ la nube no lo tiene. Lo viejo de cada área está en `hermes-content/docs/histor
   **Rubros:** dental → importadora → el resto (29-sep, confirmado el 19-oct).
 - **Auto-sync activado** (hook Stop `scripts/git-autosync.js`): commitear y pushear la rama al terminar;
   respeta `.gitignore`. **`main` solo por PR revisado** desde el 5-oct: el hook mueve `main` únicamente en la
-  sesión principal (antes «madre», `ONIA_AUTOSYNC_MAIN=1`) y el integrador (`ONIA_LOOP_ID=onia-cola`).
+  sesión principal (antes «madre», `ONIA_AUTOSYNC_MAIN=1`) y el integrador (`ONIA_LOOP_ID=onia-cola`, **apagado desde el 27-sep**).
 - **Autonomía máxima:** MCP → CLI/API → skill → script → recién ahí preguntar.
 - **Gasto (actualizado 2026-10-09):** seguir `CLAUDE.md` §Higgsfield: pruebas pequeñas
   de imagen autorizadas el 8-oct, cotizadas y registradas, sin fraccionar lotes.
@@ -138,7 +138,7 @@ la nube no lo tiene. Lo viejo de cada área está en `hermes-content/docs/histor
   resumen, cierre, aduana, calendario, pedidos a Claude, y el workflow hermes-jarvis; 2026-10-01) ·
   `equipo-de-agentes` (el método: Codex, verificadores Haiku; corregido el 19-oct: orquestan Hermes y `scripts/orquesta/`) ·
   `onia-sesion-madre` (historia desde el 19-oct: `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`) · `orca` (tablero LOCAL de agentes en la PC: qué ve y qué no, ajustes a
-  corregir; no ve la nube ni es la madre; 2026-10-16) · `panel-onia` (el Panel ONIA, mod de la app
+  corregir; no ve la nube ni es cola ni orquestador; 2026-10-16) · `panel-onia` (el Panel ONIA, mod de la app
   de Claude: dónde vive, cómo se publica un cambio, de dónde lee cada sección; 2026-10-20).
 - **Producto:** `onia-core` · `onia-chatbot` · `onia-contabilidad-bolivia`.
 - **Venta:** `onia-propuestas` (generador oficial, nunca HTML a mano) · `onia-web-factory`.
