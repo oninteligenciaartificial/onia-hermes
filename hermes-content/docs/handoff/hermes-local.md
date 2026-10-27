@@ -143,6 +143,68 @@ respaldo si falta cupo) y #274 (Hermes endurecido: sin logins prestados, sin cro
 `python -m hermes`, 48 skills de fábrica apagadas, escritura solo en handoff, pedidos y cachescratch;
 `probar-deny` 183/45/0).
 
+### Lo que le toca a Sergio Urcullo (27-oct, cierre de la noche)
+
+**Ver y decidir, en este orden:**
+1. **PR «opciones con la recomendada por silencio» (#280).** Código con 88 pruebas en verde y revisión
+   independiente sin críticos. Si da el OK: se mergea, se crean las 3 etiquetas (comandos en
+   `scripts/orquesta/README.md`) y Hermes ya puede cargar pedidos con opciones.
+2. **PR «skills sin madre, con el costo de Higgsfield y el método vigente» (#279).** Solo docs. Corrige las
+   contradicciones que hacían trabajar mal a los agentes.
+3. **PR «inventario de skills, autonomía por opciones y acceso a X» (#277).** El análisis, este handoff y el script
+   de limpieza de la PC.
+4. **PR «qué frena la laptop y cómo exprimirla» (#278).** Las 10 propuestas, de las que las 5 primeras liberan
+   ~44 GB, un núcleo y la fuga de memoria; y el análisis de Linux.
+5. Grok con X (desde USD 8 por mes) para leer X de verdad: sí o no.
+
+**Hacer él (PowerShell normal, no desde Claude):**
+1. Cerrar el `find` colgado que ocupa un núcleo: `Stop-Process -Id 23760,3160,18584`. A Claude no lo dejaron
+   porque es de otra sesión.
+2. `hermes auth remove copilot 1` y `hermes auth remove anthropic 1`. El de copilot es su token de GitHub.
+3. Con el #277 mergeado: `powershell -ExecutionPolicy Bypass -File scripts\pc\ordenar-agentes-pc.ps1`, primero en
+   seco y después con `-Aplicar`.
+4. Abrir Hermes (`Set-Location E:\onia-wt\hermes-base; hermes --tui -m gpt-6.1-sol --provider openai-codex`) y
+   mirar `/context`.
+5. Reinstalar la tarea programada (`scripts/orquesta/README.md` §«Correr»).
+
+**Lo que pidió para después:** la bóveda cifrada para los agentes. KeePassXC está instalado, pero `Agentes.kdbx`
+no existe, y `BovedaPrivada` tiene un `.txt` de variables y una llave SSH sin cifrar.
+
+**La página del taller** no se publica: no le gustó. Es una tarea para Hermes, con sus opciones.
+
+### Revisión para dejarlo operando (26-oct, 23:45, a pedido de Sergio Urcullo)
+
+Medido desde el panel Terminal (fuera de la copia de la app de Claude):
+- `hermes auth list`:
+  - openai-codex tiene login propio (`device_code`).
+  - Siguen anthropic (oauth) y copilot. **El de copilot es su token de GitHub** (`gh auth token`).
+  - gemini viene de la variable `GEMINI_API_KEY`.
+- `hermes skills list`: 69 habilitadas. Son 61 del repo (todas las de carriles: video, web, backend…) y 8 de fábrica.
+
+| # | Paso | Quién | Prueba de hecho |
+|---|---|---|---|
+| 1 | `hermes auth remove copilot 1` y `hermes auth remove anthropic 1` | Sergio Urcullo | `hermes auth list` muestra solo openai-codex y gemini |
+| 2 | ~~Recortar skills a 7~~: descartado el 26-oct. Sergio Urcullo quiere que Hermes sepa lo mismo que Claude. Se limpian en el origen las repetidas y las que se contradicen (`research/2026-10-26-skills-y-autonomia-hermes.md` §5) | Claude, por PR, con su OK | Las contradicciones de §4.2 corregidas |
+| 3 | Leer X: perfil dedicado `C:/Users/PC/BovedaPrivada/BrowserProfiles/x`, donde Sergio Urcullo inicia sesión una vez, más el lector de Playwright | Sergio Urcullo (login) y Claude (lector) | Una búsqueda en X devuelve posts con autor y fecha |
+| 4 | Abrir Hermes en una PowerShell o en el panel Terminal de la app, **no en Orca**: Orca lo abre con `--yolo` (sin aprobaciones) y en el checkout principal | Sergio Urcullo | `/context` muestra `AGENTS.md`; `/status` muestra Sol |
+| 5 | Reinstalar la tarea programada (`scripts/orquesta/README.md` §«Correr») | Sergio Urcullo | `schtasks /Query /TN "ONIA Orquesta" /V /FO LIST` sin `&` suelto |
+| 6 | Primera tarea real: la página del taller, que a Sergio Urcullo no le gusta, como pedido de Hermes con `--dry` y después cargado | Hermes, con su OK | Issue con `necesita-ok` en la cola |
+| 7 | Decidir la autonomía (abajo) | Sergio Urcullo | Línea en `AGENTS.md` §1 |
+
+**Autonomía propuesta** (pendiente de su decisión):
+- **Hermes decide solo:**
+  - leer el repo, los issues y los PR;
+  - investigar en la web;
+  - elegir carril, nivel y prueba de cada pedido;
+  - cargarlo con `necesita-ok`;
+  - ordenar la cola según la etapa vigente;
+  - revisar entregas contra su «hecho cuando»;
+  - escribir el handoff.
+- **Nuevo, si lo aprueba:** cargar **sin** `necesita-ok` las tareas que solo leen. Son las de investigación en la nube
+  con `check: urls`, con un tope de 3 por día: es la misma excepción que ya tiene el Hermes del VPS. Necesita un PR a
+  `cargar-issue.mjs`, con su prueba, y a `AGENTS.md`.
+- **Siempre con él:** lo visible, el gasto, contactar personas, producción, mergear e instalar.
+
 En este orden (actualizado el 26-oct, 23:30, por la sesión que siguió al relevo):
 1. ~~Aplicar #274~~: hecho a las 23:06 (arriba). Le falta a Sergio Urcullo, en una PowerShell nueva: `hermes auth list`;
    si no hay un openai-codex propio, `hermes auth add openai-codex`; `hermes auth remove copilot <n>` y
