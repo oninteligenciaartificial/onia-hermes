@@ -1,5 +1,7 @@
 # Stack de skills por dominio — qué agarrar y cuándo
 
+> ⚠️ **27-oct-2026: Superpowers y gstack salieron** (decisión de Sergio Urcullo: el método de sesión es reglas del repo + Ponytail; `onia-router` §«Stack de proceso común»). Donde abajo aparezcan sus skills (`brainstorming`, `writing-plans`, `investigate`, `office-hours`, `design-review`, `land-and-deploy`, `landing-report`, `document-generate`, `qa`, `review`…), no se usan.
+
 > Complemento de `SKILL.md`, que mapea **carril → stack**. Esto mapea **problema → skill**,
 > que es como aparecen las tareas en la práctica.
 >
