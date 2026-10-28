@@ -10,8 +10,19 @@ import {
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
   leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
   revisoresPara, esNivelB, opcionesDe, horasDeSilencio, silencioVencido, atenderSilencio, armarRevision,
-  resumirSilencio, informeSilencio, atenderRespuestas,
+  resumirSilencio, informeSilencio, atenderRespuestas, enPausaSinCupo,
 } from './orquesta.mjs';
+
+test('una tarea soltada sin cupo espera una hora antes de volver a tomarse', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'orq-cupo-'));
+  const t0 = 1_000_000;
+  assert.equal(enPausaSinCupo(dir, 7, t0), false);
+  fs.writeFileSync(path.join(dir, 'sin-cupo-7'), String(t0));
+  assert.equal(enPausaSinCupo(dir, 7, t0 + 59 * 60_000), true);
+  assert.equal(enPausaSinCupo(dir, 7, t0 + 61 * 60_000), false);
+  assert.equal(enPausaSinCupo(dir, 8, t0), false);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
 
 const issue = (number, carril, extra = {}) => ({
   number, title: `t${number}`, body: '', createdAt: `2026-10-18T0${number}:00:00Z`,
