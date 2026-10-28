@@ -256,6 +256,63 @@ usá `text-frames.mjs` (arriba), que muestrea por densidad y no por reloj.
 En la PC el local alcanza para casi todo; Speaches es el camino de la nube.
 ⚠ **Desde una sesión en la nube** (4-oct-2026): `transcribe.sh` va por defecto a `root@187.77.16.63` con su clave, y
 desde la nube eso se cuelga (más de 120 s, JSON vacío). Correrlo con `ONIA_VPS_HOST=onia-vps`, que pasa por el túnel.
+⛔ **Nube con red por lista blanca (medido 16-oct-2026, hilo de pruebas, sesión del proyecto «ONIA · Hermes»):** en ESTE
+entorno la red solo deja pasar lo que una regla permite (`request blocked: no rule or allowlist entry allows host "…"`,
+403 en el CONNECT). Medido: **bloqueados** `onia.com.bo`, `app.onia.com.bo`, `www.instagram.com`, `www.youtube.com`,
+`youtu.be`, `cdninstagram.com`, `googlevideo.com`, `google.com`, `huggingface.co`; **pasan** `github.com` y `pypi.org`.
+Por lo tanto aquí NO se baja ningún reel ni Short, ni con `yt-dlp` ni con `fetch-video.mjs`: el error exacto es
+`Unable to connect to proxy … Tunnel connection failed: 403 Forbidden`. No se rodea (ni WebFetch ni otro puente): se
+reporta el host y el reel se manda a la madre en la PC (Chrome + `fetch-video.mjs`). Diagnóstico en 10 s:
+`curl -sS "$HTTPS_PROXY/__agentproxy/status"` (ver `recentRelayFailures[].host`) y un `CONNECT` crudo por socket a
+`127.0.0.1:<puerto>` para leer el cuerpo del 403 (curl lo esconde). Antes de planear una tarea de video en la nube,
+probar `curl -sS -o /dev/null -w "%{http_code}" https://www.youtube.com`: `000` + «CONNECT tunnel failed, response 403»
+= no hay ruta, ahorrar el intento.
+- **Carrusel desde la nube (2.º caso, 16-oct, `/p/DecFE1oDNd3/`):** Chromium → `ERR_TUNNEL_CONNECTION_FAILED`, `yt-dlp` → 403 del proxy, `gallery-dl` (pip, 3 s) → `ProxyError: 403 Forbidden`. Las tres herramientas chocan con el mismo host bloqueado, así que cambiar de herramienta no sirve: el carrusel lo baja la madre con `ig-carousel.mjs` y las láminas se leen con visión. Fichas de esos dos posts: pendientes hasta tener los archivos.
+- **VPS desde la nube:** sin `ssh` en el PATH y sin `ONIA_VPS_SSH_KEY_B64` en el entorno ⇒ no hay camino `onia-vps`
+  (ni `transcribe.sh`). No buscar otra forma de entrar.
+- **Playwright + Chromium en la nube (medido 16-oct):** el entorno trae Chromium (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`)
+  y Playwright 1.56.1 global (`/opt/node22/lib/node_modules/playwright`). Sin `playwright install`. Lanzar con
+  `executablePath` y `--no-sandbox`; primer arranque ~8 s, siguientes ~0,15 s; captura de `github.com` 5 s en total
+  (salió sin CSS: los estáticos viven en otro host que la lista no abre, mirar la captura siempre). Hosts bloqueados
+  dan `net::ERR_TUNNEL_CONNECTION_FAILED`. Hosts que van fuera del proxy (`pypi.org`) dan `ERR_CERT_AUTHORITY_INVALID`:
+  no se desactiva TLS. `pip install yt-dlp` sí funciona (4 s, versión 2026.08.19).
+
+- ✅ **Entorno «Onia» (red abierta), medido 16-oct-2026 — REEMPLAZA los bloqueos de arriba para ese entorno.** `onia.com.bo` y
+  `app.onia.com.bo/login` dan 200 en ~1,4 s (captura 1440 con CSS y fuentes completos, 5 s el script entero con Playwright
+  global `/opt/node22/lib/node_modules/playwright` + `chromium-1194`, `--no-sandbox`); `instagram.com`, `youtube.com` y la CDN
+  `scontent-*.cdninstagram.com` también pasan. Antes de decir «bloqueado», probar `curl -s -o /dev/null -w '%{http_code}' <host>`.
+- **Instagram desde la nube SIN login (método medido, 2 posts):**
+  1. `pip install yt-dlp curl_cffi` (sin `curl_cffi`, `--impersonate chrome` falla: «target not available»).
+  2. **Carrusel:** `yt-dlp --impersonate chrome -o "s%(playlist_index)02d.%(ext)s" --write-info-json <url>`: baja las láminas
+     de VIDEO (8 de 10 en `/p/DecFE1oDNd3/`, 100-180 KB c/u, 1080x1438, 10 s) y el `s00.info.json` trae el **caption completo**,
+     likes y autor. Las láminas de IMAGEN fallan («No video formats found»). `-o` con nombre fijo se pisa.
+  3. **Post de imagen única** (`/p/DedkCc6olmo/`): yt-dlp dice «There is no video in this post». Camino: Playwright abre
+     `/p/<id>/` (5 s, sale un modal de login que no estorba) y **se guardan las respuestas de imagen de `cdninstagram`**
+     (`page.on('response')`, `r.body()`, quedarse con las >40 KB): la mayor es la imagen completa (2048x2731, 450 KB), mejor
+     que `og:image`, que viene recortada a 640. Lo mismo da la lámina 1 (imagen) de un carrusel (2160x2877).
+  4. `gallery-dl` sin login se **cuelga** (>120 s, ni error): no usarlo. `pkill -f` dentro del mismo shell mata la sesión.
+  5. Metadatos gratis del `<meta og:description>`: «N likes, M comments - autor on fecha: "caption"».
+  Faltan: lámina 10 del carrusel (imagen, CTA «guarda/comenta»); con login saldría por `?img_index=N` (ver camino de la PC).
+- **Biblioteca de anuncios de Meta desde la nube SIN login (medido 16-oct-2026, entorno «Onia»):** funciona. Chromium abre
+  `https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=BO&q=<término>&search_type=keyword_unordered`
+  (el documento responde 403 pero la página se pinta igual), a los ~9 s ya hay tarjetas con **imagen/video, texto, anunciante,
+  fechas de inicio y fin, plataformas y «Library ID»**; «N results» sale en el encabezado (`dental` BO >50.000, `Nike` BO ~22.000).
+  Scroll con `page.mouse.wheel` carga más. Trampas: (1) tras 3-4 consultas seguidas Meta contesta
+  `{"errors":[{"message":"Rate limit exceeded"...}]}` en `/api/graphql/` y la página muestra **«No hay ningún anuncio…»
+  FALSO** (Nike BO salió vacío): espaciar consultas y, ante un vacío, repetir con un término seguro antes de concluir;
+  (2) algunos videos dicen «Sorry, we're having trouble playing this video» (no se pueden ver en vivo; la imagen sí);
+  (3) «Doctocliq» en Bolivia da 0 resultados reales (el término sí cargó datos: `dynamic_filter_options` vacío). Sin cuentas
+  ni login. Para los creativos de video completos sigue valiendo la madre en la PC.
+- **Investigar páginas públicas desde la nube (16-oct):** `WebFetch` trae y resume bien (lety.ai: titular y condiciones en
+  segundos); Chromium falla en algunos sitios con `ERR_CONNECTION_RESET` (`hormozi.com`) o navegación interrumpida (`lety.ai`):
+  la red no deja pasar todos los hosts, así que se prueba WebFetch primero y Chromium si hace falta captura.
+- **Camino de la PC (sesión de control, 16-oct):** en Chrome con sesión, `fetch('/api/v1/media/<id>/info/', {headers:
+  {'x-ig-app-id':'936619743392459'}, credentials:'include'})` da caption, contadores y `media_type` (1 imagen, 8 carrusel); láminas
+  de imagen por flecha + captura (`?img_index=N`). Fallaron: embed por `curl` (shell JS vacío), descargas encadenadas desde Chrome
+  (solo aterriza la primera).
+- **VPS desde esta nube:** `ONIA_VPS_SSH_KEY_B64` SÍ existe en el entorno, pero `ssh root@187.77.16.63` da `Connection timed
+  out` (puerto 22) y el alias `onia-vps` no resuelve: el túnel no está en este entorno. No hace falta: yt-dlp + Chromium
+  locales resuelven reels y carruseles. Transcripción de audio de un reel sigue necesitando el VPS o Whisper local.
 ⚠ **En una nube SIN `ssh` ni `yt-dlp`** (entorno «onia-higgsfield», 5-oct-2026, TikTok de @kevinarce98): `transcribe.sh`
 falla con «scp al VPS falló». Camino que funcionó, todo dentro del contenedor y sin VPS:
 `pip install "yt-dlp[default,curl-cffi]" faster-whisper` → bajar con `fetch-video.mjs` → transcribir con `faster-whisper`
@@ -264,6 +321,27 @@ oyó mal. Sin clave de Gemini, la edición se mira por cuadros: 1 por segundo, l
 transiciones más lentas. La música y los efectos se deducen del nivel y del espectrograma en las pausas: decirlo así en
 la ficha, porque el audio no se escuchó.
 Un JSON con `text` vacío es respuesta válida: el audio no tiene voz (así se confirmó que ese reel es solo música). `scripts/transcribe.sh` usa ese camino (base64 → SSH → docker exec en onia-center → Speaches). Detalle de infra: [[onia-hermes-stack-y-radar]].
+
+### Transcribir en la nube sin GPU, sin VPS (medido 16-oct-2026)
+Instalar una vez por contenedor: `python3 -m pip install faster-whisper "yt-dlp[default,curl-cffi]" "av==15.1.0"`
+(⚠ **`av` 19 rompe faster-whisper** con `TypeError: open() got an unexpected keyword argument 'metadata_errors'`; fijar `av==15.1.0`).
+Uso: `python3 -I .claude/skills/ver-videos/scripts/transcribe-local.py <audio|video> [small|base|tiny] [es]` → JSON con
+`segments[]` y tiempos. CPU 4 núcleos, int8, modelo `small`: **17 s de audio en 6 s** (~0,35x), carga 2 s. Español con ruido de fondo:
+`small` acierta todo salvo nombres propios; el script ya pasa un `initial_prompt` con «Sergio Urcullo, Onia Platform, WhatsApp…»
+y con eso `small` corrigió «Cononia» → «Onia Platform». `tiny` y `base` fallan más nombres y cifras: usar `small`. Agregar al
+`PROMPT` del script los nombres del video antes de correr. Probado con TTS en español (no con voz real de Sergio Urcullo).
+- **Carrusel de Instagram con láminas en video:** `yt-dlp` baja las láminas mp4 (8 de `/p/DecFE1oDNd3/`) pero **no tienen pista de
+  audio** (`ffprobe` solo `video`): no hay nada que transcribir, se leen por cuadros. Un post de imagen única da «There is no video in this post».
+- **YouTube desde la nube:** `yt-dlp` lista pero el medio da **HTTP 403** por el proxy; Wikimedia limita por peticiones. Los videos de
+  YouTube se transcriben desde la PC. Instagram sí baja.
+- **Variante medida el 17-oct (bruto de Drive, otro entorno):**
+  - **Bajar el bruto:** el MCP de Drive solo baja hasta 10 MB. Si el archivo está compartido por enlace (`get_file_permissions` →
+    `anyone`), `curl -L "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"` baja 70-250 MB sin login.
+  - **Transcribir:** `python3 -m venv` + `pip install faster-whisper`; modelo `small`, `language="es"`, CPU int8. 109 s de video →
+    34 s. El `av` instalado falla con `metadata_errors`: decodificar antes con
+    `ffmpeg -i v.mp4 -ac 1 -ar 16000 -f f32le -` y pasar el arreglo numpy a `transcribe()`.
+  - **Pausas para la tabla de cortes:** `ffmpeg -af silencedetect=n=-35dB:d=0.5`.
+  - La transcripción confunde nombres propios (Claude→«Cloud», Anthropic→«Antropic», Sonnet→«Sonet»): corregir antes de citar.
 
 ## Common mistakes
 - **Afirmar que "viste" el video con 1-2 cuadros.** Muestreá una tanda repartida y decí la cobertura.
