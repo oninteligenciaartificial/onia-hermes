@@ -15,6 +15,8 @@
 // $OutputEncoding de fábrica) y eso no se puede detectar; la tarea se cargaba desfigurada con salida 0.
 // Sin --titulo, la primera línea del pedido es el título («titulo:» delante es opcional). Formato completo:
 // scripts/orquesta/README.md §«Cómo carga Hermes de la PC (26-oct)».
+// Con `opciones: si` y una sección «## Opciones» (2 o 3 renglones, una «(recomendada)»), un pedido del nivel B suma el
+// label `ok-por-silencio`: si Sergio Urcullo no contesta en 6 h o más, sale la recomendada (README §«Opciones…», 27-oct).
 //
 // Salidas: 0 cargada (o --dry) · 64 uso · 65 pedido inválido · 75 tope del día, repetida u otra carga en curso
 // · 1 gh falló o no se sabe.
@@ -23,13 +25,14 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { esNivelB, horasDeSilencio, opcionesDe } from './orquesta.mjs';
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const CONF = JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8'));
 export const REPO = CONF.repo_cola;
 export const CARRILES = Object.keys(CONF.carriles);
 export const TOPE = 10; // tareas origen:hermes por día de La Paz, las del VPS y las de la PC juntas
-const PERMITIDOS = ['carril', 'nivel', 'donde', 'check', 'necesita-ok', 'motor', 'salida', 'base', 'ok'];
+const PERMITIDOS = ['carril', 'nivel', 'donde', 'check', 'necesita-ok', 'motor', 'salida', 'base', 'ok', 'opciones'];
 const OBLIGATORIOS = ['carril', 'nivel', 'donde', 'check'];
 const ORDEN = ['nivel', 'check', 'motor', 'donde', 'salida', 'base', 'ok']; // cabecera del issue (la lee leerPedido)
 const DIA = 86_400_000;
@@ -132,9 +135,34 @@ export function validarPedido(entradaCruda, { titulo: tituloArg } = {}) {
   if (largo > 4000) no(`la tarea es muy larga (${largo} > 4000 caracteres): partila`);
   if (!/^\s*hecho cuando\s*:\s*\S/im.test(texto)) no('falta «Hecho cuando: …» (cómo se comprueba). Sin eso el revisor no puede juzgar');
 
+  // `opciones: si` es una orden para este comando: la sección «## Opciones» viaja en el texto y orquesta.mjs la lee de ahí.
+  let recomendada = null;
+  if ('opciones' in campos) {
+    if (!['si', 'sí'].includes(campos.opciones)) no('opciones: si (o sin esa línea). Con «si», el texto trae la sección «## Opciones»');
+    const o = opcionesDe(texto);
+    if (!o.ok) no(o.motivo);
+    recomendada = o.recomendada;
+  }
+  // Nivel B (AGENTS.md §1): lo calcula el código, Hermes no lo elige ni lo pide con un campo. Solo ahí suma ok-por-silencio.
+  const nivelB = recomendada !== null && esNivelB({ carril, donde, check, ok: campos.ok });
+
   const cuerpo = `${ORDEN.filter((c) => c in campos).map((c) => `${c}: ${campos[c]}`).join('\n')}\n\n${texto}`;
-  return { titulo, carril, texto, cuerpo, labels: ['orquesta', `carril:${carril}`, 'origen:hermes', 'necesita-ok'] };
+  const labels = ['orquesta', `carril:${carril}`, 'origen:hermes', 'necesita-ok', ...(nivelB ? ['ok-por-silencio'] : [])];
+  return { titulo, carril, texto, cuerpo, labels, nivelB, recomendada };
 }
+
+// Bolivia es UTC-4 todo el año. «26/10 17:00», en hora de La Paz.
+export function horaLaPaz(ms) {
+  const d = new Date(ms - 4 * 3_600_000).toISOString();
+  return `${d.slice(8, 10)}/${d.slice(5, 7)} ${d.slice(11, 16)}`;
+}
+
+// silencio_horas inválido (menos de 6) en carriles.json: no se carga nada, ni siquiera --dry.
+function horasConfiguradas(conf) {
+  try { return horasDeSilencio(conf); } catch (e) { return no(e.message, 1); }
+}
+
+const avisoSilencio = (pedido, limite) => `Sale la recomendada (${pedido.recomendada}) por silencio a partir de ${horaLaPaz(limite)} (hora de La Paz) si Sergio Urcullo no elige otra letra; para frenarla tiene que contestar «no» en el issue. La toma la próxima pasada de la nube (cada 3 h, de 8 a 23).`;
 
 // Bolivia es UTC-4 todo el año: el día de La Paz empieza a las 04:00 UTC.
 export const inicioDelDia = (ms) => Math.floor((ms - 4 * 3_600_000) / DIA) * DIA + 4 * 3_600_000;
@@ -246,12 +274,13 @@ function ghReal(args) {
   });
 }
 
-export async function main(argv, { gh = ghReal, leer = leerArchivo, candado = CANDADO, ahora = Date.now(), log = console.log, error = console.error } = {}) {
+export async function main(argv, { gh = ghReal, leer = leerArchivo, candado = CANDADO, ahora = Date.now(), log = console.log, error = console.error, conf = CONF } = {}) {
   try {
     const args = leerArgs(argv);
     const pedido = validarPedido(leer(args.archivo), { titulo: args.titulo });
+    const limite = pedido.nivelB ? ahora + horasConfiguradas(conf) * 3_600_000 : null;
     if (args.dry) {
-      log(`[--dry] No creé nada. Esto cargaría en ${REPO}:\nTítulo: ${pedido.titulo}\nLabels: ${pedido.labels.join(', ')}\nCuerpo:\n${pedido.cuerpo}`);
+      log(`[--dry] No creé nada. Esto cargaría en ${REPO}:\nTítulo: ${pedido.titulo}\nLabels: ${pedido.labels.join(', ')}\n${pedido.nivelB ? `${avisoSilencio(pedido, limite)}\n` : ''}Cuerpo:\n${pedido.cuerpo}`);
       return 0;
     }
     const { hoy, issue } = await conCandado(candado, async () => {
@@ -261,7 +290,7 @@ export async function main(argv, { gh = ghReal, leer = leerArchivo, candado = CA
       return { hoy: cuantas, issue: creado };
     });
     log(`Tarea #${issue.numero} cargada (carril ${pedido.carril}; ${hoy + 1} de ${TOPE} hoy): ${issue.url}`);
-    log('No arranca hasta que Sergio Urcullo le quite «necesita-ok». Vos no la das por hecha: la cierran el check y el revisor.');
+    log(`${pedido.nivelB ? avisoSilencio(pedido, limite) : 'No arranca hasta que Sergio Urcullo le quite «necesita-ok».'} Vos no la das por hecha: la cierran el check y el revisor.`);
     return 0;
   } catch (e) {
     error(e instanceof Rechazo ? e.message : `Falla inesperada, no sé si se cargó: ${e?.stack || e}`);

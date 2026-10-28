@@ -87,7 +87,9 @@ Nunca publica, gasta, escribe a terceros, toca producción ni mergea. Los PRs qu
 Las ramas `orquesta/*` no adelantan `main` aunque corra el autosync (`scripts/git-autosync.js`).
 
 Labels que usa (creados el 18 y 19-oct): `orquesta`, `en-curso`, `bloqueada`, `espera-ok`, `carril:plataforma`,
-`carril:marca`, `carril:comunidad`, `carril:video`, `carril:investigacion`. Carril nuevo = entrada en
+`carril:marca`, `carril:comunidad`, `carril:video`, `carril:investigacion`. Los de la recomendada por silencio
+(`ok-por-silencio`, `salio-por-silencio`, `frenada`) hay que crearlos una vez: comandos en la sección «Opciones y la
+recomendada por silencio». Carril nuevo = entrada en
 `carriles.json` + `gh label create carril:<nombre>` + el carril en `CARRILES` de `scripts/loops/orquesta-hermes.sh`
 (una prueba los compara).
 
@@ -121,13 +123,30 @@ node --test scripts/orquesta/orquesta.test.mjs
 gh workflow run orquesta.yml -R oninteligenciaartificial/onia-hermes   # una pasada de la nube
 ```
 
-Sin `--donde`, la PC es `pc` y Actions es `nube` (`GITHUB_ACTIONS`). Automático en la PC (Windows,
-cada 3 h de 8 a 23 con la PC prendida). Primero trae `main`; si el pull falla, esa pasada no corre y el motivo queda
-en `pasadas.log`:
+Sin `--donde`, la PC es `pc` y Actions es `nube` (`GITHUB_ACTIONS`). Automático en la PC (Windows, **cada 10 minutos
+todo el día**, con la PC prendida, también con batería). Primero trae `main`; si el pull falla, esa pasada no corre y
+el motivo queda en `pasadas.log`:
 
 ```powershell
-schtasks /Create /F /TN "ONIA Orquesta" /SC DAILY /ST 08:00 /RI 180 /DU 15:00 /TR "cmd /c cd /d C:\dev\proyectos\onia-hermes && (git pull --ff-only -q origin main && set ORQUESTA_TELEGRAM=1&& node scripts\orquesta\orquesta.mjs --donde pc) >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
+schtasks /Create /F /TN "ONIA Orquesta" /SC DAILY /ST 00:00 /RI 10 /DU 24:00 /TR "conhost.exe --headless cmd /c cd /d C:\dev\proyectos\onia-hermes && (git pull --ff-only -q origin main && set ORQUESTA_TELEGRAM=1&& node scripts\orquesta\orquesta.mjs --donde pc) >> %USERPROFILE%\.onia-orquesta\pasadas.log 2>&1"
+Set-ScheduledTask -TaskName "ONIA Orquesta" -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Hours 3))
 ```
+
+Por qué cada 10 minutos y no cada 3 h (Sergio Urcullo, 27-oct: «la más efectiva para poder trabajar todo el día»):
+- Una pasada sin tareas no gasta modelo: mira GitHub, dice «no hay tareas pendientes» y termina, sin Telegram.
+- El gasto sale de cada tarea, y cada una espera su OK (`necesita-ok`) o el nivel B. Las 3 h solo demoraban: una
+  tarea soltada a las 8:05 arrancaba a las 11:00.
+- Lo que la frena es lo de siempre: `paralelo` (3 a la vez), `minutos_max` (40) y el tope de 10 cargas por día de
+  Hermes. Dos pasadas no se pisan: el candado de `orquesta.mjs` y `IgnoreNew` en la tarea.
+- La segunda línea deja correr con batería y corta una pasada colgada a las 3 h. `schtasks` sola no arranca con
+  batería (lo que tenía la tarea vieja).
+- `conhost.exe --headless` corre la pasada sin ventana: la tarea es «solo interactiva» y con `cmd /c` a secas abría
+  una consola cada 10 min que robaba el foco (revisión del 27-oct). Probado: `&&`, el paréntesis y `>>` pasan igual.
+  El comando entero mide 227 caracteres; `schtasks /TR` acepta hasta 261.
+- Una tarea soltada sin cupo o sin login espera una hora antes de volver a tomarse (`sin-cupo-<n>` en
+  `~/.onia-orquesta`). Si no, se rearmaba su worktree y avisaba por Telegram 6 veces por hora.
+- Riesgo conocido: el `git pull` corre 144 veces por día en el checkout principal. Nadie trabaja ahí, pero si alguien
+  lo usa, puede chocar con su `index.lock` (`handoff/hermes-local.md`, ítem 8).
 
 `=1&&` va pegado a propósito: con un espacio antes de `&&`, cmd guarda «1 » (medido) y `orquesta.mjs`, que pide
 `=== '1'`, no manda el resumen a Telegram.
@@ -138,7 +157,9 @@ checkout principal con cambios sin commitear) la orquesta corre igual sobre cód
 y el espacio antes de `&&` la deja sin Telegram. La reinstala Sergio Urcullo pegando el comando de arriba en una
 PowerShell (`/F` reemplaza la tarea existente).
 
-La nube corre sola: al etiquetar o comentar un issue de la orquesta y cada 3 h de 8 a 23 (La Paz).
+La nube corre sola: al etiquetar o comentar un issue de la orquesta, **al sacarle `necesita-ok` o `bloqueada`** (desde
+el 27-oct: antes esperaba la pasada siguiente) y cada 3 h de 8 a 23 (La Paz). Las 3 h de la nube quedan: son para
+los reintentos, y la cuenta es GitHub Free (2.000 min por mes; una pasada vacía cobra 1 minuto).
 Necesita el secreto `CLAUDE_CODE_OAUTH_TOKEN` (lo crea Sergio Urcullo con `claude setup-token`).
 
 `ORQUESTA_TELEGRAM=1` manda el resumen de la pasada al resumen diario de Hermes (aduana, sin interrumpir).
@@ -177,11 +198,12 @@ Hecho cuando: cómo se comprueba.
 Qué valida, igual que el del VPS: `carril` de `carriles.json`, `nivel` (rapido|normal|profundo) y `donde` (pc|nube)
 obligatorios; `check` obligatorio y solo `urls`, `cmd npm run test:<x>`, `cmd npm test` o `cmd node --test <ruta>`,
 sin un caracter de shell, sin opciones, sin `..` ni unidad (`C:`); `salida` solo en `hermes-content/docs/` (`docs/` en
-plataforma); `base` un nombre de rama; `ok: sergio`; `motor` claude|codex; nada de `modelo:` ni campos desconocidos;
+plataforma); `base` un nombre de rama; `ok: sergio`; `opciones: si` (con su sección `## Opciones`, abajo); `motor` claude|codex; nada de `modelo:` ni campos desconocidos;
 título de una línea y hasta 120 caracteres; texto de hasta 4000 con `Hecho cuando:`; sin caracteres invisibles, de
 control ni letras de otros alfabetos; sin HTML ni comentarios `<!-- -->` en título ni texto (un `<` pegado a una
 letra, `/`, `!` o `?`), porque GitHub los esconde y el trabajador los lee. Siempre pone `orquesta`, `carril:<x>`,
-`origen:hermes` y `necesita-ok` (`necesita-ok: no` se acepta y no cambia nada). Tope: 10 issues `origen:hermes` por
+`origen:hermes` y `necesita-ok` (`necesita-ok: no` se acepta y no cambia nada; con opciones, en el nivel B suma además
+`ok-por-silencio`: sección siguiente). Tope: 10 issues `origen:hermes` por
 día de La Paz, contados en GitHub (entran las del VPS); si no puede contar, no crea. Rechaza la misma tarea (título,
 carril y texto) de las últimas 24 h. Una carga a la vez: contar, crear y confirmar los labels van dentro de un
 candado (`%TEMP%\onia-cargar-issue.lock`, creado en exclusiva); con otra carga en curso (candado de menos de 2 min)
@@ -192,3 +214,112 @@ labels y cuerpo sin llamar a `gh` (no mira el tope ni toma el candado).
 Salidas: 0 cargada · 64 uso (sin `--archivo` o el pedido como argumento, por ejemplo) · 65 pedido inválido · 75 tope,
 repetida u otra carga en curso · 1 `gh` falló o no se sabe si se cargó (lo dice). Pruebas:
 `node --test scripts/orquesta/cargar-issue.test.mjs`.
+
+## Hermes vigila (27-oct)
+
+Mientras Sergio Urcullo trabaja, el Hermes de la PC sigue la cola con su `/loop` oficial (documentación de Hermes,
+`user-guide/features/loops.md`). La orquesta reparte; Hermes mira, verifica y trae lo que hay que decidir. No lanza
+pasadas ni agentes (`AGENTS.md` §1). Al abrir la sesión del día, Sergio Urcullo pega esto en la TUI:
+
+```
+/loop 20m Revisá la cola de la orquesta: los issues orquesta abiertos y los que se cerraron desde la vuelta anterior. Por cada entrega nueva, compará el PR y el recibo con su «Hecho cuando» y decime en una línea si cumple. Si una quedó bloqueada, proponé el arreglo. Si hay algo que decidir, traelo como opciones con la recomendada. Si no cambió nada, contestá solo «sin cambios».
+```
+
+Por qué así:
+- **El kanban de Hermes no sirve para repartir.** No puede lanzar a Codex ni a Claude Code: su propia
+  documentación dice que eso no está resuelto (`kanban-worker-lanes.md`, «Adding an external CLI worker lane»), y el
+  PR de Codex se cerró sin mergear. Además sería una segunda cola.
+- **Orca Orchestration tampoco:** tuvo 7 fallas de arranque y abre a Hermes con `--yolo`
+  (`research/2026-10-26-auditoria-hermes-local.md` §7).
+- **El `/loop` tiene tope:** se pausa solo a las 40 vueltas (`config.onia.yaml`, `loops.max_ticks`), que a 20 min son
+  unas 13 h. Cada vuelta es un turno completo de Hermes; con la cola quieta contesta «sin cambios». `/loop pause`,
+  `/loop resume` y `/loop stop` lo manejan.
+
+## Opciones y la recomendada por silencio (27-oct)
+
+Pedido de Sergio Urcullo (27-oct-2026): Hermes le da opciones con una recomendada; si no contesta en **al menos 6
+horas**, sale la recomendada, **solo en el nivel B**, y eso se mide para analizarlo. Diseño:
+`hermes-content/docs/research/2026-10-26-skills-y-autonomia-hermes.md` §1 y §2. Regla corta: `AGENTS.md` §1.
+
+**Cómo se pide.** En `pedido.txt`, `opciones: si` en la cabecera y en el texto una sección `## Opciones` con 2 o 3
+renglones `- A: …`, `- B: …` (letras en orden) y **uno solo** que termine en `(recomendada)`:
+
+```
+carril: investigacion
+nivel: normal
+donde: nube
+check: urls
+opciones: si
+
+Comparar los planes de Dapta y Lety.
+
+## Opciones
+- A: Solo una tabla de precios con enlace. Media hora de cupo.
+- B: Tabla más qué incluye cada plan. Una hora de cupo. (recomendada)
+- C: Informe completo con casos de uso. Dos horas de cupo.
+
+Hecho cuando: hay una tabla con plan, precio y enlace que abre.
+```
+
+Sin la sección bien armada (falta, 1 o 4 renglones, ninguna o dos recomendadas) el pedido es inválido: sale 65.
+`opciones: si` no viaja en el issue (la sección sí) y `ok-por-silencio` no es un campo: Hermes no lo pide.
+
+**Nivel B** = todo esto junto, lo calcula el código con los campos del pedido (`esNivelB` en `orquesta.mjs`; no tiene
+que ver con `nivel:`, que elige el modelo): `donde: nube`, `check: urls`, **ninguna línea `ok:`** (ni `ok: sergio` ni
+`ok: Sergio`) y un carril que no sea `plataforma` ni `video`. Solo en el nivel B y con opciones, `cargar-issue.mjs`
+suma `ok-por-silencio` (además de `necesita-ok`) y su mensaje final dice la hora límite en La Paz. Fuera del nivel B no
+hay silencio nunca: corre cuando Sergio Urcullo saca `necesita-ok`.
+
+**Qué hace `orquesta.mjs`.** En cada pasada, antes de elegir tareas (`atenderSilencio`, que usa `silencioVencido`), con
+cada issue que tiene `necesita-ok` y `ok-por-silencio`. Vuelve a calcular el nivel B y las opciones: una etiqueta
+puesta a mano en un issue de la PC (`donde: pc`), con `check: cmd` o sin opciones válidas no sale. Y un issue con
+`salio-por-silencio` se vuelve a comprobar como nivel B cada vez que se elige una tarea: si después alguien editó el
+cuerpo (`donde: pc`, `check: cmd`, una línea `ok:`), no corre.
+
+| Lo que contestó Sergio Urcullo | Qué pasa |
+|---|---|
+| Una letra (`b`, `B: más corto`, `a, y agregá el precio`) | Saca `necesita-ok` y `ok-por-silencio`, comenta «Elegiste B» y la opción llega al trabajador y al revisor dentro del pedido |
+| `ok`, `dale`, `sí` (solos, o hechos solo de palabras de aprobación: `esOk`) | Es aceptar la recomendada: lo mismo que una letra, con la recomendada, y comenta «Elegiste B (la recomendada)» |
+| `no` | Pone `frenada`, saca `ok-por-silencio` y deja `necesita-ok` |
+| Nada, y pasaron `silencio_horas` desde la creación | Pone `salio-por-silencio`, saca `necesita-ok` y `ok-por-silencio`, y comenta «Salió la recomendada (Y) por silencio, a las 6 h» |
+| Otra cosa (una duda, «ok pero cambiá el título») | Nada: no se sabe qué quiso, no sale por silencio y queda con `necesita-ok` hasta que él lo saque |
+
+- La respuesta tiene que ser de un autor de `autores`: no cuentan el orquestador (firma `<!-- orquesta -->`), un bot ni
+  otra cuenta. Si dice varias cosas, vale lo último que fue una letra, «no» u «ok»; un comentario neutro después no lo
+  borra. Límite: Hermes y Sergio Urcullo usan la misma cuenta de GitHub, y un comentario de Hermes por esa cuenta pasa
+  por suyo (el riesgo de la sección «Lo que carga Hermes»; con una cuenta aparte para Hermes se cierra).
+- **La opción queda fijada cuando se decide.** El primer comentario firmado de la orquesta («Elegiste…», «Salió la
+  recomendada…») es ese momento. Vale la última letra (u «ok») que escribió antes, o la recomendada si salió por
+  silencio. Después solo la cambia un comentario que sea **exactamente** una letra (`a`, `A.`, `b)`), y ese gana sobre
+  `salio-por-silencio`; «A la tabla le falta el precio» o «a ver cómo va» no la mueven. Así el trabajador y el revisor
+  ven la misma opción en cada reintento.
+- Un «no» a lo que ya salió por silencio (la tarea quedó `bloqueada`, o `espera-ok`) la vuelve a frenar: pone
+  `necesita-ok` y `frenada` y saca `bloqueada`, en vez de seguir con el «no» como indicación. El informe no la cuenta.
+- Un `a` suelto seguido de texto («a ver…») se lee como la opción A **antes** de decidirse.
+- `silencio_horas` está en `carriles.json` (hoy 6). El código rechaza menos de 6: con un valor menor `cargar-issue`
+  no carga pedidos del nivel B y `orquesta.mjs` no suelta nada por silencio (lo dice en el log).
+- La hora límite es un piso, no un reloj: lo suelta la próxima pasada de la nube (8, 11, 14, 17, 20 y 23 en La Paz) o el
+  comentario de Sergio Urcullo. Un plazo que vence a las 00:30 sale a las 08:00.
+- Nada se publica ni se mergea solo: el PR sigue esperando su OK. `salio-por-silencio` y `frenada` no frenan nada.
+
+**Cómo cambia los labels.** `gh issue edit` no es atómico: cada `--add-label` y `--remove-label` es una mutación aparte,
+en paralelo. Si fueran un solo edit y fallara el agregado, se sacarían los frenos y el issue saldría sin la medición.
+Por eso van dos edits, en este orden: **primero lo que se agrega** (`salio-por-silencio`; `frenada`), y **solo si salió
+bien, lo que se saca** (`necesita-ok`, `ok-por-silencio`). Si falla uno, el issue queda con `necesita-ok` y la próxima
+pasada lo reintenta (queda dicho en el log). El comentario va al final: sin los labels no se suelta nada.
+
+**Labels, una sola vez.** Sin `ok-por-silencio`, `cargar-issue` no carga pedidos del nivel B. Sin `salio-por-silencio`, el
+primer edit falla y la orquesta no suelta nada por silencio (lo dice en el log). Sin `frenada`, el «no» no alcanza a
+marcarla, pero la tarea sigue frenada por `necesita-ok`:
+
+```powershell
+gh label create ok-por-silencio -R oninteligenciaartificial/onia-hermes -d "Sale la recomendada si Sergio Urcullo no contesta (nivel B)"
+gh label create salio-por-silencio -R oninteligenciaartificial/onia-hermes -d "Salió la recomendada por silencio: es la medición"
+gh label create frenada -R oninteligenciaartificial/onia-hermes -d "Sergio Urcullo contestó no a las opciones"
+```
+
+**Medición.** `node scripts/orquesta/orquesta.mjs --silencio-informe` solo lee: cuenta los issues con
+`salio-por-silencio` y de sus PR (rama `orquesta/<carril>-<n>`) cuántos se mergearon, cuántos se cerraron sin mergear y
+cuántos siguen abiertos. No cuenta los que todavía tienen `necesita-ok` (la marca está, pero el freno no se sacó, o un
+«no» los volvió a frenar): esos no salieron. Pide `gh`; sin él sale 1 con el motivo. Con `--dry`, una pasada muestra qué soltaría por silencio
+(`silencio  #n  accion  letra`) sin escribir.

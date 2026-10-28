@@ -38,7 +38,7 @@ skills:
 memory: {write_approval: true}
 auxiliary: {background_review: {enabled: false}}   # origen de 131 de las 194 reescrituras de sus propias skills
 curator: {enabled: false}                # no reorganiza skills por su cuenta (curator.md:406-410)
-loops: {max_ticks: 10}                   # un /loop se pausa a las 10 vueltas (default 100, config_defaults.py:1412)
+loops: {max_ticks: 40}                   # 27-oct: 40 vueltas de 20 min = un día de trabajo vigilando la cola (default 100, config_defaults.py:1412)
 
 # 26-oct: no toma prestados los logins de Claude Code ni de Codex. Hermes los refresca y, como son de un solo uso,
 # deja deslogueado al otro (security.md, «Borrowed CLI logins»). Las filas copilot y anthropic se sacan con
