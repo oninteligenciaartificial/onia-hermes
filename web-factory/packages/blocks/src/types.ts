@@ -8,6 +8,7 @@ export type SiteClient = {
     tel: string;
     whatsapp: string;
     direccion: string;
+    horario?: string;
   };
   redes: {
     ig: string;

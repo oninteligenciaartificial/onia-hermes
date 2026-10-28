@@ -152,7 +152,7 @@ export function renderLandingClinicBody(client: LandingClient): string {
       ${renderClinicFaq(client)}
       ${renderClinicQuote(client)}
       ${renderClinicFinalCta(client)}
-      ${renderFooter(client, { minimal: true })}
+      ${renderFooter(client, { minimal: true, showHours: true })}
     </main>
     ${renderStickyCta(client)}
     ${renderRevealScript()}
