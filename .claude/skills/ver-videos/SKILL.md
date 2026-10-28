@@ -73,7 +73,7 @@ Calidad: `-S res:720,ext:mp4:m4a` (con el viejo `-f "b[height<=720]"` los reels 
   **una vez** (`--login`, ventana headed, necesita Playwright); jar reusado 12 h; si Playwright no carga, avisa y
   prueba con el `cookies.txt` viejo. `--sleep-requests 2` para no gatillar rate limit de IG.
 - **Desde la NUBE (medido el 4-oct-2026):** `DeDZx1BopXS` bajó sin cookies y con `--impersonate chrome`
-  (1080x1920). El 1-oct la misma ruta había dado 429: si da 429, se le pide a la madre que lo mire desde Chrome.
+  (1080x1920). El 1-oct la misma ruta había dado 429: si da 429, se pide como issue `orquesta` + `carril:investigacion` con `donde: pc` (Chrome de la PC).
 
 **Por que NO usar `--cookies-from-browser` (medido en la maquina de Sergio, 2026-08-09):**
 

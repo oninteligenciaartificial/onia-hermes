@@ -31,9 +31,20 @@ export function ajustarAlEntorno(conf, env) {
 export const CONF = ajustarAlEntorno(JSON.parse(fs.readFileSync(path.join(AQUI, 'carriles.json'), 'utf8')), process.env);
 const ESTADO = path.join(os.homedir(), '.onia-orquesta');
 const NIVELES = ['rapido', 'normal', 'profundo'];
+// Con pasadas cada 10 min, una tarea soltada sin cupo o sin login rearmaría su worktree y avisaría por Telegram
+// 6 veces por hora hasta que vuelva el cupo (revisión del 27-oct): espera una hora.
+const PAUSA_SIN_CUPO_MIN = 60;
 const CAMPOS = /^(nivel|motor|modelo|salida|check|base|ok|donde)\s*:\s*(.+)$/i;
 
 // ---------- lógica pura (probada en orquesta.test.mjs) ----------
+
+export function enPausaSinCupo(dir, numero, ahora = Date.now(), minutos = PAUSA_SIN_CUPO_MIN) {
+  try {
+    return ahora - Number(fs.readFileSync(path.join(dir, `sin-cupo-${numero}`), 'utf8')) < minutos * 60_000;
+  } catch {
+    return false;
+  }
+}
 
 export function leerPedido(body = '') {
   const campos = {};
@@ -650,7 +661,10 @@ function cerrarIssue(issue, res) {
   const n = String(issue.number);
   const R = CONF.repo_cola;
   // Lo hecho ya quedó en la rama: se suelta y la próxima pasada sigue desde ahí, sin gastar el reintento.
-  if (res.infra) return intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
+  if (res.infra) {
+    intentar(() => fs.writeFileSync(path.join(ESTADO, `sin-cupo-${n}`), String(Date.now())));
+    return intentar(() => gh('issue', 'edit', n, '-R', R, '--remove-label', 'en-curso'));
+  }
   const vistos = (issue.comments || []).length;
   const { bloquea, cuerpo } = cuerpoCierre(res, leerHilo(issue).fallasSeguidas, vistos);
   // Sin el comentario no hay hilo que leer: ni el «ok» de Sergio Urcullo se atendería ni las fallas se contarían.
@@ -802,7 +816,8 @@ async function main() {
   const listar = () => JSON.parse(gh('issue', 'list', '-R', CONF.repo_cola, '-l', 'orquesta', '--state', 'open',
     '--limit', '200', '--json', 'number,title,body,labels,author,createdAt,comments')).filter((it) => dondeDe(it) === donde);
   if (argv.includes('--dry')) {
-    for (const t of elegirTareas(atenderSilencio(listar(), Date.now(), { escribir: false }), CONF, soloCarril)) {
+    const sinPausa = atenderSilencio(listar(), Date.now(), { escribir: false }).filter((i) => !enPausaSinCupo(ESTADO, i.number));
+    for (const t of elegirTareas(sinPausa, CONF, soloCarril)) {
       console.log(`${t.carril}\t#${t.issue.number}\t${JSON.stringify(rutear(t.carril, leerPedido(t.issue.body)))}\t${t.issue.title}`);
     }
     return;
@@ -814,7 +829,7 @@ async function main() {
   try {
     const issues = atenderSilencio(atenderRespuestas(listar()), Date.now());
     soltarHuerfanas(issues);
-    const tareas = elegirTareas(issues, CONF, soloCarril);
+    const tareas = elegirTareas(issues.filter((i) => !enPausaSinCupo(ESTADO, i.number)), CONF, soloCarril);
     if (!tareas.length) return console.log('Orquesta ONIA: no hay tareas pendientes.');
     const texto = resumen(await enParalelo(tareas, CONF.paralelo, hacerTarea));
     console.log(texto);

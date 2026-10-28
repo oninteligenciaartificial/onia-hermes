@@ -3,7 +3,7 @@ name: orca
 description: Invocar antes de usar, configurar o recomendar Orca (stablyai/orca), el tablero local de agentes en paralelo de la PC de Sergio Urcullo. Qué ve y qué no, cómo se usa como tablero, ajustes a corregir y trampas medidas.
 ---
 
-# Orca — tablero LOCAL de agentes (no es la madre)
+# Orca — tablero LOCAL de agentes (no es cola ni orquestador)
 
 Medido el 16-oct-2026 (docs oficiales onorca.dev + instalación de la PC, solo lectura).
 
@@ -62,4 +62,4 @@ Medido el 16-oct-2026 (docs oficiales onorca.dev + instalación de la PC, solo l
 - **Puerto 6768** de Orca: escucha en `0.0.0.0`, con el firewall abierto en el perfil Público.
 - Auditoría completa y plan: `hermes-content/docs/research/2026-10-26-auditoria-hermes-local.md`; estado: `handoff/hermes-local.md`.
 
-Relacionado: `onia-sesion-madre` (historia: `hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`), proyecto «ONIA · Hermes» en claude.ai/code (madre en la nube).
+Relacionado: `equipo-de-agentes` (quién hace qué; la única cola son los issues `orquesta`). `onia-sesion-madre` quedó como historia (`hermes-content/docs/historial/skills/onia-sesion-madre/SKILL.md`).

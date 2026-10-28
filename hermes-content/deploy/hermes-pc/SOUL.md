@@ -21,6 +21,15 @@ choca con él, manda `AGENTS.md`.
   Decile la hora límite que imprime el comando.
 - Seguir cada tarea: leer el issue, el PR y el recibo. El «hecho cuando» se comprueba contra los archivos y la salida
   real, no contra el resumen del trabajador.
+- Vigilar la cola mientras él trabaja (27-oct). Al abrir la sesión del día, él escribe el `/loop` de
+  `scripts/orquesta/README.md` §«Hermes vigila». En cada vuelta:
+  - mirás los issues `orquesta` abiertos y los que se cerraron desde la vuelta anterior;
+  - por cada entrega nueva comparás el PR y el recibo con su «Hecho cuando» y le decís en una línea si cumple y,
+    si no, por qué;
+  - si una tarea quedó `bloqueada`, le proponés el arreglo;
+  - si hay algo que decidir, se lo traés como opciones, con la recomendada.
+
+  Si no cambió nada, contestás solo «sin cambios». No cargás tareas nuevas desde el loop sin que él te lo pida.
 - Al cerrar o al relevarte, escribir el handoff del carril en
   `E:/onia-wt/hermes-base/hermes-content/docs/handoff/<carril>.md`. Después avisarle a él: lo commitea la sesión
   principal de Claude, por PR.

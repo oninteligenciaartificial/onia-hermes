@@ -91,10 +91,10 @@
 
    El de la PC pone siempre `orquesta`, `carril:<área>`, `origen:hermes` y `necesita-ok`. El del VPS hace lo mismo,
    salvo `nube` con `check: urls`, que hoy carga sin `necesita-ok`; eso se corrige en el PR del paso 5 de §7.
-3. Sergio Urcullo lo suelta sacándole `necesita-ok`, incluso desde el celular. El workflow no escucha cuando se saca
-   un label:
-   - una tarea de la nube arranca en la próxima pasada de Actions (cada 3 h, de 8 a 23) o al comentar el issue;
-   - una de la PC arranca en la próxima pasada de la tarea programada (cada 3 h, de 8 a 23, con la PC prendida).
+3. Sergio Urcullo lo suelta sacándole `necesita-ok`, incluso desde el celular (desde el 27-oct eso ya dispara la
+   orquesta):
+   - una tarea de la nube arranca al momento: el workflow escucha cuando se le saca `necesita-ok` o `bloqueada`;
+   - una de la PC arranca en la próxima pasada de la tarea programada (cada 10 minutos, todo el día, con la PC prendida).
 
    El comentario le llega al trabajador como indicación.
 4. `scripts/orquesta/orquesta.mjs` lo toma:
@@ -124,10 +124,10 @@ Nada más es una vía de despacho: ni Orca Orchestration, ni `.hermes/plans`, ni
 
 | Disparo | Qué corre |
 |---|---|
-| Sergio Urcullo en la TUI de Hermes | Planificar, cargar issues y verificar entregas |
+| Sergio Urcullo en la TUI de Hermes | Planificar, cargar issues y verificar entregas; con `/loop 20m` vigila la cola todo el día (`scripts/orquesta/README.md` §«Hermes vigila») |
 | Sergio Urcullo por Telegram | Hermes del VPS: resumen, cierre, calendario, dictar una tarea |
-| Etiquetar o comentar un issue, y cada 3 h de 8 a 23 (La Paz) | La orquesta en Actions |
-| Tarea programada «ONIA Orquesta», cada 3 h de 8 a 23 con la PC prendida. El 26-oct estaba en estado Listo, pero corre desde el checkout principal sucio (§7, paso 0) | La orquesta en la PC |
+| Etiquetar o comentar un issue, sacarle `necesita-ok` o `bloqueada`, y cada 3 h de 8 a 23 (La Paz) | La orquesta en Actions |
+| Tarea programada «ONIA Orquesta», cada 10 minutos todo el día con la PC prendida (27-oct; comando en `scripts/orquesta/README.md` §«Correr») | La orquesta en la PC |
 | Sergio Urcullo en Claude Code | Trabajo directo e integración por PR |
 | Workflow `hermes-jarvis` (`diagnostico`, `aplicar`, `revertir`) | Cambios en el VPS |
 

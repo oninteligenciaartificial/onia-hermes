@@ -11,7 +11,7 @@ Fecha: 2026-07-26 · CLI HyperFrames 0.7.72 · Remotion 4.0.499 · todo local, c
 ## 1. Lint de la fuente (paso 1 del skill)
 
 ```
-python .agents/skills/remotion-to-hyperframes/scripts/lint_source.py scripts/remotion/src
+python hermes-content/docs/historial/skills/remotion-to-hyperframes/scripts/lint_source.py scripts/remotion/src
 12 files scanned · 0 blocker · 2 warning · 0 info
 ```
 

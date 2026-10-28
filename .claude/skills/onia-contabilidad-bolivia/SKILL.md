@@ -16,8 +16,7 @@ fechas.** Elusión legal SÍ, evasión NO. No dar asesoría contable definitiva 
 con contador matriculado).
 
 ## Leer primero
-- `hermes-content/skills/impuestos-bolivia-operaciones.md`
-- `hermes-content/skills/recordatorios-fiscales-bolivia.md`
+- `hermes-content/skills/impuestos-bolivia-operaciones.md` (absorbió a `recordatorios-fiscales-bolivia.md` el 27-oct; si chocan sobre NIT o régimen, gana esta skill)
 - `hermes-content/docs/ONIA_OPTIMIZACION_FISCAL_PROPIA_2026.md` (playbook fiscal propio)
 - `hermes-content/integrations/siat/` (motor de facturación electrónica, external_gate del core)
 

@@ -23,7 +23,7 @@ description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (ta
 > El reel de Codex del 14-sep (`references/video-intake/2026-09-14-reel-astra-fable-codex/`) y «Tu primera
 > automatización» (`videos/marca-personal/2026-09-21/`) son REFERENCIA de lo que a él le gustó, no el molde.
 
-## Reglas de trabajo (la madre, 3-oct-2026, después de revisar los resultados)
+## Reglas de trabajo (sesión principal, antes «madre», 3-oct-2026, después de revisar los resultados)
 
 > Falló el arnés, no la edición: del mismo video (N03) salieron 3 versiones porque no había molde fijado antes de
 > editar. Medido ese día: más del 95 % del gasto de tokens fue releer contexto.
@@ -48,7 +48,7 @@ description: Invocar ANTES de editar cualquier video NUEVO de Sergio Urcullo (ta
   **Erik**: tarjetas de datos sobre el pecho, sellos y karaoke de 3 palabras. Si dudás, preguntale a Sergio Urcullo.
 - **Historia propia a cámara con 2-7 capturas (D03-A, D04-C y los «me pasó esto»): molde Rocha** (abajo, medido el
   8-oct). Hasta ese día figuraba solo en `PLAN-GRABACION-3-OCT.md` con «el ritmo no está medido».
-- **Repos de GitHub (R01-R07, G04, G10 y los cortes verticales de G11): molde Pablo** (abajo). Lo fijó la madre el
+- **Repos de GitHub (R01-R07, G04, G10 y los cortes verticales de G11): molde Pablo** (abajo). Lo fijó la sesión principal el
   3-oct con un reel que mandó Sergio Urcullo.
 - **Sin cara ni voz, «dibujé esto → así quedó»: molde Boceto** (abajo). Reel que mandó Sergio Urcullo el 4-oct.
 - **No cambia la regla de oro de `editor-videos`:** tabla de cortes + preview 360p ANTES de cortar. Cuando el script
@@ -210,7 +210,7 @@ medidas contra la ficha (píldora a ~54 %, titular solo en tesis, costura en deg
 ## Receta Pablo (@pabloinpublic), para los repos de GitHub
 
 Fuente: `hermes-content/references/video-intake/2026-10-03-reels-genjutsu-y-fiesta-ia.md` §3 (reel `Dd66MLpuIc_`,
-20,6 s, 113 comentarios sobre 142 likes; la madre verificó 6 cuadros a mano). Es Santiago con cuatro cambios, así que se
+20,6 s, 113 comentarios sobre 142 likes; se verificaron 6 cuadros a mano). Es Santiago con cuatro cambios, así que se
 edita con `santiago.py` y su storyboard.
 
 | Tramo | Qué va |
@@ -271,7 +271,7 @@ detección de escena y audio medido). No es un talking head: se arma con **Hyper
 - un boceto inventado después de la animación: el dibujo tiene que ser el de antes.
 
 **Estado (4-oct):** sin prueba todavía. La primera se hace con un boceto real de Sergio Urcullo, y es una pieza nueva:
-la aprueban él o la madre.
+la aprueba Sergio Urcullo.
 
 ## Reglas medidas el 8-oct-2026 en 5 referentes (valen para todos los moldes)
 
@@ -356,8 +356,8 @@ Lo que el QA marcó de gravedad alta no se arregla editando:
 | Santiago | 65,2 s, −13,1 LUFS | 6,5/10 | Cierre sin remate (falta la toma), encuadre de mano, el aire mueve el cutplan aprobado: la tabla de aire tiene que verla Sergio Urcullo |
 | Erik | 53,1 s, −14,0 LUFS | 6/10 | Set y encuadre (hay que regrabar), tarjetas sobre el pecho tapadas por la mano y el micrófono |
 
-Los MP4 y las hojas de control quedan en el scratchpad de la sesión del 3-oct (no se versionan); la madre los revisa
-antes de que lleguen a Sergio Urcullo.
+Los MP4 y las hojas de control quedan en el scratchpad de la sesión del 3-oct (no se versionan); se revisan
+antes de que lleguen a Sergio Urcullo, que da el OK de lo visible (`CLAUDE.md` «Qué se publica sin preguntar»).
 
 ## Trampas ya pagadas (3-oct-2026)
 
@@ -379,7 +379,7 @@ antes de que lleguen a Sergio Urcullo.
 - **Medir el zoom con el FONDO, no con la cara.** La cara crece cuando él se inclina. El ×1,4 que se midió el 3-oct
   en Animaciones era eso: con template matching del póster del fondo dio escala 1,00.
 - **Bajar los reels desde la nube:** `pip install "yt-dlp[default,curl-cffi]"` y `yt-dlp --impersonate chrome`. TikTok
-  anda; Instagram da 429 sin sesión, y para IG las fichas las saca la madre con el Chrome de la PC.
+  anda; Instagram da 429 sin sesión, y para IG las fichas se piden como issue `orquesta` + `carril:investigacion` con `donde: pc` (Chrome de la PC).
 - **Preparación por reel que sirve para medir:** hojas de 2 fps con el segundo impreso
   (`fps=2,scale=216:-2,drawtext=…%{pts\:hms}…,tile=5x4`), cortes con `select='gt(scene,0.25)',showinfo`,
   `ebur128` y transcript con palabras.
@@ -405,7 +405,7 @@ antes de que lleguen a Sergio Urcullo.
 
 ## Plan de la semana (8-oct-2026): cómo se arma sin rehacer guiones
 
-Pedido de la madre del 8-oct, en `docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md`. Lo arma `gen_semana.py`, que está en el
+Pedido del 8-oct, en `docs/cola/plan-3-semanas/GRABAR-10-16-OCT.md`. Lo arma `gen_semana.py`, que está en el
 scratchpad de esa sesión; el método:
 1. **Una hora por día = tres verticales** (~20 min cada uno con tomas), o un YouTube (~35 min) más un vertical.
 2. **Orden:**
@@ -425,8 +425,12 @@ scratchpad de esa sesión; el método:
 
 ## Publicar sin OK pieza por pieza (8-oct-2026): qué hace falta de verdad
 
-- **La autorización:** Sergio Urcullo, 8-oct, por la madre: *«sí, publicá por Buffer lo que pase control de calidad»*.
-  Está en el `CLAUDE.md` de la rama de la madre (`ad011a95a`), todavía no en `main`.
+> **Historia, sustituida el 19-oct** (`CLAUDE.md` «Qué se publica sin preguntar»): hoy el video y las piezas que ve el
+> público le llegan a Sergio Urcullo con captura y esperan su OK; el permiso del 8-oct ya no autoriza publicar. Lo que
+> sigue valiendo es el control de calidad de abajo.
+
+- **La autorización (historia):** Sergio Urcullo, 8-oct: *«sí, publicá por Buffer lo que pase control de calidad»*.
+  La recogió el `CLAUDE.md` y la sustituyó el 19-oct.
 - **Mensaje de otra sesión:** el control de permisos de una sesión en la nube no lo toma como pedido del usuario. Frenó
   hasta subir el texto y los metadatos al VPS («Unrequested Commit in a Connected App»). No se le busca la vuelta. Para
   publicar hace falta una de dos:
@@ -441,7 +445,7 @@ scratchpad de esa sesión; el método:
 ## Reglas de edición del plan de referentes (8-oct-2026)
 
 Fuente: `references/marca-personal/PLAN-REFERENTES.md` §4 (análisis de Erik Taveras, Santiago Muñoz, Enrique Rocha, Alex
-Hormozi e Iman Gadzhi; la rama de la madre lo trae a `main`). Caso: el plan pidió **un solo CTA por pieza** y un
+Hormozi e Iman Gadzhi; ya está en `main`). Caso: el plan pidió **un solo CTA por pieza** y un
 **rótulo fijo arriba**; los guiones del 10 al 16-oct ya traen las dos líneas (`GRABAR-10-16-OCT.md`).
 
 1. **Rótulo fijo arriba con el tema en 3-5 palabras, desde el cuadro 0**, en los moldes Rocha, Erik y en el formato F3
@@ -454,7 +458,7 @@ Hormozi e Iman Gadzhi; la rama de la madre lo trae a `main`). Caso: el plan pidi
    plano medio fijo con zoom digital de entrada y salida, un corte cada 3-4 s (18 cortes en 67 s), subtítulos de 1 a 4
    palabras blancos con la palabra clave en amarillo, rótulo fijo arriba durante el gancho, 4 capturas de 2-5 s, un pop
    o whoosh al entrar cada gráfico con lo-fi bajito, y 58 a 80 s de duración. **Antes de fijar los números hay que medir
-   1 reel con el método de esta skill** (hojas a 2 fps, `scene`, `ebur128`); los mp4 están en el scratchpad de la madre,
+   1 reel con el método de esta skill** (hojas a 2 fps, `scene`, `ebur128`); los mp4 están en el scratchpad de esa sesión (no se versionan),
    en `referentes/enrique-rocha/`. Hasta entonces, el molde Rocha de `PLAN-GRABACION-3-OCT.md` manda.
 5. **Si un dato de Gemini contradice uno medido, gana el medido.** Gemini dice que Santiago usa música y whoosh; la
    medición del 1-oct (6 reels, `ebur128`) dice sin música, y TikTok marca «sonido original». La receta Santiago no cambia.
