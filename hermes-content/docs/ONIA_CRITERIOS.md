@@ -74,7 +74,7 @@ choca con uno se rechaza nombrando cuál.
   para copiar) o una app, no una tesis propia. «los 3 nuevos no enseñan nada interesante, busca cosas interesantes,
   noticias» (17-sep, MEM)
 - **Titular concreto y visual que muestre el mecanismo:** «se ve muy simple o coloca el logo de github grande o cosas
-  mas visuales, siempre te corrigo lo mismo» (17-sep, MEM). Rechaza la pastilla «ONIA» y el contador «PASO 02/08»
+  mas visuales, siempre te corrigo lo mismo» (17-sep, MEM). Rechaza la pastilla «ONIA» y el contador «PASO 02 / 08»
   arriba, los textos cortados y la lámina sin visual de apoyo. (HS/carruseles-onia.md)
 - **Logos oficiales, solo cuando se nombra la marca:** «los logos están rotos y no tienen sentido» (17-sep, MEM); de
   uno recreado: «poné la original» (18-sep, SK/editor-videos).
@@ -91,13 +91,13 @@ choca con uno se rechaza nombrando cuál.
 - **Montaje:** «lo que quiero que hagas tal cual son los videos de Eric Taveras y Santiago Munoz» (skill
   `edicion-referentes`). Rechaza la edición básica de corte + karaoke + recuadros: «esa no sigue siendo tu manera de
   editar, porque no lo hacés como antes». Se edita con HyperFrames: «¿y por qué no usás HyperFrames como quedamos?»
-  (2-oct, SK/edicion-referentes; 26-jul, MEM)
+  (2-oct, SK/edicion-referentes y SK/editor-videos; 26-jul, MEM)
 - **Su video modelo** es «Tu primera automatización» (22-sep): gancho a cámara completa, recuadro chico, pantallas que
   cambian justo en el corte, subtítulos por frase, sin zooms ni efectos de sonido. (2-oct, SK/editor-videos)
 - **Sonido:** «elimina ese sonido horrible cada que sale un mockup» (2-oct, SK/editor-videos). Sin música de fondo: la
   pone él. (18-sep, MEM)
 - **Subtítulos:** karaoke «apple style, sin bordeado negro», con la palabra activa en verde. (17-sep, SK/editor-videos)
-- **Cada video, completo:** «Dejás a medias cada video» (18-sep, MEM). Lo que sale a redes pasa por `editor-videos` y
+- **Cada video, completo:** «Dejás a medias cada video», el reproche que dio origen a la regla (18-sep, MEM). Lo que sale a redes pasa por `editor-videos` y
   el render final va en una sola pasada (recodificar varias veces lo deja blando). (1-oct, SK/editor-videos)
 
 ## Pauta, web y venta de Onia (usted)
