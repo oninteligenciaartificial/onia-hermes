@@ -1,6 +1,11 @@
 # Stack de skills por dominio — qué agarrar y cuándo
 
-> ⚠️ **27-oct-2026: Superpowers y gstack salieron** (decisión de Sergio Urcullo: el método de sesión es reglas del repo + Ponytail; `onia-router` §«Stack de proceso común»). Donde abajo aparezcan sus skills (`brainstorming`, `writing-plans`, `investigate`, `office-hours`, `design-review`, `land-and-deploy`, `landing-report`, `document-generate`, `qa`, `review`…), no se usan.
+> 🧹 **Podado el 27-oct-2026** (decisiones de Sergio Urcullo: el método de sesión es reglas del repo + Ponytail, y en
+> la PC quedan solo las skills que se usan). Salieron Superpowers, gstack, 44 personales sin uso en 32 días y la
+> copia personal vieja de `ad-creative`. Las mueve `scripts/pc/ordenar-agentes-pc.ps1`, que las devuelve con
+> `-Revertir`. Este mapa nombra **solo lo
+> que queda**. Si una fila no tiene skill, se trabaja con las reglas del repo (`CLAUDE.md`, `AGENTS.md`). La poda
+> anterior (29-sep) está en `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
 
 > Complemento de `SKILL.md`, que mapea **carril → stack**. Esto mapea **problema → skill**,
 > que es como aparecen las tareas en la práctica.
@@ -9,64 +14,39 @@
 > instaladas y que yo estaba usando **cero**. El índice existía; lo que faltaba era
 > granularidad en contenido/diseño y el reflejo de mirarlo antes de empezar.
 
-> 🧹 **Podado 2026-09-29:** se sacaron las globales sin uso real en 30 días (Claude **y** Codex)
-> y sin plan que las nombre. Lista, motivo y cómo reinstalar cada una:
-> `hermes-content/docs/historial/LIMPIEZA_SKILLS_20260929.md`.
-
 **Regla de uso:** antes de escribir la primera línea de cualquier tarea, buscá el dominio acá
 y cargá las 2-3 skills de la fila. No las 10 — las que aplican.
 
-> ⚠️ **Existe un segundo ruteo y NO es el mismo:**
-> `hermes-content/references/video-intake/SKILLS_DEL_CARRIL.md` (rama
-> `claude/analizar-reels-videos-67f762`, todavía sin mergear).
->
-> | | Responde a |
-> |---|---|
-> | **ese** | *"estoy analizando un video — ¿qué skill cargo según el TEMA del video?"* |
-> | **este** | *"voy a hacer X trabajo — ¿qué skill cargo según el DOMINIO?"* |
->
-> Se escribieron el mismo día sin saber uno del otro. Solapan ~60% de los nombres. **Al
-> editar uno, mirar el otro** — si vuelven a divergir, se fusionan y queda uno solo.
+> Para **aprender de una referencia** (video, web, post) el ruteo es otro: `aprender-de-todo`, que manda cada
+> dimensión a su skill. `hermes-content/references/video-intake/SKILLS_DEL_CARRIL.md` (16-ago) quedó como historia.
 
 ---
 
 ## 1. Contenido con IA — marketing e influencers
 
-Es donde más trabajamos y donde el router tenía solo 5 skills. Ahora está desglosado por lo
-que uno realmente va a hacer.
-
 ### 1.1 Antes de producir: qué decir y a quién
 
 | Cuándo | Skills |
 |---|---|
-| Definir el plan de contenido de una cuenta | `content-strategy` · `social` |
-| Ver qué hace la competencia | `competitor-profiling` · `competitors` |
+| Definir el plan de contenido de una cuenta | `content-strategy` |
+| Ver qué hace la competencia | `competitor-profiling` |
 | Armar la oferta o el precio de la pieza | `pricing` |
 
 ### 1.2 Escribir
 
 | Cuándo | Skills |
 |---|---|
-| Copy de anuncio, caption, headline | **`onia-ventas-pauta` §9 primero** (anuncio que vende y VSL, de punta a punta; está en el repo y la nube la ve) · `copywriting` · `ad-creative` (copiadas al repo el 10-oct) |
-| Pulir un texto que ya existe | `copy-editing` · `writing-guidelines` |
-| Artículo, guion largo, documento | `article-writing` |
+| Copy de anuncio, caption, headline | **`onia-ventas-pauta` §9 primero** (anuncio que vende y VSL, de punta a punta) · `copywriting` · `ad-creative` |
+| Pulir un texto que ya existe | `humanizer` · `stop-slop` |
+| Guion o texto largo de la marca personal | skill-doc `hermes-content/skills/guiones-diarios-onia.md` · `humanizer` |
 | Recurso descargable a cambio de un dato | `lead-magnets` |
 
-> **En la nube (10-oct-2026):** las skills de este mapa que están en `.claude/skills/` del repo, la nube las ve. Estas
-> siguen **solo en la PC** (`~/.claude/skills/`) y una sesión de la nube no las carga; si una tarea las necesita, se
-> la pide como issue `orquesta` con `donde: pc` (`CLAUDE.md` «Quién orquesta»), no se improvisa de memoria: `ads` · `agentic-engineering` ·
-> `analytics` · `architecture-decision-records` · `article-writing` · `autonomous-loops` · `banner-design` · `brand` ·
-> `brandkit` · `browse` · `caveman-review` · `click-path-audit` · `codebase-onboarding` · `community-marketing` ·
-> `competitors` · `context-budget` · `context-restore` · `context-save` · `continuous-agent-loop` · `copy-editing` ·
-> `cost-aware-llm-pipeline` · `design` · `design-consultation` · `design-dna` · `design-html` · `design-md` ·
-> `design-review` · `devex-review` · `document-generate` · `documentation-lookup` · `e2e-testing` · `emil-design-eng` ·
-> `exa-search` · `frontend-patterns` · `image-to-code` · `imagegen-frontend-web` · `industrial-brutalist-ui` ·
-> `investigate` · `iterative-retrieval` · `lead-magnets` · `make-pdf` · `make-plan` · `minimalist-ui` ·
-> `n8n-code-javascript` · `n8n-expression-syntax` · `n8n-node-configuration` · `n8n-validation-expert` ·
-> `nextjs-turbopack` · `qa` · `react-components` · `review` · `shadcn-ui` · `slides` · `social` · `supabase` ·
-> `supabase-postgres-best-practices` · `taste-design` · `ui-styling` · `ui-ux-pro-max` · `writing-guidelines`.
-> Las de plugin que nombra el mapa (`caveman`, `ponytail`, `gsap-skills`, `claude-mem`, `skill-creator`,
-> `pdf`/`docx`/`pptx`/`xlsx`) no se verificaron: no se sabe si la nube las carga.
+> **Solo en la PC** (`~/.claude/skills/`; una sesión de la nube no las carga): `code-review-spec` ·
+> `community-marketing` · `design-dna` · `diagnosing-bugs` · `emil-design-eng` · `humanizer` · `lead-magnets` ·
+> `make-pdf` · `next-dev-loop` · `onboarding` · `prisma-cli` · `stop-slop` · `taste-design` · `ui-ux-pro-max`.
+> Los trabajadores de la orquesta en GitHub Actions usan las copias de `scripts/orquesta/cuartitos/`. Si una tarea de la
+> nube necesita otra, se pide como issue `orquesta` con `donde: pc`. Lo demás de este mapa está en el repo. Las de
+> plugin (`ponytail`, `gsap-skills`, `claude-mem`, `frontend-design`, `document-skills`) no se verificaron en la nube.
 
 ### 1.2-bis 🔴 Los bancos de patrones — se abren ANTES que la skill
 
@@ -86,31 +66,51 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 
 | Cuándo | Skills |
 |---|---|
-| Carrusel, placa, estático | `banner-design` · `brand` · `brandkit` · `design-dna` |
-| Generar imagen para web/mobile | `imagegen-frontend-web` |
-| Convertir una referencia visual en código | `image-to-code` |
-| Definir el sistema visual de una marca | `design-dna` |
+| Carrusel, placa, estático | **`diseno-contenido-onia` primero** · `design-dna` |
+| Sacar el sistema visual de una referencia | `design-dna` |
+| Sacar el prompt de una imagen de referencia | `sacar-prompt` |
 
 ### 1.4 Video
 
 | Cuándo | Skills |
 |---|---|
-| Video en general / edición | skills propias `editor-videos` · `ver-videos` |
+| Video en general / edición | skills propias `editor-videos` · `ver-videos` · `edicion-referentes` (todo video nuevo de Sergio Urcullo) |
 | Motor HTML→MP4 | `hyperframes*` (las del repo, `.claude/skills/hyperframes*`, restauradas el 2026-10-02; con el mismo nombre le gana una copia personal de `~/.claude/skills`, §8; `npx hyperframes skills update <nombre>` solo con OK de Sergio Urcullo) |
 | **Juzgar el movimiento y la continuidad entre planos** | `motion-doctrine` · `cut-the-curve` · `seam-craft` (propias) |
-| Reconstruir un componente desde fotogramas | `image-to-code` |
 
-**Generativo (Higgsfield):** no es skill, es MCP. Tarifario medido y las 3 vías
-(`start_image` · `image_references` · `video_extension`) en
+**Generativo (Higgsfield):** `higgsfield-generate` (CLI oficial, cotiza antes de generar). Tarifario medido y las 3
+vías (`start_image` · `image_references` · `video_extension`) en
 `references/modelos/lucia/prueba-lipsync-20260815/LEEME.md`.
 
 ### 1.5 Distribución y medición
 
 | Cuándo | Skills |
 |---|---|
-| Pauta | `ads` |
-| Comunidad | `community-marketing` |
-| Medir si sirvió | `analytics` |
+| Pauta | `onia-ventas-pauta` · `ad-creative` · MCP de Meta Ads |
+| Comunidad | `community-marketing` · `onboarding` |
+| Medir si sirvió | MCP de Meta Ads (insights) |
+
+### 1.6 Meta Ads: de la Biblioteca al anuncio que vende (27-oct)
+
+La estrategia (canales, tope, qué se puede prometer) manda en `hermes-content/docs/ONIA_ADQUISICION_Y_PAUTA.md`;
+el método está en `onia-ventas-pauta`. Esta tabla dice qué sección abrir en cada paso.
+
+| Paso | Qué se usa |
+|---|---|
+| Ver qué sostienen los competidores | `onia-ventas-pauta` §4.1, §8.2 (Biblioteca por el MCP) y §9.9 (se cuentan los que sobreviven 7+ días) · `web-factory/docs/ADS_PATTERN_BANK_2026.md` |
+| Escribir el anuncio | `onia-ventas-pauta` §9 (de punta a punta) · `copywriting` · los hooks de `anunciante-supremo` resumidos en §9.9 |
+| Hacer el creativo | `onia-ventas-pauta` §9.4 · `diseno-contenido-onia` · `editor-videos` · Higgsfield según §9.10 (qué función, cuánto cuesta y dónde NO entra) con `higgsfield-generate` (cotiza antes; video con OK) |
+| Funnel: a dónde va el clic | `onia-ventas-pauta` §9.10 (destinos verificados el 27-oct) |
+| Armar la campaña | `onia-ventas-pauta` §5 (la campaña como archivo) · MCP de Meta Ads |
+| Medir y renovar | MCP de Meta Ads (insights) · `onia-ventas-pauta` §9.6 y §9.9 (cuatro grupos, un eje por vez) |
+| Seguir al lead | `onia-ventas-pauta` §5.1 (WhatsApp y remarketing) |
+
+- **Estado medido el 27-oct:** el MCP de Meta Ads ve **ONIA Ads `act_1073680778314945`**, activa y consultable,
+  **sin método de pago**. Hasta que Sergio Urcullo cargue la tarjeta no corre ningún anuncio. La otra cuenta que ve
+  (`679613631427810`, sin business) no se usa.
+- **`anunciante-supremo`** (skill de un curso de infoproductos, en claude.ai): se usa su método (hooks, variantes de un
+  solo eje, reuso de música, B-roll y voz). Producir con ella pide el OK de Sergio Urcullo: usa la llave de APIMART, un
+  tercero, gasta ~US$ 1 por tanda y su plantilla 1 renderiza con Remotion, que está jubilado.
 
 ---
 
@@ -119,11 +119,9 @@ Cada uno cierra con **"lo que sigue sin resolver"**: ahí está el trabajo pendi
 | Cuándo | Skills |
 |---|---|
 | **Antes de codear cualquier UI** (regla de la casa) | `impeccable` · `ui-ux-pro-max` · `taste-design` |
-| Revisar un diseño ya hecho | `design-review` |
-| Explorar direcciones / armar el sistema de diseño | `design-consultation` |
-| Escribir el diseño como spec | `design-md` · `design` · `design-html` |
-| Dirección estética concreta | `minimalist-ui` · `industrial-brutalist-ui` |
-| Componentes | `shadcn-ui` · `react-components` · `ui-styling` |
+| Revisar un diseño ya hecho | `impeccable` (critique / audit) |
+| Sacar el sistema de diseño de una referencia | `design-dna` |
+| Componentes con criterio | `frontend-design:frontend-design` (plugin) |
 | Ingeniería de diseño fina | `emil-design-eng` |
 
 ⚠️ Regla ya escrita y ya incumplida una vez: **cargar `impeccable` + galería/tokens ANTES de
@@ -136,8 +134,8 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 
 | Cuándo | Skills |
 |---|---|
-| Patrones generales | `frontend-patterns` · `react-components` |
-| Next.js | `nextjs-turbopack` |
+| Pantallas del producto (`onia-platform`) | `onia-frontend` (de su repo, manda) · `next-dev-loop` *PC* |
+| Webs de venta y landings de cliente | `onia-web-factory` |
 | Animación | `gsap-skills` (plugin) |
 
 ---
@@ -146,12 +144,12 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 
 | Cuándo | Skills |
 |---|---|
-| Diseñar API | `api-design` · `backend-patterns` |
-| Postgres | `postgres-patterns` · `supabase` · `supabase-postgres-best-practices` |
+| Diseñar API | `api-design` · `backend-patterns` (en `onia-platform`, primero `onia-backend`) |
+| Postgres | `postgres-patterns` (en `onia-platform`, primero `onia-db`) · `prisma-cli` *PC* |
 | Migraciones | `database-migrations` |
-| Contenedores y deploy | `docker-patterns` · `deployment-patterns` |
-| n8n | `n8n-workflow-patterns` · `n8n-node-configuration` · `n8n-expression-syntax` · `n8n-code-javascript` · `n8n-validation-expert` · `n8n-mcp-tools-expert` |
-| Costo de LLM en pipeline | `cost-aware-llm-pipeline` · `context-budget` |
+| Contenedores y deploy | `onia-infra` · `docker-patterns` · `deployment-patterns` |
+| n8n | `n8n-mcp-tools-expert` (siempre antes de tocar n8n) · `n8n-workflow-patterns` |
+| Costo de LLM en pipeline | `hermes-content/docs/AI_MODEL_ROUTING_2026.md` |
 
 ---
 
@@ -159,12 +157,12 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 
 | Cuándo | Skills |
 |---|---|
-| **Antes de commitear algo que toca datos, auth o plata** | `security-review` |
-| Revisión de código | `code-review` · `review` · `caveman-review` · agente `code-reviewer` |
-| Testing | `qa` · `e2e-testing` · `click-path-audit` |
-| Experiencia de desarrollador (docs, CLI, onboarding) | `devex-review` |
+| **Antes de commitear algo que toca datos, auth o plata** | `security-review` + agente `security-reviewer` |
+| Revisión de código | agente `code-reviewer` · `code-review-spec` *PC* · `ponytail:ponytail-review` (plugin) |
+| Testing | agentes `tdd-guide` (test primero) · `e2e-runner` |
+| Un bug | `diagnosing-bugs` *PC*: causa raíz antes de tocar |
 | Verificar antes de decir "listo" | `verification-loop` |
-| Onboarding a un repo desconocido | `codebase-onboarding` · `investigate` |
+| Onboarding a un repo desconocido | agente `Explore` |
 
 ⚠️ `verification-loop` es la que corresponde al loop que Sergio pide a mano.
 **Cargarla en vez de improvisar el loop.**
@@ -175,10 +173,10 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 
 | Cuándo | Skills |
 |---|---|
-| Research a fondo con fuentes | `deep-research` · `iterative-retrieval` · `exa-search` |
-| Navegar / scrapear | `browse` · navegador integrado (MCP) · Crawl4AI del VPS (`scripts/alta-por-extraccion.py`) |
+| Research a fondo con fuentes | `deep-research` · MCP `exa` *PC* |
+| Navegar / scrapear | navegador integrado (MCP) · Crawl4AI del VPS (`scripts/alta-por-extraccion.py`) |
 | Buscar en memoria | `claude-mem:mem-search` (plugin) |
-| Consultar docs de librería | `documentation-lookup` |
+| Consultar docs de librería | agente `docs-lookup` (Context7) |
 
 ---
 
@@ -186,12 +184,11 @@ codear**, no descubrirlo a la tercera ronda. Ver la memoria *web-factory-disenos
 
 | Cuándo | Skills |
 |---|---|
-| Planificar antes de construir | `make-plan` |
-| Agentes en paralelo / loops | `autonomous-loops` · `continuous-agent-loop` · `agentic-engineering` |
-| Contexto entre sesiones | `context-save` · `context-restore` |
-| Registrar decisiones de arquitectura | `architecture-decision-records` |
-| Crear o auditar skills | `skill-creator` |
-| Entregables de oficina | `docx` · `xlsx` · `pptx` · `pdf` · `make-pdf` · `slides` · `document-generate` |
+| Planificar antes de construir | reglas del repo + Ponytail; agente `planner` si es grande |
+| Delegar o revisar una entrega | `equipo-de-agentes` |
+| Contexto entre sesiones | el handoff del carril (`hermes-content/docs/handoff/<carril>.md`) |
+| Crear o auditar skills | `skill-creator` (claude.ai) |
+| Entregables de oficina | `docx` · `xlsx` · `pptx` · `pdf` (plugin `document-skills`) · `make-pdf` |
 
 ---
 
@@ -201,18 +198,18 @@ Buscarlas en un solo directorio da falsos negativos — pasó al verificar este 
 
 | Origen | Dónde | Ejemplos |
 |---|---|---|
-| Globales del filesystem | `~/.claude/skills/` (**~100**, contado el 26-oct) | `impeccable` · `copywriting` · `security-review` |
-| Del proyecto | `.claude/skills/` (**65**, contado el 27-oct en `main`) | `onia-router` · `ver-videos` · `editor-videos` |
-| Plugins | `~/.claude/plugins/cache/` (**10** carpetas, contado el 27-oct) | `gsap-skills` · `caveman` · `ponytail` |
+| Globales del filesystem | `~/.claude/skills/` (**29** después del script del 27-oct: las 14 del recuadro de §1.2 y 15 copias idénticas a las del repo) | `humanizer` · `ui-ux-pro-max` · `copywriting` |
+| Del proyecto | `.claude/skills/` (**63**, contado el 27-oct) | `onia-router` · `ver-videos` · `editor-videos` |
+| Plugins | `~/.claude/plugins/cache/` (**10** carpetas, contado el 27-oct) | `gsap-skills` · `ponytail` · `claude-mem` |
 | De claude.ai | no están en disco — se listan con `ListSkills` | `docx` · `xlsx` · `pptx` · `pdf` · `skill-creator` · `abogado-del-diablo` |
-| HyperFrames | **el repo** (`.claude/skills/` y `.agents/skills/`, restaurado 2026-10-02). Con el mismo nombre gana la **personal** (`~/.claude/skills`): las de HyperFrames ya no tienen copia personal (se archivaron el 26-oct), pero 16 nombres del repo siguen también en `~/.claude/skills` (p. ej. `ad-creative`, `copywriting`, `deep-research`; contado el 27-oct) y ahí se carga la personal | `hyperframes` · `talking-head-recut` · `embedded-captions` |
+| HyperFrames | **el repo** (`.claude/skills/` y `.agents/skills/`, restaurado 2026-10-02). Con el mismo nombre gana la **personal** (`~/.claude/skills`): las de HyperFrames ya no tienen copia personal (se archivaron el 26-oct). Las 15 copias que siguen en las dos carpetas son idénticas; `ad-creative` sale el 27-oct porque la personal era la vieja | `hyperframes` · `talking-head-recut` · `embedded-captions` |
 
 ## 9. Lo que NO es skill y se confunde
 
 | Capacidad | Dónde vive |
 |---|---|
-| Higgsfield (imagen/video generativo) | MCP |
-| Meta Ads · Biblioteca de Anuncios | MCP |
+| Higgsfield (imagen/video generativo) | CLI oficial + skill `higgsfield-generate` |
+| Meta Ads · Biblioteca de Anuncios | MCP (ve ONIA Ads desde el 1-oct; cómo se usa en §1.6) |
 | Supabase · Vercel · n8n · Cloudflare · Notion · Figma · Drive · Gmail · Calendar | MCP |
 | ElevenLabs | API REST desde el VPS (no hay MCP) |
 | HyperFrames | skills del repo `.claude/skills/hyperframes*` (restaurado 2026-10-02) |

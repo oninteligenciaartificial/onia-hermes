@@ -7,12 +7,6 @@
       "skillPath": ".claude/skills/captions-overlay/SKILL.md",
       "computedHash": "f610bfb2f03d54bed5047048636936a04469a1151c336ee7bb573a18080e6ee3"
     },
-    "changelog-video": {
-      "source": "heygen-com/hyperframes",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/changelog-video/SKILL.md",
-      "computedHash": "b14af9fcdf6e000e4403ba4be08174088a9717f2335b52c5167e7130b433eb1c"
-    },
     "cut-the-curve": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -126,12 +120,6 @@
       "sourceType": "github",
       "skillPath": "skills/product-launch-video/SKILL.md",
       "computedHash": "436d08f6f934dd776e92f0a16ee07f5be47cc319e2347a4681983ea3fd48e857"
-    },
-    "remotion-to-hyperframes": {
-      "source": "heygen-com/hyperframes",
-      "sourceType": "github",
-      "skillPath": "skills/remotion-to-hyperframes/SKILL.md",
-      "computedHash": "9600c982951ef684df265dde84f63ce95b2341874fc126448f4f716abc80008b"
     },
     "seam-craft": {
       "source": "heygen-com/hyperframes",

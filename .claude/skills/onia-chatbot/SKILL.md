@@ -40,12 +40,12 @@ lo extiende para este carril.
 ## Qué cargar según la tarea
 
 ### Tocar el motor conversacional (`bot-engine`, `intents`, `reply-builder`)
-`superpowers:test-driven-development` — el motor tiene 503 tests y son el contrato; test primero, siempre.
-`superpowers:systematic-debugging` o `investigate` — para un bug: causa raíz antes de tocar. Nunca adivinar.
-`superpowers:verification-before-completion` — antes de decir "listo".
+Agente `tdd-guide` — el motor tiene 503 tests y son el contrato; test primero, siempre.
+`diagnosing-bugs` *PC* — para un bug: causa raíz antes de tocar. Nunca adivinar.
+`verification-loop` — antes de decir "listo".
 
 ### Persistencia, migraciones, base
-`postgres-patterns` · `database-migrations` · `supabase` · `supabase-postgres-best-practices`
+`postgres-patterns` · `database-migrations`
 Trampa ya pagada: `leads.business_type` es NOT NULL sin default. **Mirar las restricciones
 reales de la tabla antes de escribir el insert**, no el modelo mental de la tabla.
 
@@ -55,11 +55,9 @@ Disparadores duros: firma HMAC de Chatwoot · `META_APP_SECRET` · minimización
 (el rubro dental maneja datos de salud) · cualquier ruta nueva que reciba de afuera.
 
 ### El modelo y el costo de la IA
-`claude-api` — si se cambia de proveedor o se arma un agente.
-`cost-aware-llm-pipeline` — ruteo por costo; el gateway es LiteLLM con tope de gasto.
-`prompt-optimizer` — el system prompt de la rama off-guion es lo único que separa al bot de
-prometer precios. `benchmark-models` — antes de cambiar de modelo, medir, no opinar.
-`agentic-engineering` — si se agrega una herramienta que el bot pueda ejecutar.
+Modelos y costo: `hermes-content/docs/AI_MODEL_ROUTING_2026.md`; el gateway es LiteLLM con tope de gasto.
+El system prompt de la rama off-guion es lo único que separa al bot de prometer precios: se toca con test.
+Antes de cambiar de modelo, medir, no opinar.
 
 ### Panel del chatbot en la plataforma (la pantalla que edita el conocimiento)
 
@@ -73,8 +71,7 @@ prometer precios. `benchmark-models` — antes de cambiar de modelo, medir, no o
 > `onia-verificacion` (qué cuenta como prueba antes de declarar terminado).
 
 Recién DESPUÉS, y solo si hace falta criterio de diseño que esas no cubran:
-`impeccable` (register **product**) · `ui-ux-pro-max` · `shadcn-ui` · `design-review` ·
-`frontend-patterns` · `react-components` · `ui-styling` · `nextjs-turbopack`.
+`impeccable` (register **product**) · `ui-ux-pro-max` · `next-dev-loop` *PC*.
 Regla del repo: nada que parezca template por defecto — ver `web-factory-disenos-genericos`.
 
 **Antes de crear una pantalla nueva, mirar si ya tiene casa.** Verificado 2026-08-16:
@@ -100,8 +97,7 @@ El webhook corre **dentro del contenedor `onia-center`** por `docker exec`, con 
 cada 2 min. No es systemd. Los barridos son cron del VPS, no n8n.
 
 ### Automatización con n8n (solo si el trabajo es de n8n)
-`n8n-mcp-tools-expert` (cargar SIEMPRE antes de tocar n8n) · `n8n-workflow-patterns` ·
-`n8n-node-configuration` · `n8n-validation-expert` · `n8n-code-javascript`.
+`n8n-mcp-tools-expert` (cargar SIEMPRE antes de tocar n8n) · `n8n-workflow-patterns`.
 ⚠️ **Corregido 2026-08-24.** Acá decía "`$env` NO existe" y es FALSO desde la
 verificación en vivo del 2026-08-22: `N8N_BLOCK_ENV_ACCESS_IN_NODE=false` y las variables
 están cargadas en el contenedor — **9 workflows usan `$env`, 7 activos y funcionando**.
@@ -111,16 +107,16 @@ terminó publicada en GitHub al commitear un export.
 🔴 NUNCA hardcodear un secreto en un nodo.
 
 ### Investigar antes de decidir
-`deep-research` (con fuentes citadas) · `documentation-lookup` (Context7, para API de Meta) ·
-`exa-search`. Para temas fiscales bolivianos: skill `onia-contabilidad-bolivia`, nunca a ojo.
+`deep-research` (con fuentes citadas) · agente `docs-lookup` (Context7, para API de Meta) ·
+MCP `exa` *PC*. Para temas fiscales bolivianos: skill `onia-contabilidad-bolivia`, nunca a ojo.
 
 ### Escribir el guion o los hechos
-`writing-guidelines` · `copywriting`. El texto del guion **no pasa por el guardrail** — lo
+`copywriting` · `humanizer`. El texto del guion **no pasa por el guardrail** — lo
 escribimos nosotros y es responsabilidad nuestra que no prometa nada.
 
 ### Planificar / cerrar
-`make-plan` o `superpowers:writing-plans` · `superpowers:brainstorming` (antes de construir
-algo nuevo) · `qa` · `verification-loop` · `health`.
+Reglas del repo + Ponytail (el cambio más chico que resuelve todo) · agente `planner` si el
+trabajo es grande · `verification-loop` antes de cerrar.
 
 ## WhatsApp de Onia: plantillas, token y Meta (medido 1-oct-2026)
 

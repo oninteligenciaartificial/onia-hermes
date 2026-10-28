@@ -81,3 +81,10 @@ Regla usada: Backend y arquitectura (cadena de suministro de herramientas extern
 Artefacto: esta ficha; el veredicto lo recibe Sergio Urcullo
 Verificación: pendiente de revisor; contrastar las cifras de estrellas y descargas con una segunda consulta y releer los ToS originales de AgendaPro y Dentalink antes de citarlos a terceros
 Pendiente: llevar la regla de seguridad de herramientas externas a `equipo-de-agentes` cuando la madre lo decida; leer ToS de Doctocliq y Dapta; reabrir REA solo con el disparador de arriba
+
+## Revisión del 27-oct-2026 (Sergio Urcullo volvió a preguntar por REA)
+Medido con `gh api`: versión 6.8.0 (25-oct), ~397 mil estrellas, push el 27-oct. Al menos 12 releases entre el 5 y el
+25-oct, con tres versiones mayores en tres días. El flujo de publicación mejoró: tiene guardas y procedencia npm. Pero
+siguen entrando PRs grandes sin revisión humana: el #7514 (+1.591 líneas) se mergeó en 77 minutos, y el README sigue
+mandando a `npx rea-agents setup` con `@latest`. No se hallaron avisos de seguridad. **Veredicto sin cambios:
+congelada.** Informe: `hermes-content/docs/research/2026-10-27-github-que-falta.md`.
