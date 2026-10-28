@@ -184,6 +184,7 @@ PY
   exit 0
 fi
 [ "$4" = resume ] && [ "\${HERMES_RESUME_FALLA:-}" = 1 ] && exit 1
+[ "$4" = pause ] && [ -n "\${HERMES_PAUSE_NO_HACE:-}" ] && [ "$5" = "\${HERMES_PAUSE_NO_HACE}" ] && exit 0   # dice que sí y no pausa
 python3 - "$4" "$5" <<'PY'
 import json, os, sys
 p = "${R}/.hermes/cron/jobs.json"
@@ -628,7 +629,7 @@ echo "sincronizados"
   assert.match(r.stdout, /vuelta 1 de 2[\s\S]*vuelta 2 de 2/);
   assert.equal(v.leer("sync-vueltas").trim(), "2");
   assert.match(r.stdout, /✅ .*QA de publicación y orquesta: al día/);
-  assert.match(r.stdout, /✅ revisión de la orquesta cada 3 h: /);
+  assert.match(r.stdout, /✅ regla de la orquesta agregada al SOUL de Hermes/);
 });
 
 test("sección 0: si dos vueltas del sincronizador no traen el comando de la orquesta, no aplica nada", () => {
@@ -1159,53 +1160,162 @@ test("diagnóstico: semanal y mensual muertos salen MUDO; rutas armadas al corre
   assert.match(fila("comillas.sh"), /^sin log/);
 });
 
-// ── 5e. Hermes planifica la orquesta (2026-10-20) ────────────────────────────────────────────
-// Carga issues con onia-orquesta-hermes.sh y los revisa cada 3 h con un trabajo propio. Inerte sin el
-// token de Issues, como los pedidos sin llave; con él, todo o nada como el resto de aplicar.
+// ── 5e. La orquesta: solo lo que Sergio Urcullo le dicta (2026-10-26) ─────────────────────────
+// Desde el 26-oct planifica el Hermes de la PC (AGENTS.md §1). El aplicar del 20-oct le creaba al del VPS una
+// revisión de cada 3 h y una regla «Planificar la orquesta»; ahora la revisión se PAUSA por su nombre (nunca
+// se borra) y la regla se REEMPLAZA. La skill y la regla siguen inertes sin el token de Issues.
 
 const SKILL_ORQ = (v) => join(v.R, ".hermes", "skills", "planificar-orquesta", "SKILL.md");
 const jobOrq = (v) => v.jobs().find((j) => j.name === "onia-planificar-orquesta");
+const ID_ORQ = "26deb0b4121c"; // la del VPS, medida el 21-oct (handoff/hermes-jarvis.md)
+const conRevision = (v) => {
+  const f = join(v.R, ".hermes", "cron", "jobs.json");
+  const d = JSON.parse(readFileSync(f, "utf8"));
+  d.jobs.push({ id: ID_ORQ, name: "onia-planificar-orquesta", enabled: true, state: "scheduled", schedule: "every 3h" });
+  writeFileSync(f, JSON.stringify(d));
+};
+const REGLA_20_OCT = "## Planificar la orquesta (2026-10-20)\n\nSos el que **planifica** la orquesta: cargás tareas en su cola (issues de GitHub) y cada 3 horas\nrevisás cómo van.\n";
 
-test("sin el token de Issues, la orquesta queda apagada y a Hermes no se le enseña nada", () => {
+test("sin el token de Issues, a Hermes no se le enseña nada y no se programa nada", () => {
   const v = vps();
   const r = v.aplicar();
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /planificar la orquesta APAGADO: falta el token de Issues/);
+  assert.match(r.stdout, /cargar tareas en la orquesta APAGADO: falta el token de Issues/);
+  assert.match(r.stdout, /no hay revisión de la orquesta cada 3 h en jobs\.json: nada que pausar/);
   assert.equal(existsSync(SKILL_ORQ(v)), false);
-  assert.doesNotMatch(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), /^## Planificar la orquesta/m);
+  assert.doesNotMatch(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), /^## (Planificar|Cargar tareas en) la orquesta/m);
   assert.equal(v.leer("hermes-create"), "", "no programa nada");
   assert.doesNotMatch(v.leer("n8n"), /api\.github\.com/, "ni siquiera mira GitHub");
   assert.doesNotMatch(v.leer("telegram"), /orquesta/);
 });
 
-test("con el token: skill, su regla (una vez, hasta su ---), la revisión cada 3 h sin entrega, y reinicio", () => {
+test("con el token: skill, la regla nueva (una vez, hasta su ---), ningún trabajo nuevo, y reinicio", () => {
   const v = vps({ tokenIssues: 0o600 });
   const r = v.aplicar();
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.doesNotMatch(r.stdout + r.stderr, /NoSeImprimeNunca/);
-  assert.ok(existsSync(SKILL_ORQ(v)), "la skill va junto a la del calendario");
   assert.equal(readFileSync(SKILL_ORQ(v), "utf8"), readFileSync(join(RAIZ, "hermes-content", "skills", "planificar-orquesta.md"), "utf8"));
   const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
-  assert.equal((soul.match(/^## Planificar la orquesta/gm) || []).length, 1);
+  assert.equal((soul.match(/^## Cargar tareas en la orquesta/gm) || []).length, 1);
+  assert.match(soul, /solo cuando él te la dicta/);
+  assert.doesNotMatch(soul, /^## Planificar la orquesta/m);
   assert.doesNotMatch(soul, /^## Pedidos a Claude/m, "solo su sección: la de pedidos que le sigue no entra sin llave");
-  const create = v.leer("hermes-create");
-  assert.equal(create.trim().split("\n").length, 1);
-  for (const parte of ["cron create every 3h", "--skill planificar-orquesta", "--name onia-planificar-orquesta", "--deliver local"])
-    assert.ok(create.includes(parte), parte);
-  assert.equal(jobOrq(v).enabled, true);
-  assert.match(r.stdout, /✅ revisión de la orquesta cada 3 h: orq\d+/);
+  assert.equal(v.leer("hermes-create"), "", "ya no crea la revisión de cada 3 h");
+  assert.equal(jobOrq(v), undefined);
   assert.match(v.leer("n8n"), /^GET https:\/\/api\.github\.com\/repos\/oninteligenciaartificial\/onia-hermes\/labels\/necesita-ok$/m, "la Fase A miró los labels");
   assert.match(v.leer("systemctl"), /^--user restart hermes-gateway\.service$/m);
   assert.match(r.stdout, /✅ y nombra planificar-orquesta/);
-  assert.match(v.leer("telegram"), /📋 Y cargo tareas en la orquesta/);
+  const aviso = v.leer("telegram");
+  assert.match(aviso, /📋 Si me dictás una tarea para la orquesta, la cargo/);
+  assert.doesNotMatch(aviso, /las reviso cada 3 horas/);
 
   spawnSync("/bin/sleep", ["1.1"]); // el respaldo se nombra por segundo
   writeFileSync(join(v.log, "systemctl"), "");
   const r2 = v.aplicar();
   assert.equal(r2.status, 0, r2.stdout);
-  assert.match(r2.stdout, /la revisión de la orquesta ya estaba programada/);
-  assert.equal(v.leer("hermes-create").trim().split("\n").length, 1, "nunca dos trabajos");
+  assert.match(r2.stdout, /su SOUL ya tenía la regla de la orquesta/);
+  assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), soul, "la segunda corrida deja el SOUL igual");
   assert.doesNotMatch(v.leer("systemctl"), /restart/, "sin cambios no reinicia");
+});
+
+test("el VPS del 20-oct: pausa la revisión de cada 3 h por su nombre, reemplaza la regla vieja, y revertir lo deja exacto", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  conRevision(v);
+  const soulAntes = `# SOUL de Hermes\n\n---\n\n${REGLA_20_OCT}\n---\n\n## Otra regla\n\nque queda igual\n`;
+  writeFileSync(join(v.R, ".hermes", "SOUL.md"), soulAntes);
+  mkdirSync(dirname(SKILL_ORQ(v)), { recursive: true });
+  writeFileSync(SKILL_ORQ(v), "la skill del 20-oct: vos planificás\n");
+  // El aplicar del 20-oct, sin revertir: creó la revisión, y el nuevo hereda su lista.
+  const previo = join(v.R, "backups", "hermes-jarvis-20261020T210014Z");
+  mkdirSync(previo, { recursive: true });
+  writeFileSync(join(previo, "aplicado"), "");
+  writeFileSync(join(previo, "hermes-creados.txt"), ID_ORQ + "\n");
+  spawnSync("/bin/sleep", ["1.1"]);
+
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, new RegExp(`⏸ pausada la revisión de la orquesta cada 3 h: ${ID_ORQ}`));
+  assert.equal(jobOrq(v).state, "paused", "pausada");
+  assert.equal(jobOrq(v).enabled, false);
+  assert.equal(v.jobs().length, 4, "nunca se borra ni se crea otra");
+  assert.equal(v.leer("hermes-create"), "");
+  assert.match(r.stdout, /✅ regla de la orquesta reemplazada en el SOUL de Hermes/);
+  const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  assert.doesNotMatch(soul, /Planificar la orquesta|cada 3 horas/, "la regla vieja sale entera");
+  assert.equal((soul.match(/^## Cargar tareas en la orquesta/gm) || []).length, 1);
+  assert.ok(soul.startsWith("# SOUL de Hermes\n\n---\n\n## Cargar tareas en la orquesta"), soul);
+  assert.ok(soul.includes("\n\n---\n\n## Otra regla\n\nque queda igual\n"), "lo que sigue al --- queda igual");
+  assert.equal(readFileSync(SKILL_ORQ(v), "utf8"), readFileSync(join(RAIZ, "hermes-content", "skills", "planificar-orquesta.md"), "utf8"));
+
+  spawnSync("/bin/sleep", ["1.1"]);
+  const r2 = v.aplicar();
+  assert.equal(r2.status, 0, r2.stdout);
+  assert.match(r2.stdout, new RegExp(`la revisión de la orquesta cada 3 h ya estaba en pausa: ${ID_ORQ}`));
+
+  const rev = v.revertir({ HERMES_RESUME_ESTRICTO: "1" });
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.match(rev.stdout, new RegExp(`${ID_ORQ} lo creó un aplicar anterior: no lo reanudo`), "ni un instante activa");
+  assert.match(rev.stdout, new RegExp(`hermes: ${ID_ORQ} ya estaba en pausa`));
+  assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), soulAntes, "el SOUL de antes, byte a byte");
+  assert.equal(readFileSync(SKILL_ORQ(v), "utf8"), "la skill del 20-oct: vos planificás\n");
+  assert.equal(jobOrq(v).state, "paused", "la creó el aplicar del 20-oct, que también se revierte: queda en pausa");
+  assert.ok(v.jobs().filter((j) => j.id !== ID_ORQ).every((j) => j.enabled), "los 3 de antes vuelven");
+});
+
+test("la regla del 20-oct al FINAL del SOUL (como en el VPS: la agregó el 5e viejo) también sale entera", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  const main = readFileSync(join(RAIZ, "hermes-content/deploy/hermes-agent/SOUL.md"), "utf8");
+  const seccion = (t) => main.slice(main.indexOf(t)).split(/^---$/m)[0].trimEnd();
+  // El formato y el calendario ya están (5c no agrega nada después): la vieja es la última, sin «---» detrás.
+  const soulAntes = ["# SOUL de Hermes", seccion("## Formato fijo de cada mensaje"), seccion("## Su calendario y el cierre del día"), REGLA_20_OCT]
+    .join("\n\n---\n\n");
+  writeFileSync(join(v.R, ".hermes", "SOUL.md"), soulAntes);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /su SOUL ya tenía la regla del calendario/);
+  assert.match(r.stdout, /su SOUL ya tenía la regla del formato/);
+  assert.match(r.stdout, /✅ regla de la orquesta reemplazada en el SOUL de Hermes/);
+  const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  assert.doesNotMatch(soul, /Planificar la orquesta|cada 3 horas/);
+  assert.ok(soul.startsWith(soulAntes.slice(0, soulAntes.indexOf("## Planificar la orquesta"))), "lo de antes queda igual");
+  assert.equal(soul.trimEnd(), soul.slice(0, soul.indexOf("## Cargar tareas en la orquesta")) + seccion("## Cargar tareas en la orquesta"),
+    "termina en la regla nueva, entera");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), soulAntes);
+});
+
+test("sin token igual pausa la revisión de cada 3 h; si la pausó esta corrida, revertir la reanuda", () => {
+  const v = vps();
+  conRevision(v);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, new RegExp(`⏸ pausada la revisión de la orquesta cada 3 h: ${ID_ORQ}`));
+  assert.equal(jobOrq(v).state, "paused");
+  assert.equal(existsSync(SKILL_ORQ(v)), false, "sin token no se le enseña nada");
+  const rev = v.revertir({ HERMES_RESUME_ESTRICTO: "1" });
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(jobOrq(v).enabled, true, "volvió como estaba antes de este aplicar");
+});
+
+test("si aplicar se corta justo después de pausar la revisión, revertir la reanuda (se anota antes)", () => {
+  const v = vps();
+  conRevision(v);
+  const r = v.aplicar({}, '  JEST=""; read -r _ JEST');
+  assert.equal(r.status, 9, r.stdout);
+  assert.equal(jobOrq(v).state, "paused");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout);
+  assert.equal(jobOrq(v).enabled, true);
+});
+
+test("si Hermes dice que pausó la revisión y sigue activa, aplicar lo cuenta como falla", () => {
+  const v = vps();
+  conRevision(v);
+  const r = v.aplicar({ HERMES_PAUSE_NO_HACE: ID_ORQ });
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, new RegExp(`no pude pausar la revisión de la orquesta cada 3 h \\(${ID_ORQ} quedó: activo\\)`));
+  assert.doesNotMatch(v.leer("telegram"), /Jarvis encendido/, "con una falla no le promete nada");
 });
 
 test("con la skill del calendario suelta en skills/ (como en el VPS), la de la orquesta va a skills/planificar-orquesta/SKILL.md", () => {
@@ -1241,30 +1351,7 @@ test("la copia que un aplicar anterior dejó fuera de skills/ se borra, y revert
   assert.equal(existsSync(SKILL_ORQ(v)), false, "revertir quita la del lugar nuevo");
 });
 
-test("revertir pausa la revisión (no la borra), quita la skill y su regla; el próximo aplicar la reanuda", () => {
-  const v = vps({ tokenIssues: 0o600 });
-  assert.equal(v.aplicar().status, 0);
-  const bk = join(v.R, "backups", v.respaldos().at(-1));
-  const r = spawnSync("bash", [join(bk, "rollback.sh")], {
-    env: { ...process.env, PATH: `${join(v.dir, "dobles")}:${process.env.PATH}`, HERMES_RESUME_ESTRICTO: "1" },
-    encoding: "utf8",
-  });
-  assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /hermes: pausado orq\d+ \(la revisión de la orquesta\)/);
-  assert.equal(jobOrq(v).state, "paused");
-  assert.equal(existsSync(SKILL_ORQ(v)), false, "la skill no existía: se quita");
-  assert.doesNotMatch(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), /^## Planificar la orquesta/m);
-  assert.ok(v.jobs().filter((j) => j.name !== "onia-planificar-orquesta").every((j) => j.enabled), "los 3 de antes vuelven");
-
-  spawnSync("/bin/sleep", ["1.1"]);
-  const r2 = v.aplicar();
-  assert.equal(r2.status, 0, r2.stdout);
-  assert.equal(v.leer("hermes-create").trim().split("\n").length, 1, "reanuda el mismo, no crea otro");
-  assert.equal(jobOrq(v).enabled, true);
-  assert.match(r2.stdout, /✅ revisión de la orquesta cada 3 h/, "lo reanudó esta corrida: el próximo revertir lo pausa");
-});
-
-test("con el token, si falta la skill o la regla en main, el token no sirve o el CLI no trae cron create: no aplica nada", () => {
+test("con el token, si falta la skill o la regla nueva en main, o el token no sirve: no aplica nada", () => {
   const sinSkill = vps({ tokenIssues: 0o600 });
   cambiarMain(sinSkill, (repo, g) => g("rm", "-q", "hermes-content/skills/planificar-orquesta.md"));
   const a = sinSkill.aplicar();
@@ -1272,26 +1359,22 @@ test("con el token, si falta la skill o la regla en main, el token no sirve o el
   assert.match(a.stdout, /no encontré la skill planificar-orquesta en origin\/main/);
   nadaCreado(sinSkill);
 
-  const sinRegla = vps({ tokenIssues: 0o600 });
-  cambiarMain(sinRegla, (repo) => {
+  // Un main con la regla del 20-oct no sirve: con ella, el VPS seguiría planificando.
+  const reglaVieja = vps({ tokenIssues: 0o600 });
+  conRevision(reglaVieja);
+  cambiarMain(reglaVieja, (repo) => {
     const f = join(repo, "hermes-content/deploy/hermes-agent/SOUL.md");
-    writeFileSync(f, readFileSync(f, "utf8").replace(/^## Planificar la orquesta/m, "## Otra cosa"));
+    writeFileSync(f, readFileSync(f, "utf8").replace(/^## Cargar tareas en la orquesta.*$/m, "## Planificar la orquesta (2026-10-20)"));
   });
-  const b = sinRegla.aplicar();
+  writeFileSync(join(reglaVieja.R, ".hermes", "SOUL.md"), "# SOUL de Hermes\n\n---\n\n## Cargar tareas en la orquesta (2026-10-26)\n\nla del VPS\n");
+  const b = reglaVieja.aplicar();
   assert.equal(b.status, 1, b.stdout);
-  assert.match(b.stdout, /no encontré la regla de la orquesta/);
-  nadaCreado(sinRegla);
+  assert.match(b.stdout, /no encontré la regla de la orquesta en el SOUL de origin\/main/);
+  nadaCreado(reglaVieja);
 
   const abierto = vps({ tokenIssues: 0o644 });
   const c = abierto.aplicar();
   assert.equal(c.status, 1, c.stdout);
   assert.match(c.stdout, /la cola de la orquesta no está lista: El token de Issues tiene permisos 644/);
   nadaCreado(abierto);
-
-  const sinCreate = vps({ tokenIssues: 0o600 });
-  const d = sinCreate.aplicar({ HERMES_SIN_CREATE: "1" });
-  assert.equal(d.status, 1, d.stdout);
-  assert.match(d.stdout, /no tiene «cron create … --deliver»/);
-  nadaCreado(sinCreate);
-  assert.equal(sinCreate.leer("hermes-create"), "");
 });

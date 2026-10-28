@@ -1,14 +1,17 @@
 ---
 name: planificar-orquesta
-description: Cargar tareas en la cola de la orquesta de ONIA (issues de GitHub que trabajan Claude y Codex solos, en la nube o en la PC de Sergio Urcullo) y revisar cómo van. Usala en la revisión programada cada 3 horas, cuando Sergio Urcullo te pida que algo «lo haga la orquesta», o cuando un trabajo tuyo necesite investigación, un documento, un guion o un arreglo que vos no podés hacer. No la uses para lo que él tiene que confirmar con un código (eso es pedir-a-claude).
+description: Cargar en la cola de la orquesta de ONIA (issues de GitHub que trabajan Claude y Codex solos, en la nube o en la PC de Sergio Urcullo) la tarea que Sergio Urcullo te dicta por Telegram, y contarle cómo va cuando te lo pregunta. Usala solo cuando él te pida que algo «lo haga la orquesta» o pregunte por una tarea. No planifiques ni cargues nada por tu cuenta (eso lo hace el Hermes de su PC), ni la uses para lo que él tiene que confirmar con un código (eso es pedir-a-claude).
 ---
 
-# Planificar la orquesta
+# Cargar en la orquesta lo que Sergio Urcullo te dicta
 
-> Escrita el 2026-10-20. Stack v3 (`scripts/orquesta/README.md`): **vos planificás**, el programa fijo
-> `scripts/orquesta/orquesta.mjs` reparte cada tarea a un trabajador (GitHub Actions o la PC), otro
+> Escrita el 2026-10-20 y cambiada el 2026-10-26. Stack v3 (`scripts/orquesta/README.md`): el programa
+> fijo `scripts/orquesta/orquesta.mjs` reparte cada tarea a un trabajador (GitHub Actions o la PC), otro
 > modelo la revisa con contexto limpio y abre un PR. Los guardarraíles son los de la sección «v2» de
 > `hermes-content/docs/research/harness-orquestacion-autonomia.md`, y el comando los hace cumplir.
+>
+> **Desde el 26-oct no planificás vos** (`AGENTS.md` §1): planifica el Hermes de la PC de Sergio Urcullo.
+> Vos cargás una tarea solo cuando él te la dicta, y la revisión de cada 3 horas que hacías quedó en pausa.
 
 ## 🔴 Lo que no se rompe
 
@@ -30,14 +33,12 @@ description: Cargar tareas en la cola de la orquesta de ONIA (issues de GitHub q
 
 ## Cuándo cargar una tarea
 
-Sí, si se cumplen las tres:
-- sirve a la **etapa vigente** del negocio (`hermes-content/docs/ONIA_ESTRATEGIA_DE_EMPRESA.md`); si no
-  le sirve, va al radar, no a la cola;
-- es **concreta y comprobable**: un archivo de salida, un enlace que abre, una prueba que pasa;
-- **no está ya** en la cola (mirá `--revisar` antes) ni la está haciendo otra sesión (handoffs).
-
-De dónde salen: lo que Sergio Urcullo te pidió por Telegram, el «Próximos pasos» de
-`hermes-content/docs/handoff/<carril>.md`, y el paso siguiente de una tarea que la orquesta cerró.
+**Solo cuando Sergio Urcullo te la dicta** por Telegram. Nunca la saques vos del «Próximos pasos» de un
+handoff, del paso siguiente de una tarea cerrada ni de una idea tuya: eso lo planifica el Hermes de su PC,
+y dos que planifican llenan la cola dos veces. Antes de cargarla, mirá que:
+- sea **concreta y comprobable**: un archivo de salida, un enlace que abre, una prueba que pasa. Si no
+  sabés cómo se comprobaría, preguntale a él en una línea en vez de inventar el `Hecho cuando`;
+- **no esté ya** en la cola (`--revisar`). Si está, decíselo con el link y no la cargues otra vez.
 
 No cargues: lo que necesita su código de confirmación (skill `pedir-a-claude`), lo que es solo
 anotar una idea (tablero), ni el portal del SIAT.
@@ -76,36 +77,23 @@ corregila) · 69 sin token o sin labels (no insistas: decíselo a Sergio Urcullo
 repetida u otra carga en curso · 1 «NO se cargó» (se puede reintentar) o «Puede haberse cargado»
 (**no** la reintentes: mirá `--revisar`).
 
-## La revisión de cada 3 horas
+## Cuando te pregunta cómo va
 
-1. `/root/bin/onia-orquesta-hermes.sh --revisar` → tus tareas con su estado (`en cola`, `en curso`,
-   `espera su ok para empezar`, `espera su ok de la entrega`, `bloqueada`, `hecha`, `cerrada sin hacer`).
-   Las bloqueadas nuevas ya le quedan avisadas a él.
-2. Por cada **hecha** desde la última vez: ¿hay un paso siguiente claro? Cargalo (con su propio
-   `Hecho cuando`). Si no, nada.
-3. Por cada tarea tuya **en cola** que ya no sirve (el plan cambió, otra sesión la hizo, quedó
-   vieja): cerrala sin hacer, con el motivo por la entrada estándar:
+`/root/bin/onia-orquesta-hermes.sh --revisar` → tus tareas con su estado (`en cola`, `en curso`,
+`espera su ok para empezar`, `espera su ok de la entrega`, `bloqueada`, `hecha`, `cerrada sin hacer`).
+Le pasás las líneas que importan, con su link. Las bloqueadas nuevas ya le quedan avisadas a él.
 
-       /root/bin/onia-orquesta-hermes.sh --cerrar <número> <<'FIN_TAREA_ONIA_4b9e'
-       el motivo, en una línea
-       FIN_TAREA_ONIA_4b9e
+Si te pide cerrar una tarea tuya que ya no sirve, cerrala sin hacer, con el motivo por la entrada
+estándar:
 
-   Solo cierra lo tuyo (`origen:hermes`) que no empezó; lo que está `en curso`, `bloqueada` o
-   esperando su ok no se toca.
-4. **Si no tenés ninguna tarea `en cola` ni `en curso`, cargá UNA nueva.** Con la cola vacía, callar no
-   es planificar (20-oct: la primera revisión respondió `[SILENT]` y la orquesta quedó parada). Leé, en
-   este orden, del clon del VPS (siempre `origin/main`, nunca el árbol):
+    /root/bin/onia-orquesta-hermes.sh --cerrar <número> <<'FIN_TAREA_ONIA_4b9e'
+    el motivo, en una línea
+    FIN_TAREA_ONIA_4b9e
 
-       git -C /root/loops/onia-hermes show origin/main:hermes-content/docs/handoff/principal.md
-       git -C /root/loops/onia-hermes ls-tree --name-only origin/main hermes-content/docs/handoff/
-       git -C /root/loops/onia-hermes show origin/main:hermes-content/docs/handoff/<el del carril>.md
+Solo cierra lo tuyo (`origen:hermes`) que no empezó; lo que está `en curso`, `bloqueada` o esperando
+su ok no se toca.
 
-   Primero las prioridades de Sergio Urcullo (`principal.md`), después el «Próximos pasos» de cada
-   carril. Elegí la que cumpla las tres de «Cuándo cargar una tarea» y, entre esas, preferí una
-   `donde: nube` + `check: urls` (investigar, comparar, escribir un documento): es la única que arranca
-   sola. Una por revisión. Si ninguna cumple, decí en una línea por qué.
-5. Terminá con una línea de qué hiciste. `[SILENT]` solo si ya tenías tareas andando y no cambió nada.
-
-A Sergio Urcullo no le escribas por esto: cada tarea cargada, cerrada o bloqueada ya le llega en su
-resumen de las 06:30 o el cierre de las 21:30. Si te pregunta «¿cómo va la orquesta?», `--revisar` y
-le pasás las líneas que importan, con su link.
+**No revisás la cola por tu cuenta.** Hasta el 26-oct un trabajo tuyo la revisaba cada 3 horas y cargaba
+una tarea de los handoffs cuando la encontraba vacía; ese trabajo quedó en pausa porque planifica el
+Hermes de la PC. Cada tarea cargada, cerrada o bloqueada ya le llega en su resumen de las 06:30 o el
+cierre de las 21:30: no le escribas aparte por eso.

@@ -179,11 +179,12 @@ Los pasos y la forma de volver atrás están en `handoff/hermes-local.md`.
      «mismo approvals.deny» y 0 fallas. Hoy falla a propósito, porque el `config.yaml` vivo no tiene deny. En modo
      repo, sin `--vivo`, hoy da 0 fallas: 183 comandos que tienen que bloquearse y 45 lecturas que tienen que pasar.
      Se vuelve a correr en cada actualización de Hermes.
-5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. **Hoy `aplicar` no puede hacerlo**: su
-   control previo falla si el SOUL no trae `## Planificar la orquesta` (`aplicar.sh:309-314`), y además crea ese
-   trabajo y no tiene un paso para pausarlo. Hace falta cambiar `aplicar.sh` y su prueba
-   (`hermes-jarvis-aplicar.test.mjs`) en un PR propio, junto con `hermes-content/skills/planificar-orquesta.md`, que
-   todavía dice «vos planificás». Después lo despacha él.
+5. En el VPS: pausar la revisión de cada 3 h y reemplazar el SOUL viejo. El 28-oct `aplicar` (paso 5e) quedó listo
+   para hacerlo: pausa el trabajo `onia-planificar-orquesta` por su nombre en `jobs.json` con `hermes cron pause` (no
+   lo borra, y ya no lo crea), reemplaza la sección `## Planificar la orquesta` del SOUL del VPS por
+   `## Cargar tareas en la orquesta` (solo lo que él le dicta) y pone la skill `planificar-orquesta` nueva. `revertir`
+   reanuda la revisión solo si la pausó ese `aplicar` y no la había creado otro anterior sin revertir. Falta que él
+   despache `aplicar` después del merge.
 6. Orca: abrir a Hermes ahí solo con Settings → Agents → Agent permissions en **Manual** (en Yolo le pasa `--yolo`) y en la carpeta `E:\onia-wt\hermes-base`; nunca activar Orchestration. Cerrar la corrida `run_66e1d03c2397`.
 7. Pasar a issues lo vigente de `.hermes/plans` y `.hermes/tasks`, y archivar el resto.
 8. ✅ Reglas globales de Claude (26-oct):

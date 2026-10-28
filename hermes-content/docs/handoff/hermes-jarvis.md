@@ -1,6 +1,12 @@
 # Handoff — carril `hermes-jarvis` (Hermes, el Telegram y el calendario de Sergio Urcullo)
 
 > ⚠️ **26-oct-2026:** desde la decisión de Sergio Urcullo de ese día, planifica el Hermes de la PC y el del VPS solo avisa; la cola única son los issues `orquesta`. Lo de abajo que diga que el Hermes del VPS planifica es anterior. Mapa vigente: `hermes-content/docs/ONIA_HARNESS.md`; reglas: `AGENTS.md` §1.
+>
+> **28-oct:** `aplicar` 5e ya PAUSA la revisión de cada 3 h (`onia-planificar-orquesta`, hoy `26deb0b4121c`) por su
+> nombre, con o sin token, y reemplaza la regla vieja del SOUL por `## Cargar tareas en la orquesta`; la skill
+> `planificar-orquesta` dice «solo lo que él te dicta». Hecho en el PR de `aplicar.sh`, con la suite en el CI. **No se
+> despachó:** lo despacha Sergio Urcullo después del merge. Verificar con el diagnóstico, sección 18 (`state=paused`) y
+> sección 14 (el SOUL del VPS sin «Planificar la orquesta»).
 
 > **ESTADO 21-oct, 01:45 UTC.** Paso 5e ENCENDIDO (Hermes planifica la orquesta): aplicar 39496727472 y 39503283126,
 > fallas 0; revisión `26deb0b4121c` cada 3 h. Su primera corrida (20:01 La Paz) cargó la skill y respondió `[SILENT]`:
