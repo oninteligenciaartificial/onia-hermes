@@ -23,7 +23,7 @@ description: Invocar ANTES de tocar a Hermes (el asistente de Sergio Urcullo por
 | ¿Hermes o el asistente de Codex / dots? Decisión, pruebas y cuándo revisarla (8-oct: queda Hermes; dots bloqueado por edad) | `hermes-content/docs/ASISTENTE_CODEX_VS_HERMES.md` |
 | Fuentes del resumen/cierre que no son del carril (9-oct) | qué sale: `hermes-content/docs/cola/plan-3-semanas/CALENDARIO-PUBLICACION-<d1>-<d2>-<MES>.md` (el rango sale del nombre); qué salió: `/root/publicar/publicado.jsonl` del VPS (lo escriben los publicadores de `hermes-content/deploy/vps-ops/publicar/`); relojes (10-oct): tabla §G de `hermes-content/docs/cola/loop/madre.md`, leída de `origin/main` del clon; colas paradas: `git log` de `cola/loop/*.md` en `origin/main`; trabajos mudos: `/var/lib/onia-latido/<nombre>` («epoch código cadencia», lo escribe `onia-latido.sh`) |
 | Formato de todo lo que le llega (8-oct; 20-oct sin rótulos) | prosa corta: lo que pasó, lo que le toca, lo que viene. `jarvis-resumen.sh` (`parte`/`grupo`; `ONIA_JARVIS_GRUPOS=1` muestra los bloques solo en las pruebas), SOUL `## Formato fijo de cada mensaje` (aplicar 5c la REEMPLAZA si cambió), aviso de `qa-release.sh`, prompt de la rutina §5 |
-| Hermes carga y revisa tareas de la orquesta (20-oct; desde el 26-oct solo carga lo que dicta Sergio Urcullo y la revisión de cada 3 h se pausa: `ONIA_HARNESS.md` §7, paso 5) | `scripts/loops/orquesta-hermes.sh` (→ `/root/bin/onia-orquesta-hermes.sh`), skill `hermes-content/skills/planificar-orquesta.md`, SOUL `## Planificar la orquesta`, paso 5e de `aplicar` (inerte sin `/root/.config/onia/gh-issues-token`), sección 18 del diagnóstico. Pruebas: `npm run test:orquesta-hermes` |
+| Hermes carga tareas en la orquesta (20-oct; desde el 26-oct solo lo que dicta Sergio Urcullo: `ONIA_HARNESS.md` §7, paso 5) | `scripts/loops/orquesta-hermes.sh` (→ `/root/bin/onia-orquesta-hermes.sh`), skill `hermes-content/skills/planificar-orquesta.md`, SOUL `## Cargar tareas en la orquesta`, paso 5e de `aplicar`: pausa la revisión de cada 3 h (`onia-planificar-orquesta`, con o sin token) y pone skill y regla (inertes sin `/root/.config/onia/gh-issues-token`); sección 18 del diagnóstico. Pruebas: `npm run test:orquesta-hermes`, `npm run test:jarvis-aplicar` |
 
 ## Cómo se llega al VPS desde la nube, y qué NO anda
 
@@ -162,6 +162,10 @@ CLI de Hermes.
   (`website/docs/user-guide/features/cron.md`), no de una corrida en el VPS: la Fase A pide `cron create --help` con
   `--deliver` antes de tocar nada, y el trabajo se busca por `name` en `jobs.json` (nunca se crean dos; uno pausado se
   reanuda). `rollback.sh` lo pausa con `cron pause`, lo único del CLI medido, y lo deja en `jobs.json`.
+  **Desde el 28-oct `aplicar` ya no lo crea: lo PAUSA** por su nombre y lo anota en `hermes-pausados.txt` antes de
+  pausarlo (planifica el Hermes de la PC). La Fase A ya no pide `cron create --help`. Al revertir, `rollback.sh`
+  primero reanuda lo de `hermes-pausados.txt` y después pausa lo de `hermes-creados.txt` heredado: si la revisión la
+  creó un aplicar anterior sin revertir, revertir los dos la deja en pausa, como antes del primero.
 - **El token de Issues es de la cuenta de Sergio Urcullo** (20-oct). Lo que se cree con él lo firma su usuario y
   `orquesta.mjs` lo toma con plena confianza (autores). `onia-orquesta-hermes.sh` frena el error del modelo (check
   `cmd` con cualquier comando, publicar sin su ok, bucles que llenan la cola), no a un Hermes que use curl directo.
@@ -387,6 +391,10 @@ CLI de Hermes.
   en `$BK/SOUL.md.antes`). Las otras secciones siguen con «agregar si falta»: si cambian, necesitan lo
   mismo. Y una marca de versión de `al_dia()` se cambia junto con el texto que la lleva: el resumen sin
   rótulos se reconoce por «nada pendiente», no por `grupo NECESITO`, que también tenía el viejo.
+  **Si la sección cambia de TÍTULO** (28-oct: «Planificar la orquesta» → «Cargar tareas en la orquesta»), el awk
+  que la recorta casa los dos títulos (`/^## (Planificar|Cargar tareas en) la orquesta/`) y la Fase A exige solo el
+  nuevo en `main`: con el viejo, el VPS seguiría planificando. Con solo el nuevo, 5e la habría agregado al lado de la
+  vieja, y Hermes tendría dos reglas que se contradicen.
 - **`git stash -u` con un `git mv` en el medio:** el pop no puede restaurar un archivo nuevo en la ruta
   que dejó libre el `mv`, y deja el stash guardado. Antes de soltarlo, compará archivo por archivo con
   `git show stash@{0}^3:<ruta>`. Mejor no mezclar stash con renombres.
