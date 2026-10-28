@@ -163,9 +163,10 @@ CLI de Hermes.
   `--deliver` antes de tocar nada, y el trabajo se busca por `name` en `jobs.json` (nunca se crean dos; uno pausado se
   reanuda). `rollback.sh` lo pausa con `cron pause`, lo único del CLI medido, y lo deja en `jobs.json`.
   **Desde el 28-oct `aplicar` ya no lo crea: lo PAUSA** por su nombre y lo anota en `hermes-pausados.txt` antes de
-  pausarlo (planifica el Hermes de la PC). La Fase A ya no pide `cron create --help`. Al revertir, `rollback.sh`
-  primero reanuda lo de `hermes-pausados.txt` y después pausa lo de `hermes-creados.txt` heredado: si la revisión la
-  creó un aplicar anterior sin revertir, revertir los dos la deja en pausa, como antes del primero.
+  pausarlo (planifica el Hermes de la PC). La Fase A ya no pide `cron create --help`. Al revertir, `rollback.sh` no
+  reanuda lo que también está en `hermes-creados.txt` heredado, y después lo pausa: si la revisión la creó un aplicar
+  anterior sin revertir, queda en pausa, como antes del primero. Reanudarla y pausarla después la dejaba correr si la
+  pausa fallaba (revisión del 28-oct).
 - **El token de Issues es de la cuenta de Sergio Urcullo** (20-oct). Lo que se cree con él lo firma su usuario y
   `orquesta.mjs` lo toma con plena confianza (autores). `onia-orquesta-hermes.sh` frena el error del modelo (check
   `cmd` con cualquier comando, publicar sin su ok, bucles que llenan la cola), no a un Hermes que use curl directo.

@@ -543,6 +543,9 @@ raise SystemExit(11)
 PY
 }
 for id in $(cat "$BK/hermes-pausados.txt" 2>/dev/null); do
+  # Lo que creó un aplicar heredado queda en pausa (abajo): reanudarlo, aunque sea un instante, lo deja
+  # correr si la pausa de después falla (revisión del 28-oct).
+  if grep -qx "$id" "$BK/hermes-creados.txt" 2>/dev/null; then echo "hermes: $id lo creó un aplicar anterior: no lo reanudo"; continue; fi
   en_pausa "$id"; e=$?
   if [ "$e" = 10 ]; then echo "hermes: $id ya estaba activo"; continue; fi
   if [ "$e" = 11 ]; then echo "hermes: $id ya no está en jobs.json: nada que reanudar"; continue; fi
@@ -552,8 +555,8 @@ for id in $(cat "$BK/hermes-pausados.txt" 2>/dev/null); do
   [ "$e" = 10 ] && echo "hermes: reanudado $id" || mal "hermes: $id sigue en pausa después de reanudarlo"
 done
 # El trabajo que un aplicar del 20 al 26-oct creó o reanudó (la revisión de la orquesta) se PAUSA, no se
-# borra: «cron pause» es lo único del CLI medido en el VPS. Va DESPUÉS de reanudar lo pausado: si el aplicar
-# de ahora pausó una revisión que creó uno anterior heredado, revertir los dos la deja en pausa, como antes.
+# borra: «cron pause» es lo único del CLI medido en el VPS. Si el aplicar de ahora pausó una revisión que
+# creó uno anterior heredado, revertir los dos la deja en pausa, como antes del primero.
 for id in $(cat "$BK/hermes-creados.txt" 2>/dev/null); do
   en_pausa "$id"; e=$?
   if [ "$e" = 0 ]; then echo "hermes: $id ya estaba en pausa"; continue; fi

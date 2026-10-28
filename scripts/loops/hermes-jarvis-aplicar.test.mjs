@@ -1254,10 +1254,35 @@ test("el VPS del 20-oct: pausa la revisión de cada 3 h por su nombre, reemplaza
 
   const rev = v.revertir({ HERMES_RESUME_ESTRICTO: "1" });
   assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.match(rev.stdout, new RegExp(`${ID_ORQ} lo creó un aplicar anterior: no lo reanudo`), "ni un instante activa");
+  assert.match(rev.stdout, new RegExp(`hermes: ${ID_ORQ} ya estaba en pausa`));
   assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), soulAntes, "el SOUL de antes, byte a byte");
   assert.equal(readFileSync(SKILL_ORQ(v), "utf8"), "la skill del 20-oct: vos planificás\n");
   assert.equal(jobOrq(v).state, "paused", "la creó el aplicar del 20-oct, que también se revierte: queda en pausa");
   assert.ok(v.jobs().filter((j) => j.id !== ID_ORQ).every((j) => j.enabled), "los 3 de antes vuelven");
+});
+
+test("la regla del 20-oct al FINAL del SOUL (como en el VPS: la agregó el 5e viejo) también sale entera", () => {
+  const v = vps({ tokenIssues: 0o600 });
+  const main = readFileSync(join(RAIZ, "hermes-content/deploy/hermes-agent/SOUL.md"), "utf8");
+  const seccion = (t) => main.slice(main.indexOf(t)).split(/^---$/m)[0].trimEnd();
+  // El formato y el calendario ya están (5c no agrega nada después): la vieja es la última, sin «---» detrás.
+  const soulAntes = ["# SOUL de Hermes", seccion("## Formato fijo de cada mensaje"), seccion("## Su calendario y el cierre del día"), REGLA_20_OCT]
+    .join("\n\n---\n\n");
+  writeFileSync(join(v.R, ".hermes", "SOUL.md"), soulAntes);
+  const r = v.aplicar();
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /su SOUL ya tenía la regla del calendario/);
+  assert.match(r.stdout, /su SOUL ya tenía la regla del formato/);
+  assert.match(r.stdout, /✅ regla de la orquesta reemplazada en el SOUL de Hermes/);
+  const soul = readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8");
+  assert.doesNotMatch(soul, /Planificar la orquesta|cada 3 horas/);
+  assert.ok(soul.startsWith(soulAntes.slice(0, soulAntes.indexOf("## Planificar la orquesta"))), "lo de antes queda igual");
+  assert.equal(soul.trimEnd(), soul.slice(0, soul.indexOf("## Cargar tareas en la orquesta")) + seccion("## Cargar tareas en la orquesta"),
+    "termina en la regla nueva, entera");
+  const rev = v.revertir();
+  assert.equal(rev.status, 0, rev.stdout + rev.stderr);
+  assert.equal(readFileSync(join(v.R, ".hermes", "SOUL.md"), "utf8"), soulAntes);
 });
 
 test("sin token igual pausa la revisión de cada 3 h; si la pausó esta corrida, revertir la reanuda", () => {
