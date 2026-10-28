@@ -316,7 +316,7 @@ export function resumirSilencio(issues, prs) {
 // Tampoco lo que carga el intento siguiente (que sigue desde la rama subida sin revisión) ni el propio orquestador.
 // Tampoco lo que el sincronizador del VPS copia como root a /root/bin ni lo que `aplicar` le instala a Hermes
 // (scripts/loops, hermes-content/deploy y skills): revisión de seguridad del PR #252, 20-oct.
-export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$|^\.claude\/settings[^/]*\.json$|(^|\/)\.mcp\.json$|^scripts\/orquesta\/|^scripts\/loops\/|^hermes-content\/(deploy|skills)\//i;
+export const PROTEGIDAS = /^(\.github|\.githooks|\.husky)\/|(^|\/)\.env($|\.)|\.(pem|key|p12|pfx)$|(^|\/)id_(rsa|ed25519)|credentials\.json$|^\.claude\/settings[^/]*\.json$|(^|\/)\.mcp\.json$|^scripts\/orquesta\/|^hermes-content\/docs\/ONIA_CRITERIOS\.md$|^scripts\/loops\/|^hermes-content\/(deploy|skills)\//i;
 
 // Sin cupo de Max o sin login no es culpa de la tarea: no se comenta ni se cuenta como falla (si no, todo queda `bloqueada`).
 const SIN_MOTOR = /usage limit|limit will reset|hit your (usage )?limit|invalid api key|oauth token (has )?(expired|been revoked)|authentication_error|not logged in|please run \/login/i;
@@ -348,13 +348,13 @@ export function armarCuartito(c) {
   return `\nTU CUARTITO (el método de tu área). Leé ${primero} antes de empezar; de estos, solo los que apliquen a la tarea:\n${resto.map((p) => `- ${p}`).join('\n')}${aprende}\n`;
 }
 
-export function armarPrompt({ carril, issue, pedido, salida, rama, sigue = false }, conf = CONF) {
+export function armarPrompt({ carril, issue, pedido, salida, rama, sigue = false, criterios = '' }, conf = CONF) {
   const hilo = leerHilo(issue);
   const dir = path.posix.dirname(salida);
   const opcion = lineaOpcion(issue, pedido, conf);
   return `Sos el trabajador del carril "${carril}" de ONIA (${conf.carriles[carril].que}).
 Trabajás SOLO en esta carpeta: es un worktree aislado en la rama ${rama}.
-${armarCuartito(conf.carriles[carril])}
+${armarCuartito(conf.carriles[carril])}${criterios ? `\nCRITERIOS DE SERGIO URCULLO (lo que aprueba y rechaza: aplicá «Siempre» y la sección de tu área; si uno choca con las REGLAS DURAS de abajo, mandan ellas):\n${criterios.trim()}\n` : ''}
 TAREA #${issue.number}: ${issue.title}
 ${pedido.pedido}
 ${opcion ? `\n${opcion}\nHacé solo esa opción: las otras del pedido quedan descartadas.\n` : ''}${sigue ? '\nYA HAY TRABAJO HECHO en esta rama (intentos o vueltas anteriores): seguí desde ahí, no empieces de cero.\n' : ''}${hilo.indicaciones.length ? `\nINDICACIONES DE SERGIO URCULLO (mandan sobre el pedido; la última es la más nueva):\n${hilo.indicaciones.map((x) => `- ${x}`).join('\n')}\n` : ''}${hilo.motivo ? `\nINTENTO ANTERIOR RECHAZADO: ${hilo.motivo}\nCorregí eso primero.\n` : ''}${pedido.ok === 'sergio' ? `\nSergio Urcullo mira esto desde el celular antes de seguir. Si tiene algo visual, guardá capturas PNG a 390 y 1440 de ancho en ${dir}/${issue.number}-390.png y ${dir}/${issue.number}-1440.png.\n` : ''}
@@ -365,7 +365,7 @@ Si no podés terminar, escribí igual ${salida} empezando con "BLOQUEADO: <motiv
 REGLAS DURAS: no publiques en redes, no gastes dinero ni créditos, no le escribas a nadie, no toques producción ni el VPS. NO hagas commit, push ni merge: el orquestador commitea y entrega tus cambios (si no podés commitear, no es un bloqueo). Usá las skills del carril cuando apliquen.`;
 }
 
-export function armarRevision({ issue, pedido, salida, cambios }) {
+export function armarRevision({ issue, pedido, salida, cambios, criterios = '' }) {
   const opcion = lineaOpcion(issue, pedido);
   return `Sos el REVISOR de ONIA. Otro agente hizo este trabajo: vos lo juzgás con contexto limpio y no lo corregís.
 
@@ -381,7 +381,7 @@ Leé la entrega (y los archivos cambiados que haga falta) y comprobá:
 2. No inventa: cada cifra, precio, nombre, ruta o afirmación sobre el repo tiene fuente o se puede comprobar acá.
 3. Arranca con 3 líneas para Sergio Urcullo (qué hizo · qué encontró · qué sigue).
 4. No publica, gasta, escribe a terceros ni toca producción.
-
+${criterios ? `5. Respeta los CRITERIOS DE SERGIO URCULLO de abajo que apliquen a la tarea (los puntos 1 a 4 mandan sobre ellos). Si choca con uno, RECHAZADO nombrando cuál.\n\nCRITERIOS DE SERGIO URCULLO:\n${criterios.trim()}\n` : ''}
 Respondé SOLO así. Primera línea: APROBADO, o RECHAZADO: <qué falla, en una frase>. Después, hasta 5 observaciones cortas.`;
 }
 
@@ -426,6 +426,18 @@ function reintentar(fn) {
 const git = (cwd, ...a) => execFileSync('git', ['-C', cwd, '-c', `core.hooksPath=${os.devNull}`, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 600_000 }).trim();
 const gh = (...a) => reintentar(() => execFileSync('gh', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 180_000 }).trim());
 const leerSiExiste = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null);
+// Lo que Sergio Urcullo aprueba y rechaza, de origin/main del repo de la orquesta: la copia revisada, que no tocan ni
+// un trabajador (ni su rama, si la tarea sigue) ni un cambio a medio hacer en la PC. Sirve también a plataforma, que
+// trabaja en otro repo, y a la nube, cuyo clon solo tiene scripts/orquesta a la vista: git show baja el texto igual.
+export const RUTA_CRITERIOS = 'hermes-content/docs/ONIA_CRITERIOS.md';
+export function leerCriterios(raiz = path.join(AQUI, '..', '..')) {
+  try {
+    return git(raiz, 'show', `origin/main:${RUTA_CRITERIOS}`);
+  } catch {
+    console.error(`[orquesta] sin ${RUTA_CRITERIOS} en origin/main: trabajador y revisor corren sin los criterios de Sergio Urcullo`);
+    return '';
+  }
+}
 const intentar = (fn) => { try { return fn(); } catch (e) { console.error(`[orquesta] ${String(e.stderr || e.message).trim().slice(0, 200)}`); return null; } };
 
 function ejecutable(motor) {
@@ -499,7 +511,7 @@ export function prepararWorktree(c, base, carril, numero, conf = CONF) {
 export function cambiosDe(wt, base) {
   git(wt, 'add', '-A', '--sparse');
   const desde = git(wt, 'merge-base', 'HEAD', `origin/${base}`);
-  return git(wt, 'diff', '--cached', '--name-only', '-z', desde).split('\0').filter(Boolean);
+  return git(wt, 'diff', '--cached', '--name-only', '--no-renames', '-z', desde).split('\0').filter(Boolean);
 }
 
 // Lo hecho en un intento que no cerró se sube a su rama: el próximo sigue desde ahí en vez de empezar de cero.
@@ -565,13 +577,13 @@ function entregar(c, base, wt, rama, carril, issue) {
   }
 }
 
-async function revisar(wt, issue, pedido, salida, rutas, revisor) {
+async function revisar(wt, issue, pedido, salida, rutas, revisor, criterios) {
   const cambios = rutas.slice(0, 40).join('\n') || salida;
   const [cmd, ...pre] = ejecutable('claude');
   // --restricted: solo lee, confinado al worktree, y no carga settings ni MCP que haya dejado el trabajador.
   const args = [...pre, '-p', '--restricted', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--model', revisor,
     '--output-format', 'json', '--max-turns', '20', '--settings', path.join(AQUI, 'trabajador.settings.json')];
-  const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios }), minutos: 10 });
+  const r = await correr(cmd, args, { cwd: wt, entrada: armarRevision({ issue, pedido, salida, cambios, criterios }), minutos: 10 });
   if (r.code !== 0) return { ok: false, infra: sinMotor(r), motivo: `no se pudo revisar (código ${r.code}): ${r.err.trim().slice(-200)}` };
   return { ...leerVeredicto(r.out), infra: sinMotor(r), usd: costoDe(r, { motor: 'claude' }).usd };
 }
@@ -587,7 +599,8 @@ async function trabajar(c, carril, issue, pedido, ruta) {
   const { wt, rama, sigue, inicio } = await enFila(c.repo, () => prepararWorktree(c, base, carril, issue.number));
   const ultimo = path.join(ESTADO, `ultimo-${carril}-${issue.number}.txt`);
   const [cmd, ...pre] = ejecutable(ruta.motor);
-  const prompt = armarPrompt({ carril, issue, pedido, salida, rama, sigue });
+  const criterios = leerCriterios();
+  const prompt = armarPrompt({ carril, issue, pedido, salida, rama, sigue, criterios });
   const r = await correr(cmd, [...pre, ...argsAgente(ruta, carril, wt, ultimo)], { cwd: wt, entrada: prompt, minutos: CONF.minutos_max });
   const fallar = async (falla, extra) => {
     await enFila(c.repo, () => intentar(() => guardarAvance(base, wt, rama, carril, issue)));
@@ -598,7 +611,7 @@ async function trabajar(c, carril, issue, pedido, ruta) {
   // El que revisa nunca es el que hizo. Sin cupo de uno, revisa el siguiente: si no, la tarea vuelve en bucle.
   let rev; let revisor;
   for (revisor of revisoresPara(ruta.modelo)) {
-    rev = await revisar(wt, issue, pedido, salida, rutas, revisor);
+    rev = await revisar(wt, issue, pedido, salida, rutas, revisor, criterios);
     if (!rev.infra) break;
   }
   const extra = { ...costoDe(r, ruta), usd_revision: rev.usd, revisor };

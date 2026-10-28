@@ -312,6 +312,9 @@ sesión de nuevo en cada tarea; las credenciales personales viven en su laptop.
 - **Medir peso y tiempo real**, no solo que responda. Un 200 lento es un fallo con cara
   de éxito (la fuente de iconos pesaba 3,9 MB y tardaba 117 s).
 - Un `grep` sirve para **descartar**, nunca para **confirmar** que algo se ve bien.
+- **Una entrega se juzga también contra `hermes-content/docs/ONIA_CRITERIOS.md`** (Sergio Urcullo, 28-oct-2026: «armá el
+  archivo de criterios… para que Hermes y los trabajadores lo apliquen»): lo que él aprobó y rechazó, con su caso. La
+  orquesta se lo pasa al trabajador y al revisor. Un criterio nuevo entra por PR, con su cita y su fecha.
 - **Un dato heredado no se ejecuta sin CONTARLO de nuevo.** El 2026-08-20 mi propio
   veredicto decía "de 136 workflows de n8n quedan 2" y "las 3 orgs son de QA": contados
   en vivo, 44 workflows estaban ACTIVOS (borrarlos apagaba producción) y una de las orgs

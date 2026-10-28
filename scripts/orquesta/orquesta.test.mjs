@@ -10,7 +10,7 @@ import {
   baseDe, motivoAnterior, armarPrompt, leerVeredicto, PROTEGIDAS, armarCuartito,
   leerHilo, esOk, decidirRespuesta, cuerpoCierre, firmar, dondeDe, ajustarAlEntorno, prepararWorktree, cambiosDe, sinMotor,
   revisoresPara, esNivelB, opcionesDe, horasDeSilencio, silencioVencido, atenderSilencio, armarRevision,
-  resumirSilencio, informeSilencio, atenderRespuestas, enPausaSinCupo,
+  resumirSilencio, informeSilencio, atenderRespuestas, enPausaSinCupo, RUTA_CRITERIOS, leerCriterios,
 } from './orquesta.mjs';
 
 test('una tarea soltada sin cupo espera una hora antes de volver a tomarse', () => {
@@ -729,4 +729,48 @@ test('--silencio-informe sin gh en el PATH sale con un error claro y no escribe 
   } finally {
     fs.rmSync(vacio, { recursive: true, force: true });
   }
+});
+
+test('los criterios de Sergio Urcullo llegan al trabajador y al revisor, y ningún trabajador los edita', () => {
+  const crit = '## Siempre\n- RECHAZA: «muy pronto» en la venta.';
+  const args = { carril: 'marca', issue: issue(3, 'marca'), pedido: { pedido: 'X' }, salida: 's.md', rama: 'r' };
+  assert.match(armarPrompt({ ...args, criterios: crit }), /CRITERIOS DE SERGIO URCULLO[^\n]*\n## Siempre\n- RECHAZA: «muy pronto»/);
+  assert.doesNotMatch(armarPrompt(args), /CRITERIOS DE SERGIO URCULLO/);
+  const rev = { issue: issue(3, 'marca'), pedido: { pedido: 'X' }, salida: 's.md', cambios: 's.md' };
+  assert.match(armarRevision({ ...rev, criterios: crit }), /5\. Respeta los CRITERIOS[\s\S]*«muy pronto»[\s\S]*Respondé SOLO así/);
+  assert.doesNotMatch(armarRevision(rev), /CRITERIOS/);
+  assert.ok(PROTEGIDAS.test(RUTA_CRITERIOS));
+  assert.ok(fs.existsSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', RUTA_CRITERIOS)), 'el archivo existe donde lo busca la orquesta');
+});
+
+test('los criterios salen de origin/main aunque el clon sea ralo o el árbol tenga cambios, y mover el archivo se ve', (t) => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'orquesta-crit-'));
+  t.after(() => fs.rmSync(tmp, { recursive: true, force: true }));
+  const g = (cwd, ...a) => execFileSync('git', ['-C', cwd, '-c', 'user.name=t', '-c', 'user.email=t@t', ...a], { encoding: 'utf8' });
+  const semilla = path.join(tmp, 'semilla');
+  for (const f of [RUTA_CRITERIOS, 'scripts/orquesta/x.mjs']) {
+    fs.mkdirSync(path.dirname(path.join(semilla, f)), { recursive: true });
+    fs.writeFileSync(path.join(semilla, f), f === RUTA_CRITERIOS ? 'revisado' : 'x');
+  }
+  g(tmp, 'init', '-q', '-b', 'main', semilla);
+  g(semilla, 'add', '-A');
+  g(semilla, 'commit', '-qm', 'semilla');
+  const origen = path.join(tmp, 'origen.git');
+  g(tmp, 'clone', '-q', '--bare', semilla, origen);
+  g(origen, 'config', 'uploadpack.allowFilter', 'true');
+  // Como en Actions: clon sin blobs y solo scripts/orquesta a la vista.
+  const ralo = path.join(tmp, 'ralo');
+  g(tmp, 'clone', '-q', '--filter=blob:none', '--sparse', pathToFileURL(origen).href, ralo);
+  g(ralo, 'sparse-checkout', 'set', 'scripts/orquesta');
+  assert.equal(leerCriterios(ralo), 'revisado');
+  // Como en la PC: un cambio sin commitear no llega a los trabajadores.
+  const pc = path.join(tmp, 'pc');
+  g(tmp, 'clone', '-q', pathToFileURL(origen).href, pc);
+  fs.writeFileSync(path.join(pc, RUTA_CRITERIOS), 'a medio hacer');
+  assert.equal(leerCriterios(pc), 'revisado');
+  assert.equal(leerCriterios(semilla), ''); // sin origin/main no inventa nada
+  // Un trabajador que mueve el archivo también lo cambia: PROTEGIDAS tiene que ver la ruta vieja.
+  g(pc, 'checkout', '-q', '--', RUTA_CRITERIOS);
+  g(pc, 'mv', RUTA_CRITERIOS, 'hermes-content/docs/otro.md');
+  assert.ok(cambiosDe(pc, 'main').some((x) => PROTEGIDAS.test(x)));
 });

@@ -29,8 +29,9 @@ Cuenta IG ONIA: `17841423363059652` con token Meta default. Las cuentas
 personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ahi.
 
 ## Packs visuales disponibles (`carousel_render.js`)
-- `community-editorial` — **default para ONIA, educación y producto**. Portada
-  humana/editorial, interiores claros, tarjetas de conocimiento, diagramas y UI real.
+- `community-editorial` — **no es default de nada**: Sergio Urcullo lo rechazó el 29-sep («vacío y con demasiado
+  texto»). La marca personal va en verde, blanco y negro (`diseno-contenido-onia`); la pauta de Onia, con la marca de
+  la web (`CLAUDE.md` §«Publicidad que no parezca hecha por IA»). Criterios: `hermes-content/docs/ONIA_CRITERIOS.md`.
 - `dark-product` — estilo Solaris. Usar sólo cuando el concepto publicitario pida
   deliberadamente una pieza oscura de performance; no usarlo como default para un
   carrusel completo.
@@ -42,7 +43,8 @@ personales de Arthur/Sergio NO tienen credenciales Meta: no intentar publicar ah
   superior. La marca y el episodio van en una barra editorial discreta.
 - Titulares y objetos con tamano reducido: todo debe entrar con margen seguro,
   los callouts no se cortan en los bordes.
-- ONIA green como acento, nunca como paleta completa.
+- Marca personal: verde ONIA dominante con blanco y negro, sin crema (29-sep). Pauta de Onia: verde solo en lo que
+  se aprieta, como la web.
 - Layouts profesionales: jerarquia clara, espacio util, tarjetas de prueba,
   diagramas simples, procesos y ejemplos concretos. Un slide sin visual de apoyo
   se considera incompleto.
@@ -60,8 +62,8 @@ que se veía generada por IA y no desarrollaba un argumento de venta.
   operativa → producto real → mecanismo → control humano/prueba → oferta y CTA.
 - Para software, incluir capturas reales del tenant demo. Nunca inventar UI con un
   generador de imágenes. Revisar que no haya datos personales antes de renderizar.
-- Usar como piso de calidad el pack editorial de la sesión de marca personal
-  (`community-editorial`, commit `e9b80e22`), adaptado a ONIA; no copiar su copy.
+- El formato sale de la Biblioteca de Anuncios y de la marca de la web, no de un pack de la marca personal
+  (corrección del 2-oct).
 - La pieza se rechaza si: el rubro puede reemplazarse sin cambiar el texto, el dolor
   no termina en dinero, no aparece el producto, o el CTA compite con otro CTA.
 
