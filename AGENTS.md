@@ -214,6 +214,8 @@ Para acciones productivas o cambios de servicios, también `hermes-content/docs/
 
 - Verificar es mirar. Una pantalla se abre y se mira renderizada: un 200 o un grep no prueban ni el aspecto ni el
   flujo. En un video se revisan por separado los subtítulos, el audio, los fotogramas y la continuidad.
+- Una entrega se juzga también contra `hermes-content/docs/ONIA_CRITERIOS.md`: lo que Sergio Urcullo aprobó y rechazó, con
+  su caso. La orquesta se lo pasa al trabajador y al revisor; Hermes lo usa al verificar. Se cambia solo por PR.
 - Se verifica contra el sistema correcto. Un dato heredado, aunque sea propio, se vuelve a contar antes de actuar.
 - Construido no es terminado: algo está hecho cuando está encendido en producción y verificado ahí. Lo que está
   detrás de un flag apagado no se reporta como hecho.

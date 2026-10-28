@@ -61,6 +61,8 @@ acá: si cambia, cambia allá. Lo que importa para delegar:
 
 - Se revisa el artefacto exacto (PR, rama y commit), no el resumen de quien lo hizo. Se corre el gate del carril y se
   conservan los errores.
+- Además del «hecho cuando», la entrega se compara con `hermes-content/docs/ONIA_CRITERIOS.md` (lo que Sergio Urcullo
+  aprobó y rechazó, 28-oct). Si choca con uno, se rechaza nombrando cuál. Un criterio nuevo entra por PR, con cita y fecha.
 - Revisa alguien distinto del autor, con contexto limpio. La orquesta usa el `revisor` de `scripts/orquesta/carriles.json`;
   la sesión principal, un subagente o `codex-tarea.sh revisar`.
 - Gate de onia-platform después de Codex: `git checkout -- '*.snap'`, después `npx vitest run` completo con salida
