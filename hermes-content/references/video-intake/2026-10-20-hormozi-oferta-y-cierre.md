@@ -1,7 +1,7 @@
 # Alex Hormozi: cómo arma una oferta de valor y cómo cierra
 Recepción: 20-oct-2026 (Sergio Urcullo: «sigamos aprendiendo con otro referente de venta») · Análisis: 20-oct-2026 · Tipo: 3 videos y 2 lecturas de su libro, como transcripción
 Fuente: abajo · Instrucción de Sergio Urcullo: aprender a vender valor y psicología de compra antes de ordenar las sesiones
-Acceso: parcial. Texto completo de 2 videos ([pickscribe](https://pickscribe.com/v/q32-l3Yoqg4/) con dos transcripciones) y subtítulos de 1 (`yt-dlp`, cliente android). YouTube pidió login para los otros 7 elegidos (`cy2k1GdA-9o` se leyó por pickscribe). La ecuación de valor se leyó en una entrevista suya ([Young and Profiting E199](https://youngandprofiting.com/alex-hormozi-the-value-equation-how-to-make-offers-so-good-people-feel-stupid-saying-no-e199/)) y en la lectura de su libro por él ([podscripts, parte 3](https://podscripts.co/podcasts/the-game-with-alex-hormozi/part-3-100m-offers-book)). Sin imagen. Copias de trabajo en `E:/onia-research/hormozi/`.
+Acceso: parcial. Texto completo de 2 videos ([pickscribe](https://pickscribe.com/v/q32-l3Yoqg4/) con dos transcripciones) y subtítulos de 1 (`yt-dlp`, cliente android). YouTube pidió login para los otros 8 pedidos (`q32-l3Yoqg4` y `cy2k1GdA-9o` se leyeron por pickscribe). La ecuación de valor se leyó en una entrevista suya ([Young and Profiting E199](https://youngandprofiting.com/alex-hormozi-the-value-equation-how-to-make-offers-so-good-people-feel-stupid-saying-no-e199/)) y en la lectura de su libro por él ([podscripts, parte 3](https://podscripts.co/podcasts/the-game-with-alex-hormozi/part-3-100m-offers-book)). Sin imagen. Copias de trabajo en `E:/onia-research/hormozi/`.
 Sesión/carril: sesión local «taller + contenido diario», 20-oct.
 
 > **Lectura rápida.** Para Hormozi el valor no es lo que cuesta hacer algo: es **qué tan grande es el resultado y qué tan seguro está el comprador de lograrlo, dividido por cuánto tarda y cuánto le cuesta en esfuerzo**. Las empresas grandes ganan achicando la parte de abajo (rápido y sin esfuerzo); los novatos solo prometen más. Para cerrar usa siempre el mismo orden (**CLOSER**) y en la llamada solo dice tres cosas: **preguntas, reformulaciones e historias cortas**.
@@ -17,7 +17,7 @@ Sesión/carril: sesión local «taller + contenido diario», 20-oct.
 | YAP E199 | Entrevista: la ecuación de valor contada por él | — | Transcripción del sitio del podcast | `[00:07:54]`-`[00:13:10]` |
 | The Game, parte 3 | Él leyendo el capítulo de la ecuación de valor de su libro | — | Transcripción (podscripts) | `00:03:41`-`00:07:36` |
 
-Elegidos y no leídos (YouTube pidió login): `RVbvhPGFi6E`, `GO6VCcLlnLs` (subir precios), `ETEFhDICm5o` y `j1tA4l7R2c0` (cerrar diciendo que no), `EZLQzR-_83A` (el primer producto), `5MjjpB8SPMo`, `gza5RtQCVsA` (bajar de producto). Las partes del libro sobre escasez, urgencia, bonos, garantías y nombre de la oferta **no se releyeron hoy**.
+Pedidos y no leídos (YouTube pidió login, 6): `RVbvhPGFi6E`, `GO6VCcLlnLs` (subir precios), `ETEFhDICm5o` (cerrar diciendo que no), `EZLQzR-_83A` (el primer producto), `5MjjpB8SPMo`, `gza5RtQCVsA` (bajar de producto). Las partes del libro sobre escasez, urgencia, bonos, garantías y nombre de la oferta **no se releyeron hoy**.
 
 ## 1. La oferta: la ecuación de valor
 

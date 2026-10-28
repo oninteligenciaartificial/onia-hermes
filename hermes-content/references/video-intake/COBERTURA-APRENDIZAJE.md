@@ -31,6 +31,7 @@ Las rutas de fuente de la tabla son relativas a esta carpeta; las skills viven e
 | 9-oct | [DePBfHouarG](2026-10-09-reel-DePBfHouarG.md), Qué aprende Onia | Jerarquía, repetición, comparación y centralización; mosaico previo al cierre | `diseno-contenido-onia`; `edicion-referentes`, caso 45,3 → 47,0 s | Pendiente; audio y ritmo no medidos |
 | Pedido 19-oct, ficha 20-oct | [Iman Gadzhi, venta](2026-10-20-gadzhi-vender-valor-psicologia.md), §1-§3 | Cuenta primero; marco → meta → dolor → valor → riesgo cero → precio → paso inmediato; primer mensaje para que conteste | `onia-ventas-pauta` §10 (20-oct) | Pendiente: aplicar §3 al taller con OK de Sergio Urcullo |
 | Pedido 20-oct, ficha 20-oct | [Alex Hormozi, oferta y cierre](2026-10-20-hormozi-oferta-y-cierre.md), §1-§4 | Ecuación de valor (bajar demora y esfuerzo), oferta en una frase con razón, CLOSER, obstáculos antes del precio | `onia-ventas-pauta` §10.1 (20-oct) | Pendiente: plantilla A del taller con CLOSER, con OK de Sergio Urcullo |
+| Pedido y 3 links sin instrucción 20-oct, ficha 20-oct | [Embudos de 6 referentes](2026-10-20-embudos-referentes.md), §1-§4 | El anuncio que dura regala y filtra; evento = ráfaga; creador chico = reel con recurso → comunidad → venta; escasez y garantía verdaderas | `onia-ventas-pauta` §10.2 (20-oct) | Pendiente: página del taller «No pierdas clientes» |
 
 ## Feedback fechado y memoria
 
