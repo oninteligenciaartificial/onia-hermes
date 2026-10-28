@@ -32,7 +32,7 @@ Fuentes bajo `hermes-content/references/video-intake/`:
 > con UN solo objeto en verde esmeralda** (`image_style: "fotobn"` en `scripts/carousel_images.mjs`, `--model gpt_image_2_5`,
 > `params ["--quality","medium","--resolution","2k"]`, **1 cr por imagen**). Soul 2.0 inventó letras en 5 de 7 imágenes de
 > arcilla. Prompt: describir la escena y decir cuál es «el objeto verde». Fuente completa: `HIGGSFIELD_VIDEO_SYSTEM.md` §
-> «Higgsfield en la edición de la marca personal» (entra a `main` con el PR de la madre). Todo lo de abajo que diga «arcilla»
+> «Higgsfield en la edición de la marca personal» (ya está en `main`). Todo lo de abajo que diga «arcilla»
 > es el estilo anterior. Carruseles nuevos (P2, P3): `fotobn`. Los 7 carruseles en espera (K1, N02, K9, K12, K5, K13, K10)
 > mezclan 10 imágenes flojas con 10 de arcilla que sí sirven: el lote en `docs/cola/plan-3-semanas/lote-14-imagenes.json` está
 > en `fotobn` (14 cr) y falta que Sergio Urcullo decida si se rehace todo el carrusel en el estilo nuevo (+10 cr).
@@ -212,7 +212,7 @@ Letras: Bricolage (títulos, local), DM Sans (texto), Caveat (flechas y sello), 
 > 3. los kits ya aprobados: `carousels/out/curso-dia1/` y `historias-llamada/` (fondo verde de marca, tarjetas negras,
 >    stickers collage, zona punteada para el sticker real).
 > Una historia que vende es una **secuencia** con una acción final, no un afiche con titular. Lo que no se ve desde la nube
-> (cómo lo hacen cuentas que funcionan) se le pide a la madre: «PEDIDO PC: historias de <cuentas> — para qué lo querés».
+> (cómo lo hacen cuentas que funcionan) se pide como issue `orquesta` + `carril:investigacion` con `donde: pc`: «historias de <cuentas> — para qué lo querés».
 
 Lo que sigue (render, banda segura, trampas del headless) **sigue valiendo** como herramienta; lo que cambia es el diseño.
 
@@ -260,7 +260,7 @@ Fuente y evidencia: [`references/video-intake/2026-10-10-ig-carrusel-DePPPp5FgMh
 
 **Qué plantilla hay hoy y qué falta (verificado en `scripts/carousel_pack_referentes.js` el 10-oct):**
 - **Hoy no hay plantilla para esta receta.** El `lista` más parecido (línea 56; CSS 172-193) dibuja cada fila como tarjeta con borde de 3 px y radio de 26 px, siempre imprime su `headline`, cambia a `compacta` con 4 filas o más y usa dos cuerpos (50 y 40 px). **No se usa como si fuera la receta.**
-- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que la madre lo pida):
+- **Falta, en este orden** (encargo cerrado para Codex, con la hoja de contactos de los 2 briefs como prueba de hecho; no se construye hasta que Sergio Urcullo lo pida, como issue `orquesta` + `carril:marca` con `motor: codex`):
   1. Layout `inventario` junto a `listaHtml`, registrado en `LAYOUTS` (línea 89): `items[{icon|n, label, text}]`, `headline` opcional que no dibuja nada si falta, filas sin caja a la grilla de arriba, `center` para la última lámina y `ask` para la flecha del remate. Sumarlo a la lista de `scripts/carousel_render.test.js:104` con casos de 5, 3 y 2 filas.
   2. `cierre` escribe «Comentá» fijo (línea 86; lo confirma P2): darle un `pre` con «Buscá» por defecto, o armar el cierre con `ilustrado` (foto + frase + CTA) mientras tanto.
   3. Portada-inventario con logos en arco: layout nuevo opcional; sin él, la portada va con foto `fotobn` + `dato` o captura.

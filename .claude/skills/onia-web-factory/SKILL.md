@@ -1,11 +1,12 @@
 ---
 name: onia-web-factory
-description: Invocar al construir o rediseñar cualquier superficie web en onia-hermes — landings de cliente, el panel onia-center, tiendas/storefronts o secciones de marketing. Impone el flujo real del generador de Web Factory (intake → cliente → receta → out/), el stack de diseño anti-template de ONIA y los gates antes de main.
+description: Invocar al construir o rediseñar cualquier superficie web en onia-hermes — landings de cliente, tiendas/storefronts o secciones de marketing (el panel onia-center está abandonado desde el 31-ago: no se rutea trabajo ahí). Impone el flujo real del generador de Web Factory (intake → cliente → receta → out/), el stack de diseño anti-template de ONIA y los gates antes de main.
 ---
 
 # ONIA — Web Factory (construir webs anti-template)
 
-Aplica a carriles A (onia-center) y B (landings/sitios cliente). Objetivo: que el output
+Aplica al carril B (landings/sitios cliente). El carril A, el panel `onia-center`, está **abandonado desde el 31-ago**
+(decisión de Sergio Urcullo): no se rutea trabajo ahí. Objetivo: que el output
 NO salga genérico. ⚠️ El subagente `web-factory-builder` fue retirado el 2026-08-18 y borrado el
 2026-09-29: el trabajo lo hace la sesión con esta skill.
 
@@ -30,8 +31,8 @@ Todo desde `C:\dev\proyectos\onia-hermes\web-factory`.
 pnpm install                                  # una vez
 
 # 1) Intake → perfil de cliente
-#    (el formulario del panel, /onia-center/web-factory, descarga ese JSON;
-#     plantilla de referencia: data/intakes/client-intake.template.json)
+#    (plantilla: data/intakes/client-intake.template.json; el formulario del panel,
+#     /onia-center/web-factory, ya no se usa: el panel está abandonado desde el 31-ago)
 pnpm client:new -i data/intakes/<archivo>.intake.json
 #    → data/clients/<slug>.json + <slug>.context.md
 
@@ -141,7 +142,7 @@ Reglas de motion que salieron de reconstruirlos, y que aplican a TODA web nueva:
    conocimiento"** — skills → pattern banks → aprendizaje crudo → packages. Leerlo
    ANTES de diseñar; el aprendizaje nuevo sigue esa cadena, nunca doc suelto.
 4. **Construcción:** para sitios de cliente = editar bloques/templates del generador.
-   Para superficies Next (onia-center, onia-platform): `frontend-design` · `frontend-patterns` ·
+   Para superficies Next (onia-platform): `frontend-design` · `frontend-patterns` ·
    `react-components` · `shadcn-ui` · `ui-styling` · `nextjs-turbopack`.
 5. **Copy:** todo texto que generamos (titulares por rubro, bajadas de fallback, servicios sin
    descripción) pasa por `humanizer` o `stop-slop` antes de quedar. `web-factory/generate/slop.test.ts`
@@ -159,7 +160,7 @@ librería sin tocar. Copy hardcodeado del template en el HTML final = defecto, n
 ## Gates antes de main (regla dura)
 
 - **`tsc --noEmit` verde en `web-factory/apps/site`** antes de que el avance llegue a `main`
-  (Linux distingue casing de imports; `main` alimenta Vercel `onia-center` + VPS `center.onia.com.bo`).
+  (Linux distingue casing de imports; `deploy-onia-center.yml` es SOLO MANUAL desde el 31-ago y publica `onia.com.bo`; `center.onia.com.bo` está bajado desde el 29-ago).
 - `pnpm test` + `pnpm e2e` (los E2E incluyen axe WCAG 2.2 AA y presupuesto de Core Web Vitals).
 - No filtrar WIP parcial: si un archivo nuevo importa otro nuevo, van los dos o ninguno.
 - `code-review` antes de mergear.
@@ -334,8 +335,8 @@ Reprocharle a un prospecto lo que tenemos roto es un bumerán. Estado 2026-08-13
 
 ## Ojo con los monolitos
 
-- `onia-center` (~14k líneas): NO rediseñar in situ; reconstruir en componentes chicos
-  (`src/app/onia-center/components/**`) al lado de prod y hacer swap al final.
+- `onia-center` (~14k líneas): **abandonado desde el 31-ago**; no se rediseña ni se le agrega nada. Su contenedor
+  no se apaga (el auditor diario lo usa como runtime de node).
 - `packages/templates/src/store.ts` (~3.4k líneas) viola la regla de <800. No escribir otro
   template monolítico: un rubro nuevo sale de bloques, no de un archivo nuevo de 3.000 líneas.
 - `apps/onia-platform/**` es la landing en producción: carril aparte, no tocar de paso.

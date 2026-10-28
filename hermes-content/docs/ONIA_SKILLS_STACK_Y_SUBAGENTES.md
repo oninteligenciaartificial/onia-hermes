@@ -1,5 +1,7 @@
 # Onia — Stack de skills + reglas de subagentes
 
+> ⚠️ **27-oct-2026: Superpowers y gstack salieron** (decisión de Sergio Urcullo: el método de sesión es reglas del repo + Ponytail; `onia-router` §«Stack de proceso común»). Donde abajo aparezcan sus skills (`brainstorming`, `writing-plans`, `investigate`, `office-hours`, `design-review`, `land-and-deploy`, `landing-report`, `document-generate`, `qa`, `review`…), no se usan.
+
 > Fuente de verdad viva — **sin fecha en el nombre a propósito**: esto se EDITA, no se
 > reemplaza por una copia nueva. (Creado 2026-07-05, última revisión 2026-09-29.)
 > Índice operativo vivo = skill **`onia-router`** (`.claude/skills/onia-router/SKILL.md`).

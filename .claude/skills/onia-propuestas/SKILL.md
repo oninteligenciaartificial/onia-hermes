@@ -6,11 +6,11 @@ description: Invocar cuando Sergio pida crear, cotizar, perfeccionar o enviar un
 # Onia — Propuestas comerciales
 
 Fuente de verdad completa: `hermes-content/skills/propuestas-comerciales-onia.md`.
-Para delegar el armado en paralelo: subagente `onia-propuestas`.
+El subagente `onia-propuestas` se retiró el 18-ago: para armar en paralelo se delega un encargo cerrado (`equipo-de-agentes`).
 
 ## Leer primero
 - `hermes-content/propuestas/generador/README.md`
-- `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` (§0 = fuente de verdad de precios)
+- `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` (§0 = hoja de lanzamiento; ver «Pricing» abajo)
 - `hermes-content/propuestas/PLAYBOOK_CONSTRUCCION_INTERNO.md`
 - `hermes-content/propuestas/ESTRATEGIA_PLANTILLAS_WEB_INTERNO.md`
 
@@ -35,9 +35,12 @@ Cliente nuevo = agregar objeto a `clientes.json` y correr el generador.
 8. **No fabricar.** Falta dato del cliente → pedirlo o marcarlo. Personalizar con datos reales.
 9. **Benchmark visual:** Bench, Garabato, HSB Engineers (jerarquía/limpieza/seriedad), sin copiar literal.
 
-## Pricing (fuente de verdad: PRICING_RATIONALE_INTERNO.md §0)
-- **Lanzamiento vigente (fase sin portafolio):** Landing **790** / Web Pro **1.500**.
-- **Premium (objetivo con 3-5 casos):** Landing **2.000** / Web Pro **4.500**.
+## Pricing (acá no se escribe ninguna cifra: se LEE)
+- **Webs:** `web-factory/apps/onia-platform/src/content/webs.ts` (`WEB_STACKS`, lo que la web publica) y
+  `hermes-content/propuestas/PRICING_RATIONALE_INTERNO.md` §0 (hoja de lanzamiento; remite a
+  `hermes-content/propuestas/ONIA_CATALOGO_PRECIOS_2026.md` para cotizar). ⚠️ **Las dos fuentes no dicen lo mismo hoy:** §0
+  presenta como objetivo con portafolio la línea que `webs.ts` ya usa como vigente. Antes de cotizar una web, se
+  pregunta a Sergio Urcullo cuál rige (`CLAUDE.md` «Una sola fuente de verdad»); no se elige la más linda.
 - **SaaS Onia (planes y add-ons): NO se escriben acá.** Se LEEN del código del producto:
   planes en `onia-platform/lib/subscription-plans.ts` (`DEFAULT_PLAN_AMOUNTS`; nombres visibles en
   `lib/pricing.ts`, p.ej. `clinic` = «Completo») y add-ons en `onia-platform/lib/pricing.ts`

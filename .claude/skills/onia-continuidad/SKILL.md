@@ -137,7 +137,7 @@ Tres cosas se escriben **en el momento**, porque son las que se pierden:
 | Qué | Dónde | Por qué se pierde |
 |---|---|---|
 | **Un doc que resultó falso** | en el doc mismo, con la marca ⚠️ | si esperás al cierre, ya no te acordás de la evidencia |
-| **Una decisión de Sergio** | en la cola del carril, con sus palabras textuales | parafraseada pierde el matiz que la hacía útil |
+| **Una decisión de Sergio** | en el issue `orquesta` del carril (o su handoff), con sus palabras textuales; `docs/cola/*.md` es historia | parafraseada pierde el matiz que la hacía útil |
 | **Un intento que falló** | handoff, campo *intentos fallidos* | es lo único que no se puede reconstruir del código |
 
 Un hallazgo que aparece **verificando otra cosa** vale doble: nadie lo estaba buscando, así que
@@ -154,9 +154,11 @@ baja una cuenta servía de algo.
   a un archivo, filtrar lo que ya existe, y `git checkout <c>^ --pathspec-from-file=<archivo>`.
 - **Antes, comparar lo que ya se había restaurado** (`git diff --stat <c>^ -- <ruta>`): si
   difiere, alguien lo editó después y no se pisa.
-- **Mismo nombre en dos lados:** en Claude Code gana la skill del **proyecto**
-  (`.claude/skills/`) sobre la del usuario (`~/.claude/skills/`). Por eso restaurar la copia del
-  repo basta para volver al comportamiento viejo, sin tocar la PC.
+- **Mismo nombre en dos lados:** en Claude Code gana la **PERSONAL** (`~/.claude/skills/`) sobre la del
+  repo (`.claude/skills/`) (medido el 26-oct en una sesión del repo: la descripción cargada de `hyperframes`
+  era la de la copia personal; code.claude.com/docs/en/skills). Restaurar la copia del repo solo vuelve al
+  comportamiento viejo si NO queda una personal con el mismo nombre; las 15 que diferían se archivaron el
+  26-oct en `~/.claude/skills-archivadas-20261026`.
 - Caso: la limpieza del 29-sep (`2ff1c207`) se revirtió el 2-oct desde `9622ae6a` porque
   Sergio Urcullo vio que sus archivos dejaron de editarse como quiere
   (`historial/LIMPIEZA_SKILLS_20260929.md`).
@@ -166,8 +168,9 @@ baja una cuenta servía de algo.
 ## 5. Trampas de coordinación medidas en la nube (1-oct-2026)
 
 - **Una sesión en la nube no puede mandarle mensajes a otra:** `SendMessage` falla con «auth: this cloud session cannot
-  message other sessions». Lo que la madre local pide se contesta EN EL TRANSCRIPT, porque ella lo lee desde ahí. Si
-  hace falta que la madre haga algo, el texto se le da a Sergio Urcullo para que lo pegue.
+  message other sessions». Lo que otra sesión o la PC necesitan se contesta EN EL TRANSCRIPT (lo lee quien integra) o, si es trabajo de fondo,
+  se pide como issue `orquesta` + `carril:<área>` (con `donde: pc` si es de la PC). Si hace falta que otra sesión
+  haga algo ahora, el texto se le da a Sergio Urcullo para que lo pegue.
 - **`git grep` sobre todo el repo tarda más de 2 minutos** y corta el comando por timeout. El 1-oct dejó un merge a
   medias, con `git add` sin correr. Para buscar marcadores de conflicto, usá `grep -c '^<<<<<<<'` sobre el archivo en
   conflicto.

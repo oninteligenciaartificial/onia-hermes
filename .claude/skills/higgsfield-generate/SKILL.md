@@ -36,6 +36,15 @@ allowed-tools: Bash
 > hex. El color va en palabras y se agrega «no typography anywhere». Después se mide el color en la tela y se mira
 > la imagen ENTERA antes de usarla como referencia.
 >
+> ⛔ **Gasto en ONIA (`CLAUDE.md` §«Higgsfield», regla dura; sobreescribe la regla UX 5 de abajo):** SIEMPRE se corre
+> `higgsfield generate cost` ANTES de `higgsfield generate create`; se guardan modelo, parámetros y costo (y se leen los
+> `adjustments`), y **cada generación de video pide la aprobación explícita de Sergio Urcullo** con ese costo a la vista.
+> Las imágenes de prueba u opciones de estilo de **menos de ~5 créditos por lote** ya están autorizadas (8-oct): se
+> cotizan, se registran y se muestran después, sin partir un lote mayor en varios chicos. Lotes grandes, video y
+> entrenamiento Soul conservan su aprobación; subir cara o voz de Sergio Urcullo a un servicio externo pide además el OK
+> de Leslie Mercado Moreno. Nunca `higgsfield auth token` en logs, chats ni scripts. Precios y saldos de bitácoras
+> antiguas son historia, no autorización.
+>
 > ⚠️ **Trampa de costo de Kling (medida el 3-oct con `get_cost`).** `kling3_0` con `sound: false` cotiza **10,5 cr**:
 > Higgsfield no acepta `false`, lo cambia a `on` y lo avisa solo en `adjustments`. Con `sound: "off"` (texto), 6 s
 > std 9:16 cuestan **7,5 cr**, con o sin imagen de arranque. Siempre se leen los `adjustments` de la cotización antes
@@ -69,10 +78,10 @@ Before any other command:
 ## UX Rules
 
 1. Be concise. No raw IDs, no JSON dumps in chat. Print the media URL for generated assets, or the text summary for Virality Predictor.
-2. No internal jargon. Don't narrate "calling higgsfield cost", "polling job".
+2. No internal jargon. Don't narrate "calling higgsfield cost", "polling job". (ONIA: the cost call always runs and its result is stated when approval is needed; see the ONIA spend rule above.)
 3. Detect the user's language from the first message and reply in it. Technical args (`--aspect_ratio 16:9`) stay English.
 4. Don't batch-ask. Pick a sane default model and ask one thing at a time only if genuinely missing.
-5. Don't pre-estimate cost or optimize for cheaper models unless the user asks. Prefer the quality default first.
+5. Don't optimize for cheaper models unless the user asks; prefer the quality default first. **ONIA override: DO quote the cost** (`higgsfield generate cost` before every `generate create`), record model/params/cost, and get explicit approval for each video (see the ONIA spend rule above).
 6. Pass `--wait` to `generate create` so the command blocks until done and prints the result URL itself. Avoid the two-step `create` → `wait` pattern.
 
 ## Discovery guardrail

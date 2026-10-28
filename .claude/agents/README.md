@@ -1,6 +1,6 @@
 # Subagentes ONIA
 
-Actualizado: 2026-10-02 (se restauraron `onia-core-guardian` y `onia-creative-radar`, borrados
+Actualizado: 2026-10-27 (reglas de delegación del 26-oct; el 2026-10-02 se restauraron `onia-core-guardian` y `onia-creative-radar`, borrados
 en la limpieza del 29-sep; pedido de Sergio Urcullo).
 
 Este directorio define los subagentes propios de ONIA (invocables con la tool `Agent` /
@@ -11,7 +11,7 @@ que revisan todo PR (`CLAUDE.md` §«Calidad de código»). Área de cada uno (2
 | Agente | Para qué | Estado |
 |---|---|---|
 | `onia-crm-prospeccion` | Prospección y CRM: pocos prospectos buenos con señal de oportunidad, fuentes públicas verificables, nunca contacta sin aprobación | La etapa vigente es vender a 5 clínicas (`ONIA_ESTRATEGIA_DE_EMPRESA.md` §7) y la auditoría de agentes lo conservó por su diseño anti-listas-largas |
-| `onia-core-guardian` | Guardián del contrato de ONIA Core (`contract.json`, adapters, `base-schema.sql`): invariantes, 3 adapters en sincronía, validador verde antes de commitear | Restaurado 2026-10-02 |
+| `onia-core-guardian` | Guardián del contrato de ONIA Core (`contract.json`, adapters, `base-schema.sql`): invariantes, 4 adapters en sincronía, validador verde antes de commitear | Restaurado 2026-10-02 |
 | `onia-creative-radar` | Contenido y video (carruseles, historias, guiones, UGC, Higgsfield): investiga tendencias antes de crear, nunca publica sin aprobación | Restaurado 2026-10-02 |
 
 Los 6 retirados el 2026-08-18 (`onia-orchestrator`, `onia-propuestas`, `dentalgest-migrations`,
@@ -31,7 +31,7 @@ para que la nube los vea (10-oct-2026). Si se edita uno, se edita en los dos sit
 Se revisaron los 5 del repo, los 43 de `~/.claude/agents/` (casi todos de ECC), los de plugins
 (`claude-security`, `superpowers`, `skill-creator`, `understand-anything`) y los integrados (`general-purpose`,
 `Explore`, `Plan`). Modelo por rol (`CLAUDE.md`): Haiku cuenta y verifica, Sonnet sintetiza, Opus decide lo riesgoso.
-El stack de skills de cada área está en `onia-router` § «Apartados por área».
+El stack de skills de cada área está en `onia-router` § «Las 4 áreas de Onia».
 
 | Agente | Área | Cuándo y cómo |
 |---|---|---|
@@ -65,8 +65,23 @@ El stack de skills de cada área está en `onia-router` § «Apartados por área
 - `superpowers:code-reviewer`: duplica `code-reviewer`. Los agentes de `skill-creator` y `understand-anything`
   son piezas internas de esas skills: no se llaman sueltos.
 
-## Reglas de delegación (de AGENTS.md)
-1. Data-first antes de preguntar. 2. Autonomía operativa antes de delegar al
-humano. 3. Ejecución cerrada por defecto. 4. Cada pendiente cierra como
-ejecutado / automatizado / bloqueado. 5. Gates: no tocar repos producto del core,
-publicar, deployar, tocar secretos ni migrar DB real sin aprobación explícita.
+## Reglas de delegación (de `AGENTS.md`, versión del 26-oct-2026)
+
+1. **Una sola cola: los issues `orquesta` + `carril:<área>`.** Lo que no está ahí no es un encargo (Orca Orchestration,
+   `.hermes/plans` y los goals de Hermes no son cola). Lo que necesita la PC va con `donde: pc`.
+2. **Quién hace qué.** Hermes de la PC planifica (carga issues con `scripts/orquesta/cargar-issue.mjs`; no edita código
+   ni escribe en Git); `scripts/orquesta/` reparte y hace revisar; Claude Code trabaja con Sergio Urcullo e integra por
+   PR (no mergea a `main` sin revisión); **Codex ejecuta un contrato cerrado en su worktree y no hace Git (ni
+   consultas), ni merge, push, publicar, orquestar ni abrir sesiones**: quien lo lanzó verifica la rama y commitea.
+3. **Un encargo delegado lleva:** objetivo y «hecho cuando» · carril, worktree y rama · archivos propios y prohibidos ·
+   fuentes y permisos · modelo y vía · presupuesto y cuándo parar · la entrega (PR más un recibo con los comandos y su
+   salida) · un revisor distinto del autor.
+4. **Una sola vía de despacho por tarea.** El mismo carril va en secuencia; carriles distintos, en paralelo. Para editar
+   hacen falta worktree y rama propios (un subagente lleva la ruta explícita); una revisión de solo lectura no los necesita.
+5. **Un trabajador sin pantalla** (`codex exec`, `claude -p`, la orquesta) no tiene a quién preguntar: cuando tiene que
+   parar, su entrega empieza con `BLOQUEADO:` y el motivo.
+6. **Se le pregunta a Sergio Urcullo, todo junto en un mensaje,** por gasto, lo que ve un cliente o el público,
+   contactar terceros, producción fuera de lo autorizado, instalar o descargar herramientas y cambiar reglas, skills,
+   modelos o permisos (va por PR). Lo razonable y reversible se decide y se anota.
+7. Ante un tope de gasto o de cupo se baja el consumo, no se sube el techo. Modelos:
+   `hermes-content/docs/AI_MODEL_ROUTING_2026.md`.

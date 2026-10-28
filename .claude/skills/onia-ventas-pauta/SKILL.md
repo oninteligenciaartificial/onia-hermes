@@ -33,7 +33,7 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 
 ## 1. Reglas que no se negocian
 
-> **Reglas de la madre, 3-oct** (después del bucle de D4: se armó prometiendo el tratamiento a medias, que en
+> **Reglas de la sesión principal, 3-oct** (antes «madre»; hoy mandan `AGENTS.md` y `CLAUDE.md`; nacen después del bucle de D4: se armó prometiendo el tratamiento a medias, que en
 > producción no encontraba a nadie, porque la frase no se comparó con el catálogo antes de renderizar):
 > 1. **Cada tarea arranca con 3 líneas escritas en el transcript:** META, PRUEBA DE HECHO y REGLA DE PARADA.
 > 2. **Antes de renderizar una pieza o mandar un mensaje, cada frase se compara con
@@ -43,7 +43,7 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 >    `grep -n` + `sed -n`); effort bajo y modelo chico para lo mecánico. Medido el 3-oct: más del 95 % del gasto
 >    fue releer contexto.
 
-> **De USTED, nunca vos ni tú** (Sergio Urcullo por la madre, 3-oct: *«no se usa vos, es muy informal, usted»*).
+> **De USTED, nunca vos ni tú** (Sergio Urcullo, 3-oct: *«no se usa vos, es muy informal, usted»*).
 > - **Alcance:** el bot de venta, las respuestas a la pauta, las plantillas de WhatsApp, los mensajes 1:1 y los
 >   agentes de voz, producto, web y anuncios. **Actualización 9-oct:** producto y clientes = usted; marca personal = vos.
 >   Los briefs históricos en voseo se corrigen antes de reutilizarlos; no se cambia una plantilla aprobada en Meta sin su proceso de aprobación.
@@ -55,7 +55,7 @@ description: "Invocar para CUALQUIER trabajo del carril Ventas y pauta de Onia: 
 >      copia literal de lo aprobado. Pasan a usted solo con una plantilla nueva aprobada en Meta.
 >   2. **El recepcionista** (el bot que cada cliente pone delante de sus clientes): sigue de vos. Pendiente de
 >      decidir si también va de usted o si lo elige cada negocio.
-> - **Respuesta nueva a la pauta: SIN FIRMA, no se publica** (madre, 3-oct). La campaña del anuncio entró al repo
+> - **Respuesta nueva a la pauta: SIN FIRMA, no se publica** (regla del 3-oct). La campaña del anuncio entró al repo
 >   con `363dcf10` (30-sep, «REQUIERE FIRMA»); el barrido del 3-oct solo pasó ESE texto a usted, sin cambiar qué
 >   dice. La versión nueva que espera firma es esta:
 >   > ¡Gracias por escribir desde el anuncio! Para mostrarle Onia con el caso de su clínica, y no una demo genérica,
@@ -156,7 +156,7 @@ Redactar primero y verificar después costó una tarde de mensajes tirados. Las 
 - Páginas quietas desde hace meses.
 
 La nube resuelve la ciudad y el canal. **El tamaño real y si el negocio sigue vivo** casi siempre necesitan abrir
-su Facebook desde la PC: se le pide a la madre con la lista exacta. Al que queda listo, el mensaje le cierra la
+su Facebook desde la PC: se pide como issue `orquesta` + `carril:investigacion` con `donde: pc` y la lista exacta. Al que queda listo, el mensaje le cierra la
 condición con una sola pregunta («¿cuántas profesionales atienden hoy?», «¿las importan ustedes directo?»).
 
 **Re-leer antes de enviar:** un prospecto cuya pauta se cortó recibe un mensaje sobre un anuncio que ya no
@@ -243,7 +243,7 @@ contestarle de memoria es la forma de quemarlo.
 ## 4. Piezas del anuncio (D1 y D4)
 
 > ⏸️ **EN PAUSA (2-oct, tarde).** Sergio Urcullo: *«DEJA DE ARMAR, PRIMERO MIRA LA META ADS LIBRARY Y MIRA
-> COMPETENCIAS»*. **Primero el estudio de la Biblioteca** (lo hace la madre desde la PC; desde la nube Facebook no
+> COMPETENCIAS»*. **Primero el estudio de la Biblioteca** (lo hace la PC: issue `orquesta` + `carril:investigacion` con `donde: pc`; desde la nube Facebook no
 > abre), después el diseño. v3 no está aprobada: D4 está frenado por el catálogo (§4.1) y el primer beneficio de D1
 > («La IA escribe el mensaje») viola el catálogo §8. Lo de abajo es el MÉTODO de render, no un formato aprobado.
 
@@ -303,8 +303,8 @@ Trampas pagadas armando v3 (2-oct):
 ### 4.1 Mirar la competencia antes de escribir (método del 2-oct)
 
 - **Dónde están:** `hermes-content/research/competencia/anuncios/<anunciante>/` + `CAPTURAS-HECHAS.md` (18 de 22,
-  capturados por la madre desde la PC el 1-oct). La nube no abre `facebook.com`: un pedido nuevo de capturas se le
-  manda a la madre con la lista de id (`hermes-content/docs/historial/research/competencia/PEDIDO-CAPTURAS.md` es el formato).
+  capturados desde la PC el 1-oct). La nube no abre `facebook.com`: un pedido nuevo de capturas va como
+  issue `orquesta` + `carril:investigacion` con `donde: pc`, con la lista de id (`hermes-content/docs/historial/research/competencia/PEDIDO-CAPTURAS.md` es el formato).
 - **La única señal de rendimiento pública es la antigüedad.** `grep -o 'En circulación desde[^\n]*' */*.txt`: lo que
   pasa ~6 semanas al aire sin cortarse le rinde a quien lo paga; lo que tiene horas no prueba nada, por prolijo
   que se vea. **Se aprende de los que sobreviven, no de los más nuevos ni de los más lindos.**
@@ -325,7 +325,7 @@ Trampas pagadas armando v3 (2-oct):
   `ONIA_CATALOGO_DE_VENTA.md`** («Se puede decir» / «NO se puede decir», §8 para la IA). Se lee ANTES de escribir
   una promesa, y lo que no está ahí se pide a Plataforma que lo mire funcionando.
 - **Mapa de toda la competencia (SaaS, ERP y bots):** `hermes-content/research/competencia/MAPA_COMPETENCIA.md` +
-  sus fichas (madre, 3-oct). Leer «Lo que cambia decisiones» antes de elegir el ángulo de una pieza. De ahí:
+  sus fichas (3-oct). Leer «Lo que cambia decisiones» antes de elegir el ángulo de una pieza. De ahí:
   - **«Qué pacientes tienen que volver» ya es el gancho de Agenda en Día y Eholo.** El de D4 es otro: el
     tratamiento EMPEZADO y presupuestado que no se cobró. D4 sigue congelado por el catálogo (§8) hasta que el
     detector encuentre pacientes en producción; al descongelarlo se mantiene ese ángulo y no se pasa al de «recall».
@@ -360,17 +360,17 @@ Trampas pagadas armando v3 (2-oct):
 - **Lo que NO arregla el diseño:** la persona (los 7 que sobreviven la tienen) y el rendimiento (sin gasto no hay cifras).
 - **Las dos capturas de una misma pieza tienen que ser de la MISMA persona de demo.** Hoy la agenda y Pendientes son de
   capturas distintas del 30-sep; con la cuenta demo se arma el caso entero (agenda → pendiente → mensaje).
-- **Biblioteca desde la nube:** HTTP 403 de Facebook (8-oct). No se rodea; la madre captura desde la PC. Los sitios de
+- **Biblioteca desde la nube:** HTTP 403 de Facebook (8-oct). No se rodea; se captura desde la PC (issue `orquesta` + `carril:investigacion` con `donde: pc`). Los sitios de
   referencia sí abren con la receta de Playwright del §6, salvo Doctolib (Cloudflare «verifique que es humano»).
 
 ### 4.3 Laboratorio de creativos (8-oct): los 5 formatos que SOSTIENEN y cómo se hace cada uno
 
-> Pedido de Sergio Urcullo por la madre: *«aprender a hacer campañas mirando a la competencia, y que sea real»*. Documento:
+> Pedido de Sergio Urcullo: *«aprender a hacer campañas mirando a la competencia, y que sea real»*. Documento:
 > `research/competencia/anuncios/FORMATOS-QUE-SOSTIENEN.md`.
 
 - **Método:** ordenar los `.txt` de `anuncios/` por «En circulación desde» (`grep -m1 -o "En circulación desde el [0-9]* [a-z]*\.* [0-9]*"`) y
   mirar los fotogramas en hoja de contacto (`montage … -geometry 260x460`). Lo único público es la antigüedad; **no prueba rendimiento
-  y las capturas del 1-2 oct no prueban que sigan vivas** (PEDIDO PC a la madre).
+  y las capturas del 1-2 oct no prueban que sigan vivas** (se pide como issue `orquesta` + `carril:investigacion` con `donde: pc`).
 - **Lo que enseñaron (8-oct):** de los 5 formatos más viejos, **4 llevan una persona**; el más viejo (Dt.Dental, 100 d) es un selfie sin
   producción; ninguno lleva precio ni cifra propia; ninguno va a WhatsApp. El copy **«No es X, no es Y… Es Z»** de CitaPro sostiene
   3 anuncios (83, 63 y 23 d).
@@ -499,13 +499,13 @@ Trampas pagadas armando v3 (2-oct):
 |---|---|---|
 | `facebook.com`, `instagram.com`, webs de clínicas, buscadores | 403 del proxy | La Biblioteca por el conector; para mirar páginas, el entorno `onia-higgsfield` o la PC |
 | **Entorno «Default» con red completa (1-oct, noche)** | Las webs, los directorios y los buscadores abren. **`facebook.com` redirige al login** con `curl` y con Chromium. Abrir Instagram, `wa.me` o Maps con Chromium **lo bloquea el control de permisos**: no se reintenta por otro lado | Webs propias, el directorio por `page_id` (§2) y la Biblioteca por el conector. Lo que solo se ve dentro de Facebook (cuántos atienden, el texto del anuncio) se mira desde la PC |
-| VPS y base de producción | sin llave (`ONIA_VPS_SSH_KEY_B64` vacía) | lo mide la madre en la PC |
-| `SendMessage` a otra sesión | falla: la nube no puede mandar | se contesta en el propio transcript; la madre lo lee |
+| VPS y base de producción | sin llave (`ONIA_VPS_SSH_KEY_B64` vacía) | lo mide la sesión principal en la PC (la infra tiene un dueño a la vez) |
+| `SendMessage` a otra sesión | falla: la nube no puede mandar | se contesta en el propio transcript; lo que necesita la PC va como issue `orquesta` con `donde: pc` |
 | `ssh onia-vps` después de reiniciar la sesión (2-oct) | El hook deja la llave y la config, pero **falta el programa `ssh`** | `apt-get install -y openssh-client` |
 | Cupo de búsquedas web | 200 por sesión; se agotó con 4 subagentes | Darle a cada subagente un tope. El 1-oct, de noche, 4 subagentes con 25, 30, 20 y 12 búsquedas verificaron 28 prospectos y 9 de reserva, y usaron el tope completo |
 | Fuentes de Google en el render | no bajan | `scripts/carousel_cloud_setup.sh` instala TTF locales |
 | **Playwright contra nuestros dominios (8-oct)** | `ERR_CERT_AUTHORITY_INVALID` con el headless shell, con Chromium completo y aun con el proxy | Chromium completo (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`) + `proxy: HTTPS_PROXY` + `--ignore-certificate-errors-spki-list` con la huella SPKI de las CA «O = Anthropic … production» de `/root/.ccr/ca-bundle.crt` (la misma confianza que usa curl). Ya resuelto en `scripts/auditar-app.mjs`. Con eso, onia.com.bo y la app dan 200 |
-| `send_message` a la sesión madre de la PC (8-oct) | `elevated_session_untrusted_device`: no sale | Se contesta en el transcript, como dice la madre |
+| `send_message` a la sesión de la PC (8-oct; historia: ya no hay «madre» que ordene a otras) | `elevated_session_untrusted_device`: no sale | Se contesta en el transcript; el trabajo de fondo se pide como issue `orquesta` |
 
 ## 6.1 Promesa contra lo que funciona (8-oct)
 
@@ -529,7 +529,7 @@ primero que se resuelve con Sergio Urcullo y Plataforma.
 Resultado: `research/competencia/DAPTA_COMO_FUNCIONA.md` (sin fecha, fuente del tema) con capturas en
 `research/competencia/dapta/`.
 
-- ⛔ **El agente de llamadas de Dapta NO es un canal** (madre, 3-oct). Sergio Urcullo lo armó solo para ver la
+- ⛔ **El agente de llamadas de Dapta NO es un canal** (3-oct). Sergio Urcullo lo armó solo para ver la
   interfaz y sacar ideas. No se usa con leads, no se le cargan prospectos y no entra en ningún plan de contacto.
 
 - **Las capturas van al repo, no al scratchpad.** El scratchpad se borra y el doc queda citando archivos que no
@@ -586,7 +586,7 @@ de cada ficha. Cinco subagentes en paralelo, uno por grupo, y después un verifi
   pagina, así que los conteos por titular son mínimos (Jelou: 382 activos, 50 visibles); en AgendaPro «activos» y «todos»
   devuelven lo mismo; el filtro de inactivos devolvió 0 en Leadsales, que sí tiene anuncios viejos; con filtro de país cuenta
   distinto (Leadsales: 55 sin filtro, 30 con MX); y el «estimated_total_count» se mueve entre consultas. No da texto, creativo,
-  botón ni destino, y Facebook da 403 por curl: **los creativos los captura la madre** (pedido con ids, §7 de la síntesis).
+  botón ni destino, y Facebook da 403 por curl: **los creativos se capturan desde la PC** (issue `orquesta` + `carril:investigacion` con `donde: pc`, con ids, §7 de la síntesis).
 - **Lectura:** la única señal son los días al aire. Quien rota a diario (Dapta, Clinera) no da señal. Vistas altas con pocos
   likes (Kommo, 357 mil con 28) = probable pauta, no orgánico.
 - **Trampas que hicieron caer cifras al verificar:** una ventana de 60 videos no es el canal (Leadsales: el de 4,5 M estaba
@@ -608,7 +608,7 @@ de cada ficha. Cinco subagentes en paralelo, uno por grupo, y después un verifi
 
 ### 9.1 Investigar (antes de escribir una línea)
 
-- **Competencia en Meta:** Biblioteca por `page_id` (§8.2) y las capturas de la madre (§4.1). La única señal pública es
+- **Competencia en Meta:** Biblioteca por `page_id` (§8.2) y las capturas desde la PC (§4.1). La única señal pública es
   la **antigüedad**: se aprende de lo que dura más de 30 días, no de lo nuevo ni de lo lindo (§4.1, 2-oct).
 - **Lo que repiten los que duran** (`research/competencia/COMUNICACION_Y_PAUTA_COMPETENCIA.md` §2, 8-oct): un concepto
   en 2-5 copias; una persona en cuadro con poca producción; la primera línea habla de la plata o el tiempo del dueño y
@@ -671,7 +671,7 @@ de cada ficha. Cinco subagentes en paralelo, uno por grupo, y después un verifi
 | Estático 4:5 / 9:16 / 1:1, video sin persona de ~11 s | `scripts/anuncio-render.js` y `anuncio-video.js`, plantilla `bloques` (§4.2-4.3) | La nube lo rinde sola (~33 s) |
 | Persona + pantalla (selfie G4, VSL corto) | `editor-videos` (**tabla de cortes + preview 360p ANTES de cortar**) y HyperFrames para rótulos y tarjetas (`talking-head-recut`) | Bruto a Drive «Videos Onia Octubre» con el código en el nombre |
 | VSL largo (3-5 min) | `editor-videos` + `hyperframes` + `embedded-captions` | Un cambio visual cada 2-4 s; rótulo por módulo |
-| Grabación de pantalla con cursor (cuenta demo) | **Script por escribir** (Playwright `recordVideo` + skill `oversized-cursor`); `auditar-app.mjs` solo captura imágenes | Antes de hacer clic en «Aprobar» (G-01) la cuenta lleva contactos de prueba propios: un clic puede enviar de verdad. Cuenta dedicada, nunca superadmin. Si el script no está, la madre graba desde la PC |
+| Grabación de pantalla con cursor (cuenta demo) | **Script por escribir** (Playwright `recordVideo` + skill `oversized-cursor`); `auditar-app.mjs` solo captura imágenes | Antes de hacer clic en «Aprobar» (G-01) la cuenta lleva contactos de prueba propios: un clic puede enviar de verdad. Cuenta dedicada, nunca superadmin. Si el script no está, se pide como issue `orquesta` + `carril:video` con `donde: pc` |
 | Presentador IA | `hermes-content/skills/ugc-empresas-higgsfield.md` (no es skill registrada: se abre por ruta) | Solo si Sergio Urcullo lo pide; costo con `higgsfield generate cost` desde la PC; nunca como cliente ni odontólogo |
 
 Reglas de edición de la pauta: las 11 de COMUNICACION §4 (subtítulos Archivo con chip amarillo «Pendiente», cartela de

@@ -68,7 +68,7 @@ código não") — para eso están `make-mockup.mjs` (PNG) y `scripts/remotion` 
 >    son referencia. El video bueno que él recuerda es «tu primera automatización» (22-sep).
 > Lección: «como antes» no se adivina. Tres ediciones del mismo video, y cada una copió lo más parecido que había en el
 > repo. Antes de rehacer un estilo «como antes»,
-> preguntá CUÁL video y pedile a la madre el archivo si no está en el repo.
+> preguntá CUÁL video y pedile el archivo a Sergio Urcullo si no está en el repo.
 
 Si él pide este estilo, la receta está en `videos/tiktok-20260917/README.md`:
 - corte fino (silencios + sonido sin palabra);
@@ -441,7 +441,7 @@ la burbujita de OBS incrustada en la esquina no da resolución para la zona de c
 
 ## 🟩 Pantalla verde: vos recortado delante de la captura (3-oct-2026)
 
-Pedido de la madre el 3-oct para el Bloque 1 de `PLAN-GRABACION-3-OCT.md` (16 piezas «Verde»). Pieza:
+Pedido del 3-oct para el Bloque 1 de `PLAN-GRABACION-3-OCT.md` (16 piezas «Verde»). Pieza:
 **`scripts/fondo-verde.mjs`** (chromakey + despill de ffmpeg, sin dependencias).
 
 ```bash
@@ -493,18 +493,18 @@ node scripts/fondo-verde.mjs --toma toma.mp4 --fondo captura.png --crop 0:0:1440
 > - **Cómo se llegó acá:** «Hoy soy odontóloga» entró a `main` el 2-oct en el plan v2 sin revisión. Antes de renderizar
 >   se hace grep del guion y del pie contra esta lista.
 >
-> 📋 **Cómo trabaja el carril Lucía (reglas de la madre, 3-oct).**
+> 📋 **Cómo trabaja el carril Lucía (reglas de la sesión principal, antes «madre», 3-oct).**
 > 1. **Cada tarea arranca con tres cosas escritas en el transcript:**
 >    - **META**: qué se hace;
 >    - **PRUEBA DE HECHO**: qué se mira para darla por terminada;
 >    - **REGLA DE PARADA**: cuándo se frena.
 > 2. **Nada entra a `main` sin revisión: se trabaja en una rama y con un PR.** Antes, cada guion se compara con
 >    `LUCIA.md` §0: IA declarada, nunca profesional de salud, sin promesas de resultado.
->    - Desde el 5-oct el hook Stop (`scripts/git-autosync.js`) ya no empuja la rama a `main`: solo la madre y el
->      integrador mueven `main` (CLAUDE.md, «Git — auto-sync»). Hasta ese día sí lo hacía, y por eso estaba el
+>    - Desde el 5-oct el hook Stop (`scripts/git-autosync.js`) ya no empuja la rama a `main`: solo la sesión principal (antes «madre») y el
+>      integrador (apagado desde el 27-sep) mueven `main` (CLAUDE.md, «Git — auto-sync»). Hasta ese día sí lo hacía, y por eso estaba el
 >      truco de abajo.
 >    - Para que el PR espere la revisión: pushear la rama, abrir el PR y **estacionar el checkout en `main`**
->      (`git checkout -B main origin/main`). Sigue sirviendo en la PC de la madre, que tiene el permiso.
+>      (`git checkout -B main origin/main`). Sigue sirviendo en el checkout de la sesión principal, que tiene el permiso.
 >    - Medido el 3-oct: con `git reset --keep origin/main` sobre la rama del PR, esa rama queda adelante y atrás de su
 >      remoto, y el hook Stop pide un push que GitHub rechaza.
 >    - Así entró «Hoy soy odontóloga» (#82) el 2-oct.

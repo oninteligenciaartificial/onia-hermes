@@ -172,6 +172,9 @@ For image and video generation tools, see [references/generative-tools.md](refer
 3. Batch produce variations with Remotion using data feeds
 4. Iterate — AI for new angles, Remotion for scale
 
+> **In ONIA: HyperFrames, not Remotion.** Remotion is retired here (`CLAUDE.md`); where this skill says Remotion, build the
+> templated, data-driven video with the `hyperframes` skill and edit it with `editor-videos`.
+
 ---
 
 ## Generating Ad Copy
